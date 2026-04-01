@@ -54,17 +54,17 @@ jobs:
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
             echo "🔐 Logging in to GHCR..."
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u heejun-0219 --password-stdin
+            echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u heejun-0219 --password-stdin
 
             echo "📥 Pulling latest image..."
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            sudo docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
             echo "🔄 Stopping old container..."
-            docker stop econpedia 2>/dev/null || true
-            docker rm econpedia 2>/dev/null || true
+            sudo docker stop econpedia 2>/dev/null || true
+            sudo docker rm econpedia 2>/dev/null || true
 
             echo "🚀 Starting new container..."
-            docker run -d \
+            sudo docker run -d \
               --name econpedia \
               --restart unless-stopped \
               -p 80:80 \
@@ -77,7 +77,7 @@ jobs:
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
             echo "🧹 Cleaning up old images..."
-            docker image prune -f
+            sudo docker image prune -f
 
             echo "✅ Deployment complete!"
-            docker ps --filter name=econpedia
+            sudo docker ps --filter name=econpedia
