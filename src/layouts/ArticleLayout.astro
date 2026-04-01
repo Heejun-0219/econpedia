@@ -1,0 +1,174 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  category: string;
+  categoryHref: string;
+  readingTime: string;
+  publishDate: string;
+  author?: string;
+  series?: { title: string; current: number; total: number; articles: { title: string; href: string }[] };
+  relatedArticles?: { title: string; category: string; href: string }[];
+}
+
+const { 
+  title, description, category, categoryHref,
+  readingTime, publishDate, author = 'EconPedia 편집부',
+  series, relatedArticles = []
+} = Astro.props;
+
+import BaseLayout from './BaseLayout.astro';
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <article class="article-layout">
+    <!-- Breadcrumb -->
+    <nav class="article-breadcrumb" aria-label="breadcrumb">
+      <a href="/">홈</a> → <a href={categoryHref}>{category}</a> → <span>{title}</span>
+    </nav>
+
+    <!-- Series Nav (if part of series) -->
+    {series && (
+      <div class="series-nav">
+        <span class="series-nav__label">📚 시리즈</span>
+        <span class="series-nav__title">{series.title} ({series.current}/{series.total})</span>
+        <div class="series-nav__list">
+          {series.articles.map((a, i) => (
+            <a 
+              href={a.href} 
+              class={`series-nav__item ${i + 1 === series.current ? 'series-nav__item--active' : ''}`}
+            >
+              {i + 1}. {a.title}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Article Header -->
+    <header class="article-header">
+      <a href={categoryHref} class="article-header__category">{category}</a>
+      <h1 class="article-header__title">{title}</h1>
+      <p class="article-header__subtitle">{description}</p>
+      <div class="article-header__meta">
+        <span>✍️ {author}</span>
+        <span>📅 {publishDate}</span>
+        <span>⏱ {readingTime} 읽기</span>
+      </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="article-content">
+      <slot />
+    </div>
+
+    <!-- Related Articles (체류 시간 극대화) -->
+    {relatedArticles.length > 0 && (
+      <div class="related-articles">
+        <h3 class="related-articles__title">📖 이 기사도 함께 읽어보세요</h3>
+        <div class="related-articles__list">
+          {relatedArticles.map((article) => (
+            <a href={article.href} class="related-articles__item">
+              <div>
+                <span class="related-articles__item-category">{article.category}</span>
+                <span class="related-articles__item-title">{article.title}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Series Next/Prev -->
+    {series && series.current < series.total && (
+      <a href={series.articles[series.current]?.href} class="series-next-btn">
+        다음 기사 읽기: {series.articles[series.current]?.title} →
+      </a>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .article-breadcrumb {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+  .article-breadcrumb a {
+    color: var(--color-text-muted);
+  }
+  .article-breadcrumb a:hover {
+    color: var(--color-accent-primary);
+  }
+  .article-breadcrumb span {
+    color: var(--color-text-secondary);
+  }
+
+  .article-header__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-lg);
+  }
+
+  .series-nav {
+    background: var(--color-bg-card);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+  .series-nav__label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-accent-primary);
+  }
+  .series-nav__title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    display: block;
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+  .series-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .series-nav__item {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+  }
+  .series-nav__item:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+  }
+  .series-nav__item--active {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--color-accent-primary);
+    font-weight: 600;
+  }
+
+  .series-next-btn {
+    display: block;
+    text-align: center;
+    padding: var(--space-lg);
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    color: white;
+    font-weight: 600;
+    font-size: var(--text-lg);
+    text-decoration: none;
+    margin-top: var(--space-2xl);
+    transition: all var(--transition-base);
+  }
+  .series-next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    color: white;
+  }
+</style>

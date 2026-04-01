@@ -1,0 +1,140 @@
+---
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
+
+const relatedArticles = [
+  { title: '인플레이션이란? — 물가가 오르면 내 월급은 왜 줄어들까', category: '기초 경제학', href: '/economy/basics/inflation-explained' },
+  { title: '금리란? — 한국은행이 금리를 올리면 일어나는 일들', category: '기초 경제학', href: '/economy/basics/interest-rate-basics' },
+  { title: 'ETF 완전 정복 — 주식보다 안전하고, 적금보다 수익률 높은 투자법', category: '투자 기초', href: '/economy/investment/etf-guide' },
+  { title: '환율이란? — 1달러가 1,300원이면 좋은 건가, 나쁜 건가', category: '기초 경제학', href: '/economy/basics/exchange-rate' },
+  { title: '경기침체란? — 뉴스에서 말하는 불황, 내 삶에 어떤 영향?', category: '기초 경제학', href: '/economy/basics/recession-explained' },
+];
+---
+
+<ArticleLayout 
+  title="GDP란 무엇인가? — 국가 경제의 건강 검진표를 읽는 법"
+  description="GDP는 한 나라의 경제 크기를 측정하는 가장 기본적인 지표입니다. GDP가 올랐다, 내렸다는 뉴스를 들을 때 그것이 내 삶에 어떤 영향을 미치는지 쉽게 풀어봅니다."
+  category="기초 경제학"
+  categoryHref="/economy/basics"
+  readingTime="8분"
+  publishDate="2026.04.01"
+  author="이경제 시니어 기자"
+  relatedArticles={relatedArticles}
+>
+
+<h2>한 줄 요약</h2>
+
+<div class="key-term">
+  <p class="key-term__label">💡 핵심 용어</p>
+  <p class="key-term__title">GDP (Gross Domestic Product, 국내총생산)</p>
+  <p class="key-term__definition">한 나라 안에서 일정 기간(보통 1년) 동안 새롭게 만들어진 모든 상품과 서비스의 시장 가치를 합한 것. 쉽게 말해, <strong>"우리나라가 1년 동안 얼마나 벌었는가"</strong>를 보여주는 숫자입니다.</p>
+</div>
+
+<h2>왜 GDP를 알아야 할까?</h2>
+
+<p>뉴스에서 가장 많이 듣는 경제 용어 중 하나가 바로 <strong>GDP</strong>입니다. "한국 GDP 성장률 2.5%", "GDP 3만 달러 시대" 같은 헤드라인을 한 번쯤은 본 적이 있을 겁니다.</p>
+
+<p>그런데 정확히 GDP가 뭔지, 이게 오르면 내 삶이 어떻게 좋아지는지 아는 사람은 의외로 많지 않습니다. 오늘 이 글에서 GDP를 완전히 이해해봅시다.</p>
+
+<h2>GDP를 쉽게 이해하는 비유</h2>
+
+<p>가정을 하나로 비유해봅시다.</p>
+
+<blockquote>
+여러분 집에서 1년 동안 벌어들인 총수입을 생각해보세요. 아빠 월급, 엄마가 운영하는 가게 수입, 부업으로 번 돈… 이것을 다 합치면 여러분 집의 "가정 총생산"이 됩니다. GDP는 이걸 나라 전체로 확장한 겁니다.
+</blockquote>
+
+<p>삼성이 만든 스마트폰, 현대가 만든 자동차, 여러분 동네 빵집이 구운 빵, 병원에서 제공한 의료 서비스… 이 모든 것의 <strong>시장 가치를 합친 것</strong>이 바로 <strong>GDP</strong>입니다.</p>
+
+<h2>GDP의 3가지 측정 방법</h2>
+
+<p>GDP는 같은 것을 세 가지 다른 각도에서 바라볼 수 있습니다:</p>
+
+<h3>1. 생산 접근법 (Production Approach)</h3>
+<p>"얼마나 만들었나?" — 모든 산업에서 새로 만들어 낸 <a href="/economy/basics/value-added">부가가치</a>를 합산합니다.</p>
+
+<h3>2. 지출 접근법 (Expenditure Approach)</h3>
+<p>"얼마나 썼나?" — 가장 많이 사용되는 공식입니다:</p>
+
+<div class="key-term">
+  <p class="key-term__label">📐 GDP 공식</p>
+  <p class="key-term__title">GDP = C + I + G + (X - M)</p>
+  <p class="key-term__definition">
+    <strong>C</strong> = 소비 (개인이 쓴 돈)<br/>
+    <strong>I</strong> = 투자 (기업이 쓴 돈)<br/>
+    <strong>G</strong> = 정부 지출 (정부가 쓴 돈)<br/>
+    <strong>X - M</strong> = 순수출 (수출 - 수입)
+  </p>
+</div>
+
+<h3>3. 소득 접근법 (Income Approach)</h3>
+<p>"얼마나 벌었나?" — 근로자 임금, 기업 이익, 이자, 임대료 등 소득을 모두 합산합니다.</p>
+
+<p>세 가지 방법으로 계산해도 이론적으로 <strong>같은 숫자</strong>가 나옵니다. 만들어진 것 = 팔린 것 = 벌어들인 것이기 때문입니다.</p>
+
+<h2>GDP와 내 삶의 관계</h2>
+
+<p>GDP가 올라가면 구체적으로 어떤 일이 벌어질까요?</p>
+
+<ul>
+  <li><strong>기업 매출 증가</strong> → 고용이 늘어남 → 취업이 쉬워짐</li>
+  <li><strong>임금 상승 가능성</strong> → 경제가 성장하면 회사가 돈을 더 잘 벌고, 직원 월급도 오를 수 있음</li>
+  <li><strong>세수 증가</strong> → 정부가 복지, 인프라에 투자 → 삶의 질 향상</li>
+  <li><strong>주가 상승 경향</strong> → <a href="/economy/investment/stock-basics">주식 투자</a> 수익률 개선</li>
+</ul>
+
+<p>반대로 GDP가 2분기 연속 감소하면 <strong><a href="/economy/basics/recession-explained">경기침체(Recession)</a></strong>로 분류됩니다. 이때는 실업률이 올라가고, 기업의 투자가 줄어듭니다.</p>
+
+<h2>한국의 GDP, 숫자로 알아보기</h2>
+
+<p>2025년 기준 한국의 GDP 관련 핵심 수치입니다:</p>
+
+<ul>
+  <li><strong>한국 GDP</strong>: 약 1조 7,000억 달러 (세계 12~13위)</li>
+  <li><strong>1인당 GDP</strong>: 약 33,000달러</li>
+  <li><strong>GDP 성장률</strong>: 약 2~2.5% (선진국 평균 수준)</li>
+</ul>
+
+<p>참고로 미국 GDP는 약 28조 달러로 한국의 16배 이상, 세계 1위입니다. 중국은 약 18조 달러로 2위입니다.</p>
+
+<h2>GDP가 높으면 무조건 좋은 건가?</h2>
+
+<p>꼭 그렇지는 않습니다. GDP에는 중요한 <strong>한계점</strong>이 있습니다:</p>
+
+<ul>
+  <li><strong>불평등을 반영하지 않음</strong>: 1인당 GDP가 높아도 소득이 상위 10%에 집중되면 대부분 사람들의 삶은 나아지지 않음</li>
+  <li><strong>삶의 질을 측정하지 않음</strong>: 환경오염, 여가 시간, 행복도 등은 GDP에 포함되지 않음</li>
+  <li><strong>가사노동, 자원봉사 미포함</strong>: 돈이 오가지 않는 경제 활동은 GDP에 잡히지 않음</li>
+</ul>
+
+<blockquote>
+로버트 케네디는 이렇게 말했습니다: "GDP는 우리의 삶을 가치 있게 만드는 것들을 제외한 모든 것을 측정한다."
+</blockquote>
+
+<p>그래서 최근에는 <strong><a href="/economy/indicators/hdi">HDI(인간개발지수)</a></strong>나 <strong>국민총행복</strong> 같은 보완 지표도 많이 사용됩니다.</p>
+
+<h2>명목 GDP vs 실질 GDP</h2>
+
+<div class="key-term">
+  <p class="key-term__label">🔍 헷갈리기 쉬운 개념</p>
+  <p class="key-term__title">명목 GDP vs 실질 GDP</p>
+  <p class="key-term__definition">
+    <strong>명목 GDP</strong>: 현재 가격으로 계산. <a href="/economy/basics/inflation-explained">물가 상승</a>이 반영됨.<br/>
+    <strong>실질 GDP</strong>: 특정 기준연도 가격으로 계산. 물가 변동을 제거하여 <strong>순수한 생산량 변화만</strong> 보여줌.
+  </p>
+</div>
+
+<p>예를 들어, 올해 빵을 100개 만들고 가격이 1,000원이면 명목 GDP는 10만원. 내년에 같은 100개를 만들었는데 가격이 1,200원으로 올랐다면 명목 GDP는 12만원이 됩니다. 하지만 실제로 빵을 더 만든 건 아니죠? 실질 GDP는 여전히 10만원입니다.</p>
+
+<p>따라서 <strong>"경제가 정말 성장했는가?"</strong>를 판단할 때는 항상 <strong>실질 GDP 성장률</strong>을 봐야 합니다.</p>
+
+<h2>정리: 기억해야 할 3가지</h2>
+
+<ol>
+  <li><strong>GDP = 나라의 경제 성적표</strong>. 1년간 만든 모든 것의 시장 가치.</li>
+  <li><strong>GDP 공식</strong>: C(소비) + I(투자) + G(정부) + (X-M)(순수출)</li>
+  <li><strong>실질 GDP</strong>를 봐야 진짜 성장을 알 수 있다. 명목은 물가 착시가 있다.</li>
+</ol>
+
+<p>다음 글에서는 GDP와 밀접하게 연결된 <strong><a href="/economy/basics/inflation-explained">인플레이션</a></strong>에 대해 알아보겠습니다. 물가가 오르면 내 월급은 왜 줄어드는지, 한번 파헤쳐봅시다.</p>
+
+</ArticleLayout>

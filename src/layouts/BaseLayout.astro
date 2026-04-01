@@ -1,0 +1,131 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  article?: boolean;
+}
+
+const { title, description, ogImage = '/og-default.png', article = false } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- SEO Meta -->
+    <title>{title} | EconPedia</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:title" content={`${title} | EconPedia`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="EconPedia — 경제 백과사전" />
+    <meta property="og:locale" content="ko_KR" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | EconPedia`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": article ? "Article" : "WebSite",
+      "name": `${title} | EconPedia`,
+      "description": description,
+      "url": canonicalURL.toString(),
+      ...(article ? {} : {
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": `${Astro.site}search?q={search_term_string}`,
+          "query-input": "required name=search_term_string"
+        }
+      })
+    })} />
+    
+    <!-- Styles -->
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="nav" id="main-nav">
+      <div class="nav__inner">
+        <a href="/" class="nav__logo">
+          <span class="nav__logo-icon">📊</span>
+          EconPedia
+        </a>
+        <ul class="nav__links">
+          <li><a href="/economy/basics" class="nav__link">기초 경제학</a></li>
+          <li><a href="/economy/investment" class="nav__link">투자 기초</a></li>
+          <li><a href="/economy/finance" class="nav__link">생활 금융</a></li>
+          <li><a href="/economy/global" class="nav__link">글로벌 경제</a></li>
+          <li><a href="/economy/trends" class="nav__link">경제 트렌드</a></li>
+        </ul>
+        <button class="nav__search" id="search-trigger">
+          🔍 검색 <kbd>⌘K</kbd>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__inner">
+        <div>
+          <a href="/" class="nav__logo">
+            <span class="nav__logo-icon">📊</span>
+            EconPedia
+          </a>
+          <p class="footer__brand-desc">
+            경제 초보자를 전문가로 만드는 경제 백과사전.<br/>
+            복잡한 경제를 쉽고 재밌게 풀어드립니다.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer__heading">카테고리</h4>
+          <ul class="footer__links">
+            <li><a href="/economy/basics">기초 경제학</a></li>
+            <li><a href="/economy/investment">투자 기초</a></li>
+            <li><a href="/economy/finance">생활 금융</a></li>
+            <li><a href="/economy/global">글로벌 경제</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__heading">더 보기</h4>
+          <ul class="footer__links">
+            <li><a href="/economy/indicators">경제 지표</a></li>
+            <li><a href="/economy/corporate">기업 분석</a></li>
+            <li><a href="/economy/trends">경제 트렌드</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__heading">소개</h4>
+          <ul class="footer__links">
+            <li><a href="/about">EconPedia 소개</a></li>
+            <li><a href="/contact">문의하기</a></li>
+            <li><a href="/advertise">광고 문의</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 EconPedia. 경제를 쉽게, 모두에게.</p>
+      </div>
+    </footer>
+  </body>
+</html>
