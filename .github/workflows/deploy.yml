@@ -3,13 +3,11 @@ name: 🚀 Deploy EconPedia
 on:
   push:
     branches: [main]
-    paths:
-      - 'econpedia/**'
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/econpedia
+  IMAGE_NAME: heejun-0219/econpedia
 
 jobs:
   build-and-deploy:
@@ -39,7 +37,7 @@ jobs:
       - name: 🏗 Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
-          context: ./econpedia
+          context: .
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
@@ -56,7 +54,7 @@ jobs:
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
             echo "🔐 Logging in to GHCR..."
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u heejun-0219 --password-stdin
 
             echo "📥 Pulling latest image..."
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
