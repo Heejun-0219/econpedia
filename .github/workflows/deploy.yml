@@ -68,9 +68,11 @@ jobs:
               --name econpedia \
               --restart unless-stopped \
               -p 80:80 \
+              -p 443:443 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
               --memory=128m \
               --cpus=0.5 \
-              --health-cmd="wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1" \
+              --health-cmd="wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost/ || exit 1" \
               --health-interval=30s \
               --health-timeout=3s \
               --health-retries=3 \
