@@ -1,0 +1,87 @@
+---
+import { CATEGORIES } from '../../../data/categories.js';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  return Object.values(CATEGORIES).map((cat) => ({
+    params: { category: cat.slug },
+    props: { cat },
+  }));
+}
+
+const { cat } = Astro.props;
+---
+
+<BaseLayout
+  title={cat.title}
+  description={cat.description}
+>
+  <div class="cat-page">
+    <!-- Hero -->
+    <div class="cat-page__hero" style={`--cat-color: ${cat.color}`}>
+      <div class="container">
+        <a href="/" class="cat-page__breadcrumb">홈</a>
+        <span class="cat-page__breadcrumb-sep">›</span>
+        <span class="cat-page__breadcrumb-current">{cat.title}</span>
+
+        <div class="cat-page__icon">{cat.icon}</div>
+        <h1 class="cat-page__title">{cat.title}</h1>
+        <p class="cat-page__desc">{cat.description}</p>
+
+        <div class="cat-page__meta">
+          <span>📄 {cat.articles.length}개 기사</span>
+          <span>•</span>
+          <span>🤖 AI 분석 + 전문가 검수</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Articles List -->
+    <div class="container">
+      <div class="cat-article-list">
+        {cat.articles.map((article, idx) => (
+          article.comingSoon ? (
+            <div class="cat-article-card cat-article-card--soon" id={`article-${idx}`}>
+              <div class="cat-article-card__body">
+                <span class="cat-article-card__badge cat-article-card__badge--soon">곧 출시</span>
+                <h2 class="cat-article-card__title">{article.title}</h2>
+                <p class="cat-article-card__excerpt">{article.excerpt}</p>
+                <div class="cat-article-card__meta">
+                  <span>⏱ {article.readingTime} 읽기</span>
+                  <span>{article.date}</span>
+                </div>
+              </div>
+              <div class="cat-article-card__arrow cat-article-card__arrow--soon">🔒</div>
+            </div>
+          ) : (
+            <a href={article.href} class="cat-article-card" id={`article-${idx}`}>
+              <div class="cat-article-card__body">
+                <span class="cat-article-card__badge">새 글</span>
+                <h2 class="cat-article-card__title">{article.title}</h2>
+                <p class="cat-article-card__excerpt">{article.excerpt}</p>
+                <div class="cat-article-card__meta">
+                  <span>⏱ {article.readingTime} 읽기</span>
+                  <span>{article.date}</span>
+                </div>
+              </div>
+              <div class="cat-article-card__arrow">→</div>
+            </a>
+          )
+        ))}
+      </div>
+
+      <!-- Newsletter CTA -->
+      <div class="cat-newsletter">
+        <div class="cat-newsletter__icon">📬</div>
+        <h3 class="cat-newsletter__title">새 글이 올라오면 알려드릴게요</h3>
+        <p class="cat-newsletter__desc">
+          <strong>{cat.title}</strong> 카테고리에 새 기사가 추가될 때 가장 먼저 받아보세요.<br/>
+          또한, AI가 매일 분석하는 경제 브리핑도 함께 받아볼 수 있습니다.
+        </p>
+        <a href="/daily" class="cat-newsletter__btn">
+          📰 오늘의 데일리 브리핑 보기 →
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
