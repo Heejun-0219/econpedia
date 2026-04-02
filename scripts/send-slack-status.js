@@ -13,7 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
 // ─── 환경 변수 검증 ─────────────────────────────────────
-const WEBHOOK_URL   = process.env.SLACK_WEBHOOK_URL;
+const WEBHOOK_URL    = process.env.SLACK_WEBHOOK_URL;
 const GITHUB_RUN_URL = process.env.GITHUB_RUN_URL || '';
 
 if (!WEBHOOK_URL) {
@@ -42,8 +42,27 @@ try {
     categoryArticleCount += cat.articles.filter(a => !a.comingSoon).length;
   }
 } catch (e) {
-  categoryArticleCount = 1; // GDP 기사 1개
+  categoryArticleCount = 1;
 }
+
+// ─── 뉴스레터 실제 발송 결과 읽기 ─────────────────────────
+// send-newsletter.js가 실행 후 기록한 .newsletter-status.json을 읽어
+// 실제 성공/실패 여부를 슬랙에 정확히 표시합니다.
+const STATUS_FILE = join(ROOT, '.newsletter-status.json');
+let newsletterStatus = { success: null, message: '' };
+try {
+  newsletterStatus = JSON.parse(readFileSync(STATUS_FILE, 'utf-8'));
+  console.log('📋 뉴스레터 상태 파일 로드:', newsletterStatus);
+} catch (e) {
+  console.warn('⚠️  뉴스레터 상태 파일 없음 (실행 안 됐거나 취소됨)');
+  newsletterStatus = { success: null, message: '상태 파일 없음' };
+}
+
+const newsletterLine = (() => {
+  if (newsletterStatus.success === true)  return `✅ 뉴스레터 발송 완료 (${newsletterStatus.message})`;
+  if (newsletterStatus.success === false) return `❌ 뉴스레터 발송 실패 — ${newsletterStatus.message}`;
+  return `⚠️ 뉴스레터 상태 미확인`;
+})();
 
 // ─── 날짜/시간 ───────────────────────────────────────────
 const now = new Date();
@@ -57,21 +76,22 @@ const kstStr = now.toLocaleString('ko-KR', {
   hour12: false,
 });
 
-const totalArticles = articles.length + categoryArticleCount;
-
 // ─── Slack Block Kit 메시지 ───────────────────────────────
 const articleUrl = latestArticle
   ? `https://econpedia.dedyn.io${latestArticle.href}`
   : 'https://econpedia.dedyn.io/daily';
 
+const overallOk = latestArticle && newsletterStatus.success;
+const headerEmoji = overallOk ? '✅' : '⚠️';
+
 const payload = {
   blocks: [
-    // 헤더
+    // 헤더 (전체 상태에 따라 ✅ / ⚠️ 변경)
     {
       type: 'header',
       text: {
         type: 'plain_text',
-        text: '📊 EconPedia 일일 현황 리포트',
+        text: `${headerEmoji} EconPedia 일일 현황 리포트`,
         emoji: true,
       },
     },
@@ -82,7 +102,7 @@ const payload = {
       elements: [
         {
           type: 'mrkdwn',
-          text: `🕐 *${kstStr} KST* | 자동 발행 완료`,
+          text: `🕐 *${kstStr} KST*`,
         },
       ],
     },
@@ -96,7 +116,7 @@ const payload = {
         type: 'mrkdwn',
         text: latestArticle
           ? `📰 *오늘의 브리핑*\n>${latestArticle.title}\n>${latestArticle.excerpt}`
-          : '📰 *오늘의 브리핑*\n>기사 생성 없음',
+          : '📰 *오늘의 브리핑*\n>❌ 기사 생성 없음 또는 실패',
       },
       ...(latestArticle
         ? {
@@ -137,12 +157,17 @@ const payload = {
 
     { type: 'divider' },
 
-    // 자동화 상태
+    // 자동화 상태 — 실제 결과 기반
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `🤖 *자동화 상태*\n✅ 기사 생성 완료\n✅ 사이트 배포 트리거됨\n✅ 뉴스레터 발송 완료`,
+        text: [
+          `🤖 *자동화 상태*`,
+          latestArticle ? `✅ 기사 생성 완료` : `❌ 기사 생성 실패`,
+          `✅ 사이트 배포 트리거됨`,
+          newsletterLine,   // ← send-newsletter.js의 실제 결과
+        ].join('\n'),
       },
       ...(GITHUB_RUN_URL
         ? {
@@ -171,6 +196,7 @@ const payload = {
 
 // ─── 슬랙 발송 ────────────────────────────────────────────
 console.log(`💬 슬랙 현황 리포트 발송 중...`);
+console.log(`   뉴스레터 상태: ${newsletterLine}`);
 
 try {
   const res = await fetch(WEBHOOK_URL, {
@@ -189,6 +215,7 @@ try {
   console.log('✅ 슬랙 현황 리포트 발송 완료!');
   console.log(`   - 브리핑: ${articles.length}개`);
   console.log(`   - 카테고리 기사: ${categoryArticleCount}개`);
+  console.log(`   - 뉴스레터: ${newsletterLine}`);
 } catch (err) {
   console.error('❌ 예외 발생:', err.message);
   process.exit(1);

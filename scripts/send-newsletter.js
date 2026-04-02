@@ -7,9 +7,15 @@
 //   NEWSLETTER_TO      - 수신자 이메일 (쉼표로 구분 시 여러 명 가능)
 
 import { Resend } from 'resend';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+
+// ─── 결과 상태 파일 기록 헬퍼 ────────────────────────────────
+const STATUS_FILE = join(dirname(fileURLToPath(import.meta.url)), '..', '.newsletter-status.json');
+function writeStatus(success, message = '') {
+  writeFileSync(STATUS_FILE, JSON.stringify({ success, message, ts: Date.now() }));
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -21,10 +27,12 @@ const TO              = process.env.NEWSLETTER_TO;
 
 if (!RESEND_API_KEY) {
   console.error('❌ RESEND_API_KEY 환경 변수가 없습니다. 발송을 건너뜁니다.');
+  writeStatus(false, 'RESEND_API_KEY 없음');
   process.exit(0);
 }
 if (!TO) {
   console.error('❌ NEWSLETTER_TO 환경 변수가 없습니다. 발송을 건너뜁니다.');
+  writeStatus(false, 'NEWSLETTER_TO 없음');
   process.exit(0);
 }
 
@@ -37,11 +45,13 @@ try {
   latestArticle = articles[0]; // 최신 기사 = 배열 첫 번째
 } catch (e) {
   console.error('❌ daily-articles.json 읽기 실패:', e.message);
+  writeStatus(false, `daily-articles.json 읽기 실패: ${e.message}`);
   process.exit(0);
 }
 
 if (!latestArticle) {
   console.log('ℹ️  발행된 기사가 없습니다. 발송을 건너뜁니다.');
+  writeStatus(false, '발행된 기사 없음');
   process.exit(0);
 }
 
@@ -233,6 +243,7 @@ try {
     }
 
     console.error('═══════════════════════════════════════');
+    writeStatus(false, `${error.statusCode} ${error.name}: ${error.message}`);
     // 이메일 실패가 전체 워크플로우를 중단시키지 않도록 exit 0
     process.exit(0);
   }
@@ -241,11 +252,13 @@ try {
   console.log(`   메일 ID  : ${data.id}`);
   console.log(`   수신자   : ${toList.join(', ')}`);
   console.log(`   제목     : ${latestArticle.title}`);
+  writeStatus(true, `메일 ID: ${data.id}`);
 } catch (err) {
   console.error('═══════════════════════════════════════');
   console.error('❌ 뉴스레터 발송 중 예외 발생');
   console.error(`   ${err.message}`);
   console.error('═══════════════════════════════════════');
+  writeStatus(false, `예외: ${err.message}`);
   process.exit(0); // 사이트 배포 파이프라인은 계속 진행
 }
 
