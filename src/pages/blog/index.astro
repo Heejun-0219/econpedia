@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import blogArticles from '../../data/blog-articles.json';
+
+const sortedArticles = [...blogArticles].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BaseLayout
+  title="블로그 · 심층분석"
+  description="EconPedia AI의 심층 경제 분석 블로그. 매일의 시장 데이터에서 한 가지 주제를 깊이 파고듭니다."
+>
+  <section class="daily-archive">
+    <div class="container">
+      <div class="daily-archive__header">
+        <div class="daily-archive__badge">
+          <span class="pulse-dot"></span>
+          매일 심층 분석 발행
+        </div>
+        <h1 class="daily-archive__title">
+          블로그 ·
+          <span class="hero__title-gradient">심층분석</span>
+        </h1>
+        <p class="daily-archive__desc">
+          EconPedia AI '이코노'가 매일의 시장 데이터에서 하나의 주제를 골라 깊이 분석합니다.<br/>
+          데일리 브리핑보다 깊이 있는 인사이트를 원하신다면 여기서 만나보세요.
+        </p>
+      </div>
+
+      {sortedArticles.length === 0 && (
+        <div class="daily-archive__empty">
+          <p>아직 발행된 블로그 글이 없습니다. 첫 번째 심층 분석이 곧 도착합니다! 📝</p>
+        </div>
+      )}
+
+      <div class="daily-archive__list">
+        {sortedArticles.map((article, idx) => (
+          <a href={article.href} class="daily-archive__card" id={`blog-${article.slug}`}>
+            <div class="daily-archive__card-date">
+              <span class="daily-archive__card-day">{new Date(article.date + 'T00:00:00').getDate()}</span>
+              <span class="daily-archive__card-month">{(new Date(article.date + 'T00:00:00').getMonth() + 1) + '월'}</span>
+              <span class="daily-archive__card-year">{new Date(article.date + 'T00:00:00').getFullYear()}</span>
+            </div>
+            <div class="daily-archive__card-body">
+              {idx === 0 && <span class="daily-archive__card-latest">최신</span>}
+              <h2 class="daily-archive__card-title">{article.title}</h2>
+              <p class="daily-archive__card-excerpt">{article.excerpt}</p>
+              <div class="daily-archive__card-meta">
+                <span>EconPedia AI · 이코노</span>
+                <span>•</span>
+                <span>⏱ 10분 읽기</span>
+                {article.tags && article.tags.length > 0 && (
+                  <>
+                    <span>•</span>
+                    <span>{article.tags.slice(0, 3).join(' · ')}</span>
+                  </>
+                )}
+              </div>
+            </div>
+            <div class="daily-archive__card-arrow">→</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

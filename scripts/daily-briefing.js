@@ -1,3 +1,12 @@
+// scripts/daily-briefing.js
+// EconPedia 데일리 브리핑 파이프라인
+//
+// Yahoo Finance → 시장 데이터 크롤링 → Gemini → 마크다운 기사 생성 → .astro 파일 저장
+//
+// Phase 1 리팩토링:
+//   - persona.js + prompts.js 기반 구조화된 프롬프트
+//   - 기존 하드코딩 프롬프트 제거
+
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -7,6 +16,9 @@ import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import dotenv from 'dotenv';
 
+// 프롬프트 시스템 import
+import { buildArticlePrompt } from '../src/data/prompts.js';
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,15 +27,16 @@ const __dirname = path.dirname(__filename);
 // Initialize Gemini API
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// ─── 시장 데이터 크롤링 ──────────────────────────────────
 async function getMarketData() {
   console.log('📡 Fetching market data...');
   try {
     const symbols = {
-      sp500: '^GSPC',    // S&P 500
-      nasdaq: '^IXIC',   // NASDAQ
-      kospi: '^KS11',    // KOSPI
-      bitcoin: 'BTC-USD',// Bitcoin
-      krw: 'KRW=X'       // USD/KRW Exchange Rate
+      sp500: '^GSPC',     // S&P 500
+      nasdaq: '^IXIC',    // NASDAQ
+      kospi: '^KS11',     // KOSPI
+      bitcoin: 'BTC-USD', // Bitcoin
+      krw: 'KRW=X'        // USD/KRW Exchange Rate
     };
 
     const results = {};
@@ -53,30 +66,19 @@ function formatMarketDataForPrompt(data) {
 `;
 }
 
+// ─── Gemini 기사 생성 ────────────────────────────────────
 async function generateArticle(marketDataString) {
-  console.log('🤖 Generating article with Gemini...');
+  console.log('🤖 Generating article with Gemini (고도화 프롬프트)...');
   const today = new Date().toISOString().split('T')[0];
 
-  const systemPrompt = `당신은 'EconPedia'의 총괄 시니어 기자이자 최고의 데이터 애널리스트입니다.
-오늘의 주요 글로벌 경제 지표 데이터를 분석하여, 초보자도 쉽게 이해할 수 있는 매력적이고 바이럴 가능성이 높은 아침 경제 브리핑 기사를 작성하십시오.
-
-[작업 원칙]
-1. 킬러 헤드라인: 호기심과 숫자를 자극하는 매력적인 헤드라인을 맨 위에 하나만 작성하세요. (마크다운 H1)
-2. 친근한 어조: 딱딱한 뉴스가 아닌 옆에서 똑똑한 친구가 설명해주는 듯한 톤(뉴닉, 어피티 스타일) 유지.
-3. 데이터 스토리텔링: "환율이 올랐다"가 아니라 그게 "내 월급과 주식 계좌에 무슨 의미인지" 맥락을 짚어주세요.
-4. 요약(Executive Summary): 상단에 오늘의 핵심을 3줄 요약하세요.
-5. 포맷: Astro 페이지에 삽입하기 쉬운 순수 Markdown 본문으로 작성해주세요 (frontmatter는 제외).
-
-오늘 날짜: ${today}
-`;
-
-  const userPrompt = `다음은 오늘 아침의 최신 금융/경제 데이터입니다:\n${marketDataString}\n\n위 데이터를 분석하여 오늘의 경제 브리핑 기사 마크다운 콘텐츠를 작성해주세요. H1 제목 꼭 포함해주세요.`;
+  // prompts.js에서 구조화된 프롬프트 조립
+  const { system, user } = buildArticlePrompt(marketDataString, today);
 
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: [
-        { role: 'user', parts: [{ text: systemPrompt + '\n\n' + userPrompt }] }
+        { role: 'user', parts: [{ text: system + '\n\n' + user }] }
       ],
       config: {
         temperature: 0.7,
@@ -90,6 +92,7 @@ async function generateArticle(marketDataString) {
   }
 }
 
+// ─── 유틸리티 ────────────────────────────────────────────
 function extractExcerpt(markdownContent, maxLength = 150) {
   // Remove H1 title, then get first meaningful paragraph
   const withoutTitle = markdownContent.replace(/^#\s+(.+)$/m, '').trim();
@@ -131,6 +134,7 @@ async function updateManifest(dateString, title, excerpt) {
   console.log(`📋 Manifest updated: ${manifestPath}`);
 }
 
+// ─── .astro 파일 저장 ────────────────────────────────────
 async function saveArticle(content) {
   const currentDate = new Date();
   const dateString = currentDate.toISOString().split('T')[0];
@@ -170,7 +174,7 @@ const description = "${safeDescription}";
       <div class="article-header__meta">
         <time datetime={date}>{date}</time>
         <span>•</span>
-        <span>EconPedia AI</span>
+        <span>EconPedia AI · 이코노</span>
         <span>•</span>
         <span>⏱ 5분 읽기</span>
       </div>
@@ -194,13 +198,14 @@ const description = "${safeDescription}";
     // Update the manifest
     await updateManifest(dateString, title, excerpt);
 
-    return filePath;
+    return { filePath, title, excerpt, dateString, marketDataString: '' };
   } catch (error) {
     console.error('Error saving article:', error);
     throw error;
   }
 }
 
+// ─── 메인 파이프라인 ─────────────────────────────────────
 async function main() {
   if (!process.env.GEMINI_API_KEY) {
     console.error('❌ Error: GEMINI_API_KEY environment variable is not set.');
@@ -214,7 +219,16 @@ async function main() {
     console.log(formattedData);
 
     const articleMarkdown = await generateArticle(formattedData);
-    await saveArticle(articleMarkdown);
+    const result = await saveArticle(articleMarkdown);
+
+    // 시장 데이터를 파일로 저장 — 카드뉴스/블로그 스크립트에서 재사용
+    const marketDataPath = path.join(__dirname, '..', '.market-data.json');
+    await fs.writeFile(marketDataPath, JSON.stringify({
+      raw: rawData,
+      formatted: formattedData,
+      date: result.dateString,
+    }, null, 2), 'utf8');
+    console.log(`📊 Market data saved for downstream scripts: ${marketDataPath}`);
 
     console.log('🚀 Daily Briefing Pipeline Completed Successfully.');
   } catch (error) {

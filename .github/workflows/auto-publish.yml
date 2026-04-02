@@ -28,22 +28,41 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
+      # ── Phase 1: 데일리 브리핑 (기사) 생성 ─────────────────
       - name: 🤖 Generate Daily Briefing Article
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/daily-briefing.js
 
+      # ── Phase 2: 카드뉴스 이미지 생성 ──────────────────────
+      - name: 📱 Generate Card News Images
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-card-news.js
+
+      # ── Phase 3: 블로그 포스트 생성 ────────────────────────
+      - name: 📝 Generate Blog Post
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-blog-post.js
+
+      # ── 커밋 & 푸시 ────────────────────────────────────────
       - name: 🚀 Commit and Push
         run: |
           git config --global user.name "EconPedia AI Publisher"
           git config --global user.email "actions@github.com"
-          git add src/pages/daily/*.astro src/data/daily-articles.json
+          git add \
+            src/pages/daily/*.astro \
+            src/data/daily-articles.json \
+            src/pages/blog/*.astro \
+            src/data/blog-articles.json \
+            public/cards/
           
           # Only commit if there are changes
           if git diff --cached --quiet; then
-            echo "No new article generated."
+            echo "No new content generated."
           else
-            git commit -m "docs(daily): Auto-published daily briefing"
+            git commit -m "docs: Auto-published daily briefing + blog + card news"
             git push origin main
           fi
 
@@ -63,4 +82,3 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: node scripts/send-slack-status.js
-

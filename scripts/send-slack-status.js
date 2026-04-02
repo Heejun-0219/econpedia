@@ -21,6 +21,21 @@ if (!WEBHOOK_URL) {
   process.exit(0);
 }
 
+// ─── 유틸: 상태 파일 읽기 헬퍼 ───────────────────────────
+function readStatusFile(filename) {
+  try {
+    return JSON.parse(readFileSync(join(ROOT, filename), 'utf-8'));
+  } catch {
+    return { success: null, message: '상태 파일 없음' };
+  }
+}
+
+function statusLine(status, successMsg, failMsg, unknownMsg) {
+  if (status.success === true)  return successMsg(status);
+  if (status.success === false) return failMsg(status);
+  return unknownMsg;
+}
+
 // ─── 데이터 수집 ─────────────────────────────────────────
 let articles = [];
 let latestArticle = null;
@@ -34,35 +49,55 @@ try {
   console.warn('⚠️  daily-articles.json 읽기 실패:', e.message);
 }
 
-// 카테고리 기사 수 계산
+// 카테고리 기사 수
 let categoryArticleCount = 0;
 try {
   const { CATEGORIES } = await import('../src/data/categories.js');
   for (const cat of Object.values(CATEGORIES)) {
     categoryArticleCount += cat.articles.filter(a => !a.comingSoon).length;
   }
-} catch (e) {
+} catch {
   categoryArticleCount = 1;
 }
 
-// ─── 뉴스레터 실제 발송 결과 읽기 ─────────────────────────
-// send-newsletter.js가 실행 후 기록한 .newsletter-status.json을 읽어
-// 실제 성공/실패 여부를 슬랙에 정확히 표시합니다.
-const STATUS_FILE = join(ROOT, '.newsletter-status.json');
-let newsletterStatus = { success: null, message: '' };
+// 블로그 기사 수
+let blogArticles = [];
 try {
-  newsletterStatus = JSON.parse(readFileSync(STATUS_FILE, 'utf-8'));
-  console.log('📋 뉴스레터 상태 파일 로드:', newsletterStatus);
-} catch (e) {
-  console.warn('⚠️  뉴스레터 상태 파일 없음 (실행 안 됐거나 취소됨)');
-  newsletterStatus = { success: null, message: '상태 파일 없음' };
-}
+  blogArticles = JSON.parse(
+    readFileSync(join(ROOT, 'src/data/blog-articles.json'), 'utf-8')
+  );
+} catch { /* no blog yet */ }
 
-const newsletterLine = (() => {
-  if (newsletterStatus.success === true)  return `✅ 뉴스레터 발송 완료 (${newsletterStatus.message})`;
-  if (newsletterStatus.success === false) return `❌ 뉴스레터 발송 실패 — ${newsletterStatus.message}`;
-  return `⚠️ 뉴스레터 상태 미확인`;
-})();
+// ─── 각 파이프라인 실제 결과 읽기 ─────────────────────────
+const newsletterStatus = readStatusFile('.newsletter-status.json');
+const cardNewsStatus   = readStatusFile('.cardnews-status.json');
+const blogStatus       = readStatusFile('.blog-status.json');
+
+console.log('📋 상태 파일 로드:');
+console.log('   뉴스레터:', newsletterStatus);
+console.log('   카드뉴스:', cardNewsStatus);
+console.log('   블로그:',   blogStatus);
+
+const newsletterLine = statusLine(
+  newsletterStatus,
+  s => `✅ 뉴스레터 발송 완료 (${s.message})`,
+  s => `❌ 뉴스레터 발송 실패 — ${s.message}`,
+  '⚠️ 뉴스레터 상태 미확인',
+);
+
+const cardNewsLine = statusLine(
+  cardNewsStatus,
+  s => `✅ 카드뉴스 생성 완료 (${s.slideCount || 5}장)`,
+  s => `❌ 카드뉴스 생성 실패 — ${s.message}`,
+  '⚠️ 카드뉴스 상태 미확인',
+);
+
+const blogLine = statusLine(
+  blogStatus,
+  s => `✅ 블로그 포스트 발행 (${s.slug})`,
+  s => `❌ 블로그 포스트 실패 — ${s.message}`,
+  '⚠️ 블로그 상태 미확인',
+);
 
 // ─── 날짜/시간 ───────────────────────────────────────────
 const now = new Date();
@@ -81,12 +116,15 @@ const articleUrl = latestArticle
   ? `https://econpedia.dedyn.io${latestArticle.href}`
   : 'https://econpedia.dedyn.io/daily';
 
-const overallOk = latestArticle && newsletterStatus.success;
-const headerEmoji = overallOk ? '✅' : '⚠️';
+const allOk = latestArticle
+  && newsletterStatus.success
+  && cardNewsStatus.success
+  && blogStatus.success;
+const headerEmoji = allOk ? '✅' : '⚠️';
 
 const payload = {
   blocks: [
-    // 헤더 (전체 상태에 따라 ✅ / ⚠️ 변경)
+    // 헤더
     {
       type: 'header',
       text: {
@@ -100,10 +138,7 @@ const payload = {
     {
       type: 'context',
       elements: [
-        {
-          type: 'mrkdwn',
-          text: `🕐 *${kstStr} KST*`,
-        },
+        { type: 'mrkdwn', text: `🕐 *${kstStr} KST*` },
       ],
     },
 
@@ -142,11 +177,11 @@ const payload = {
         },
         {
           type: 'mrkdwn',
-          text: `📚 *카테고리 기사*\n${categoryArticleCount}개 발행 완료`,
+          text: `📚 *카테고리 기사*\n${categoryArticleCount}개 발행`,
         },
         {
           type: 'mrkdwn',
-          text: `🗂 *카테고리*\n7개 운영 중`,
+          text: `📝 *블로그 포스트*\n${blogArticles.length}개 발행`,
         },
         {
           type: 'mrkdwn',
@@ -157,7 +192,7 @@ const payload = {
 
     { type: 'divider' },
 
-    // 자동화 상태 — 실제 결과 기반
+    // 자동화 상태 — 모든 파이프라인 실제 결과 반영
     {
       type: 'section',
       text: {
@@ -165,8 +200,10 @@ const payload = {
         text: [
           `🤖 *자동화 상태*`,
           latestArticle ? `✅ 기사 생성 완료` : `❌ 기사 생성 실패`,
+          cardNewsLine,
+          blogLine,
           `✅ 사이트 배포 트리거됨`,
-          newsletterLine,   // ← send-newsletter.js의 실제 결과
+          newsletterLine,
         ].join('\n'),
       },
       ...(GITHUB_RUN_URL
@@ -196,7 +233,6 @@ const payload = {
 
 // ─── 슬랙 발송 ────────────────────────────────────────────
 console.log(`💬 슬랙 현황 리포트 발송 중...`);
-console.log(`   뉴스레터 상태: ${newsletterLine}`);
 
 try {
   const res = await fetch(WEBHOOK_URL, {
@@ -213,9 +249,6 @@ try {
   }
 
   console.log('✅ 슬랙 현황 리포트 발송 완료!');
-  console.log(`   - 브리핑: ${articles.length}개`);
-  console.log(`   - 카테고리 기사: ${categoryArticleCount}개`);
-  console.log(`   - 뉴스레터: ${newsletterLine}`);
 } catch (err) {
   console.error('❌ 예외 발생:', err.message);
   process.exit(1);

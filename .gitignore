@@ -23,3 +23,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .newsletter-status.json
+.cardnews-status.json
+.blog-status.json
+.market-data.json

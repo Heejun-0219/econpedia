@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1080" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1080px;
+      height: 1350px;
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      background: #0a0f1e;
+      color: #f9fafb;
+      overflow: hidden;
+    }
+
+    .slide { display: none; width: 1080px; height: 1350px; position: relative; }
+    .slide.active { display: flex; }
+
+    /* ── 공통 레이아웃 ─────────────────── */
+    .slide-inner {
+      width: 100%;
+      height: 100%;
+      padding: 80px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .brand-bar__logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-bar__logo-icon { font-size: 36px; }
+
+    .brand-bar__badge {
+      font-size: 16px;
+      font-weight: 700;
+      color: #93c5fd;
+      background: rgba(59, 130, 246, 0.15);
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .slide-number {
+      position: absolute;
+      bottom: 48px;
+      right: 80px;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: 600;
+    }
+
+    /* ── 커버 슬라이드 ─────────────────── */
+    .cover { background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); }
+
+    .cover .slide-inner {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cover__headline {
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.2;
+      margin-bottom: 32px;
+      max-width: 900px;
+      background: linear-gradient(135deg, #f9fafb 0%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cover__subheadline {
+      font-size: 36px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 800px;
+      line-height: 1.4;
+    }
+
+    .cover__glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    /* ── 데이터 슬라이드 ───────────────── */
+    .data-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
+
+    .data-slide__title {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 56px;
+      letter-spacing: -1px;
+    }
+
+    .data-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .data-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .data-item__left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .data-item__icon { font-size: 40px; }
+
+    .data-item__label {
+      font-size: 28px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .data-item__right { text-align: right; }
+
+    .data-item__value {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .data-item__change {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    .data-item__change.up { color: #34d399; }
+    .data-item__change.down { color: #f87171; }
+    .data-item__change.flat { color: #9ca3af; }
+
+    /* ── 인사이트 슬라이드 ──────────────── */
+    .insight-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
+
+    .insight__number {
+      font-size: 120px;
+      font-weight: 900;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 24px;
+    }
+
+    .insight__title {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.3;
+      margin-bottom: 40px;
+    }
+
+    .insight__body {
+      font-size: 32px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.7;
+      max-width: 850px;
+    }
+
+    .insight__accent-bar {
+      width: 80px;
+      height: 6px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      border-radius: 3px;
+      margin-bottom: 48px;
+    }
+
+    /* ── CTA 슬라이드 ──────────────────── */
+    .cta-slide { background: linear-gradient(160deg, #1e3a5f 0%, #0f172a 50%, #1a1a2e 100%); }
+
+    .cta-slide .slide-inner {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cta__icon { font-size: 80px; margin-bottom: 40px; }
+
+    .cta__headline {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .cta__message {
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.5;
+      margin-bottom: 56px;
+      max-width: 700px;
+    }
+
+    .cta__button {
+      display: inline-block;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      padding: 24px 56px;
+      border-radius: 100px;
+      text-decoration: none;
+    }
+
+    .cta__url {
+      margin-top: 32px;
+      font-size: 22px;
+      color: rgba(255, 255, 255, 0.3);
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 슬라이드 1: 커버 -->
+  <div class="slide cover active" id="slide-0">
+    <div class="cover__glow"></div>
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo">
+          <span class="brand-bar__logo-icon">📊</span>
+          <span>EconPedia</span>
+        </div>
+        <span class="brand-bar__badge" id="cover-badge"></span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <h1 class="cover__headline" id="cover-headline"></h1>
+        <p class="cover__subheadline" id="cover-subheadline"></p>
+      </div>
+    </div>
+    <span class="slide-number">1 / 5</span>
+  </div>
+
+  <!-- 슬라이드 2: 데이터 -->
+  <div class="slide data-slide" id="slide-1">
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo">
+          <span class="brand-bar__logo-icon">📊</span>
+          <span>EconPedia</span>
+        </div>
+      </div>
+      <h2 class="data-slide__title" id="data-title"></h2>
+      <div class="data-grid" id="data-grid"></div>
+    </div>
+    <span class="slide-number">2 / 5</span>
+  </div>
+
+  <!-- 슬라이드 3: 인사이트 1 -->
+  <div class="slide insight-slide" id="slide-2">
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo">
+          <span class="brand-bar__logo-icon">📊</span>
+          <span>EconPedia</span>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="insight__number" id="insight1-number"></div>
+        <div class="insight__accent-bar"></div>
+        <h2 class="insight__title" id="insight1-title"></h2>
+        <p class="insight__body" id="insight1-body"></p>
+      </div>
+    </div>
+    <span class="slide-number">3 / 5</span>
+  </div>
+
+  <!-- 슬라이드 4: 인사이트 2 -->
+  <div class="slide insight-slide" id="slide-3">
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo">
+          <span class="brand-bar__logo-icon">📊</span>
+          <span>EconPedia</span>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="insight__number" id="insight2-number"></div>
+        <div class="insight__accent-bar"></div>
+        <h2 class="insight__title" id="insight2-title"></h2>
+        <p class="insight__body" id="insight2-body"></p>
+      </div>
+    </div>
+    <span class="slide-number">4 / 5</span>
+  </div>
+
+  <!-- 슬라이드 5: CTA -->
+  <div class="slide cta-slide" id="slide-4">
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo">
+          <span class="brand-bar__logo-icon">📊</span>
+          <span>EconPedia</span>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div class="cta__icon">☕</div>
+        <h2 class="cta__headline" id="cta-headline"></h2>
+        <p class="cta__message" id="cta-message"></p>
+        <a class="cta__button" href="#">전문 읽기 →</a>
+        <p class="cta__url" id="cta-url"></p>
+      </div>
+    </div>
+    <span class="slide-number">5 / 5</span>
+  </div>
+
+  <script>
+    // Puppeteer가 데이터를 주입할 전역 함수
+    window.renderSlide = function(slideData, slideIndex) {
+      // 모든 슬라이드 숨기기
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+
+      const slide = slideData.slides[slideIndex];
+
+      if (slide.type === 'cover') {
+        document.getElementById('cover-headline').textContent = slide.headline;
+        document.getElementById('cover-subheadline').textContent = slide.subheadline;
+        document.getElementById('cover-badge').textContent = slide.badge;
+      }
+
+      if (slide.type === 'data') {
+        document.getElementById('data-title').textContent = slide.title;
+        const grid = document.getElementById('data-grid');
+        grid.innerHTML = '';
+        for (const item of slide.items) {
+          const dir = item.direction || (item.change.startsWith('-') ? 'down' : 'up');
+          grid.innerHTML += `
+            <div class="data-item">
+              <div class="data-item__left">
+                <span class="data-item__icon">${item.icon || (dir === 'up' ? '📈' : '📉')}</span>
+                <span class="data-item__label">${item.label}</span>
+              </div>
+              <div class="data-item__right">
+                <div class="data-item__value">${item.value}</div>
+                <div class="data-item__change ${dir}">${item.change}</div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      if (slide.type === 'insight') {
+        const n = slide.number === '01' ? '1' : '2';
+        document.getElementById(`insight${n}-number`).textContent = slide.number;
+        document.getElementById(`insight${n}-title`).textContent = slide.title;
+        document.getElementById(`insight${n}-body`).textContent = slide.body;
+      }
+
+      if (slide.type === 'cta') {
+        document.getElementById('cta-headline').textContent = slide.headline;
+        document.getElementById('cta-message').textContent = slide.message;
+        document.getElementById('cta-url').textContent = slide.url;
+      }
+
+      document.getElementById(`slide-${slideIndex}`).classList.add('active');
+    };
+  </script>
+</body>
+</html>
