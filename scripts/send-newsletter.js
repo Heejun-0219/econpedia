@@ -204,12 +204,48 @@ try {
   });
 
   if (error) {
-    console.error('❌ 발송 실패:', error);
-    process.exit(1);
+    // ── 에러 상세 로그 ──────────────────────────────────
+    console.error('═══════════════════════════════════════');
+    console.error('❌ 뉴스레터 발송 실패');
+    console.error('───────────────────────────────────────');
+    console.error(`   코드   : ${error.statusCode ?? 'N/A'}`);
+    console.error(`   이름   : ${error.name ?? 'N/A'}`);
+    console.error(`   메시지 : ${error.message}`);
+    console.error('───────────────────────────────────────');
+
+    // Resend 무료 플랜 제한 안내
+    if (error.statusCode === 403 && error.name === 'validation_error') {
+      const ownerEmail = error.message.match(/\(([^)]+)\)/)?.[1] ?? '계정 이메일';
+      console.error('');
+      console.error('💡 원인: Resend 무료 플랜 제한');
+      console.error('   onboarding@resend.dev 발신자는 계정 소유자 이메일로만 발송 가능합니다.');
+      console.error('');
+      console.error('🛠  해결 방법 (둘 중 하나 선택):');
+      console.error('');
+      console.error('   [A] GitHub Secret NEWSLETTER_TO 값을 변경 (즉시 가능)');
+      console.error(`       현재 설정값 → 계정 소유자 이메일로 변경: ${ownerEmail}`);
+      console.error('       GitHub → Settings → Secrets → NEWSLETTER_TO');
+      console.error('');
+      console.error('   [B] Resend 도메인 인증 후 FROM 주소 변경 (권장, 수일 소요)');
+      console.error('       https://resend.com/domains 에서 도메인 인증');
+      console.error('       인증 후 GitHub Secret NEWSLETTER_FROM 을 도메인 이메일로 설정');
+      console.error('       예: EconPedia <briefing@econpedia.kr>');
+    }
+
+    console.error('═══════════════════════════════════════');
+    // 이메일 실패가 전체 워크플로우를 중단시키지 않도록 exit 0
+    process.exit(0);
   }
 
-  console.log(`✅ 뉴스레터 발송 완료! 메일 ID: ${data.id}`);
+  console.log('✅ 뉴스레터 발송 완료!');
+  console.log(`   메일 ID  : ${data.id}`);
+  console.log(`   수신자   : ${toList.join(', ')}`);
+  console.log(`   제목     : ${latestArticle.title}`);
 } catch (err) {
-  console.error('❌ 예외 발생:', err.message);
-  process.exit(1);
+  console.error('═══════════════════════════════════════');
+  console.error('❌ 뉴스레터 발송 중 예외 발생');
+  console.error(`   ${err.message}`);
+  console.error('═══════════════════════════════════════');
+  process.exit(0); // 사이트 배포 파이프라인은 계속 진행
 }
+
