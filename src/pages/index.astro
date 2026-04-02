@@ -1,5 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import dailyArticles from '../data/daily-articles.json';
+
+const latestBriefings = [...dailyArticles]
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .slice(0, 5);
 
 const categories = [
   { icon: '🏦', title: '기초 경제학', desc: 'GDP, 인플레이션, 금리, 환율 등 경제의 기본 개념을 쉽게 배워보세요.', count: '24개 기사', href: '/economy/basics' },
@@ -37,10 +42,19 @@ const featuredArticles = [
     href: '/economy/finance/credit-score-tips',
   },
 ];
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[d.getDay()];
+  return `${month}월 ${day}일 (${weekday})`;
+}
 ---
 
-<BaseLayout 
-  title="경제 백과사전" 
+<BaseLayout
+  title="경제 백과사전"
   description="경제 초보자를 전문가로 만드는 경제 백과사전. GDP, 주식, ETF, 금리 등 복잡한 경제 개념을 쉽고 재밌게 배워보세요."
 >
   <!-- Hero -->
@@ -57,8 +71,8 @@ const featuredArticles = [
       </p>
       <div class="hero__stats">
         <div class="hero__stat">
-          <div class="hero__stat-value">115+</div>
-          <div class="hero__stat-label">경제 백과 기사</div>
+          <div class="hero__stat-value">매일</div>
+          <div class="hero__stat-label">AI 데일리 브리핑</div>
         </div>
         <div class="hero__stat">
           <div class="hero__stat-value">7</div>
@@ -71,6 +85,43 @@ const featuredArticles = [
       </div>
     </div>
   </section>
+
+  <!-- Daily Briefing -->
+  {latestBriefings.length > 0 && (
+    <section class="daily-section" id="daily-briefing">
+      <div class="container">
+        <div class="daily-section__header">
+          <div class="daily-section__label">
+            <span class="pulse-dot"></span>
+            오늘의 브리핑
+          </div>
+          <h2 class="section-title">AI 데일리 경제 브리핑</h2>
+          <p class="daily-section__subtitle">매일 아침, AI가 분석한 글로벌 시장 동향을 가장 먼저 만나보세요.</p>
+        </div>
+
+        <div class="daily-card-list">
+          {latestBriefings.map((brief, idx) => (
+            <a href={brief.href} class={`daily-card ${idx === 0 ? 'daily-card--featured' : ''}`} id={`briefing-${brief.date}`}>
+              <div class="daily-card__top">
+                <span class="daily-card__date">{formatDate(brief.date)}</span>
+                {idx === 0 && <span class="daily-card__live">NEW</span>}
+              </div>
+              <h3 class="daily-card__title">{brief.title}</h3>
+              <p class="daily-card__excerpt">{brief.excerpt}</p>
+              <div class="daily-card__footer">
+                <span class="daily-card__author">🤖 EconPedia AI</span>
+                <span class="daily-card__read">읽기 →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div class="daily-section__cta">
+          <a href="/daily" class="daily-section__cta-link">📚 모든 브리핑 보기 →</a>
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- Categories -->
   <section class="categories">

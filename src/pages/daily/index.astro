@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import dailyArticles from '../../data/daily-articles.json';
+
+const sortedArticles = [...dailyArticles].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BaseLayout
+  title="데일리 브리핑 아카이브"
+  description="EconPedia AI가 매일 아침 전달하는 글로벌 경제 브리핑. 최신 시장 데이터 기반의 경제 뉴스를 한눈에."
+>
+  <section class="daily-archive">
+    <div class="container">
+      <div class="daily-archive__header">
+        <div class="daily-archive__badge">
+          <span class="pulse-dot"></span>
+          매일 아침 업데이트
+        </div>
+        <h1 class="daily-archive__title">
+          데일리 브리핑
+          <span class="hero__title-gradient">아카이브</span>
+        </h1>
+        <p class="daily-archive__desc">
+          EconPedia AI가 매일 아침 전달한 글로벌 경제 브리핑을 모아볼 수 있습니다.<br/>
+          최신 시장 데이터를 기반으로 '내 지갑에 미치는 영향'을 분석합니다.
+        </p>
+      </div>
+
+      {sortedArticles.length === 0 && (
+        <div class="daily-archive__empty">
+          <p>아직 발행된 브리핑이 없습니다. 곧 첫 번째 브리핑이 도착합니다! 🚀</p>
+        </div>
+      )}
+
+      <div class="daily-archive__list">
+        {sortedArticles.map((article, idx) => (
+          <a href={article.href} class="daily-archive__card" id={`daily-${article.date}`}>
+            <div class="daily-archive__card-date">
+              <span class="daily-archive__card-day">{new Date(article.date + 'T00:00:00').getDate()}</span>
+              <span class="daily-archive__card-month">{(new Date(article.date + 'T00:00:00').getMonth() + 1) + '월'}</span>
+              <span class="daily-archive__card-year">{new Date(article.date + 'T00:00:00').getFullYear()}</span>
+            </div>
+            <div class="daily-archive__card-body">
+              {idx === 0 && <span class="daily-archive__card-latest">최신</span>}
+              <h2 class="daily-archive__card-title">{article.title}</h2>
+              <p class="daily-archive__card-excerpt">{article.excerpt}</p>
+              <div class="daily-archive__card-meta">
+                <span>EconPedia AI</span>
+                <span>•</span>
+                <span>⏱ 5분 읽기</span>
+              </div>
+            </div>
+            <div class="daily-archive__card-arrow">→</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

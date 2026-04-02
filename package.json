@@ -15,6 +15,7 @@
     "@google/genai": "^1.48.0",
     "astro": "^6.1.2",
     "dotenv": "^17.4.0",
+    "marked": "^17.0.5",
     "yahoo-finance2": "^3.14.0"
   }
 }
