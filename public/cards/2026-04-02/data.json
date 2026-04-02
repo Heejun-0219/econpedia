@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 4.47% 폭락! 📉",
+      "subheadline": "내 월급도 괜찮을까?",
+      "badge": "2026.04.03 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5234.05",
+          "change": "-4.47%",
+          "direction": "down"
+        },
+        {
+          "label": "S&P 500",
+          "value": "6554.02",
+          "change": "-0.32%",
+          "direction": "down"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1509.18",
+          "change": "-0.29%",
+          "direction": "down"
+        },
+        {
+          "label": "Bitcoin (USD)",
+          "value": "$66865.28",
+          "change": "-2.75%",
+          "direction": "down"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "글로벌 시장은 살짝 흔들렸는데, 우리 증시만 크게 출렁였어요. 마치 튼튼한 건물인데 갑자기 지반이 약해진 것처럼요. 외국인 매도세가 컸을 수 있어요. 😥"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "주식 투자자라면 내 계좌가 얇아졌다는 뜻. 😥 경제 전반의 분위기가 위축되면 회사 분위기나 고용, 소비에도 영향 줄 수 있어요."
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
