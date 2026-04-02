@@ -37,7 +37,7 @@ jobs:
         run: |
           git config --global user.name "EconPedia AI Publisher"
           git config --global user.email "actions@github.com"
-          git add src/pages/daily/*.astro
+          git add src/pages/daily/*.astro src/data/daily-articles.json
           
           # Only commit if there are changes
           if git diff --cached --quiet; then
@@ -46,3 +46,21 @@ jobs:
             git commit -m "docs(daily): Auto-published daily briefing"
             git push origin main
           fi
+
+      # ── 뉴스레터 이메일 발송 ─────────────────────────────
+      - name: 📧 Send Newsletter Email
+        if: always()
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          NEWSLETTER_FROM: ${{ secrets.NEWSLETTER_FROM || 'EconPedia <onboarding@resend.dev>' }}
+          NEWSLETTER_TO: ${{ secrets.NEWSLETTER_TO }}
+        run: node scripts/send-newsletter.js
+
+      # ── 슬랙 현황 리포트 발송 ─────────────────────────────
+      - name: 💬 Send Slack Status Report
+        if: always()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/send-slack-status.js
+
