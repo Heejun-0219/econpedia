@@ -1,0 +1,52 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 2%대 껑충! 📈",
+      "subheadline": "내 지갑도 두둑해질까?",
+      "badge": "2026.04.03 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "코스피",
+          "value": "5377.30",
+          "change": "+2.74%",
+          "direction": "up"
+        },
+        {
+          "label": "S&P 500",
+          "value": "6582.69",
+          "change": "+0.11%",
+          "direction": "up"
+        },
+        {
+          "label": "원/달러 환율",
+          "value": "1510.54원",
+          "change": "+0.05%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "해외는 잠잠한데, 우리 코스피만 껑충! 📈 외국인 투자자들이 한국 기업 성장에 기대를 걸고 돈을 넣은 결과일 수 있어요. 마치 우리 회사에 큰 계약이 들어온 것처럼요!"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "코스피 상승은 내 주식 계좌에 웃음꽃을 피울 수 있어요. 💰 또, 기업 실적이 좋아지면 월급 인상이나 고용 증가로 이어질 가능성도 있답니다!"
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
