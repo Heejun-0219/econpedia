@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "KOSPI 2.7% 급등! 🚀",
+      "subheadline": "내 월급도 오를까?",
+      "badge": "2026.04.04 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5377.30",
+          "change": "+2.74%",
+          "direction": "up"
+        },
+        {
+          "label": "S&P 500",
+          "value": "6582.69",
+          "change": "+0.11%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1510.54",
+          "change": "+0.05%",
+          "direction": "up"
+        },
+        {
+          "label": "Bitcoin",
+          "value": "$67390.05",
+          "change": "+0.79%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "오늘 코스피가 껑충 뛴 건, 기업들 '성적표'에 대한 기대감 때문이에요. 글로벌 경제 분위기도 슬금슬금 좋아지는 중! 📈"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "주식 투자했다면 내 계좌가 방긋 웃었을 수 있어요. 💰 하지만 이건 기업 '기대감'이라, 당장 월급이 오르진 않아요. 그래도 경제 분위기엔 좋은 신호!"
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
