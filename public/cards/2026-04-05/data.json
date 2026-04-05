@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "KOSPI 2.74% 껑충! 🚀",
+      "subheadline": "내 주식도 오를까?",
+      "badge": "2026.04.03 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5377.30",
+          "change": "+2.74%",
+          "direction": "up"
+        },
+        {
+          "label": "S&P 500",
+          "value": "6582.69",
+          "change": "+0.11%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1510.59",
+          "change": "+0.05%",
+          "direction": "up"
+        },
+        {
+          "label": "Bitcoin (USD)",
+          "value": "$67548.06",
+          "change": "+0.23%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "기업들 성적표 기대감에 투자 심리가 확 살아났어요! 📈 마치 월급날 앞둔 기분?"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "내 주식 계좌에 초록불이 켜질 수 있어요. 💸 하지만 환율은 살짝 올라 수입품은 비싸질 수 있죠."
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
