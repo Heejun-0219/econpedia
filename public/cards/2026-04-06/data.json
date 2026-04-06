@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 쑥쑥! 📈 내 계좌도?",
+      "subheadline": "주식, 환율, 비트코인 싹 다!",
+      "badge": "2026.04.03 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5450.33",
+          "change": "+1.36%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1508.80",
+          "change": "-0.12%",
+          "direction": "down"
+        },
+        {
+          "label": "Bitcoin (USD)",
+          "value": "$69343.58",
+          "change": "+2.93%",
+          "direction": "up"
+        },
+        {
+          "label": "S&P 500",
+          "value": "6611.83",
+          "change": "+0.44%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "글로벌 경기 회복 기대감에 투자 심리가 살아났어요! 마치 우리 회사 실적 좋아져서 보너스 기대하는 느낌? 😊"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "내 주식 계좌에 빨간불 들어왔을 수 있어요! 📈 해외여행 계획 중이라면 환전할 때 조금 더 유리할 수 있고요."
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
