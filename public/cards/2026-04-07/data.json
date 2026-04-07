@@ -1,0 +1,52 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 0.8% 껑충! 📈",
+      "subheadline": "내 지갑에 무슨 일?",
+      "badge": "2026.04.07 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5494.78",
+          "change": "+0.82%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1501.26",
+          "change": "-0.49%",
+          "direction": "down"
+        },
+        {
+          "label": "Bitcoin (USD)",
+          "value": "$70374.19",
+          "change": "+1.45%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "우리나라 주식시장이 힘을 냈어요. 🚀 기업들의 성적표(실적)가 좋았나 봐요!"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "환율이 내려서 해외 직구(해외 인터넷 쇼핑) 싸지고, 비트코인도 오르고! 💰 여행 계획 세울까?"
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
