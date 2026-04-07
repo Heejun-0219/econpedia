@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   generate-and-publish:
@@ -65,6 +66,22 @@ jobs:
             git commit -m "docs: Auto-published daily briefing + blog + card news"
             git push origin main
           fi
+
+      # ── 배포 워크플로우 트리거 ──────────────────────────────
+      # GITHUB_TOKEN으로 푸시한 커밋은 deploy.yml을 자동 트리거하지 않으므로
+      # GitHub API를 통해 workflow_dispatch로 직접 호출합니다.
+      - name: 🚀 Trigger Deploy Workflow
+        env:
+          DEPLOY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $DEPLOY_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy.yml/dispatches \
+            -d '{"ref":"main"}' \
+          && echo "✅ Deploy workflow triggered" \
+          || echo "⚠️ Deploy trigger failed (non-critical)"
 
       # ── 뉴스레터 이메일 발송 ─────────────────────────────
       - name: 📧 Send Newsletter Email
