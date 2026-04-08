@@ -2,8 +2,8 @@
   "slides": [
     {
       "type": "cover",
-      "headline": "코스피 6%대 급등! 📈",
-      "subheadline": "내 계좌도 오르는 걸까?",
+      "headline": "코스피 6.87% 급등! 📈",
+      "subheadline": "내 지갑, 괜찮을까?",
       "badge": "2026.04.08 브리핑"
     },
     {
@@ -17,21 +17,21 @@
           "direction": "up"
         },
         {
-          "label": "USD/KRW",
-          "value": "1477.79",
-          "change": "-1.53%",
-          "direction": "down"
-        },
-        {
-          "label": "NASDAQ",
-          "value": "22583.61",
-          "change": "+2.57%",
+          "label": "S&P 500",
+          "value": "6782.81",
+          "change": "+2.51%",
           "direction": "up"
         },
         {
+          "label": "USD/KRW",
+          "value": "1478.49",
+          "change": "-1.49%",
+          "direction": "down"
+        },
+        {
           "label": "Bitcoin (USD)",
-          "value": "$71090.01",
-          "change": "+4.54%",
+          "value": "$71157.76",
+          "change": "+1.04%",
           "direction": "up"
         }
       ]
@@ -40,13 +40,13 @@
       "type": "insight",
       "number": "01",
       "title": "왜 이렇게 됐을까?",
-      "body": "기업들 실적이 좋아질 거란 기대감에 투자자들이 돈 보따리를 푼 거예요. 마치 세일 기간에 백화점 가는 것처럼요! 🛍️"
+      "body": "글로벌 경기 회복 기대감 솔솔~ 투자자들이 지갑을 열기 시작했어요. 마치 내 월급날처럼 기분 좋은 소식이죠?"
     },
     {
       "type": "insight",
       "number": "02",
       "title": "내 지갑에 미치는 영향",
-      "body": "주식 투자한 친구들은 계좌가 활짝 웃었을 거예요. 😃 환율 내려서 해외 직구, 여행도 부담이 덜해질 수 있고요!"
+      "body": "주식 계좌에 초록불 들어왔다면 기분 좋으셨죠? 💵 해외여행 계획 중이라면 환율이 살짝 저렴해질 수 있어요!"
     },
     {
       "type": "cta",
