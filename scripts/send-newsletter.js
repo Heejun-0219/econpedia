@@ -183,12 +183,11 @@ const html = `
               <p style="color:rgba(255,255,255,0.3);font-size:12px;margin:0 0 8px;">
                 이 메일은 EconPedia 자동 발행 시스템이 발송했습니다.
               </p>
-              <p style="color:rgba(255,255,255,0.2);font-size:11px;margin:0;">
+              <p style="color:rgba(255,255,255,0.2);font-size:11px;margin:0 0 12px 0;">
                 <a href="https://econpedia.dedyn.io" style="color:#3b82f6;text-decoration:none;">econpedia.dedyn.io</a>
-                &nbsp;·&nbsp;
-                <a href="https://econpedia.dedyn.io/about" style="color:rgba(255,255,255,0.3);text-decoration:none;">소개</a>
-                &nbsp;·&nbsp;
-                <a href="https://econpedia.dedyn.io/contact" style="color:rgba(255,255,255,0.3);text-decoration:none;">문의</a>
+              </p>
+              <p style="margin:0;">
+                <a href="{{UNSUBSCRIBE_URL}}" style="color:rgba(255,255,255,0.3);text-decoration:underline;font-size:11px;">더 이상 뉴스레터를 받고 싶지 않다면 여기를 클릭해 구독을 취소해주세요.</a>
               </p>
             </td>
           </tr>
@@ -215,8 +214,19 @@ async function getAudienceContacts(audienceId) {
   return (json.data || []).filter(c => !c.unsubscribed).map(c => c.email);
 }
 
-async function sendToEmail(to, subject, htmlBody) {
-  return resend.emails.send({ from: FROM, to, subject, html: htmlBody });
+async function sendToEmail(to, subject, baseHtml) {
+  const unsubscribeUrl = `https://econpedia.dedyn.io/unsubscribe?email=${encodeURIComponent(to)}`;
+  const htmlBody = baseHtml.replace('{{UNSUBSCRIBE_URL}}', unsubscribeUrl);
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject,
+    html: htmlBody,
+    headers: {
+      'List-Unsubscribe': `<${unsubscribeUrl}>`
+    }
+  });
 }
 
 console.log(`📧 뉴스레터 발송 시작...`);
