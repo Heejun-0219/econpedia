@@ -4,6 +4,12 @@
 // 필요한 환경 변수:
 //   SLACK_WEBHOOK_URL  - Slack Incoming Webhook URL
 //   GITHUB_RUN_URL     - GitHub Actions 실행 URL (자동 주입)
+//   SERVER_CPU         - 서버 CPU 사용률 (워크플로우에서 주입)
+//   SERVER_MEM         - 서버 메모리 사용률
+//   SERVER_DISK        - 서버 디스크 사용률
+//   SERVER_UPTIME      - 서버 업타임
+//   SERVER_DOCKER      - Docker 컨테이너 상태
+//   SERVER_REACHABLE   - SSH 연결 가능 여부
 
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -99,6 +105,41 @@ const blogLine = statusLine(
   '⚠️ 블로그 상태 미확인',
 );
 
+// ─── 서버 리소스 메트릭 ─────────────────────────────────
+const serverCpu       = process.env.SERVER_CPU       || 'N/A';
+const serverMem       = process.env.SERVER_MEM       || 'N/A';
+const serverDisk      = process.env.SERVER_DISK      || 'N/A';
+const serverUptime    = process.env.SERVER_UPTIME    || 'N/A';
+const serverDocker    = process.env.SERVER_DOCKER    || 'N/A';
+const serverReachable = process.env.SERVER_REACHABLE === 'true';
+
+console.log('🖥️  서버 메트릭:', { serverCpu, serverMem, serverDisk, serverUptime, serverDocker, serverReachable });
+
+// 퍼센트 숫자 파싱 (경고 임계값 판단용)
+function pct(str) {
+  const n = parseFloat(str);
+  return isNaN(n) ? null : n;
+}
+function gauge(str) {
+  const n = pct(str);
+  if (n === null) return '⬜';
+  if (n >= 90) return '🔴';
+  if (n >= 75) return '🟡';
+  return '🟢';
+}
+
+const cpuGauge    = gauge(serverCpu);
+const memGauge    = gauge(serverMem);
+const diskGauge   = gauge(serverDisk);
+const dockerOk    = serverDocker.toLowerCase().includes('up');
+const dockerEmoji = !serverReachable ? '⬜' : dockerOk ? '🟢' : '🔴';
+
+// 서버 경보 여부
+const serverAlert = (pct(serverCpu)  !== null && pct(serverCpu)  >= 90)
+                 || (pct(serverMem)  !== null && pct(serverMem)  >= 90)
+                 || (pct(serverDisk) !== null && pct(serverDisk) >= 90)
+                 || (serverReachable && !dockerOk);
+
 // ─── 날짜/시간 ───────────────────────────────────────────
 const now = new Date();
 const kstStr = now.toLocaleString('ko-KR', {
@@ -119,8 +160,9 @@ const articleUrl = latestArticle
 const allOk = latestArticle
   && newsletterStatus.success
   && cardNewsStatus.success
-  && blogStatus.success;
-const headerEmoji = allOk ? '✅' : '⚠️';
+  && blogStatus.success
+  && !serverAlert;
+const headerEmoji = allOk ? '✅' : serverAlert ? '🚨' : '⚠️';
 
 const payload = {
   blocks: [
@@ -217,6 +259,41 @@ const payload = {
           }
         : {}),
     },
+
+    { type: 'divider' },
+
+    // 서버 리소스 모니터링
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: [
+          serverReachable
+            ? `🖥️ *서버 리소스* (Oracle Cloud · econpedia.dedyn.io)`
+            : `🖥️ *서버 리소스* — ⚠️ SSH 연결 불가`,
+          `${cpuGauge} CPU : *${serverCpu}*`,
+          `${memGauge} 메모리 : *${serverMem}*`,
+          `${diskGauge} 디스크 : *${serverDisk}*`,
+          `${dockerEmoji} Docker : *${serverDocker}*`,
+          `⏱️ 업타임 : ${serverUptime}`,
+        ].join('\n'),
+      },
+    },
+
+    // 리소스 경보 (임계값 초과 시만 표시)
+    ...(serverAlert ? [{
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: [
+          `🚨 *서버 리소스 경보!*`,
+          pct(serverCpu)  >= 90 ? `• CPU ${serverCpu} — 과부하 위험` : '',
+          pct(serverMem)  >= 90 ? `• 메모리 ${serverMem} — 메모리 부족 위험` : '',
+          pct(serverDisk) >= 90 ? `• 디스크 ${serverDisk} — 디스크 부족 위험` : '',
+          serverReachable && !dockerOk ? `• Docker 컨테이너 다운 — 즉시 확인 필요!` : '',
+        ].filter(Boolean).join('\n'),
+      },
+    }] : []),
 
     // 푸터
     {

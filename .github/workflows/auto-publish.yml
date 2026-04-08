@@ -92,10 +92,80 @@ jobs:
           NEWSLETTER_TO: ${{ secrets.NEWSLETTER_TO }}
         run: node scripts/send-newsletter.js
 
+      # ── 서버 리소스 수집 (SSH) ────────────────────────────
+      - name: 📊 Collect Server Metrics
+        if: always()
+        id: server_metrics
+        env:
+          OCI_HOST: ${{ secrets.OCI_HOST }}
+          OCI_USER: ${{ secrets.OCI_USER }}
+          OCI_SSH_KEY: ${{ secrets.OCI_SSH_KEY }}
+        run: |
+          # SSH 키가 없으면 스킵
+          if [ -z "$OCI_SSH_KEY" ]; then
+            echo "⚠️ OCI_SSH_KEY 없음 - 서버 메트릭 수집 건너뜀"
+            echo "SERVER_CPU=N/A"       >> $GITHUB_OUTPUT
+            echo "SERVER_MEM=N/A"       >> $GITHUB_OUTPUT
+            echo "SERVER_DISK=N/A"      >> $GITHUB_OUTPUT
+            echo "SERVER_DOCKER=N/A"    >> $GITHUB_OUTPUT
+            echo "SERVER_UPTIME=N/A"    >> $GITHUB_OUTPUT
+            echo "SERVER_REACHABLE=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # SSH 키 파일 생성
+          mkdir -p ~/.ssh
+          echo "$OCI_SSH_KEY" > ~/.ssh/oci_key
+          chmod 600 ~/.ssh/oci_key
+
+          # 서버에서 메트릭 수집 (단일 SSH 연결)
+          METRICS=$(ssh -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=10 \
+            -i ~/.ssh/oci_key \
+            "$OCI_USER@$OCI_HOST" \
+            'echo "CPU:$(top -bn1 | grep "Cpu(s)" | awk "{print 100-\$8}")%" && \
+             echo "MEM:$(free -m | awk "/^Mem/{printf \"%.0f%%\", \$3/\$2*100}")" && \
+             echo "DISK:$(df -h / | awk "NR==2{print \$5}")" && \
+             echo "UPTIME:$(uptime -p | sed s/up\ //)" && \
+             echo "DOCKER:$(sudo docker ps --filter name=econpedia --format "{{.Status}}" 2>/dev/null || echo unknown)"' 2>/dev/null) || {
+            echo "⚠️ SSH 연결 실패"
+            echo "SERVER_CPU=연결 실패"    >> $GITHUB_OUTPUT
+            echo "SERVER_MEM=연결 실패"    >> $GITHUB_OUTPUT
+            echo "SERVER_DISK=연결 실패"   >> $GITHUB_OUTPUT
+            echo "SERVER_DOCKER=연결 실패" >> $GITHUB_OUTPUT
+            echo "SERVER_UPTIME=연결 실패" >> $GITHUB_OUTPUT
+            echo "SERVER_REACHABLE=false"  >> $GITHUB_OUTPUT
+            exit 0
+          }
+
+          echo "서버 메트릭:" && echo "$METRICS"
+
+          CPU=$(echo "$METRICS"    | grep '^CPU:'    | cut -d: -f2)
+          MEM=$(echo "$METRICS"    | grep '^MEM:'    | cut -d: -f2)
+          DISK=$(echo "$METRICS"   | grep '^DISK:'   | cut -d: -f2)
+          UPTIME=$(echo "$METRICS" | grep '^UPTIME:' | cut -d: -f2)
+          DOCKER=$(echo "$METRICS" | grep '^DOCKER:' | cut -d: -f2-)
+
+          echo "SERVER_CPU=${CPU:-N/A}"       >> $GITHUB_OUTPUT
+          echo "SERVER_MEM=${MEM:-N/A}"       >> $GITHUB_OUTPUT
+          echo "SERVER_DISK=${DISK:-N/A}"     >> $GITHUB_OUTPUT
+          echo "SERVER_UPTIME=${UPTIME:-N/A}" >> $GITHUB_OUTPUT
+          echo "SERVER_DOCKER=${DOCKER:-N/A}" >> $GITHUB_OUTPUT
+          echo "SERVER_REACHABLE=true"        >> $GITHUB_OUTPUT
+
+          # SSH 키 삭제
+          rm -f ~/.ssh/oci_key
+
       # ── 슬랙 현황 리포트 발송 ─────────────────────────────
       - name: 💬 Send Slack Status Report
         if: always()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SERVER_CPU: ${{ steps.server_metrics.outputs.SERVER_CPU }}
+          SERVER_MEM: ${{ steps.server_metrics.outputs.SERVER_MEM }}
+          SERVER_DISK: ${{ steps.server_metrics.outputs.SERVER_DISK }}
+          SERVER_UPTIME: ${{ steps.server_metrics.outputs.SERVER_UPTIME }}
+          SERVER_DOCKER: ${{ steps.server_metrics.outputs.SERVER_DOCKER }}
+          SERVER_REACHABLE: ${{ steps.server_metrics.outputs.SERVER_REACHABLE }}
         run: node scripts/send-slack-status.js
