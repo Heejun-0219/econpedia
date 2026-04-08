@@ -10,6 +10,10 @@ import { Resend } from 'resend';
 import { readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { config } from 'dotenv';
+
+// 로컬 환경에서 .env 파일 로드 (GitHub Actions는 secrets로 주입됨)
+config({ path: join(dirname(fileURLToPath(import.meta.url)), '..', '.env') });
 
 // ─── 결과 상태 파일 기록 헬퍼 ────────────────────────────────
 const STATUS_FILE = join(dirname(fileURLToPath(import.meta.url)), '..', '.newsletter-status.json');
