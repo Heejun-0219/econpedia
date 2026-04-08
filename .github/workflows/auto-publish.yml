@@ -64,6 +64,8 @@ jobs:
             echo "No new content generated."
           else
             git commit -m "docs: Auto-published daily briefing + blog + card news"
+            # 원격에 새 커밋이 있을 경우 rebase 후 push
+            git pull --rebase origin main
             git push origin main
           fi
 
