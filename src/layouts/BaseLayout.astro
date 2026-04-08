@@ -112,6 +112,42 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       </div>
     </div>
 
+    <!-- 뉴스레터 구독 섹션 -->
+    <section class="newsletter-section" id="newsletter">
+      <div class="newsletter-inner">
+        <div class="newsletter-left">
+          <span class="newsletter-badge">📬 무료 뉴스레터</span>
+          <h2 class="newsletter-title">매일 아침, 경제 브리핑을<br/>받아보세요</h2>
+          <p class="newsletter-desc">AI가 분석한 글로벌 경제 핵심을 5분 만에 파악.<br/>이미 <strong id="subscriber-count">구독자들이</strong> 함께하고 있어요.</p>
+          <ul class="newsletter-features">
+            <li>📊 매일 오전 7시 KST 발송</li>
+            <li>🤖 Gemini AI 경제 분석</li>
+            <li>✉️ 언제든지 구독 취소 가능</li>
+          </ul>
+        </div>
+        <div class="newsletter-right">
+          <form class="newsletter-form" id="subscribe-form">
+            <div class="newsletter-form__group">
+              <input
+                type="email"
+                id="subscribe-email"
+                class="newsletter-form__input"
+                placeholder="your@email.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <button type="submit" class="newsletter-form__btn" id="subscribe-btn">
+              <span class="subscribe-btn-text">무료 구독 시작 →</span>
+              <span class="subscribe-btn-loading" style="display:none">발송 중...</span>
+            </button>
+            <div id="subscribe-feedback" class="newsletter-feedback" style="display:none"></div>
+            <p class="newsletter-form__privacy">스팸 없음 · 무료 · 언제든 취소 가능</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
       <div class="footer__inner">
@@ -282,6 +318,67 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           }
           if (e.key === 'Escape' && modal.classList.contains('search-modal--open')) {
             closeModal();
+          }
+        });
+      })();
+    </script>
+
+    <!-- 뉴스레터 구독 스크립트 -->
+    <script>
+      (function () {
+        const form = document.getElementById('subscribe-form');
+        if (!form) return;
+
+        const emailInput = document.getElementById('subscribe-email');
+        const btn = document.getElementById('subscribe-btn');
+        const btnText = btn.querySelector('.subscribe-btn-text');
+        const btnLoading = btn.querySelector('.subscribe-btn-loading');
+        const feedback = document.getElementById('subscribe-feedback');
+
+        function setLoading(on) {
+          btn.disabled = on;
+          btnText.style.display = on ? 'none' : '';
+          btnLoading.style.display = on ? '' : 'none';
+        }
+
+        function showFeedback(message, isSuccess) {
+          feedback.textContent = message;
+          feedback.className = 'newsletter-feedback ' + (isSuccess ? 'newsletter-feedback--success' : 'newsletter-feedback--error');
+          feedback.style.display = '';
+        }
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = emailInput.value.trim();
+          if (!email) return;
+
+          setLoading(true);
+          feedback.style.display = 'none';
+
+          try {
+            const res = await fetch('/api/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email }),
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+              showFeedback(data.message || '구독 신청이 완료됐습니다! 📊', true);
+              emailInput.value = '';
+              // 성공 시 버튼 텍스트 변경
+              btnText.textContent = '✅ 구독 완료!';
+              btnText.style.display = '';
+              btnLoading.style.display = 'none';
+              btn.disabled = true;
+              btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else {
+              showFeedback(data.error || '오류가 발생했습니다. 다시 시도해주세요.', false);
+              setLoading(false);
+            }
+          } catch (err) {
+            showFeedback('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', false);
+            setLoading(false);
           }
         });
       })();

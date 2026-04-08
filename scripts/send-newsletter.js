@@ -2,9 +2,10 @@
 // 데일리 브리핑 이메일 뉴스레터 발송 (Resend API)
 //
 // 필요한 환경 변수:
-//   RESEND_API_KEY     - Resend에서 발급한 API Key
-//   NEWSLETTER_FROM    - 발신자 이메일 (예: onboarding@resend.dev 또는 briefing@econpedia.kr)
-//   NEWSLETTER_TO      - 수신자 이메일 (쉼표로 구분 시 여러 명 가능)
+//   RESEND_API_KEY       - Resend에서 발급한 API Key
+//   NEWSLETTER_FROM      - 발신자 이메일 (예: briefing@econpedia.dedyn.io)
+//   RESEND_AUDIENCE_ID   - Resend Audiences ID (구독자 전체 발송)
+//   NEWSLETTER_TO        - 폴백용 수신자 (RESEND_AUDIENCE_ID 없을 때만 사용)
 
 import { Resend } from 'resend';
 import { readFileSync, writeFileSync } from 'fs';
@@ -26,17 +27,18 @@ const ROOT = join(__dirname, '..');
 
 // ─── 환경 변수 검증 ─────────────────────────────────────
 const RESEND_API_KEY  = process.env.RESEND_API_KEY;
-const FROM            = process.env.NEWSLETTER_FROM || 'EconPedia <onboarding@resend.dev>';
-const TO              = process.env.NEWSLETTER_TO;
+const FROM            = process.env.NEWSLETTER_FROM || 'EconPedia <briefing@econpedia.dedyn.io>';
+const AUDIENCE_ID     = process.env.RESEND_AUDIENCE_ID;
+const FALLBACK_TO     = process.env.NEWSLETTER_TO; // Audience 없을 때 폴백
 
 if (!RESEND_API_KEY) {
   console.error('❌ RESEND_API_KEY 환경 변수가 없습니다. 발송을 건너뜁니다.');
   writeStatus(false, 'RESEND_API_KEY 없음');
   process.exit(0);
 }
-if (!TO) {
-  console.error('❌ NEWSLETTER_TO 환경 변수가 없습니다. 발송을 건너뜁니다.');
-  writeStatus(false, 'NEWSLETTER_TO 없음');
+if (!AUDIENCE_ID && !FALLBACK_TO) {
+  console.error('❌ RESEND_AUDIENCE_ID 또는 NEWSLETTER_TO 환경 변수가 없습니다.');
+  writeStatus(false, 'AUDIENCE_ID/NEWSLETTER_TO 없음');
   process.exit(0);
 }
 
@@ -203,60 +205,82 @@ const html = `
 // ─── Resend 발송 ──────────────────────────────────────────
 const resend = new Resend(RESEND_API_KEY);
 
-const toList = TO.split(',').map(e => e.trim()).filter(Boolean);
+async function getAudienceContacts(audienceId) {
+  const res = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+    headers: { Authorization: `Bearer ${RESEND_API_KEY}` },
+  });
+  if (!res.ok) throw new Error(`Contacts API 오류: ${res.status}`);
+  const json = await res.json();
+  // 구독 취소하지 않은 활성 구독자만
+  return (json.data || []).filter(c => !c.unsubscribed).map(c => c.email);
+}
+
+async function sendToEmail(to, subject, htmlBody) {
+  return resend.emails.send({ from: FROM, to, subject, html: htmlBody });
+}
 
 console.log(`📧 뉴스레터 발송 시작...`);
-console.log(`   수신자: ${toList.join(', ')}`);
 console.log(`   기사: ${latestArticle.title}`);
 
+const subject = `📊 [EconPedia] ${dateStr} | ${latestArticle.title}`;
+
 try {
-  const { data, error } = await resend.emails.send({
-    from: FROM,
-    to: toList,
-    subject: `📊 [EconPedia] ${dateStr} | ${latestArticle.title}`,
-    html,
-  });
+  let recipients = [];
 
-  if (error) {
-    // ── 에러 상세 로그 ──────────────────────────────────
-    console.error('═══════════════════════════════════════');
-    console.error('❌ 뉴스레터 발송 실패');
-    console.error('───────────────────────────────────────');
-    console.error(`   코드   : ${error.statusCode ?? 'N/A'}`);
-    console.error(`   이름   : ${error.name ?? 'N/A'}`);
-    console.error(`   메시지 : ${error.message}`);
-    console.error('───────────────────────────────────────');
+  if (AUDIENCE_ID) {
+    // ── Audience 구독자 전체 발송 ────────────────────────
+    console.log(`   📋 Audience ID: ${AUDIENCE_ID}`);
+    console.log(`   구독자 목록 조회 중...`);
+    recipients = await getAudienceContacts(AUDIENCE_ID);
+    console.log(`   ✅ 활성 구독자 ${recipients.length}명 조회 완료`);
 
-    // Resend 무료 플랜 제한 안내
-    if (error.statusCode === 403 && error.name === 'validation_error') {
-      const ownerEmail = error.message.match(/\(([^)]+)\)/)?.[1] ?? '계정 이메일';
-      console.error('');
-      console.error('💡 원인: Resend 무료 플랜 제한');
-      console.error('   onboarding@resend.dev 발신자는 계정 소유자 이메일로만 발송 가능합니다.');
-      console.error('');
-      console.error('🛠  해결 방법 (둘 중 하나 선택):');
-      console.error('');
-      console.error('   [A] GitHub Secret NEWSLETTER_TO 값을 변경 (즉시 가능)');
-      console.error(`       현재 설정값 → 계정 소유자 이메일로 변경: ${ownerEmail}`);
-      console.error('       GitHub → Settings → Secrets → NEWSLETTER_TO');
-      console.error('');
-      console.error('   [B] Resend 도메인 인증 후 FROM 주소 변경 (권장, 수일 소요)');
-      console.error('       https://resend.com/domains 에서 도메인 인증');
-      console.error('       인증 후 GitHub Secret NEWSLETTER_FROM 을 도메인 이메일로 설정');
-      console.error('       예: EconPedia <briefing@econpedia.kr>');
+    if (recipients.length === 0) {
+      console.log('ℹ️  구독자가 없습니다. 발송을 건너뜁니다.');
+      writeStatus(false, '구독자 0명');
+      process.exit(0);
     }
-
-    console.error('═══════════════════════════════════════');
-    writeStatus(false, `${error.statusCode} ${error.name}: ${error.message}`);
-    // 이메일 실패가 전체 워크플로우를 중단시키지 않도록 exit 0
-    process.exit(0);
+  } else {
+    // ── 폴백: NEWSLETTER_TO 목록 발송 ─────────────────
+    recipients = FALLBACK_TO.split(',').map(e => e.trim()).filter(Boolean);
+    console.log(`   ⚠️  Audience 없음 — 폴백 수신자 ${recipients.length}명`);
   }
 
-  console.log('✅ 뉴스레터 발송 완료!');
-  console.log(`   메일 ID  : ${data.id}`);
-  console.log(`   수신자   : ${toList.join(', ')}`);
-  console.log(`   제목     : ${latestArticle.title}`);
-  writeStatus(true, `메일 ID: ${data.id}`);
+  console.log(`   발송 대상: ${recipients.slice(0, 3).join(', ')}${recipients.length > 3 ? ` 외 ${recipients.length - 3}명` : ''}`);
+  console.log(`─────────────────────────────────────────`);
+
+  // 개별 발송 (Resend 무료 플랜 호환)
+  let successCount = 0;
+  let failCount = 0;
+  const BATCH_SIZE = 10; // 동시 발송 최대 수
+
+  for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
+    const batch = recipients.slice(i, i + BATCH_SIZE);
+    const results = await Promise.allSettled(
+      batch.map(email => sendToEmail(email, subject, html))
+    );
+
+    results.forEach((result, idx) => {
+      if (result.status === 'fulfilled' && !result.value.error) {
+        successCount++;
+      } else {
+        failCount++;
+        const err = result.value?.error || result.reason;
+        console.error(`   ❌ ${batch[idx]}: ${err?.message || '알 수 없는 오류'}`);
+      }
+    });
+
+    // Rate limit 방지 (배치간 100ms 대기)
+    if (i + BATCH_SIZE < recipients.length) {
+      await new Promise(r => setTimeout(r, 100));
+    }
+  }
+
+  console.log(`═══════════════════════════════════════`);
+  console.log(`✅ 뉴스레터 발송 완료!`);
+  console.log(`   성공: ${successCount}명 / 실패: ${failCount}명 / 전체: ${recipients.length}명`);
+  console.log(`   제목: ${latestArticle.title}`);
+  writeStatus(true, `성공 ${successCount}/${recipients.length}명`);
+
 } catch (err) {
   console.error('═══════════════════════════════════════');
   console.error('❌ 뉴스레터 발송 중 예외 발생');
