@@ -70,7 +70,10 @@ jobs:
               -p 80:80 \
               -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
-              --memory=128m \
+              -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
+              -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
+              -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
+              --memory=256m \
               --cpus=0.5 \
               --health-cmd="wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost/ || exit 1" \
               --health-interval=30s \
