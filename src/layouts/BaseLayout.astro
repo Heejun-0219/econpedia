@@ -57,6 +57,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <style is:global>
       @import '../styles/global.css';
     </style>
+
+    <!-- Visit Tracker -->
+    <script is:inline>
+      // 페이지 로드 시 한 번만 방문자 카운트 올리기 (간단한 세션 스토리지 체크로 중복 방지)
+      if (!sessionStorage.getItem('visited')) {
+        fetch('/api/track').catch(() => {});
+        sessionStorage.setItem('visited', '1');
+      }
+    </script>
   </head>
   <body>
     <!-- Navigation -->

@@ -6,11 +6,43 @@
 
 import 'dotenv/config';
 import { createServer } from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// data 폴더를 루트 디렉토리에 마운트된 영역으로 지정 (로컬에서는 api/../data)
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const STATS_FILE = path.join(DATA_DIR, 'stats.json');
 
 const PORT = process.env.API_PORT || 3001;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://econpedia.dedyn.io';
+
+// ─── 데이터 파일 초기화 ──────────────────────────────
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(STATS_FILE)) {
+  fs.writeFileSync(STATS_FILE, JSON.stringify({ total: 0, daily: {} }), 'utf-8');
+}
+
+function readStats() {
+  try {
+    return JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8'));
+  } catch (e) {
+    return { total: 0, daily: {} };
+  }
+}
+
+function writeStats(data) {
+  try {
+    fs.writeFileSync(STATS_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('⚠️ stats.json 쓰기 실패:', e.message);
+  }
+}
+
 
 // ─── 간단한 인메모리 Rate Limiter ────────────────────────
 const rateLimitMap = new Map(); // ip → { count, resetAt }
@@ -112,6 +144,35 @@ const server = createServer(async (req, res) => {
       audience: AUDIENCE_ID ? '설정됨' : '미설정',
       ts: new Date().toISOString(),
     });
+  }
+
+  // ── GET /api/stats (슬랙 리포트용) ──────────────────────────
+  if (req.method === 'GET' && path === '/api/stats') {
+    const stats = readStats();
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayCount = stats.daily[todayStr] || 0;
+    
+    return sendJSON(res, 200, {
+      total_visitors: stats.total || 0,
+      daily_visitors: todayCount,
+      ts: new Date().toISOString(),
+    });
+  }
+
+  // ── GET /api/track (방문자 수 카운팅) ───────────────────────
+  if (req.method === 'GET' && path === '/api/track') {
+    // Rate limit 의 일종으로 단순 어뷰징 체크 가능 (생략 가능)
+    const stats = readStats();
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    stats.total = (stats.total || 0) + 1;
+    stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
+    
+    // 30일이 지난 데이터(혹은 구형 데이터) 정리 로직을 위해 간단하게 구현 가능하지만
+    // 현 단계에서는 단순히 오늘 날짜만 카운트
+    writeStats(stats);
+    
+    return sendJSON(res, 200, { success: true });
   }
 
   // ── POST /api/subscribe ────────────────────────────────

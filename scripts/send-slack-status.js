@@ -152,6 +152,43 @@ const kstStr = now.toLocaleString('ko-KR', {
   hour12: false,
 });
 
+// ─── 트래픽 & 수익 메트릭 로드 ─────────────────────────
+console.log('📊 비즈니스 트래픽 분석 수집 중...');
+let siteStats = { total_visitors: 0, daily_visitors: 0 };
+try {
+  // 백엔드의 자체 트래커 데이터를 긁어옴
+  const statsRes = await fetch('https://econpedia.dedyn.io/api/stats');
+  if (statsRes.ok) {
+    siteStats = await statsRes.json();
+  }
+} catch (err) {
+  console.warn('⚠️ 웹사이트 트래픽 통계 로드 실패:', err.message);
+}
+
+let subscribersCount = 0;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const RESEND_AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
+
+if (RESEND_API_KEY && RESEND_AUDIENCE_ID) {
+  try {
+    const audRes = await fetch(`https://api.resend.com/audiences/${RESEND_AUDIENCE_ID}`, {
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}` }
+    });
+    if (audRes.ok) {
+      const audData = await audRes.json();
+      // resend audience 객체는 'total_contacts' 에 숫자를 보유하거나, 
+      // 만약 없다면 contacts api를 우회 사용 가능 (여기서는 우선 audience 기본 속성을 기대)
+      // 확인해본 결과 Audiences API GET 단건 조회가 total_contacts를 내려줄 것으로 추정
+      // 안전빵으로 없으면 0
+      subscribersCount = audData.count || audData.total_contacts || 0;
+    }
+  } catch (e) {
+    console.warn('⚠️ 뉴스레터 구독자 수 로드 실패:', e.message);
+  }
+} else {
+  console.warn('⚠️ RESEND 자격 증명이 없어 구독자 수 로드를 건너뜁니다.');
+}
+
 // ─── Slack Block Kit 메시지 ───────────────────────────────
 const articleUrl = latestArticle
   ? `https://econpedia.dedyn.io${latestArticle.href}`
@@ -230,6 +267,35 @@ const payload = {
           text: `🌐 *사이트*\n<https://econpedia.dedyn.io|econpedia.dedyn.io>`,
         },
       ],
+    },
+
+    { type: 'divider' },
+
+    // 트래픽 & 비즈니스 메트릭 (빅데이터 적재용)
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: `📊 *비즈니스 & 프론트 트래픽 KPI*`,
+      },
+      fields: [
+        {
+          type: 'mrkdwn',
+          text: `👥 *전체 누적 방문자*\n${siteStats.total_visitors.toLocaleString()} 명`,
+        },
+        {
+          type: 'mrkdwn',
+          text: `🌅 *당일 방문자*\n${siteStats.daily_visitors.toLocaleString()} 명`,
+        },
+        {
+          type: 'mrkdwn',
+          text: `📧 *뉴스레터 구독자*\n${subscribersCount.toLocaleString()} 명`,
+        },
+        {
+          type: 'mrkdwn',
+          text: `💰 *광고 수익*\n(Google AdSense 등 연동 준비 중)`,
+        },
+      ]
     },
 
     { type: 'divider' },

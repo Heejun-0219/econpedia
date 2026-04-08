@@ -64,12 +64,14 @@ jobs:
             sudo docker rm econpedia 2>/dev/null || true
 
             echo "🚀 Starting new container..."
+            sudo mkdir -p /opt/econpedia/data
             sudo docker run -d \
               --name econpedia \
               --restart unless-stopped \
               -p 80:80 \
               -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              -v /opt/econpedia/data:/app/data \
               -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
               -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
