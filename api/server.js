@@ -1,0 +1,186 @@
+// api/server.js
+// EconPedia 뉴스레터 구독 API 서버
+// POST /api/subscribe   — Resend Audiences에 이메일 추가
+// DELETE /api/subscribe — 구독 취소
+// GET  /api/health      — 헬스체크
+
+import 'dotenv/config';
+import { createServer } from 'http';
+
+const PORT = process.env.API_PORT || 3001;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID;
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://econpedia.dedyn.io';
+
+// ─── 간단한 인메모리 Rate Limiter ────────────────────────
+const rateLimitMap = new Map(); // ip → { count, resetAt }
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip) || { count: 0, resetAt: now + 60_000 };
+  if (now > entry.resetAt) {
+    entry.count = 0;
+    entry.resetAt = now + 60_000;
+  }
+  entry.count++;
+  rateLimitMap.set(ip, entry);
+  return entry.count > 5; // 분당 5회 제한
+}
+
+// ─── Resend Contacts API 헬퍼 ────────────────────────────
+async function addContact(email, firstName = '') {
+  const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, first_name: firstName, unsubscribed: false }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || `Resend API 오류: ${res.status}`);
+  return data;
+}
+
+async function removeContact(email) {
+  // 1. 이메일로 contact ID 조회
+  const listRes = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
+    headers: { Authorization: `Bearer ${RESEND_API_KEY}` },
+  });
+  const list = await listRes.json();
+  const contact = (list.data || []).find(c => c.email === email);
+  if (!contact) return { message: '등록된 구독자가 아닙니다.' };
+
+  // 2. 구독 취소 (삭제 대신 unsubscribed = true)
+  const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts/${contact.id}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ unsubscribed: true }),
+  });
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.message || `Resend API 오류: ${res.status}`);
+  }
+  return { message: '구독이 취소됐습니다.' };
+}
+
+// ─── 요청 파싱 헬퍼 ─────────────────────────────────────
+function parseBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try { resolve(JSON.parse(body || '{}')); }
+      catch { reject(new Error('Invalid JSON')); }
+    });
+    req.on('error', reject);
+  });
+}
+
+function sendJSON(res, status, data) {
+  res.writeHead(status, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  });
+  res.end(JSON.stringify(data));
+}
+
+// ─── 이메일 검증 ─────────────────────────────────────────
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email));
+}
+
+// ─── HTTP 서버 ───────────────────────────────────────────
+const server = createServer(async (req, res) => {
+  const url = new URL(req.url, `http://localhost:${PORT}`);
+  const path = url.pathname;
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+
+  // CORS Preflight
+  if (req.method === 'OPTIONS') {
+    return sendJSON(res, 204, {});
+  }
+
+  // ── GET /api/health ────────────────────────────────────
+  if (req.method === 'GET' && path === '/api/health') {
+    return sendJSON(res, 200, {
+      status: 'ok',
+      audience: AUDIENCE_ID ? '설정됨' : '미설정',
+      ts: new Date().toISOString(),
+    });
+  }
+
+  // ── POST /api/subscribe ────────────────────────────────
+  if (req.method === 'POST' && path === '/api/subscribe') {
+    // Rate limit
+    if (isRateLimited(ip)) {
+      return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
+    }
+
+    if (!RESEND_API_KEY || !AUDIENCE_ID) {
+      return sendJSON(res, 500, { error: '서버 설정 오류입니다. 관리자에게 문의해주세요.' });
+    }
+
+    let body;
+    try { body = await parseBody(req); }
+    catch { return sendJSON(res, 400, { error: '잘못된 요청 형식입니다.' }); }
+
+    const { email, name } = body;
+
+    if (!email || !isValidEmail(email)) {
+      return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
+    }
+
+    try {
+      await addContact(email, name || '');
+      console.log(`[subscribe] ✅ ${email}`);
+      return sendJSON(res, 200, {
+        success: true,
+        message: '구독 신청이 완료됐습니다! 내일 아침 첫 브리핑을 보내드릴게요. 📊',
+      });
+    } catch (err) {
+      console.error(`[subscribe] ❌ ${email}: ${err.message}`);
+      // 이미 구독중인 경우도 성공으로 처리
+      if (err.message?.includes('already')) {
+        return sendJSON(res, 200, {
+          success: true,
+          message: '이미 구독 중입니다! 매일 아침 브리핑을 보내드리고 있어요. 📊',
+        });
+      }
+      return sendJSON(res, 500, { error: '구독 신청 중 오류가 발생했습니다. 다시 시도해주세요.' });
+    }
+  }
+
+  // ── DELETE /api/subscribe (구독 취소) ─────────────────
+  if (req.method === 'DELETE' && path === '/api/subscribe') {
+    let body;
+    try { body = await parseBody(req); }
+    catch { return sendJSON(res, 400, { error: '잘못된 요청 형식입니다.' }); }
+
+    const { email } = body;
+    if (!email || !isValidEmail(email)) {
+      return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
+    }
+
+    try {
+      const result = await removeContact(email);
+      console.log(`[unsubscribe] ✅ ${email}`);
+      return sendJSON(res, 200, { success: true, ...result });
+    } catch (err) {
+      console.error(`[unsubscribe] ❌ ${email}: ${err.message}`);
+      return sendJSON(res, 500, { error: '구독 취소 중 오류가 발생했습니다.' });
+    }
+  }
+
+  // 404
+  return sendJSON(res, 404, { error: 'Not found' });
+});
+
+server.listen(PORT, () => {
+  console.log(`🚀 EconPedia Subscribe API 서버 실행 중 — port ${PORT}`);
+  console.log(`   Audience ID: ${AUDIENCE_ID || '⚠️ 미설정'}`);
+});
