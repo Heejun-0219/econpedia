@@ -11,6 +11,7 @@
 //   SERVER_DOCKER      - Docker 컨테이너 상태
 //   SERVER_REACHABLE   - SSH 연결 가능 여부
 
+import 'dotenv/config';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
