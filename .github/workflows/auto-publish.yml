@@ -7,6 +7,11 @@ on:
   # Allows manual triggering
   workflow_dispatch:
 
+# 동시 실행 방지: 이미 실행 중이면 대기 (cancel 하지 않음)
+concurrency:
+  group: auto-publish
+  cancel-in-progress: false
+
 permissions:
   contents: write
   actions: write
@@ -52,22 +57,47 @@ jobs:
         run: |
           git config --global user.name "EconPedia AI Publisher"
           git config --global user.email "actions@github.com"
+
           git add \
             src/pages/daily/*.astro \
             src/data/daily-articles.json \
             src/pages/blog/*.astro \
             src/data/blog-articles.json \
             public/cards/
-          
-          # Only commit if there are changes
+
+          # 변경사항이 없으면 종료
           if git diff --cached --quiet; then
-            echo "No new content generated."
-          else
-            git commit -m "docs: Auto-published daily briefing + blog + card news"
-            # 원격에 새 커밋이 있을 경우 rebase 후 push
-            git pull --rebase origin main
-            git push origin main
+            echo "No new content generated. Skipping commit."
+            exit 0
           fi
+
+          # 커밋 전 원격 최신화 (fetch → rebase → 재스테이징)
+          git stash
+          git fetch origin main
+          git rebase origin/main
+          git stash pop
+
+          # 재스테이징 (stash pop 후 unstaged 상태가 될 수 있음)
+          git add \
+            src/pages/daily/*.astro \
+            src/data/daily-articles.json \
+            src/pages/blog/*.astro \
+            src/data/blog-articles.json \
+            public/cards/
+
+          git commit -m "docs: Auto-published daily briefing + blog + card news"
+
+          # push 실패 시 최대 3회 재시도
+          for i in 1 2 3; do
+            if git push origin main; then
+              echo "✅ Push 성공 (시도 $i)"
+              break
+            fi
+            echo "⚠️ Push 실패 (시도 $i/3) — 원격 변경 후 재시도..."
+            git fetch origin main
+            git rebase origin/main
+            sleep 5
+          done
 
       # ── 배포 워크플로우 트리거 ──────────────────────────────
       # GITHUB_TOKEN으로 푸시한 커밋은 deploy.yml을 자동 트리거하지 않으므로
