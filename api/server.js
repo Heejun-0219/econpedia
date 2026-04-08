@@ -151,7 +151,7 @@ const server = createServer(async (req, res) => {
           message: '이미 구독 중입니다! 매일 아침 브리핑을 보내드리고 있어요. 📊',
         });
       }
-      return sendJSON(res, 500, { error: '구독 신청 중 오류가 발생했습니다. 내역: ' + err.message, stack: err.stack });
+      return sendJSON(res, 500, { error: '구독 신청 중 오류가 발생했습니다. 다시 시도해주세요.' });
     }
   }
 
