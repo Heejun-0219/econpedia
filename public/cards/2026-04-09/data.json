@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 1.6% 하락 📉 내 주식은?",
+      "subheadline": "오늘 밤 잠 못 드는 이유",
+      "badge": "2026.04.09 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5778.01",
+          "change": "-1.61%",
+          "direction": "down"
+        },
+        {
+          "label": "S&P 500",
+          "value": "6824.66",
+          "change": "+0.62%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1474.17",
+          "change": "-0.30%",
+          "direction": "down"
+        },
+        {
+          "label": "Bitcoin (USD)",
+          "value": "$72500.19",
+          "change": "+1.91%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "미국은 올랐는데, 우리 코스피만 뚝! 📉 외국인 투자자들이 갑자기 한국 주식을 팔아치우면서 시장 전체가 출렁였어요."
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "주식 계좌에 마이너스 찍힌 분들 많죠? 😥 당장 손실이겠지만, 기업 가치에 변화가 없다면 '싸게 살 기회'가 될 수도 있어요."
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
