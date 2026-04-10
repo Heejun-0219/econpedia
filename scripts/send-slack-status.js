@@ -79,11 +79,13 @@ try {
 const newsletterStatus = readStatusFile('.newsletter-status.json');
 const cardNewsStatus   = readStatusFile('.cardnews-status.json');
 const blogStatus       = readStatusFile('.blog-status.json');
+const indexingStatus   = readStatusFile('.indexing-status.json');
 
 console.log('📋 상태 파일 로드:');
 console.log('   뉴스레터:', newsletterStatus);
 console.log('   카드뉴스:', cardNewsStatus);
 console.log('   블로그:',   blogStatus);
+console.log('   구글색인:', indexingStatus);
 
 const newsletterLine = statusLine(
   newsletterStatus,
@@ -101,9 +103,16 @@ const cardNewsLine = statusLine(
 
 const blogLine = statusLine(
   blogStatus,
-  s => `✅ 블로그 포스트 발행 (${s.slug})`,
+  s => `✅ 블로그 및 외부 매체 연동 (${s.slug})\n    > ` + s.message.replace(/\n/g, '\n    > '),
   s => `❌ 블로그 포스트 실패 — ${s.message}`,
   '⚠️ 블로그 상태 미확인',
+);
+
+const indexingLine = statusLine(
+  indexingStatus,
+  s => `✅ 구글 Indexing API 핑 발송 완료 (${s.message})`,
+  s => `❌ 구글 Indexing API 핑 발송 실패 — ${s.message}`,
+  '⚠️ 구글 색인 상태 미확인',
 );
 
 // ─── 서버 리소스 메트릭 ─────────────────────────────────
@@ -311,6 +320,7 @@ const payload = {
           latestArticle ? `✅ 기사 생성 완료` : `❌ 기사 생성 실패`,
           cardNewsLine,
           blogLine,
+          indexingLine,
           `✅ 사이트 배포 트리거됨`,
           newsletterLine,
         ].join('\n'),

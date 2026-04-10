@@ -69,7 +69,7 @@ function formatMarketDataForPrompt(data) {
 // ─── Gemini 기사 생성 ────────────────────────────────────
 async function generateArticle(marketDataString) {
   console.log('🤖 Generating article with Gemini (고도화 프롬프트)...');
-  const today = new Date().toISOString().split('T')[0];
+  const today = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
   // prompts.js에서 구조화된 프롬프트 조립
   const { system, user } = buildArticlePrompt(marketDataString, today);
@@ -136,8 +136,7 @@ async function updateManifest(dateString, title, excerpt) {
 
 // ─── .astro 파일 저장 ────────────────────────────────────
 async function saveArticle(content) {
-  const currentDate = new Date();
-  const dateString = currentDate.toISOString().split('T')[0];
+  const dateString = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
   // Extract the first H1 from markdown to use as the title
   let title = `[EconPedia] ${dateString} 데일리 브리핑`;

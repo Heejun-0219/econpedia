@@ -50,6 +50,15 @@ jobs:
       - name: 📝 Generate Blog Post
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BLOGGER_CLIENT_ID: ${{ secrets.BLOGGER_CLIENT_ID }}
+          BLOGGER_CLIENT_SECRET: ${{ secrets.BLOGGER_CLIENT_SECRET }}
+          BLOGGER_REFRESH_TOKEN: ${{ secrets.BLOGGER_REFRESH_TOKEN }}
+          BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
+          WP_API_URL: ${{ secrets.WP_API_URL }}
+          WP_USERNAME: ${{ secrets.WP_USERNAME }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+          MEDIUM_USER_ID: ${{ secrets.MEDIUM_USER_ID }}
         run: node scripts/generate-blog-post.js
 
       # ── 커밋 & 푸시 ────────────────────────────────────────
@@ -114,6 +123,13 @@ jobs:
             -d '{"ref":"main"}' \
           && echo "✅ Deploy workflow triggered" \
           || echo "⚠️ Deploy trigger failed (non-critical)"
+
+      # ── 구글 검색엔진 Indexing 자동화 (핑 발송) ────────────────
+      - name: 🚀 Ping Google Indexing API
+        if: always()
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node scripts/ping-google-indexing.js
 
       # ── 뉴스레터 이메일 발송 ─────────────────────────────
       - name: 📧 Send Newsletter Email

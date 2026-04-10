@@ -156,7 +156,7 @@ async function main() {
 
   try {
     const marketData = await loadMarketData();
-    const today = marketData.date || new Date().toISOString().split('T')[0];
+    const today = marketData.date || Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
     // Gemini로 카드뉴스 데이터 생성
     const cardData = await generateCardNewsData(marketData.formatted, today);
