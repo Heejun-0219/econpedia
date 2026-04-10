@@ -61,6 +61,23 @@ jobs:
           MEDIUM_USER_ID: ${{ secrets.MEDIUM_USER_ID }}
         run: node scripts/generate-blog-post.js
 
+      # ── 카드뉴스 30일 보존 정책 (디스크 폭발 방지) ──────────
+      - name: 🧹 Cleanup Old Card News (30-day retention)
+        run: |
+          CARDS_DIR="public/cards"
+          if [ -d "$CARDS_DIR" ]; then
+            CUTOFF=$(date -d '30 days ago' +%Y-%m-%d 2>/dev/null || date -v-30d +%Y-%m-%d)
+            echo "📅 보존 기준일: $CUTOFF (이전 날짜 폴더 삭제)"
+            for dir in "$CARDS_DIR"/*/; do
+              dirname=$(basename "$dir")
+              if [[ "$dirname" < "$CUTOFF" ]]; then
+                echo "  🗑️ 삭제: $dir"
+                rm -rf "$dir"
+              fi
+            done
+            echo "✅ 카드뉴스 정리 완료"
+          fi
+
       # ── 커밋 & 푸시 ────────────────────────────────────────
       - name: 🚀 Commit and Push
         run: |

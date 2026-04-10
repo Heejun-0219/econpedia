@@ -45,8 +45,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # === 5. Deploy to Oracle Cloud ===
-      - name: 🚀 Deploy to Oracle Cloud
+      # === 5. Blue-Green Zero-Downtime Deploy to Oracle Cloud ===
+      - name: 🚀 Deploy to Oracle Cloud (Zero Downtime)
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.OCI_HOST }}
@@ -56,15 +56,69 @@ jobs:
             echo "🔐 Logging in to GHCR..."
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u heejun-0219 --password-stdin
 
-            echo "📥 Pulling latest image..."
-            sudo docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
 
-            echo "🔄 Stopping old container..."
+            echo "📥 Pulling latest image..."
+            sudo docker pull $IMAGE
+
+            echo "🟢 Starting NEW container (Blue-Green)..."
+            sudo mkdir -p /opt/econpedia/data
+            sudo docker run -d \
+              --name econpedia-new \
+              --restart unless-stopped \
+              -p 8080:80 \
+              -p 8443:443 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              -v /opt/econpedia/data:/app/data \
+              -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
+              -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
+              -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
+              --memory=256m \
+              --cpus=0.5 \
+              --health-cmd="wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost/ || wget --no-verbose --tries=1 --spider http://localhost/ || exit 1" \
+              --health-interval=5s \
+              --health-timeout=3s \
+              --health-retries=5 \
+              --health-start-period=15s \
+              $IMAGE
+
+            echo "⏳ Waiting for new container health check..."
+            for i in $(seq 1 30); do
+              STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "starting")
+              echo "   Health check attempt $i/30: $STATUS"
+              if [ "$STATUS" = "healthy" ]; then
+                break
+              fi
+              sleep 2
+            done
+
+            FINAL_STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "unknown")
+            if [ "$FINAL_STATUS" != "healthy" ]; then
+              echo "❌ New container failed health check. Rolling back..."
+              sudo docker stop econpedia-new 2>/dev/null || true
+              sudo docker rm econpedia-new 2>/dev/null || true
+              echo "🔄 Rollback complete. Old container still running."
+              exit 1
+            fi
+
+            echo "✅ New container is healthy! Swapping traffic..."
+
+            # 포트 포워딩으로 트래픽 원자적 전환
+            sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 2>/dev/null || true
+            sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443 2>/dev/null || true
+
+            # 구 컨테이너 제거
+            echo "🔴 Stopping OLD container..."
             sudo docker stop econpedia 2>/dev/null || true
             sudo docker rm econpedia 2>/dev/null || true
 
-            echo "🚀 Starting new container..."
-            sudo mkdir -p /opt/econpedia/data
+            # iptables 정리 및 새 컨테이너를 :80/:443으로 재바인딩
+            sudo iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 2>/dev/null || true
+            sudo iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443 2>/dev/null || true
+            sudo docker stop econpedia-new 2>/dev/null || true
+            sudo docker rm econpedia-new 2>/dev/null || true
+
+            # 최종 컨테이너를 정식 이름 + 포트로 가동
             sudo docker run -d \
               --name econpedia \
               --restart unless-stopped \
@@ -81,10 +135,11 @@ jobs:
               --health-interval=30s \
               --health-timeout=3s \
               --health-retries=3 \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+              $IMAGE
 
             echo "🧹 Cleaning up old images..."
             sudo docker image prune -f
 
-            echo "✅ Deployment complete!"
+            echo "✅ Zero-downtime deployment complete!"
             sudo docker ps --filter name=econpedia
+

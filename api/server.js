@@ -23,25 +23,41 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://econpedia.dedyn.io
 
 // ─── 데이터 파일 초기화 ──────────────────────────────
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(STATS_FILE)) {
-  fs.writeFileSync(STATS_FILE, JSON.stringify({ total: 0, daily: {} }), 'utf-8');
+
+// 인메모리 카운터 (디스크 I/O 제거 — 5분마다 비동기 플러시)
+let stats = { total: 0, daily: {} };
+try {
+  if (fs.existsSync(STATS_FILE)) {
+    stats = JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8'));
+  }
+} catch (e) {
+  console.warn('⚠️ stats.json 로드 실패, 초기값으로 시작:', e.message);
 }
 
-function readStats() {
-  try {
-    return JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8'));
-  } catch (e) {
-    return { total: 0, daily: {} };
+function pruneOldDaily() {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - 90);
+  const cutoffStr = cutoff.toISOString().split('T')[0];
+  for (const key of Object.keys(stats.daily)) {
+    if (key < cutoffStr) delete stats.daily[key];
   }
 }
 
-function writeStats(data) {
+async function flushStats() {
   try {
-    fs.writeFileSync(STATS_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    pruneOldDaily();
+    const { writeFile } = await import('fs/promises');
+    await writeFile(STATS_FILE, JSON.stringify(stats, null, 2), 'utf-8');
   } catch (e) {
-    console.error('⚠️ stats.json 쓰기 실패:', e.message);
+    console.error('⚠️ stats.json 비동기 플러시 실패:', e.message);
   }
 }
+
+// 5분마다 디스크에 기록 (이벤트 루프 차단 없음)
+setInterval(flushStats, 5 * 60 * 1000);
+// 프로세스 종료 시에도 저장
+process.on('SIGTERM', async () => { await flushStats(); process.exit(0); });
+process.on('SIGINT', async () => { await flushStats(); process.exit(0); });
 
 
 // ─── 간단한 인메모리 Rate Limiter ────────────────────────
@@ -148,8 +164,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/stats (슬랙 리포트용) ──────────────────────────
   if (req.method === 'GET' && path === '/api/stats') {
-    const stats = readStats();
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     const todayCount = stats.daily[todayStr] || 0;
     
     return sendJSON(res, 200, {
@@ -159,19 +174,12 @@ const server = createServer(async (req, res) => {
     });
   }
 
-  // ── GET /api/track (방문자 수 카운팅) ───────────────────────
+  // ── GET /api/track (방문자 수 카운팅 — 인메모리, 논블로킹) ──────
   if (req.method === 'GET' && path === '/api/track') {
-    // Rate limit 의 일종으로 단순 어뷰징 체크 가능 (생략 가능)
-    const stats = readStats();
-    const todayStr = new Date().toISOString().split('T')[0];
-    
+    const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     stats.total = (stats.total || 0) + 1;
     stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
-    
-    // 30일이 지난 데이터(혹은 구형 데이터) 정리 로직을 위해 간단하게 구현 가능하지만
-    // 현 단계에서는 단순히 오늘 날짜만 카운트
-    writeStats(stats);
-    
+    // 디스크 I/O 없음 — 5분마다 자동 플러시
     return sendJSON(res, 200, { success: true });
   }
 
