@@ -75,6 +75,8 @@ jobs:
               -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
               -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
+              -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+              -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
               --memory=384m --cpus=0.5 \
               --health-cmd="wget -qO /dev/null http://localhost/health || exit 1" \
               --health-interval=5s --health-timeout=3s --health-retries=5 \
@@ -120,6 +122,8 @@ jobs:
               -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
               -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
+              -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
+              -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
               --memory=384m --cpus=0.5 \
               $IMAGE
 

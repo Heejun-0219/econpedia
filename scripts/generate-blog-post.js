@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import dotenv from 'dotenv';
-import { publishToBlogger, publishToWordPress, publishToMedium } from './publish-external.js';
+import { publishToBlogger, publishToTelegram, publishToTistory } from './publish-external.js';
 
 // 프롬프트 시스템 import
 import { buildBlogPrompt } from '../src/data/prompts.js';
@@ -221,11 +221,11 @@ async function main() {
     const blogMarkdown = await generateBlogContent(marketData.formatted, today);
     const result = await saveBlogPost(blogMarkdown, today);
 
-    // ─── 외부 파이프라인 연동 ────────────────────────────────
-    const canonicalUrl = `https://econpedia.dedyn.io/blog/${result.slug}`;
+    // ─── 외부 마케팅 파이프라인 연동 ───────────────────────
+    const canonicalUrl = `https://econpedia.kr/blog/${result.slug}`;
     const externalLogs = [];
     
-    // Blogger (수익 메인 채널)
+    // 1. Blogger (구글 검색 최적화 및 메인 수익 채널)
     try {
       const bloggerMsg = await publishToBlogger(result.title, result.htmlContent, result.tags);
       externalLogs.push(bloggerMsg);
@@ -233,35 +233,20 @@ async function main() {
       externalLogs.push(`[Blogger] 실패: ${e.message}`);
     }
 
-    // WordPress (서브 수익 / 자산)
+    // 2. 텔레그램 채널 알림 (무료, 가장 즉각적인 유입 경로)
     try {
-      const wpMsg = await publishToWordPress(result.title, result.htmlContent, result.tags);
-      externalLogs.push(wpMsg);
+      const tgMsg = await publishToTelegram(result.title, canonicalUrl);
+      externalLogs.push(tgMsg);
     } catch (e) {
-      externalLogs.push(`[WordPress] 실패: ${e.message}`);
+      externalLogs.push(`[Telegram] 실패: ${e.message}`);
     }
 
-    // Medium (SEO 및 트래픽용 백링크 채널 - 투트랙 미끼 전략)
+    // 3. 티스토리 (준비 중 - 국내 검색 엔진 유입 극대화)
     try {
-      // 본문의 첫 700자 이후 나오는 첫 번째 H태그(서브제목) 앞에서 컷오프
-      const cutoffIndex = result.htmlContent.indexOf('<h', 600);
-      let mediumHtml = result.htmlContent;
-      if (cutoffIndex > 0) {
-        mediumHtml = result.htmlContent.substring(0, cutoffIndex);
-      } else {
-        mediumHtml = result.htmlContent.substring(0, 1000) + '...';
-      }
-      
-      mediumHtml += `
-      <br /><hr /><br />
-      <h3>🚀 <strong>이 리포트의 더 깊은 통찰과 전체 전문은 <a href="${canonicalUrl}" target="_blank">EconPedia 공식 사이트</a>에서 바로 확인하세요!</strong></h3>
-      <p>애드센스 광고 없는 깔끔한 UI와 프리미엄 경제 브리핑을 매일 아침 무료로 만나보실 수 있습니다.</p>
-      `;
-
-      const mediumMsg = await publishToMedium(result.title, mediumHtml, result.tags, canonicalUrl);
-      externalLogs.push(mediumMsg);
+      const tistoryMsg = await publishToTistory(result.title, result.htmlContent, result.tags);
+      externalLogs.push(tistoryMsg);
     } catch (e) {
-      externalLogs.push(`[Medium] 실패: ${e.message}`);
+      externalLogs.push(`[Tistory] 실패: ${e.message}`);
     }
     // ──────────────────────────────────────────────────────────
 
