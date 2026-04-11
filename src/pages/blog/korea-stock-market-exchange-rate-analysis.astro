@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "환율 1,480원 시대, 코스피는 왜 웃었을까? : 환율과 증시의 '불편한 동거' 분석";
+const date = "2026-04-11";
+const description = "환율 상승에도 코스피가 오르는 이유는 무엇일까요? 수출 기업 실적과 환율의 상관관계를 분석하고, 직장인을 위한 실전 투자 체크포인트를 정리했습니다.";
+const tags = ["코스피","환율","재테크","경제분석","주식투자"];
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/blog" class="article-header__category">📝 블로그 · 심층분석</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 10분 읽기</span>
+      </div>
+      <div class="article-header__tags">
+        {tags.map(tag => <span class="tag">{tag}</span>)}
+      </div>
+    </div>
+
+    <div class="article-content blog-content">
+      <p>오늘 이 글을 읽으시면, <strong>&#39;환율이 오르면 주식은 떨어진다&#39;는 고정관념이 왜 지금은 통하지 않는지</strong>, 그리고 이런 시장 흐름 속에서 내 자산은 어떻게 지켜야 할지 확실히 이해하실 수 있습니다. 📈</p>
+<h3>시장 상황 대시보드 (2026-04-11 기준)</h3>
+<table>
+<thead>
+<tr>
+<th align="left">지표</th>
+<th align="left">현재 수치</th>
+<th align="left">등락률</th>
+<th align="left">의미</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>KOSPI</strong></td>
+<td align="left">5,858.87</td>
+<td align="left">+1.40%</td>
+<td align="left">강세 유지</td>
+</tr>
+<tr>
+<td align="left"><strong>USD/KRW</strong></td>
+<td align="left">1,482.70</td>
+<td align="left">+0.55%</td>
+<td align="left">원화 가치 하락(환율 상승)</td>
+</tr>
+<tr>
+<td align="left"><strong>NASDAQ</strong></td>
+<td align="left">22,902.90</td>
+<td align="left">+0.35%</td>
+<td align="left">기술주 중심 완만한 상승</td>
+</tr>
+<tr>
+<td align="left"><strong>Bitcoin</strong></td>
+<td align="left">$72,849.66</td>
+<td align="left">+1.50%</td>
+<td align="left">위험자산 선호 심리 회복</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>[심층 분석 1: 배경과 원인] 환율과 주식, 왜 같이 오를까?</h2>
+<p>보통 환율이 오르면(원화 가치 하락) 외국인 투자자가 한국 시장을 떠나 주가가 떨어지는 게 정석입니다. 하지만 오늘 코스피는 1.40%나 상승하며 환율 상승분을 무색하게 만들었죠.</p>
+<p>이 현상의 핵심은 **&#39;수출 경쟁력&#39;**과 **&#39;기업 실적&#39;**에 있습니다. 현재 한국의 주요 수출 기업들이 글로벌 시장에서 가격 경쟁력을 확보하고 있다는 신호가 시장에 전달된 것이죠.</p>
+<ul>
+<li>환율 상승은 곧 달러로 벌어들이는 수익이 원화로 환산했을 때 커짐을 의미합니다.</li>
+<li>즉, 반도체나 자동차 같은 수출 기업의 실적 개선 기대감이 외국인들의 매도세를 상쇄하고 있는 상황입니다.</li>
+<li>이는 한국 경제가 단순히 환율에 휘둘리는 약한 체력이 아니라, 기업 체질 개선을 통해 맷집을 키웠음을 시사합니다. 🧐</li>
+</ul>
+<h2>[심층 분석 2: 시장의 메커니즘] &#39;환차손&#39;보다 &#39;실적&#39;이 먼저다</h2>
+<p>외국인 투자자 입장에서 환율이 1,480원까지 올랐다는 건 한국 주식을 팔 때 달러로 환전하면 손해를 본다는 뜻입니다(환차손). 그런데도 왜 코스피를 샀을까요?</p>
+<ol>
+<li><strong>기업 이익의 질적 성장</strong>: 단순히 환율 덕분에 돈을 버는 게 아니라, AI 반도체 등 핵심 부품의 글로벌 수요가 견고합니다.</li>
+<li><strong>위험자산 선호 심리(Risk-on)</strong>: 나스닥과 비트코인이 동반 상승하며 글로벌 투자 자금이 공격적인 투자처를 찾고 있습니다.</li>
+<li><strong>자금의 순환</strong>: 한국 증시가 그동안 저평가되어 있었다는 인식이 퍼지면서, 환율 리스크를 감수하고서라도 들어올 만큼 매력적인 &#39;밸류에이션(기업 가치 대비 주가 수준)&#39;을 확보했다고 판단한 것이죠.</li>
+</ol>
+<h2>[심층 분석 3: 내 지갑에 미치는 영향] 직장인 투자자의 전략은?</h2>
+<p>환율이 1,480원이라는 건, 우리가 해외 직구를 하거나 해외 여행을 갈 때 지갑이 훨씬 얇아진다는 뜻입니다. 하지만 투자자 입장에서는 조금 다른 전략이 필요합니다.</p>
+<ul>
+<li><strong>수출 기업 중심 포트폴리오</strong>: 환율 상승 효과를 직접적으로 누리는 IT/자동차 관련주가 내 계좌의 방어막이 될 수 있습니다.</li>
+<li><strong>해외 주식 투자자라면?</strong>: 이미 미국 주식을 보유 중이라면 환율 상승 덕분에 달러 자산 가치가 올라가는 효과를 보고 계실 겁니다.</li>
+<li><strong>환전 타이밍</strong>: 유학이나 해외 결제 등 달러가 꼭 필요한 분들은 지금처럼 환율이 높은 시기에는 분할 매수 전략이 필수입니다.</li>
+</ul>
+<blockquote>
+<p><strong>경제 지식 한 스푼: 환차익과 환차손</strong>
+외화를 보유하거나 주식에 투자할 때, 환율 변동으로 인해 얻는 이익을 &#39;환차익&#39;, 손해를 &#39;환차손&#39;이라고 합니다. 예를 들어, 1달러당 1,300원일 때 산 미국 주식을 1,480원일 때 팔면, 주가 상승분 외에도 180원의 환차익을 추가로 얻게 되는 것이죠!</p>
+</blockquote>
+<hr>
+<h2>향후 전망 및 투자 체크포인트</h2>
+<p>앞으로 시장은 환율의 절대적인 수치보다는 **&#39;기업 실적이 환율 변동성을 이겨낼 수 있는가&#39;**에 집중할 것으로 보입니다.</p>
+<ul>
+<li><strong>실적 시즌 집중</strong>: 1분기 기업 실적 발표에서 환율 상승이 실제 영업이익에 얼마나 긍정적 영향을 미쳤는지 확인하세요.</li>
+<li><strong>금리 결정 회의 주시</strong>: 미국 연준(Fed)의 금리 정책이 향후 환율의 방향성을 결정할 가장 큰 변수입니다.</li>
+<li><strong>분산 투자</strong>: 환율이 높은 시기에는 국내 수출주와 해외 자산을 적절히 섞는 &#39;통화 다변화&#39; 전략이 유효할 수 있어요.</li>
+</ul>
+<p>여러분은 현재의 고환율 상황에서 어떤 투자 전략을 고민하고 계신가요? 댓글로 여러분의 생각을 공유해주세요! </p>
+<hr>
+<p><em>본 포스팅은 정보 제공을 목적으로 하며, 특정 종목에 대한 매수/매도 추천이 아닙니다. 투자의 책임은 본인에게 있으며, 시장 상황은 언제든 변할 수 있음을 유의하시기 바랍니다.</em></p>
+
+    </div>
+  </div>
+</BaseLayout>
