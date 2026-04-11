@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 1.4% 껑충! 😆",
+      "subheadline": "근데 내 지갑은 왜 얇아질까?",
+      "badge": "2026.04.12 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5858.87",
+          "change": "+1.40%",
+          "direction": "up"
+        },
+        {
+          "label": "환율(원/달러)",
+          "value": "1482.70원",
+          "change": "+0.55%",
+          "direction": "up"
+        },
+        {
+          "label": "NASDAQ",
+          "value": "22902.90",
+          "change": "+0.35%",
+          "direction": "up"
+        },
+        {
+          "label": "Bitcoin",
+          "value": "$73509.13",
+          "change": "+0.61%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "코스피가 1.4% 올랐어요! 환율이 1482원(+0.55%)으로 비싸졌지만 수출 기업엔 '보너스'가 됐죠. 나스닥도 0.35% 오르며 훈풍을 더했어요 🚀"
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "환율이 오르면(원화 가치 하락) 수입 물가도 비싸질 수 있어요 😢 해외직구나 달러 구독료 결제할 때 체감 비용이 늘어날 테니 꼼꼼히 따져봐요!"
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
