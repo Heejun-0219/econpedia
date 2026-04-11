@@ -22,15 +22,21 @@ async function saveIndexingStatus(success, message) {
 }
 
 async function pingGoogleSitemap() {
-  // Google Search Console에 사이트맵 핑 (인증 불필요)
-  const pingUrl = `https://www.google.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}`;
-  const res = await fetch(pingUrl);
-  if (res.ok) {
-    console.log(`✅ [Google] 사이트맵 핑 성공 (${res.status})`);
-    return true;
+  // Google의 /ping 엔드포인트는 deprecated → Bing sitemap 핑으로 대체
+  // (IndexNow 미설정 시 Bing에라도 알림)
+  const pingUrl = `https://www.bing.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}`;
+  try {
+    const res = await fetch(pingUrl);
+    if (res.ok) {
+      console.log(`✅ [Bing] 사이트맵 핑 성공 (${res.status})`);
+      return true;
+    }
+    console.log(`⚠️ [Bing] 사이트맵 핑 응답: ${res.status}`);
+    return false;
+  } catch (e) {
+    console.log(`⚠️ [Bing] 사이트맵 핑 에러: ${e.message}`);
+    return false;
   }
-  console.log(`⚠️ [Google] 사이트맵 핑 응답: ${res.status}`);
-  return false;
 }
 
 async function pingIndexNow(urlsToPing) {
@@ -78,7 +84,7 @@ async function pingIndexingAPI() {
     ]);
 
     const msg = [
-      googleOk ? 'Google 사이트맵 핑 성공' : 'Google 핑 실패',
+      googleOk ? 'Bing 사이트맵 핑 성공' : 'Bing 핑 실패',
       indexNowOk ? 'IndexNow 핑 성공' : 'IndexNow 생략',
     ].join(' / ');
 
