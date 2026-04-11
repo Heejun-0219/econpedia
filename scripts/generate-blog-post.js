@@ -46,22 +46,21 @@ async function generateBlogContent(formattedData, today) {
 
   const { system, user } = buildBlogPrompt(formattedData, today);
 
-  const model = ai.getGenerativeModel({ 
+  // @google/genai v1.x SDK에서는 models.generateContent를 직접 사용하거나 
+  // 아래와 같은 방식으로 호출합니다.
+  const response = await ai.models.generateContent({
     model: 'gemini-2.0-flash',
-    systemInstruction: system // 시스템 지침으로 분리하여 모델 성능 극대화
-  });
-
-  const response = await model.generateContent({
-    contents: [{ role: 'user', parts: [{ text: user }] }],
-    generationConfig: {
-      temperature: 0.8, // 창의성과 분석력을 위해 약간 높임
+    contents: [
+      { role: 'user', parts: [{ text: system + '\n\n' + user }] }
+    ],
+    config: {
+      temperature: 0.8,
       topP: 0.9,
-      maxOutputTokens: 4096, // 충분한 본문 길이를 위해 확장
+      maxOutputTokens: 4096,
     }
   });
 
-  const result = await response.response;
-  return result.text();
+  return response.text;
 }
 
 // ─── 메타데이터 JSON 추출 ────────────────────────────────
