@@ -46,7 +46,7 @@ async function generateCardNewsData(formattedData, today) {
   const { system, user } = buildCardNewsPrompt(formattedData, today);
 
   const response = await ai.models.generateContent({
-    model: 'gemini-3.1-flash-lite-preview',
+    model: 'gemini-3.1-pro-preview',
     contents: [
       { role: 'user', parts: [{ text: system + '\n\n' + user }] }
     ],
