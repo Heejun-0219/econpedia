@@ -45,6 +45,11 @@ async function pingIndexingAPI() {
     process.exit(1);
   }
 
+  // GitHub Secrets에서 \n이 \\n으로 이스케이프되는 문제 보정
+  if (credentials.private_key) {
+    credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+  }
+
   // 오늘 날짜(KST) 구하기
   const today = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
@@ -85,8 +90,11 @@ async function pingIndexingAPI() {
     await saveIndexingStatus(true, `URL ${urlsToPing.length}개 핑 발송 완료`);
   } catch (err) {
     console.error(`❌ 구글 Indexing API 에러 발생:`, err.message);
-    if (err.response && err.response.data) {
-      console.error(err.response.data);
+    if (err.response?.data) {
+      console.error('응답 데이터:', JSON.stringify(err.response.data, null, 2));
+    }
+    if (err.code) {
+      console.error('에러 코드:', err.code);
     }
     await saveIndexingStatus(false, err.message);
   }
