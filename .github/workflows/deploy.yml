@@ -75,11 +75,11 @@ jobs:
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
               --memory=256m \
               --cpus=0.5 \
-              --health-cmd="wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost/ || wget --no-verbose --tries=1 --spider http://localhost/ || exit 1" \
+              --health-cmd="wget -qO- http://localhost/health | grep -c OK || exit 1" \
               --health-interval=5s \
               --health-timeout=3s \
               --health-retries=5 \
-              --health-start-period=15s \
+              --health-start-period=20s \
               $IMAGE
 
             echo "⏳ Waiting for new container health check..."
@@ -131,7 +131,7 @@ jobs:
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
               --memory=256m \
               --cpus=0.5 \
-              --health-cmd="wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost/ || exit 1" \
+              --health-cmd="wget -qO- http://localhost/health | grep -c OK || exit 1" \
               --health-interval=30s \
               --health-timeout=3s \
               --health-retries=3 \

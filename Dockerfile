@@ -34,11 +34,9 @@ COPY api/server.js ./server.js
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# Health check (HTTPS or HTTP fallback)
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider --no-check-certificate https://localhost/ \
-   || wget --no-verbose --tries=1 --spider http://localhost/api/health \
-   || exit 1
+# Health check (HTTP /health endpoint, no SSL needed)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -qO- http://localhost/health | grep -c OK || exit 1
 
 EXPOSE 80 443 3001
 
