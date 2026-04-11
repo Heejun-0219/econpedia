@@ -42,12 +42,12 @@ async function loadMarketData() {
 
 // ─── Gemini → 블로그 마크다운 생성 ───────────────────────
 async function generateBlogContent(formattedData, today) {
-  console.log('📝 Gemini (gemini-3.1-pro)에 시니어 애널리스트 심층 리포트 요청 중...');
+  console.log('📝 Gemini (gemini-3.1-pro-preview)에 시니어 애널리스트 심층 리포트 요청 중...');
 
   const { system, user } = buildBlogPrompt(formattedData, today);
 
   const response = await ai.models.generateContent({
-    model: 'gemini-3.1-pro',
+    model: 'gemini-3.1-pro-preview',
     contents: [
       { role: 'user', parts: [{ text: system + '\n\n' + user }] }
     ],
