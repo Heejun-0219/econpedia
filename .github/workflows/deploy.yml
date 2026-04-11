@@ -75,7 +75,7 @@ jobs:
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
               --memory=256m \
               --cpus=0.5 \
-              --health-cmd="wget -qO- http://localhost/health | grep -c OK || exit 1" \
+              --health-cmd="wget -qO /dev/null http://localhost/health || exit 1" \
               --health-interval=5s \
               --health-timeout=3s \
               --health-retries=5 \
@@ -95,6 +95,12 @@ jobs:
             FINAL_STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "unknown")
             if [ "$FINAL_STATUS" != "healthy" ]; then
               echo "❌ New container failed health check. Rolling back..."
+              echo "=== Container Logs ==="
+              sudo docker logs --tail 50 econpedia-new 2>&1 || true
+              echo "=== Health Check Output ==="
+              sudo docker inspect --format='{{json .State.Health}}' econpedia-new 2>/dev/null || true
+              echo "=== Manual Health Check ==="
+              sudo docker exec econpedia-new wget -qO- http://localhost/health 2>&1 || true
               sudo docker stop econpedia-new 2>/dev/null || true
               sudo docker rm econpedia-new 2>/dev/null || true
               echo "🔄 Rollback complete. Old container still running."
@@ -131,7 +137,7 @@ jobs:
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
               --memory=256m \
               --cpus=0.5 \
-              --health-cmd="wget -qO- http://localhost/health | grep -c OK || exit 1" \
+              --health-cmd="wget -qO /dev/null http://localhost/health || exit 1" \
               --health-interval=30s \
               --health-timeout=3s \
               --health-retries=3 \
