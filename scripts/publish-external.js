@@ -40,15 +40,6 @@ export async function publishToTelegram(title, url) {
 }
 
 /**
- * 티스토리 (국내 SEO 최적화용)
- * 비용: 무료 / API: 공식 지원
- */
-export async function publishToTistory(title, content, tags) {
-  // TODO: 티스토리 API 구현 (ACCESS_TOKEN 필요)
-  return '[Tistory] API 연동 준비 중...';
-}
-
-/**
  * Blogger (구글 검색 최적화 및 메인 수익 채널)
  * OAuth2 refresh token으로 액세스 토큰 갱신 후 포스팅
  */

@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import dotenv from 'dotenv';
-import { publishToBlogger, publishToTelegram, publishToTistory } from './publish-external.js';
+import { publishToBlogger, publishToTelegram } from './publish-external.js';
 
 // 프롬프트 시스템 import
 import { buildBlogPrompt } from '../src/data/prompts.js';
@@ -239,14 +239,6 @@ async function main() {
       externalLogs.push(tgMsg);
     } catch (e) {
       externalLogs.push(`[Telegram] 실패: ${e.message}`);
-    }
-
-    // 3. 티스토리 (준비 중 - 국내 검색 엔진 유입 극대화)
-    try {
-      const tistoryMsg = await publishToTistory(result.title, result.htmlContent, result.tags);
-      externalLogs.push(tistoryMsg);
-    } catch (e) {
-      externalLogs.push(`[Tistory] 실패: ${e.message}`);
     }
     // ──────────────────────────────────────────────────────────
 
