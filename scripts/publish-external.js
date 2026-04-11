@@ -40,11 +40,58 @@ export async function publishToTelegram(title, url) {
 }
 
 /**
- * 구글 블로거 (Blogger) 발행 함수는 기존 로직 유지 (scripts/publish-external.js 원본 참조)
- * Google SEO 유입의 핵심 축입니다.
+ * Blogger (구글 검색 최적화 및 메인 수익 채널)
+ * OAuth2 refresh token으로 액세스 토큰 갱신 후 포스팅
  */
-export async function publishToBlogger(title, content, tags) {
-  // 기존 구현된 Blogger API 로직이 이 자리에 위치합니다.
-  // (생략된 기존 Blogger 로직...)
-  return '[Blogger] 발행 프로세스 진행됨';
+export async function publishToBlogger(title, htmlContent, tags = []) {
+  const clientId     = process.env.BLOGGER_CLIENT_ID;
+  const clientSecret = process.env.BLOGGER_CLIENT_SECRET;
+  const refreshToken = process.env.BLOGGER_REFRESH_TOKEN;
+  const blogId       = process.env.BLOGGER_BLOG_ID;
+
+  if (!clientId || !clientSecret || !refreshToken || !blogId) {
+    return '[Blogger] 환경변수(BLOGGER_CLIENT_ID, BLOGGER_CLIENT_SECRET, BLOGGER_REFRESH_TOKEN, BLOGGER_BLOG_ID)가 없어 생략합니다.';
+  }
+
+  try {
+    // Access Token 갱신
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refreshToken,
+        grant_type: 'refresh_token',
+      }),
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) {
+      return `[Blogger] 토큰 갱신 실패: ${JSON.stringify(tokenData)}`;
+    }
+
+    // 포스트 발행
+    const postRes = await fetch(
+      `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content: htmlContent,
+          labels: tags,
+        }),
+      }
+    );
+    const postData = await postRes.json();
+    if (postData.url) {
+      return `[Blogger] ✅ 포스팅 성공! (URL: ${postData.url})`;
+    }
+    return `[Blogger] ❌ 포스팅 실패: ${JSON.stringify(postData.error || postData)}`;
+  } catch (e) {
+    return `[Blogger] ❌ 에러: ${e.message}`;
+  }
 }
