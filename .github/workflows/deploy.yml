@@ -82,6 +82,15 @@ jobs:
               --health-start-period=20s \
               $IMAGE
 
+            echo "🔍 Container startup diagnostics..."
+            sleep 5
+            echo "--- docker ps ---"
+            sudo docker ps -a --filter name=econpedia-new
+            echo "--- container state ---"
+            sudo docker inspect --format='Status={{.State.Status}} ExitCode={{.State.ExitCode}} Error={{.State.Error}} OOM={{.State.OOMKilled}}' econpedia-new 2>/dev/null || true
+            echo "--- container logs (last 30) ---"
+            sudo docker logs --tail 30 econpedia-new 2>&1 || true
+
             echo "⏳ Waiting for new container health check..."
             for i in $(seq 1 30); do
               STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "starting")
