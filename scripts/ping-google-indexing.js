@@ -1,7 +1,7 @@
 // scripts/ping-google-indexing.js
-// 구글 Indexing API 전송 모듈 (새로운 글 색인 1시간 이내 단축)
-// 인증: Blogger API와 동일한 OAuth2 credentials 재사용
-import { google } from 'googleapis';
+// 검색엔진 색인 요청 모듈
+// - Google: Sitemaps API 핑 (서비스 계정 불필요)
+// - IndexNow: Bing/Naver/Yandex 등 동시 지원 (키 1개)
 import dotenv from 'dotenv';
 import fs from 'fs/promises';
 import path from 'path';
@@ -13,54 +13,79 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.join(__dirname, '..');
 
+const SITE_URL = 'https://econpedia.dedyn.io';
+const SITEMAP_URL = `${SITE_URL}/sitemap-index.xml`;
+
 async function saveIndexingStatus(success, message) {
   const statusPath = path.join(ROOT, '.indexing-status.json');
   await fs.writeFile(statusPath, JSON.stringify({ success, message, ts: new Date().toISOString() }, null, 2), 'utf-8');
 }
 
-async function pingIndexingAPI() {
-  const clientId     = process.env.BLOGGER_CLIENT_ID;
-  const clientSecret = process.env.BLOGGER_CLIENT_SECRET;
-  const refreshToken = process.env.BLOGGER_REFRESH_TOKEN;
+async function pingGoogleSitemap() {
+  // Google Search Console에 사이트맵 핑 (인증 불필요)
+  const pingUrl = `https://www.google.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}`;
+  const res = await fetch(pingUrl);
+  if (res.ok) {
+    console.log(`✅ [Google] 사이트맵 핑 성공 (${res.status})`);
+    return true;
+  }
+  console.log(`⚠️ [Google] 사이트맵 핑 응답: ${res.status}`);
+  return false;
+}
 
-  if (!clientId || !clientSecret || !refreshToken) {
-    console.log('⚠️ BLOGGER_CLIENT_ID / BLOGGER_CLIENT_SECRET / BLOGGER_REFRESH_TOKEN 환경변수가 없어 Google Indexing API 핑을 건너뜁니다.');
-    await saveIndexingStatus(false, '필수 환경변수 없음');
-    return;
+async function pingIndexNow(urlsToPing) {
+  const key = process.env.INDEXNOW_KEY;
+  if (!key) {
+    console.log('⚠️ [IndexNow] INDEXNOW_KEY 환경변수가 없어 생략합니다.');
+    return false;
   }
 
-  // 오늘 날짜(KST)
-  const today = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+  // IndexNow 엔드포인트 (Bing이 가장 안정적, Bing → Google/Naver/Yandex 자동 전파)
+  const res = await fetch('https://api.indexnow.org/IndexNow', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({
+      host: 'econpedia.dedyn.io',
+      key,
+      keyLocation: `${SITE_URL}/${key}.txt`,
+      urlList: urlsToPing,
+    }),
+  });
 
+  if (res.ok || res.status === 202) {
+    console.log(`✅ [IndexNow] 핑 성공 (${res.status}) — ${urlsToPing.length}개 URL`);
+    return true;
+  }
+  const body = await res.text().catch(() => '');
+  console.log(`⚠️ [IndexNow] 응답: ${res.status} ${body}`);
+  return false;
+}
+
+async function pingIndexingAPI() {
+  const today = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
   const urlsToPing = [
-    `https://econpedia.dedyn.io/daily/${today}`,
-    `https://econpedia.dedyn.io/blog/${today}`,
+    `${SITE_URL}/daily/${today}`,
+    `${SITE_URL}/blog/${today}`,
   ];
 
-  console.log(`🚀 Google Indexing API: 오늘자 URL ${urlsToPing.length}개 핑 발송 준비 중...`);
+  console.log(`🚀 검색엔진 색인 핑: ${urlsToPing.length}개 URL`);
   console.log(urlsToPing);
 
-  // Blogger와 동일한 OAuth2 클라이언트 재사용
-  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
-  oauth2Client.setCredentials({ refresh_token: refreshToken });
-
-  const indexing = google.indexing({ version: 'v3', auth: oauth2Client });
-
   try {
-    for (const url of urlsToPing) {
-      const res = await indexing.urlNotifications.publish({
-        requestBody: { url, type: 'URL_UPDATED' },
-      });
-      console.log(`✅ 성공 [${url}] -> Status: ${res.status}`);
-    }
+    const [googleOk, indexNowOk] = await Promise.all([
+      pingGoogleSitemap(),
+      pingIndexNow(urlsToPing),
+    ]);
 
-    console.log('🎉 구글 검색엔진에 새 글 색인 요청 완료!');
-    await saveIndexingStatus(true, `URL ${urlsToPing.length}개 핑 발송 완료`);
+    const msg = [
+      googleOk ? 'Google 사이트맵 핑 성공' : 'Google 핑 실패',
+      indexNowOk ? 'IndexNow 핑 성공' : 'IndexNow 생략',
+    ].join(' / ');
+
+    console.log(`🎉 완료: ${msg}`);
+    await saveIndexingStatus(true, msg);
   } catch (err) {
-    console.error('❌ Google Indexing API 에러:', err.message);
-    if (err.response?.data) {
-      console.error('응답:', JSON.stringify(err.response.data, null, 2));
-    }
+    console.error('❌ 색인 핑 에러:', err.message);
     await saveIndexingStatus(false, err.message);
   }
 }

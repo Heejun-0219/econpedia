@@ -48,4 +48,59 @@ export async function publishToTistory(title, content, tags) {
   return '[Tistory] API 연동 준비 중...';
 }
 
-// 기존 워드프레스/미디엄 함수는 삭제되었습니다.
+/**
+ * Blogger (구글 검색 최적화 및 메인 수익 채널)
+ * OAuth2 refresh token으로 액세스 토큰 갱신 후 포스팅
+ */
+export async function publishToBlogger(title, htmlContent, tags = []) {
+  const clientId     = process.env.BLOGGER_CLIENT_ID;
+  const clientSecret = process.env.BLOGGER_CLIENT_SECRET;
+  const refreshToken = process.env.BLOGGER_REFRESH_TOKEN;
+  const blogId       = process.env.BLOGGER_BLOG_ID;
+
+  if (!clientId || !clientSecret || !refreshToken || !blogId) {
+    return '[Blogger] 환경변수(BLOGGER_CLIENT_ID, BLOGGER_CLIENT_SECRET, BLOGGER_REFRESH_TOKEN, BLOGGER_BLOG_ID)가 없어 생략합니다.';
+  }
+
+  try {
+    // Access Token 갱신
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refreshToken,
+        grant_type: 'refresh_token',
+      }),
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) {
+      return `[Blogger] 토큰 갱신 실패: ${JSON.stringify(tokenData)}`;
+    }
+
+    // 포스트 발행
+    const postRes = await fetch(
+      `https://www.googleapis.com/blogger/v3/blogs/${blogId}/posts/`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content: htmlContent,
+          labels: tags,
+        }),
+      }
+    );
+    const postData = await postRes.json();
+    if (postData.url) {
+      return `[Blogger] ✅ 포스팅 성공! (URL: ${postData.url})`;
+    }
+    return `[Blogger] ❌ 포스팅 실패: ${JSON.stringify(postData.error || postData)}`;
+  } catch (e) {
+    return `[Blogger] ❌ 에러: ${e.message}`;
+  }
+}
