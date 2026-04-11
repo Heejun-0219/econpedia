@@ -11,10 +11,10 @@ dotenv.config();
  */
 export async function publishToTelegram(title, url) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const chatId = process.env.TELEGRAM_CHAT_ID || process.env.TELEGRAM_OWNER_ID;
 
   if (!token || !chatId) {
-    return '[Telegram] 환경변수가 없어 알림을 생략합니다.';
+    return '[Telegram] 환경변수(TELEGRAM_BOT_TOKEN 또는 CHAT_ID/OWNER_ID)가 없어 알림을 생략합니다.';
   }
 
   const text = `📢 *EconPedia 새로운 분석 리포트*\n\n*${title}*\n\n지금 확인해보세요! 👇\n${url}`;
