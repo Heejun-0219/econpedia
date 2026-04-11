@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.join(__dirname, '..');
 
-const SITE_URL = 'https://econpedia.dedyn.io';
+const SITE_URL = 'https://econpedia.kr';
 const SITEMAP_URL = `${SITE_URL}/sitemap-index.xml`;
 
 async function saveIndexingStatus(success, message) {
@@ -67,12 +67,28 @@ async function pingIndexNow(urlsToPing) {
   return false;
 }
 
-async function pingIndexingAPI() {
+async function getActualSlugs() {
   const today = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
-  const urlsToPing = [
-    `${SITE_URL}/daily/${today}`,
-    `${SITE_URL}/blog/${today}`,
-  ];
+
+  // blog-status.json에서 실제 발행된 slug 읽기
+  let blogSlug = today;
+  try {
+    const raw = await fs.readFile(path.join(ROOT, '.blog-status.json'), 'utf-8');
+    const status = JSON.parse(raw);
+    if (status.slug) blogSlug = status.slug;
+  } catch {
+    // 파일 없으면 날짜 fallback
+  }
+
+  return {
+    daily: `${SITE_URL}/daily/${today}`,
+    blog: `${SITE_URL}/blog/${blogSlug}`,
+  };
+}
+
+async function pingIndexingAPI() {
+  const slugs = await getActualSlugs();
+  const urlsToPing = [slugs.daily, slugs.blog];
 
   console.log(`🚀 검색엔진 색인 핑: ${urlsToPing.length}개 URL`);
   console.log(urlsToPing);

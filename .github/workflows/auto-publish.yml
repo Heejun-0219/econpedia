@@ -54,11 +54,6 @@ jobs:
           BLOGGER_CLIENT_SECRET: ${{ secrets.BLOGGER_CLIENT_SECRET }}
           BLOGGER_REFRESH_TOKEN: ${{ secrets.BLOGGER_REFRESH_TOKEN }}
           BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
-          WP_API_URL: ${{ secrets.WP_API_URL }}
-          WP_USERNAME: ${{ secrets.WP_USERNAME }}
-          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
-          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
-          MEDIUM_USER_ID: ${{ secrets.MEDIUM_USER_ID }}
         run: node scripts/generate-blog-post.js
 
       # ── 카드뉴스 30일 보존 정책 (디스크 폭발 방지) ──────────

@@ -231,12 +231,14 @@ async function main() {
       externalLogs.push(`[Blogger] 실패: ${e.message}`);
     }
 
-    // 2. 텔레그램 채널 알림 (무료, 가장 즉각적인 유입 경로)
-    try {
-      const tgMsg = await publishToTelegram(result.title, canonicalUrl);
-      externalLogs.push(tgMsg);
-    } catch (e) {
-      externalLogs.push(`[Telegram] 실패: ${e.message}`);
+    // 2. 텔레그램 채널 알림 (TELEGRAM_BOT_TOKEN 설정 시에만 실행)
+    if (process.env.TELEGRAM_BOT_TOKEN) {
+      try {
+        const tgMsg = await publishToTelegram(result.title, canonicalUrl);
+        externalLogs.push(tgMsg);
+      } catch (e) {
+        externalLogs.push(`[Telegram] 실패: ${e.message}`);
+      }
     }
     // ──────────────────────────────────────────────────────────
 
