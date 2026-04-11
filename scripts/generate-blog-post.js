@@ -42,21 +42,26 @@ async function loadMarketData() {
 
 // ─── Gemini → 블로그 마크다운 생성 ───────────────────────
 async function generateBlogContent(formattedData, today) {
-  console.log('📝 Gemini에 블로그 포스트 요청 중...');
+  console.log('📝 Gemini (gemini-2.0-flash)에 심층 블로그 리포트 요청 중...');
 
   const { system, user } = buildBlogPrompt(formattedData, today);
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3.1-flash-lite-preview',
-    contents: [
-      { role: 'user', parts: [{ text: system + '\n\n' + user }] }
-    ],
-    config: {
-      temperature: 0.7,
+  const model = ai.getGenerativeModel({ 
+    model: 'gemini-2.0-flash',
+    systemInstruction: system // 시스템 지침으로 분리하여 모델 성능 극대화
+  });
+
+  const response = await model.generateContent({
+    contents: [{ role: 'user', parts: [{ text: user }] }],
+    generationConfig: {
+      temperature: 0.8, // 창의성과 분석력을 위해 약간 높임
+      topP: 0.9,
+      maxOutputTokens: 4096, // 충분한 본문 길이를 위해 확장
     }
   });
 
-  return response.text;
+  const result = await response.response;
+  return result.text();
 }
 
 // ─── 메타데이터 JSON 추출 ────────────────────────────────
