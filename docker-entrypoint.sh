@@ -2,13 +2,14 @@
 
 echo "🚀 EconPedia 컨테이너 시작..."
 
-# Nginx pid 파일 디렉터리 보장
-mkdir -p /run/nginx
+# Nginx 로그를 docker logs로 리다이렉트
+mkdir -p /run/nginx /var/log/nginx
+ln -sf /dev/stdout /var/log/nginx/access.log
+ln -sf /dev/stderr /var/log/nginx/error.log
 
 # ─── Nginx 설정 사전 검증 ──────────────────────────────────
 echo "🔍 Nginx 설정 검증..."
-nginx -t 2>&1
-if [ $? -ne 0 ]; then
+if ! nginx -t 2>&1; then
   echo "❌ Nginx 설정 오류 - 컨테이너 종료"
   exit 1
 fi

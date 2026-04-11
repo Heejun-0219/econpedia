@@ -105,9 +105,13 @@ jobs:
             if [ "$FINAL_STATUS" != "healthy" ]; then
               echo "❌ New container failed health check. Rolling back..."
               echo "=== Container Logs ==="
-              sudo docker logs --tail 50 econpedia-new 2>&1 || true
+              sudo docker logs --tail 100 econpedia-new 2>&1 || true
               echo "=== Health Check Output ==="
               sudo docker inspect --format='{{json .State.Health}}' econpedia-new 2>/dev/null || true
+              echo "=== Nginx Error Log ==="
+              sudo docker exec econpedia-new cat /var/log/nginx/error.log 2>&1 || true
+              echo "=== Port Listening ==="
+              sudo docker exec econpedia-new sh -c 'cat /proc/net/tcp /proc/net/tcp6 2>/dev/null | awk "NR>1{print \$2}" | sort -u' 2>&1 || true
               echo "=== Manual Health Check ==="
               sudo docker exec econpedia-new wget -qO- http://localhost/health 2>&1 || true
               sudo docker stop econpedia-new 2>/dev/null || true
