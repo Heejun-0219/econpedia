@@ -220,7 +220,7 @@ async function main() {
     const result = await saveBlogPost(blogMarkdown, today);
 
     // ─── 외부 마케팅 파이프라인 연동 ───────────────────────
-    const canonicalUrl = `https://econpedia.kr/blog/${result.slug}`;
+    const canonicalUrl = `https://econpedia.dedyn.io/blog/${result.slug}`;
     const externalLogs = [];
     
     // 1. Blogger (구글 검색 최적화 및 메인 수익 채널)

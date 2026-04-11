@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.join(__dirname, '..');
 
-const SITE_URL = 'https://econpedia.kr';
+const SITE_URL = 'https://econpedia.dedyn.io';
 const SITEMAP_URL = `${SITE_URL}/sitemap-index.xml`;
 
 async function saveIndexingStatus(success, message) {
