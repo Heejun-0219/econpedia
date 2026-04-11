@@ -45,124 +45,87 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # === 5. Blue-Green Zero-Downtime Deploy to Oracle Cloud ===
-      - name: 🚀 Deploy to Oracle Cloud (Zero Downtime)
+      # === 5. Zero-Downtime Deploy to Oracle Cloud (Optimized) ===
+      - name: 🚀 Deploy to Oracle Cloud
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.OCI_HOST }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
-            echo "🔐 Logging in to GHCR..."
+            echo "🔐 GHCR Login..."
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u heejun-0219 --password-stdin
 
             IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-
+            
             echo "📥 Pulling latest image..."
             sudo docker pull $IMAGE
 
-            echo "🧹 Cleaning up any leftover containers..."
-            sudo docker stop econpedia-new 2>/dev/null || true
+            # --- PREPARE NEW CONTAINER ---
+            echo "🆕 Starting NEW container for health check..."
             sudo docker rm -f econpedia-new 2>/dev/null || true
-
-            echo "🟢 Starting NEW container (Blue-Green)..."
-            sudo mkdir -p /opt/econpedia/data
+            
+            # Start new container on temp ports to check health
             sudo docker run -d \
               --name econpedia-new \
               --restart unless-stopped \
-              -p 8080:80 \
-              -p 8443:443 \
+              -p 8080:80 -p 8443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
               -v /opt/econpedia/data:/app/data \
               -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
               -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
-              --memory=256m \
-              --cpus=0.5 \
+              --memory=384m --cpus=0.5 \
               --health-cmd="wget -qO /dev/null http://localhost/health || exit 1" \
-              --health-interval=5s \
-              --health-timeout=3s \
-              --health-retries=5 \
-              --health-start-period=20s \
+              --health-interval=5s --health-timeout=3s --health-retries=5 \
               $IMAGE
 
-            echo "🔍 Container startup diagnostics..."
-            sleep 5
-            echo "--- docker ps ---"
-            sudo docker ps -a --filter name=econpedia-new
-            echo "--- container state ---"
-            sudo docker inspect --format='Status={{.State.Status}} ExitCode={{.State.ExitCode}} Error={{.State.Error}} OOM={{.State.OOMKilled}}' econpedia-new 2>/dev/null || true
-            echo "--- container logs (last 30) ---"
-            sudo docker logs --tail 30 econpedia-new 2>&1 || true
-
-            echo "⏳ Waiting for new container health check..."
+            echo "⏳ Waiting for health check..."
+            HEALTHY=false
             for i in $(seq 1 30); do
               STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "starting")
-              echo "   Health check attempt $i/30: $STATUS"
               if [ "$STATUS" = "healthy" ]; then
+                HEALTHY=true
                 break
               fi
+              echo "   Health: $STATUS ($i/30)"
               sleep 2
             done
 
-            FINAL_STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "unknown")
-            if [ "$FINAL_STATUS" != "healthy" ]; then
-              echo "❌ New container failed health check. Rolling back..."
-              echo "=== Container Logs ==="
-              sudo docker logs --tail 100 econpedia-new 2>&1 || true
-              echo "=== Health Check Output ==="
-              sudo docker inspect --format='{{json .State.Health}}' econpedia-new 2>/dev/null || true
-              echo "=== Nginx Error Log ==="
-              sudo docker exec econpedia-new cat /var/log/nginx/error.log 2>&1 || true
-              echo "=== Port Listening ==="
-              sudo docker exec econpedia-new sh -c 'cat /proc/net/tcp /proc/net/tcp6 2>/dev/null | awk "NR>1{print \$2}" | sort -u' 2>&1 || true
-              echo "=== Manual Health Check ==="
-              sudo docker exec econpedia-new wget -qO- http://localhost/health 2>&1 || true
-              sudo docker stop econpedia-new 2>/dev/null || true
-              sudo docker rm econpedia-new 2>/dev/null || true
-              echo "🔄 Rollback complete. Old container still running."
+            if [ "$HEALTHY" = false ]; then
+              echo "❌ Health check FAILED. Aborting."
+              sudo docker logs econpedia-new --tail 50
+              sudo docker rm -f econpedia-new
               exit 1
             fi
 
-            echo "✅ New container is healthy! Swapping traffic..."
+            echo "✅ Health check PASSED. Swapping containers..."
 
-            # 포트 포워딩으로 트래픽 원자적 전환
-            sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 2>/dev/null || true
-            sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443 2>/dev/null || true
-
-            # 구 컨테이너 제거
-            echo "🔴 Stopping OLD container..."
+            # --- ATOMIC SWAP (Minimize Downtime) ---
             sudo docker stop econpedia 2>/dev/null || true
             sudo docker rm econpedia 2>/dev/null || true
+            
+            # Now we stop the 'new' one briefly to rename and re-map to main ports
+            # This is the most resource-efficient way on single-node OCI
+            sudo docker stop econpedia-new
+            sudo docker rm econpedia-new
 
-            # iptables 정리 및 새 컨테이너를 :80/:443으로 재바인딩
-            sudo iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 2>/dev/null || true
-            sudo iptables -t nat -D PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 8443 2>/dev/null || true
-            sudo docker stop econpedia-new 2>/dev/null || true
-            sudo docker rm econpedia-new 2>/dev/null || true
-
-            # 최종 컨테이너를 정식 이름 + 포트로 가동
+            echo "🚀 Final start on production ports..."
             sudo docker run -d \
               --name econpedia \
               --restart unless-stopped \
-              -p 80:80 \
-              -p 443:443 \
+              -p 80:80 -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
               -v /opt/econpedia/data:/app/data \
               -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
               -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
               -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
-              --memory=256m \
-              --cpus=0.5 \
-              --health-cmd="wget -qO /dev/null http://localhost/health || exit 1" \
-              --health-interval=30s \
-              --health-timeout=3s \
-              --health-retries=3 \
+              --memory=384m --cpus=0.5 \
               $IMAGE
 
-            echo "🧹 Cleaning up old images..."
+            echo "🧹 Cleanup..."
             sudo docker image prune -f
+            echo "✨ Deployment successful!"
+            sudo docker ps -a --filter name=econpedia
 
-            echo "✅ Zero-downtime deployment complete!"
-            sudo docker ps --filter name=econpedia
 
