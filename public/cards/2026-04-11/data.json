@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피 1.4% 상승! 📈",
+      "subheadline": "내 주식도 오를까?",
+      "badge": "2026.04.11 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5858.87",
+          "change": "+1.40%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1485.41",
+          "change": "+0.74%",
+          "direction": "up"
+        },
+        {
+          "label": "NASDAQ",
+          "value": "22902.90",
+          "change": "+0.35%",
+          "direction": "up"
+        },
+        {
+          "label": "Bitcoin (USD)",
+          "value": "$73060.41",
+          "change": "+0.48%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "외국인 형님들이 한국 주식을 많이 사줬어요! 🛍️ 우리 기업 실적이 좋아질 거란 기대감 때문이래요."
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "내 주식 계좌가 조금 웃었을 수 있지만, 환율 오름세는 해외여행이나 수입 물가엔 😢 조금 부담될 수 있어요."
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
