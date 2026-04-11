@@ -61,6 +61,10 @@ jobs:
             echo "📥 Pulling latest image..."
             sudo docker pull $IMAGE
 
+            echo "🧹 Cleaning up any leftover containers..."
+            sudo docker stop econpedia-new 2>/dev/null || true
+            sudo docker rm -f econpedia-new 2>/dev/null || true
+
             echo "🟢 Starting NEW container (Blue-Green)..."
             sudo mkdir -p /opt/econpedia/data
             sudo docker run -d \
