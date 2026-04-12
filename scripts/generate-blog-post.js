@@ -128,7 +128,16 @@ async function saveBlogPost(markdown, dateString) {
       </div>
     </div>
   `;
-  const htmlContent = marked.parse(bodyMarkdown) + ctaHtml;
+  let coverImageHtml = '';
+  try {
+    const cardStatus = JSON.parse(await fs.readFile(path.join(ROOT, '.cardnews-status.json'), 'utf-8'));
+    if (cardStatus.success && cardStatus.date) {
+      const coverUrl = `https://econpedia.dedyn.io/cards/${cardStatus.date}/slide-1.png`;
+      coverImageHtml = `<img src="${coverUrl}" alt="오늘의 카드뉴스" style="width:100%;max-width:1080px;border-radius:12px;margin-bottom:24px;" />\n`;
+    }
+  } catch {}
+
+  const htmlContent = coverImageHtml + marked.parse(bodyMarkdown) + ctaHtml;
 
   const safeTitle = title.replace(/`/g, "'");
   const safeDescription = (metadata.seoDescription || excerpt).replace(/`/g, "'").replace(/"/g, "'");
