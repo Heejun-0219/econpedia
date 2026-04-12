@@ -30,7 +30,7 @@ import BaseLayout from './BaseLayout.astro';
     <!-- Series Nav (if part of series) -->
     {series && (
       <div class="series-nav">
-        <span class="series-nav__label">📚 시리즈</span>
+        <span class="series-nav__label"><svg class="icon-svg" viewBox="0 0 24 24" style="margin-right: 4px; font-size: 0.8em;"><path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/></svg> 시리즈</span>
         <span class="series-nav__title">{series.title} ({series.current}/{series.total})</span>
         <div class="series-nav__list">
           {series.articles.map((a, i) => (
