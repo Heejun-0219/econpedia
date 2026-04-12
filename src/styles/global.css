@@ -8,19 +8,19 @@
 
 /* === CSS Variables === */
 :root {
-  /* Colors — 프리미엄 다크 테마 */
-  --color-bg-primary: #0a0e1a;
-  --color-bg-secondary: #111827;
-  --color-bg-card: #1a2035;
-  --color-bg-card-hover: #1f2847;
-  --color-bg-elevated: #222d45;
+  /* Colors — 더 선명하고 가독성 높은 프리미엄 테마 */
+  --color-bg-primary: #0f172a; /* 약간 밝아진 딥 네이비 (가독성 베이스) */
+  --color-bg-secondary: #1e293b;
+  --color-bg-card: #1e293b;
+  --color-bg-card-hover: #334155;
+  --color-bg-elevated: #334155;
   
-  --color-text-primary: #f0f4ff;
-  --color-text-secondary: #94a3c0;
-  --color-text-muted: #5e6e8a;
+  --color-text-primary: #f8fafc; /* 최상급 명도 (가장 밝은 텍스트) */
+  --color-text-secondary: #cbd5e1; /* 서브 텍스트 명도 상향 */
+  --color-text-muted: #94a3b8;
   
-  --color-accent-primary: #3b82f6;
-  --color-accent-secondary: #8b5cf6;
+  --color-accent-primary: #60a5fa; /* 더 밝고 선명한 블루 */
+  --color-accent-secondary: #a78bfa;
   --color-accent-tertiary: #06b6d4;
   --color-accent-success: #10b981;
   --color-accent-warning: #f59e0b;
@@ -93,38 +93,40 @@ html {
 
 body {
   font-family: var(--font-sans);
-  font-size: 1.125rem; /* 18px로 상향: 가독성의 기본 */
-  line-height: 1.8;    /* 넉넉한 행간: 다크모드 피로도 감소 */
+  font-size: 1.125rem;
+  line-height: 1.85; /* 행간 미세 상향 */
+  font-weight: 450;    /* 폰트 두께 상향으로 선명도 확보 */
   color: var(--color-text-primary);
   background: var(--color-bg-primary);
   min-height: 100vh;
-  word-break: keep-all; /* 한글 단어 끊김 방지 */
+  word-break: keep-all;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* === Article Content Optimization === */
 .article-content {
   max-width: var(--content-width);
   margin: 0 auto;
-  color: #e2e8f0; /* 본문은 순백색보다 약간 낮은 톤으로 눈 보호 */
+  color: var(--color-text-primary); /* 본문 명도 상향 */
 }
 
 .article-content p {
-  margin-bottom: 1.8rem; /* 문단 간의 명확한 구분 */
-  letter-spacing: -0.01em;
+  margin-bottom: 2rem;
+  letter-spacing: -0.015em;
 }
 
 .article-content h2 {
   font-size: var(--text-3xl);
-  margin: 3.5rem 0 1.5rem;
+  margin: 4rem 0 1.5rem;
   color: white;
-  border-left: 4px solid var(--color-accent-primary);
-  padding-left: 1rem;
+  border-left: 5px solid var(--color-accent-primary);
+  padding-left: 1.25rem;
 }
 
 .article-content h3 {
   font-size: var(--text-xl);
-  margin: 2.5rem 0 1rem;
+  margin: 2.5rem 0 1.25rem;
   color: #f1f5f9;
 }
 
