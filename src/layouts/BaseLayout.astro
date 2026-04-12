@@ -124,60 +124,46 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       </div>
     </div>
 
-    <!-- 텔레그램 실시간 알림 CTA -->
-    <section class="telegram-cta">
-      <div class="telegram-cta__inner">
-        <div class="telegram-cta__content">
-          <div class="telegram-cta__badge">🚀 실시간 알림</div>
-          <h2 class="telegram-cta__title">놓치면 손해 보는 경제 소식,<br/>텔레그램에서 가장 먼저 확인하세요</h2>
-          <p class="telegram-cta__desc">매일 아침 AI 브리핑과 심층 리포트 알림을 텔레그램 채널에서 실시간으로 보내드립니다.</p>
-        </div>
-        <div class="telegram-cta__action">
-          <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" class="telegram-cta__btn">
-            <svg class="telegram-cta__icon" viewBox="0 0 24 24" fill="currentColor">
+    <!-- 통합 구독 허브 (텔레그램 + 뉴스레터) -->
+    <section class="sub-hub">
+      <div class="sub-hub__inner">
+        <!-- 왼쪽: 텔레그램 (실시간 알림) -->
+        <div class="sub-card sub-card--telegram">
+          <div class="sub-card__badge">🚀 실시간 알림</div>
+          <h2 class="sub-card__title">텔레그램 채널</h2>
+          <p class="sub-card__desc">오늘의 시장 변동과 카드뉴스를<br/>가장 빠르게 확인하세요.</p>
+          <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" class="sub-card__btn sub-card__btn--telegram">
+            <svg class="sub-card__icon" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/>
             </svg>
             채널 입장하기
           </a>
         </div>
+
+        <!-- 오른쪽: 뉴스레터 (매일 아침 브리핑) -->
+        <div class="sub-card sub-card--newsletter">
+          <div class="sub-card__badge">📬 무료 뉴스레터</div>
+          <h2 class="sub-card__title">데일리 브리핑</h2>
+          <p class="sub-card__desc">매일 오전 7시, AI가 분석한<br/>경제 핵심을 메일로 보내드려요.</p>
+          <form class="sub-form" id="subscribe-form">
+            <input
+              type="email"
+              id="subscribe-email"
+              class="sub-form__input"
+              placeholder="your@email.com"
+              required
+            />
+            <button type="submit" class="sub-form__btn" id="subscribe-btn">
+              <span class="btn-text">구독하기</span>
+              <span class="btn-loading" style="display:none">...</span>
+            </button>
+          </form>
+          <div id="subscribe-feedback" class="sub-feedback" style="display:none"></div>
+        </div>
       </div>
     </section>
 
-    <!-- 뉴스레터 구독 섹션 -->
-    <section class="newsletter-section" id="newsletter">
-      <div class="newsletter-inner">
-        <div class="newsletter-left">
-          <span class="newsletter-badge">📬 무료 뉴스레터</span>
-          <h2 class="newsletter-title">매일 아침, 경제 브리핑을<br/>받아보세요</h2>
-          <p class="newsletter-desc">AI가 분석한 글로벌 경제 핵심을 5분 만에 파악.<br/>이미 <strong id="subscriber-count">구독자들이</strong> 함께하고 있어요.</p>
-          <ul class="newsletter-features">
-            <li>📊 매일 오전 7시 KST 발송</li>
-            <li>🤖 Gemini AI 경제 분석</li>
-            <li>✉️ 언제든지 구독 취소 가능</li>
-          </ul>
-        </div>
-        <div class="newsletter-right">
-          <form class="newsletter-form" id="subscribe-form">
-            <div class="newsletter-form__group">
-              <input
-                type="email"
-                id="subscribe-email"
-                class="newsletter-form__input"
-                placeholder="your@email.com"
-                required
-                autocomplete="email"
-              />
-            </div>
-            <button type="submit" class="newsletter-form__btn" id="subscribe-btn">
-              <span class="subscribe-btn-text">무료 구독 시작 →</span>
-              <span class="subscribe-btn-loading" style="display:none">발송 중...</span>
-            </button>
-            <div id="subscribe-feedback" class="newsletter-feedback" style="display:none"></div>
-            <p class="newsletter-form__privacy">스팸 없음 · 무료 · 언제든 취소 가능</p>
-          </form>
-        </div>
-      </div>
-    </section>
+    <!-- Footer -->
 
     <!-- Footer -->
     <footer class="footer">

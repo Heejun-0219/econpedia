@@ -2077,3 +2077,155 @@ img {
   width: 24px;
   height: 24px;
 }
+
+/* ============================================
+   Subscription Hub (Combined Telegram + Newsletter)
+   ============================================ */
+.sub-hub {
+  padding: 80px 20px;
+  background-color: var(--color-bg-primary);
+  border-top: 1px solid var(--glass-border);
+}
+
+.sub-hub__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 850px) {
+  .sub-hub__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sub-card {
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.sub-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Telegram Card Style */
+.sub-card--telegram {
+  background: linear-gradient(145deg, #1d2b4a 0%, #0088cc 150%);
+  border: 1px solid rgba(0, 136, 204, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 136, 204, 0.1);
+}
+
+/* Newsletter Card Style */
+.sub-card--newsletter {
+  background: linear-gradient(145deg, #1d2b4a 0%, #10b981 150%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+}
+
+.sub-card__badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sub-card--telegram .sub-card__badge { color: #7dd3fc; }
+.sub-card--newsletter .sub-card__badge { color: #6ee7b7; }
+
+.sub-card__title {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.sub-card__desc {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* Button & Form Styles */
+.sub-card__btn, .sub-form__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: var(--text-base);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.sub-card__btn--telegram {
+  background: #0088cc;
+  color: white;
+}
+
+.sub-card__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.sub-form {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .sub-form {
+    flex-direction: column;
+  }
+}
+
+.sub-form__input {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: var(--color-bg-elevated);
+  color: white;
+  font-size: var(--text-sm);
+  outline: none;
+}
+
+.sub-form__input:focus {
+  border-color: var(--color-accent-success);
+}
+
+.sub-form__btn {
+  background: var(--color-accent-success);
+  color: white;
+  min-width: 100px;
+}
+
+.sub-feedback {
+  margin-top: 15px;
+  font-size: var(--text-sm);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.newsletter-feedback--success { background: rgba(16, 185, 129, 0.1); color: #6ee7b7; }
+.newsletter-feedback--error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
+
