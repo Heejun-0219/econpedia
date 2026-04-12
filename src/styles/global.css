@@ -8,32 +8,61 @@
 
 /* === CSS Variables === */
 :root {
-  /* Colors — "Sophisticated Garden" (차분한 성장의 공간) */
-  --color-bg-primary: #f4f7f4; /* 톤다운된 세이지 화이트 (편안함) */
-  --color-bg-secondary: #ffffff; /* 카드 및 섹션용 순백색 */
+  /* Common Token */
+  --font-sans: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --max-width: 1200px;
+  --content-width: 760px;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Light Theme Variables (Default) */
+  --color-bg-primary: #f4f7f4;
+  --color-bg-secondary: #ffffff;
   --color-bg-card: #ffffff;
   --color-bg-card-hover: #ecf2ec;
   --color-bg-elevated: #ffffff;
   
-  --color-text-primary: #064e3b; /* 깊은 숲색 (가장 가독성 높은 텍스트) */
+  --color-text-primary: #064e3b;
   --color-text-secondary: #374151;
   --color-text-muted: #6b7280;
   
-  --color-accent-primary: #16a34a; /* 선명한 그린 */
-  --color-accent-secondary: #15803d; /* 내비게이션 및 타이틀용 딥 그린 */
+  --color-accent-primary: #16a34a;
+  --color-accent-secondary: #15803d;
   --color-accent-tertiary: #10b981;
-  --color-accent-success: #22c55e;
-  --color-accent-warning: #f59e0b;
-  --color-accent-danger: #ef4444;
   
   --gradient-primary: linear-gradient(135deg, #16a34a, #15803d);
-  --gradient-secondary: linear-gradient(135deg, #22c55e, #16a34a);
   --gradient-hero: linear-gradient(180deg, #ecf2ec 0%, #f4f7f4 100%);
-  
-  /* Glass Effect — 투명도 조절 */
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(22, 163, 74, 0.1);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  --nav-bg: rgba(244, 247, 244, 0.85);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --color-bg-primary: #0a0f0a; /* 깊은 숲의 밤 */
+  --color-bg-secondary: #121a12;
+  --color-bg-card: #162416;
+  --color-bg-card-hover: #1c2e1c;
+  --color-bg-elevated: #1c2e1c;
+  
+  --color-text-primary: #ecfdf5; /* 맑은 민트 화이트 */
+  --color-text-secondary: #a7f3d0;
+  --color-text-muted: #64748b;
+  
+  --color-accent-primary: #34d399;
+  --color-accent-secondary: #10b981;
+  --color-accent-tertiary: #84cc16;
+  
+  --gradient-primary: linear-gradient(135deg, #10b981, #059669);
+  --gradient-hero: linear-gradient(180deg, #0a0f0a 0%, #121a12 100%);
+  --glass-bg: rgba(18, 26, 18, 0.8);
+  --glass-border: rgba(16, 185, 129, 0.15);
+  --nav-bg: rgba(10, 15, 10, 0.85);
+}
   
   /* Typography */
   --font-sans: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -257,7 +286,7 @@ img {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(244, 247, 244, 0.85); /* 세이지 화이트 투명 배경 */
+  background: var(--nav-bg); /* 다크모드 대응 배경색 */
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(22, 163, 74, 0.1);
   transition: all var(--transition-base);
@@ -2453,3 +2482,57 @@ img {
 .icon-svg--xl { width: 2em; height: 2em; }
 .icon-svg--accent { color: var(--color-accent-primary); }
 
+
+/* ============================================
+   Theme Toggle Button Styles
+   ============================================ */
+.nav__theme-btn {
+  background: var(--color-bg-secondary);
+  border: 1px solid rgba(22, 163, 74, 0.15);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-accent-primary);
+  transition: all 0.2s;
+}
+
+.nav__theme-btn:hover {
+  background: var(--color-bg-card-hover);
+  transform: scale(1.05);
+}
+
+.nav__theme-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* 다크모드 시 버튼 보더 조절 */
+[data-theme="dark"] .nav__theme-btn {
+  border-color: rgba(52, 211, 153, 0.2);
+}
+
+/* 모바일 대응: 내비게이션 압축 */
+@media (max-width: 480px) {
+  .nav__inner {
+    padding: 0 15px;
+  }
+  .nav__logo {
+    font-size: 1.25rem;
+  }
+  .nav__actions {
+    gap: 8px !important;
+  }
+  .nav__search span, .nav__search kbd {
+    display: none;
+  }
+  .nav__search {
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+}
