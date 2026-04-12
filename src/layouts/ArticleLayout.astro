@@ -47,6 +47,23 @@ import BaseLayout from './BaseLayout.astro';
 
     <!-- Article Header -->
     <header class="article-header">
+      <div class="editor-badge">
+        <div class="editor-badge__avatar">
+          <span class="editor-badge__icon">📊</span>
+        </div>
+        <div class="editor-badge__info">
+          <div class="editor-badge__meta">
+            <span class="editor-badge__role">수석 경제 에디터</span>
+            <span class="editor-badge__name">이코노 (Econo)</span>
+          </div>
+          <p class="editor-badge__bio">“복잡한 경제를 당신의 언어로 쉽게 통역해 드립니다.”</p>
+        </div>
+        <div class="editor-badge__status">
+          <span class="status-chip">✅ 팩트체크 완료</span>
+          <span class="status-chip">🤖 AI + 전문검수</span>
+        </div>
+      </div>
+
       <a href={categoryHref} class="article-header__category">{category}</a>
       <h1 class="article-header__title">{title}</h1>
       <p class="article-header__subtitle">{description}</p>
@@ -170,5 +187,98 @@ import BaseLayout from './BaseLayout.astro';
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
     color: white;
+  }
+  /* Editor Badge UI — 페르소나 강화 */
+  .editor-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-2xl);
+    max-width: fit-content;
+  }
+
+  @media (max-width: 600px) {
+    .editor-badge {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      max-width: 100%;
+    }
+  }
+
+  .editor-badge__avatar {
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  }
+
+  .editor-badge__icon {
+    font-size: 1.5rem;
+  }
+
+  .editor-badge__info {
+    flex: 1;
+  }
+
+  .editor-badge__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: 2px;
+  }
+
+  .editor-badge__role {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .editor-badge__name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .editor-badge__bio {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .editor-badge__status {
+    display: flex;
+    gap: var(--space-xs);
+    margin-left: var(--space-lg);
+  }
+
+  @media (max-width: 600px) {
+    .editor-badge__status {
+      margin-left: 0;
+      margin-top: 4px;
+    }
+  }
+
+  .status-chip {
+    padding: 4px 8px;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-accent-success);
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    border: 1px solid rgba(16, 185, 129, 0.1);
   }
 </style>

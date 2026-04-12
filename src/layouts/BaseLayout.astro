@@ -71,6 +71,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8793696080407617" crossorigin="anonymous"></script>
   </head>
   <body>
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress-container" aria-hidden="true">
+      <div id="reading-progress-bar" class="reading-progress-bar"></div>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav" id="main-nav">
       <div class="nav__inner">
@@ -208,6 +213,38 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         <p>&copy; 2026 EconPedia. 경제를 쉽게, 모두에게.</p>
       </div>
     </footer>
+
+    <!-- 읽기 진행률 스크립트 -->
+    <script is:inline>
+      (function() {
+        const progressBar = document.getElementById('reading-progress-bar');
+        if (!progressBar) return;
+
+        let lastKnownScrollPosition = 0;
+        let ticking = false;
+
+        function updateProgress(scrollPos) {
+          const winHeight = window.innerHeight;
+          const docHeight = document.body.offsetHeight;
+          const totalScroll = docHeight - winHeight;
+          const progress = (scrollPos / totalScroll) * 100;
+          
+          progressBar.style.width = Math.min(Math.max(progress, 0), 100) + '%';
+          ticking = false;
+        }
+
+        window.addEventListener('scroll', function() {
+          lastKnownScrollPosition = window.scrollY;
+
+          if (!ticking) {
+            window.requestAnimationFrame(function() {
+              updateProgress(lastKnownScrollPosition);
+            });
+            ticking = true;
+          }
+        }, { passive: true });
+      })();
+    </script>
 
     <!-- Fuse.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>

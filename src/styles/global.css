@@ -93,11 +93,60 @@ html {
 
 body {
   font-family: var(--font-sans);
-  font-size: var(--text-base);
-  line-height: 1.7;
+  font-size: 1.125rem; /* 18px로 상향: 가독성의 기본 */
+  line-height: 1.8;    /* 넉넉한 행간: 다크모드 피로도 감소 */
   color: var(--color-text-primary);
   background: var(--color-bg-primary);
   min-height: 100vh;
+  word-break: keep-all; /* 한글 단어 끊김 방지 */
+  text-rendering: optimizeLegibility;
+}
+
+/* === Article Content Optimization === */
+.article-content {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  color: #e2e8f0; /* 본문은 순백색보다 약간 낮은 톤으로 눈 보호 */
+}
+
+.article-content p {
+  margin-bottom: 1.8rem; /* 문단 간의 명확한 구분 */
+  letter-spacing: -0.01em;
+}
+
+.article-content h2 {
+  font-size: var(--text-3xl);
+  margin: 3.5rem 0 1.5rem;
+  color: white;
+  border-left: 4px solid var(--color-accent-primary);
+  padding-left: 1rem;
+}
+
+.article-content h3 {
+  font-size: var(--text-xl);
+  margin: 2.5rem 0 1rem;
+  color: #f1f5f9;
+}
+
+/* Blockquote - 시니어 에디터의 코멘트 스타일 */
+.article-content blockquote {
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 2rem;
+  margin: 2.5rem 0;
+  border-left: 0;
+  position: relative;
+}
+
+.article-content blockquote::before {
+  content: '“';
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 4rem;
+  opacity: 0.1;
+  font-family: serif;
+}
 }
 
 a {
@@ -2229,3 +2278,24 @@ img {
 .newsletter-feedback--success { background: rgba(16, 185, 129, 0.1); color: #6ee7b7; }
 .newsletter-feedback--error { background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
 
+
+/* ============================================
+   Reading Progress Bar
+   ============================================ */
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  z-index: 9999;
+}
+
+.reading-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-primary);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+  transition: width 0.1s ease-out;
+}
