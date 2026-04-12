@@ -8,33 +8,33 @@
 
 /* === CSS Variables === */
 :root {
-  /* Colors — 더 선명하고 가독성 높은 프리미엄 테마 */
-  --color-bg-primary: #0f172a; /* 약간 밝아진 딥 네이비 (가독성 베이스) */
-  --color-bg-secondary: #1e293b;
-  --color-bg-card: #1e293b;
-  --color-bg-card-hover: #334155;
-  --color-bg-elevated: #334155;
+  /* Colors — "The Garden of Wealth" 테마 (성장과 신뢰) */
+  --color-bg-primary: #022c22; /* 딥 에메랄드 (깊은 지식의 토양) */
+  --color-bg-secondary: #064e3b;
+  --color-bg-card: #064e3b;
+  --color-bg-card-hover: #065f46;
+  --color-bg-elevated: #065f46;
   
-  --color-text-primary: #f8fafc; /* 최상급 명도 (가장 밝은 텍스트) */
-  --color-text-secondary: #cbd5e1; /* 서브 텍스트 명도 상향 */
-  --color-text-muted: #94a3b8;
+  --color-text-primary: #ecfdf5; /* 최상급 명도 (신선한 민트 화이트) */
+  --color-text-secondary: #a7f3d0; /* 부드러운 그린 틴트 */
+  --color-text-muted: #64748b;
   
-  --color-accent-primary: #60a5fa; /* 더 밝고 선명한 블루 */
-  --color-accent-secondary: #a78bfa;
-  --color-accent-tertiary: #06b6d4;
+  --color-accent-primary: #10b981; /* 에메랄드 그린 (전문적인 성장) */
+  --color-accent-secondary: #84cc16; /* 스프라우트 라임 (생동감) */
+  --color-accent-tertiary: #34d399;
   --color-accent-success: #10b981;
-  --color-accent-warning: #f59e0b;
+  --color-accent-warning: #fbbf24;
   --color-accent-danger: #ef4444;
   
-  --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  --gradient-secondary: linear-gradient(135deg, #06b6d4, #3b82f6);
-  --gradient-accent: linear-gradient(135deg, #f59e0b, #ef4444);
-  --gradient-hero: linear-gradient(180deg, #0a0e1a 0%, #111827 50%, #0a0e1a 100%);
+  --gradient-primary: linear-gradient(135deg, #059669, #10b981); /* 숲의 생명력 */
+  --gradient-secondary: linear-gradient(135deg, #10b981, #84cc16); /* 새싹의 도약 */
+  --gradient-accent: linear-gradient(135deg, #065f46, #059669);
+  --gradient-hero: linear-gradient(180deg, #022c22 0%, #064e3b 50%, #022c22 100%);
   
-  /* Glass Effect */
-  --glass-bg: rgba(26, 32, 53, 0.6);
-  --glass-border: rgba(59, 130, 246, 0.15);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* Glass Effect — 잎사귀의 이슬 느낌 */
+  --glass-bg: rgba(6, 78, 59, 0.6);
+  --glass-border: rgba(16, 185, 129, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   
   /* Typography */
   --font-sans: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -120,7 +120,7 @@ body {
   font-size: var(--text-3xl);
   margin: 4rem 0 1.5rem;
   color: white;
-  border-left: 5px solid var(--color-accent-primary);
+  border-left: 5px solid var(--color-accent-secondary); /* 줄기 포인트 */
   padding-left: 1.25rem;
 }
 
@@ -130,9 +130,10 @@ body {
   color: #f1f5f9;
 }
 
-/* Blockquote - 시니어 에디터의 코멘트 스타일 */
+/* Blockquote - 에디터의 정원 코멘트 */
 .article-content blockquote {
-  background: var(--color-bg-elevated);
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   padding: 1.5rem 2rem;
   margin: 2.5rem 0;

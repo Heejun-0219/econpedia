@@ -81,14 +81,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <div class="nav__inner">
         <a href="/" class="nav__logo">
           <svg class="icon-svg icon-svg--lg icon-svg--accent" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            <!-- 차트 위로 돋아난 새싹 아이콘 -->
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity="0.3"/>
+            <path d="M12 14c0-2.21 1.79-4 4-4s4 1.79 4 4v4h-8v-4z" fill="var(--color-accent-secondary)"/>
+            <path d="M13 10c0-1.1.9-2 2-2s2 .9 2 2" fill="none" stroke="var(--color-accent-secondary)" stroke-width="2" stroke-linecap="round"/>
           </svg>
           EconPedia
         </a>
         <ul class="nav__links">
           <li>
             <a href="/daily" class="nav__link nav__link--live">
-              <span class="pulse-dot pulse-dot--sm"></span>
+              <span class="pulse-dot pulse-dot--sm" style="background-color: var(--color-accent-secondary); box-shadow: 0 0 0 rgba(132, 204, 22, 0.4);"></span>
               데일리 브리핑
             </a>
           </li>
@@ -141,21 +144,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <section class="sub-hub">
       <div class="sub-hub__inner">
         <!-- 왼쪽: 텔레그램 (실시간 알림) -->
-        <div class="sub-card sub-card--telegram hover-lift">
-          <div class="sub-card__badge">
+        <div class="sub-card sub-card--telegram hover-lift" style="background: linear-gradient(145deg, #064e3b 0%, #022c22 150%); border-color: rgba(16, 185, 129, 0.2);">
+          <div class="sub-card__badge" style="color: var(--color-text-secondary);">
             <svg class="icon-svg" viewBox="0 0 24 24" style="margin-right: 4px; font-size: 0.9em;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.13-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .24z"/></svg>
             실시간 알림
           </div>
           <h2 class="sub-card__title">텔레그램 채널</h2>
           <p class="sub-card__desc">오늘의 시장 변동과 카드뉴스를<br/>가장 빠르게 확인하세요.</p>
-          <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" class="sub-card__btn sub-card__btn--telegram shimmer-effect">
+          <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" class="sub-card__btn shimmer-effect" style="background: var(--color-accent-primary); color: white;">
             채널 입장하기
           </a>
         </div>
 
         <!-- 오른쪽: 뉴스레터 (매일 아침 브리핑) -->
-        <div class="sub-card sub-card--newsletter hover-lift">
-          <div class="sub-card__badge">
+        <div class="sub-card sub-card--newsletter hover-lift" style="background: linear-gradient(145deg, #065f46 0%, #059669 150%); border-color: rgba(132, 204, 22, 0.2);">
+          <div class="sub-card__badge" style="color: var(--color-accent-secondary);">
             <svg class="icon-svg" viewBox="0 0 24 24" style="margin-right: 4px; font-size: 0.9em;"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
             무료 뉴스레터
           </div>
@@ -169,7 +172,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
               placeholder="your@email.com"
               required
             />
-            <button type="submit" class="sub-form__btn shimmer-effect" id="subscribe-btn">
+            <button type="submit" class="sub-form__btn shimmer-effect" id="subscribe-btn" style="background: var(--color-accent-secondary); color: white;">
               <span class="btn-text">구독하기</span>
               <span class="btn-loading" style="display:none">...</span>
             </button>
