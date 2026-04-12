@@ -110,15 +110,22 @@ async function saveBlogPost(markdown, dateString) {
   // 마크다운 → HTML
   const utmParams = 'utm_source=blogger&utm_medium=blog&utm_campaign=daily_report';
   const canonicalUrl = `https://econpedia.dedyn.io/blog/${slug}?${utmParams}`;
+  const subscribeUrl = `https://econpedia.dedyn.io/#newsletter?${utmParams}`;
   const ctaHtml = `
     <br/><hr/><br/>
     <div style="background-color: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center;">
       <h3 style="margin-top: 0; color: #1e293b;">📊 더 깊은 경제 분석이 궁금하다면?</h3>
       <p style="color: #64748b;">EconPedia 본진에서 매일 아침 AI가 분석한 리포트를 받아보세요.</p>
-      <a href="${canonicalUrl}" 
-         style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
-         EconPedia에서 전문 읽기 →
-      </a>
+      <div style="margin-top: 15px;">
+        <a href="${canonicalUrl}" 
+           style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 10px;">
+           EconPedia에서 전문 읽기 →
+        </a>
+        <a href="${subscribeUrl}" 
+           style="display: inline-block; background-color: #10b981; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+           📮 매일 아침 무료 구독하기
+        </a>
+      </div>
     </div>
   `;
   const htmlContent = marked.parse(bodyMarkdown) + ctaHtml;

@@ -62,10 +62,11 @@ export async function publishCardNewsToTelegram(title, imagePaths, canonicalUrl)
   const formData = new FormData();
   formData.append('chat_id', chatId);
   
+  const subscribeUrl = `https://econpedia.dedyn.io/#newsletter?utm_source=telegram&utm_medium=cardnews&utm_campaign=album`;
   const media = imagePaths.map((p, idx) => ({
     type: 'photo',
     media: `attach://photo${idx}`,
-    caption: idx === 0 ? `🖼️ *${title}* (카드뉴스 브리핑)\n\n지금 EconPedia에서 오늘의 경제 인사이트를 확인하세요! 👇\n${canonicalUrl}` : '',
+    caption: idx === 0 ? `🖼️ *${title}* (카드뉴스 브리핑)\n\n📊 *오늘의 인사이트 확인하기* 👇\n${canonicalUrl}\n\n📮 *매일 아침 무료 브리핑 구독하기* 👇\n${subscribeUrl}` : '',
     parse_mode: 'Markdown'
   }));
   
@@ -145,6 +146,10 @@ export async function publishCardNewsToTelegram(title, imagePaths, canonicalUrl)
     console.error('❌ [Blogger] 포스팅 실패:', JSON.stringify(postData.error || postData));
     return `[Blogger] ❌ 포스팅 실패: ${JSON.stringify(postData.error || postData)}`;
   } catch (e) {
+    return `[Blogger] ❌ 에러: ${e.message}`;
+  }
+}
+) {
     return `[Blogger] ❌ 에러: ${e.message}`;
   }
 }

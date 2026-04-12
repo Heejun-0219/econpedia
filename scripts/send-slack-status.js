@@ -96,14 +96,18 @@ const newsletterLine = statusLine(
 
 const cardNewsLine = statusLine(
   cardNewsStatus,
-  s => `✅ 카드뉴스 생성 완료 (${s.slideCount || 5}장)`,
-  s => `❌ 카드뉴스 생성 실패 — ${s.message}`,
+  s => `✅ 카드뉴스 생성 및 텔레그램 발행 완료 (${s.slideCount || 5}장)`,
+  s => `❌ 카드뉴스/텔레그램 실패 — ${s.message}`,
   '⚠️ 카드뉴스 상태 미확인',
 );
 
 const blogLine = statusLine(
   blogStatus,
-  s => `✅ 블로그 및 외부 매체 연동 (${s.slug})\n    > ` + s.message.replace(/\n/g, '\n    > '),
+  s => {
+    const isBloggerOk = s.message.includes('Blogger] ✅');
+    const isTelegramOk = s.message.includes('Telegram] 채널 알림 전송 성공');
+    return `✅ 블로그 심층분석 발행 완료 (${s.slug})\n    > ${isBloggerOk ? '🟢' : '🔴'} Blogger | ${isTelegramOk ? '🟢' : '🔴'} Telegram`;
+  },
   s => `❌ 블로그 포스트 실패 — ${s.message}`,
   '⚠️ 블로그 상태 미확인',
 );
