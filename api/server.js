@@ -48,13 +48,14 @@ async function flushStats() {
     pruneOldDaily();
     const { writeFile } = await import('fs/promises');
     await writeFile(STATS_FILE, JSON.stringify(stats, null, 2), 'utf-8');
+    // console.log(`[stats] ✅ Flushed to disk at ${new Date().toISOString()}`); // 조용한 로그
   } catch (e) {
     console.error('⚠️ stats.json 비동기 플러시 실패:', e.message);
   }
 }
 
-// 5분마다 디스크에 기록 (이벤트 루프 차단 없음)
-setInterval(flushStats, 5 * 60 * 1000);
+// 30초마다 디스크에 기록 (테스트 및 안정성 강화)
+setInterval(flushStats, 30 * 1000);
 // 프로세스 종료 시에도 저장
 process.on('SIGTERM', async () => { await flushStats(); process.exit(0); });
 process.on('SIGINT', async () => { await flushStats(); process.exit(0); });

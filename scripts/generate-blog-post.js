@@ -108,7 +108,20 @@ async function saveBlogPost(markdown, dateString) {
   const excerpt = firstPara.length > 155 ? firstPara.slice(0, 155) + '...' : firstPara;
 
   // 마크다운 → HTML
-  const htmlContent = marked.parse(bodyMarkdown);
+  const utmParams = 'utm_source=blogger&utm_medium=blog&utm_campaign=daily_report';
+  const canonicalUrl = `https://econpedia.dedyn.io/blog/${slug}?${utmParams}`;
+  const ctaHtml = `
+    <br/><hr/><br/>
+    <div style="background-color: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; text-align: center;">
+      <h3 style="margin-top: 0; color: #1e293b;">📊 더 깊은 경제 분석이 궁금하다면?</h3>
+      <p style="color: #64748b;">EconPedia 본진에서 매일 아침 AI가 분석한 리포트를 받아보세요.</p>
+      <a href="${canonicalUrl}" 
+         style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+         EconPedia에서 전문 읽기 →
+      </a>
+    </div>
+  `;
+  const htmlContent = marked.parse(bodyMarkdown) + ctaHtml;
 
   const safeTitle = title.replace(/`/g, "'");
   const safeDescription = (metadata.seoDescription || excerpt).replace(/`/g, "'").replace(/"/g, "'");

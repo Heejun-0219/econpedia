@@ -167,7 +167,15 @@ async function main() {
     await fs.writeFile(jsonPath, JSON.stringify(cardData, null, 2), 'utf-8');
 
     // Puppeteer로 이미지 렌더링
-    const { outputDir } = await renderCardImages(cardData, today);
+    const { outputDir, imagePaths } = await renderCardImages(cardData, today);
+
+    // ─── 텔레그램 카드뉴스 앨범 발행 ───────────────────
+    if (process.env.TELEGRAM_BOT_TOKEN) {
+      const canonicalUrl = `https://econpedia.dedyn.io/daily/${today}`;
+      const tgMsg = await publishCardNewsToTelegram(cardData.slides[0].headline, imagePaths, canonicalUrl);
+      console.log(tgMsg);
+    }
+    // ──────────────────────────────────────────────────
 
     await saveCardNewsStatus(true, `${today} 카드뉴스 5장 생성`, today, outputDir);
     console.log('🚀 Card News Pipeline Completed Successfully.');
