@@ -17,6 +17,7 @@ import dotenv from 'dotenv';
 
 // 프롬프트 시스템 import
 import { buildCardNewsPrompt } from '../src/data/prompts.js';
+import { publishCardNewsToTelegram } from './publish-external.js';
 
 dotenv.config();
 

@@ -80,18 +80,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <nav class="nav" id="main-nav">
       <div class="nav__inner">
         <a href="/" class="nav__logo">
-          <svg class="icon-svg icon-svg--lg icon-svg--accent" viewBox="0 0 24 24">
+          <svg class="icon-svg icon-svg--lg" style="color: var(--color-accent-secondary);" viewBox="0 0 24 24">
             <!-- 차트 위로 돋아난 새싹 아이콘 -->
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity="0.3"/>
-            <path d="M12 14c0-2.21 1.79-4 4-4s4 1.79 4 4v4h-8v-4z" fill="var(--color-accent-secondary)"/>
-            <path d="M13 10c0-1.1.9-2 2-2s2 .9 2 2" fill="none" stroke="var(--color-accent-secondary)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity="0.2"/>
+            <path d="M12 14c0-2.21 1.79-4 4-4s4 1.79 4 4v4h-8v-4z" fill="currentColor"/>
+            <path d="M13 10c0-1.1.9-2 2-2s2 .9 2 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
           EconPedia
         </a>
         <ul class="nav__links">
           <li>
             <a href="/daily" class="nav__link nav__link--live">
-              <span class="pulse-dot pulse-dot--sm" style="background-color: var(--color-accent-secondary); box-shadow: 0 0 0 rgba(132, 204, 22, 0.4);"></span>
+              <span class="pulse-dot pulse-dot--sm" style="background-color: var(--color-accent-primary);"></span>
               데일리 브리핑
             </a>
           </li>
@@ -100,8 +100,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           <li><a href="/economy/finance" class="nav__link">생활 금융</a></li>
           <li><a href="/economy/global" class="nav__link">글로벌 경제</a></li>
         </ul>
-        <button class="nav__search hover-lift" id="search-trigger">
-          <svg class="icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <button class="nav__search" id="search-trigger">
+          <svg class="icon-svg" viewBox="0 0 24 24" style="font-size: 1.1em;"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
           검색 <kbd>⌘K</kbd>
         </button>
       </div>
