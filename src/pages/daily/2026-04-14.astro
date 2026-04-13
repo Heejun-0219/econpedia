@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "코스피의 나홀로 우울증, 1,485원 환율이 만든 '외국인 패싱'";
+const date = "2026-04-14";
+const description = "> 오늘 하루를 한 문장으로 정의한다면:";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">📰 데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <blockquote>
+<p>오늘 하루를 한 문장으로 정의한다면:
+&quot;미국 파티장엔 초대받지 못하고, 1,485원짜리 달러 청구서만 날아온 한국 증시&quot;</p>
+</blockquote>
+<h3>📊 이코노의 데이터 대시보드</h3>
+<table>
+<thead>
+<tr>
+<th align="left">지표</th>
+<th align="left">수치</th>
+<th align="left">변동</th>
+<th align="left">이코노의 한 줄 해석</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>S&amp;P 500</strong></td>
+<td align="left">6,826.17</td>
+<td align="left">+0.14%</td>
+<td align="left">끄떡없는 미국 형님, 조용히 우상향 중 📈</td>
+</tr>
+<tr>
+<td align="left"><strong>나스닥</strong></td>
+<td align="left">22,988.76</td>
+<td align="left">+0.37%</td>
+<td align="left">기술주 체력은 여전히 탄탄해요</td>
+</tr>
+<tr>
+<td align="left"><strong>코스피</strong></td>
+<td align="left">5,808.62</td>
+<td align="left">-0.86%</td>
+<td align="left">나홀로 뒷걸음질, 외국인 장바구니가 텅 비었어요 🛒</td>
+</tr>
+<tr>
+<td align="left"><strong>원·달러 환율</strong></td>
+<td align="left">1,485.46</td>
+<td align="left">0.00%</td>
+<td align="left">숨 막히는 고환율, 1,500원 문턱에서 눈치싸움 중</td>
+</tr>
+<tr>
+<td align="left"><strong>비트코인</strong></td>
+<td align="left">$71,972.38</td>
+<td align="left">+1.65%</td>
+<td align="left">위험자산 선호 심리(투자자들이 쫄지 않는 상태) 부활!</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>[시장의 뒷모습: 왜 움직였나?]</h2>
+<p>간밤에 미국과 한국 증시가 완전히 다른 길을 걷는 &#39;디커플링(탈동조화)&#39; 현상이 나타났어요. 미국 증시와 비트코인은 기분 좋게 올랐는데, 코스피만 -0.86% 뒷걸음질 쳤죠. 범인은 바로 &#39;1,485원&#39;이라는 무거운 환율입니다.</p>
+<p>외국인 투자자 입장에서 현재 한국 증시를 바라보는 심리를 읽어볼까요? </p>
+<ul>
+<li>외국인이 한국 주식을 사려면 달러를 원화로 바꿔야 합니다.</li>
+<li>그런데 나중에 주식을 팔고 다시 달러로 바꿀 때, 원화 가치가 떨어져 있으면(환율 상승) 주식에서 수익이 나도 환전할 때 오히려 손해를 봅니다. (이를 &#39;환차손&#39;이라고 해요)</li>
+<li>즉, 지금처럼 환율이 1,500원을 위협하는 상황은 외국인에게 &quot;한국 주식은 사면 살수록 손해 보는 구조&quot;라는 인식을 심어줍니다. 💸</li>
+</ul>
+<p>결국 환율이 외국인의 지갑을 굳게 닫아버렸고, 든든한 매수 주체가 사라진 코스피는 작은 충격에도 쉽게 무너지는 모습을 보여준 거예요. 반면 미국은 자체적인 기술주 실적 기대감으로 자금이 몰리면서, 비트코인 같은 위험자산까지 함께 춤을 췄답니다.</p>
+<h2>[독자의 지갑: 그래서 어떻게 되나?]</h2>
+<p>&quot;나는 주식 안 하는데 나랑 무슨 상관?&quot;이라고 생각하셨나요? 이 1,485원이라는 숫자는 우리 통장과 일상을 조용히, 하지만 확실하게 갉아먹을 수 있어요.</p>
+<ol>
+<li><strong>🛒 장바구니 물가 비상:</strong> 당장 마트에서 사는 수입 과일, 커피, 밀가루 가격이 오를 수 있어요. (우리나라는 원유와 원자재를 달러로 사 오기 때문에, 환율이 오르면 수입 물가가 그대로 뜁니다.)</li>
+<li><strong>✈️ 해외여행 환전은 &#39;쪼개서&#39;:</strong> 다가오는 연휴에 해외여행 계획이 있다면 한숨이 나오실 텐데요. 지금 당장 전액을 환전하기보다는, 필요할 때마다 조금씩 나누어 바꾸는 &#39;분할 환전&#39;이 안전한 전략일 수 있어요.</li>
+<li><strong>💼 서학개미의 딜레마:</strong> 미국 주식을 가진 분들은 주가가 가만히 있어도 환율 덕분에 원화 평가액이 늘어나는 마법을 보고 계실 거예요. 하지만 지금 당장 달러를 사서 투자를 시작하기엔 환율이 너무 비싼 &#39;입장료&#39;로 작용할 수 있습니다.</li>
+</ol>
+<p>결국 지금 시장은 &#39;달러가 왕&#39;인 시기입니다. 환율이 의미 있게 꺾이기 전까지는 국내 증시도 롤러코스터를 탈 확률이 높으니, 분위기에 휩쓸린 섣부른 투자는 조심해야 해요. 🛑</p>
+<p>오늘도 똑똑한 하루 보내세요! 💪</p>
+
+    </div>
+  </div>
+</BaseLayout>
