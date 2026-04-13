@@ -66,8 +66,8 @@ export async function publishCardNewsToTelegram(title, imagePaths, canonicalUrl)
   const media = imagePaths.map((p, idx) => ({
     type: 'photo',
     media: `attach://photo${idx}`,
-    caption: idx === 0 ? `🖼️ *${title}* (카드뉴스 브리핑)\n\n📊 *오늘의 인사이트 확인하기* 👇\n${canonicalUrl}\n\n📮 *매일 아침 무료 브리핑 구독하기* 👇\n${subscribeUrl}` : '',
-    parse_mode: 'Markdown'
+    caption: idx === 0 ? `🖼️ <b>${title}</b> (카드뉴스 브리핑)\n\n📊 <b>오늘의 인사이트 확인하기</b> 👇\n${canonicalUrl}\n\n📮 <b>매일 아침 무료 브리핑 구독하기</b> 👇\n${subscribeUrl}` : '',
+    parse_mode: 'HTML'
   }));
   
   formData.append('media', JSON.stringify(media));
