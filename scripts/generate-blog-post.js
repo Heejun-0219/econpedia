@@ -107,6 +107,8 @@ async function saveBlogPost(markdown, dateString) {
   const firstPara = (lines[0] || '').replace(/\*\*/g, '').replace(/\*/g, '').trim();
   const excerpt = firstPara.length > 155 ? firstPara.slice(0, 155) + '...' : firstPara;
 
+  const slug = metadata.slug || dateString;
+
   // 마크다운 → HTML
   const utmParams = 'utm_source=blogger&utm_medium=blog&utm_campaign=daily_report';
   const canonicalUrl = `https://econpedia.dedyn.io/blog/${slug}?${utmParams}`;
@@ -176,7 +178,6 @@ const tags = ${safeTags};
 </BaseLayout>
 `;
 
-  const slug = metadata.slug || dateString;
   const dirPath = path.join(ROOT, 'src', 'pages', 'blog');
   const filePath = path.join(dirPath, `${slug}.astro`);
 
