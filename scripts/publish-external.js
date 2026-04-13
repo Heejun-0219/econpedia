@@ -92,6 +92,8 @@ export async function publishCardNewsToTelegram(title, imagePaths, canonicalUrl)
     return `[Telegram] 카드뉴스 통신 에러: ${e.message}`;
   }
 }
+
+export async function publishToBlogger(title, htmlContent, labels = []) {
   const clientId     = process.env.BLOGGER_CLIENT_ID;
   const clientSecret = process.env.BLOGGER_CLIENT_SECRET;
   const refreshToken = process.env.BLOGGER_REFRESH_TOKEN;
@@ -134,7 +136,7 @@ export async function publishCardNewsToTelegram(title, imagePaths, canonicalUrl)
         body: JSON.stringify({
           title,
           content: htmlContent,
-          labels: tags,
+          labels: labels,
         }),
       }
     );
@@ -146,10 +148,6 @@ export async function publishCardNewsToTelegram(title, imagePaths, canonicalUrl)
     console.error('❌ [Blogger] 포스팅 실패:', JSON.stringify(postData.error || postData));
     return `[Blogger] ❌ 포스팅 실패: ${JSON.stringify(postData.error || postData)}`;
   } catch (e) {
-    return `[Blogger] ❌ 에러: ${e.message}`;
-  }
-}
-) {
     return `[Blogger] ❌ 에러: ${e.message}`;
   }
 }
