@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
 import dailyArticles from '../data/daily-articles.json';
 
 const latestBriefings = [...dailyArticles]
@@ -7,13 +8,13 @@ const latestBriefings = [...dailyArticles]
   .slice(0, 5);
 
 const categories = [
-  { icon: '🏦', title: '기초 경제학', desc: 'GDP, 인플레이션, 금리, 환율 등 경제의 기본 개념을 쉽게 배워보세요.', count: '24개 기사', href: '/economy/basics' },
-  { icon: '📈', title: '투자 기초', desc: '주식, 채권, ETF, 부동산 등 투자의 첫 걸음을 시작하세요.', count: '18개 기사', href: '/economy/investment' },
-  { icon: '💳', title: '생활 금융', desc: '신용점수, 대출, 보험, 세금 등 일상 속 금융 상식을 알려드립니다.', count: '21개 기사', href: '/economy/finance' },
-  { icon: '🌍', title: '글로벌 경제', desc: '미국, 중국, 유럽 등 세계 경제의 흐름을 한눈에 파악하세요.', count: '15개 기사', href: '/economy/global' },
-  { icon: '🏢', title: '기업 분석', desc: '재무제표 읽기, 산업 분석 등 기업을 보는 눈을 키워보세요.', count: '12개 기사', href: '/economy/corporate' },
-  { icon: '📊', title: '경제 지표 해설', desc: 'CPI, PMI, 고용지표 등 경제 뉴스의 핵심 지표를 해설합니다.', count: '16개 기사', href: '/economy/indicators' },
-  { icon: '🔥', title: '경제 트렌드', desc: 'AI 경제, ESG, 디지털 화폐 등 최신 경제 트렌드를 분석합니다.', count: '9개 기사', href: '/economy/trends' },
+  { icon: 'book',       title: '기초 경제학', desc: 'GDP, 인플레이션, 금리, 환율 등 경제의 기본 개념을 쉽게 배워보세요.', count: '24개 기사', href: '/economy/basics' },
+  { icon: 'chart-line', title: '투자 기초',   desc: '주식, 채권, ETF, 부동산 등 투자의 첫 걸음을 시작하세요.', count: '18개 기사', href: '/economy/investment' },
+  { icon: 'wallet',     title: '생활 금융',   desc: '신용점수, 대출, 보험, 세금 등 일상 속 금융 상식을 알려드립니다.', count: '21개 기사', href: '/economy/finance' },
+  { icon: 'globe',      title: '글로벌 경제', desc: '미국, 중국, 유럽 등 세계 경제의 흐름을 한눈에 파악하세요.', count: '15개 기사', href: '/economy/global' },
+  { icon: 'building',   title: '기업 분석',   desc: '재무제표 읽기, 산업 분석 등 기업을 보는 눈을 키워보세요.', count: '12개 기사', href: '/economy/corporate' },
+  { icon: 'gauge',      title: '경제 지표 해설', desc: 'CPI, PMI, 고용지표 등 경제 뉴스의 핵심 지표를 해설합니다.', count: '16개 기사', href: '/economy/indicators' },
+  { icon: 'trend',      title: '경제 트렌드', desc: 'AI 경제, ESG, 디지털 화폐 등 최신 경제 트렌드를 분석합니다.', count: '9개 기사', href: '/economy/trends' },
 ];
 
 const featuredArticles = [
@@ -60,7 +61,7 @@ function formatDate(dateStr) {
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <span class="hero__badge">📚 경제를 쉽게, 모두에게</span>
+      <span class="hero__badge"><Icon name="library" size={15} class="hero__badge-icon" /> 경제를 쉽게, 모두에게</span>
       <h1 class="hero__title">
         경제가 어렵다면,<br/>
         <span class="hero__title-gradient">EconPedia에서 시작하세요.</span>
@@ -109,7 +110,7 @@ function formatDate(dateStr) {
               <h3 class="daily-card__title">{brief.title}</h3>
               <p class="daily-card__excerpt">{brief.excerpt}</p>
               <div class="daily-card__footer">
-                <span class="daily-card__author">🤖 EconPedia AI</span>
+                <span class="daily-card__author"><Icon name="robot" size={14} class="daily-card__author-icon" /> EconPedia AI</span>
                 <span class="daily-card__read">읽기 →</span>
               </div>
             </a>
@@ -117,7 +118,7 @@ function formatDate(dateStr) {
         </div>
 
         <div class="daily-section__cta">
-          <a href="/daily" class="daily-section__cta-link">📚 모든 브리핑 보기 →</a>
+          <a href="/daily" class="daily-section__cta-link"><Icon name="library" size={16} class="daily-section__cta-icon" /> 모든 브리핑 보기 →</a>
         </div>
       </div>
     </section>
@@ -133,10 +134,10 @@ function formatDate(dateStr) {
       <div class="category-grid">
         {categories.map((cat) => (
           <a href={cat.href} class="category-card" id={`category-${cat.title}`}>
-            <div class="category-card__icon">{cat.icon}</div>
+            <div class="category-card__icon"><Icon name={cat.icon} size={28} /></div>
             <h3 class="category-card__title">{cat.title}</h3>
             <p class="category-card__desc">{cat.desc}</p>
-            <span class="category-card__count">📄 {cat.count}</span>
+            <span class="category-card__count"><Icon name="document" size={13} class="category-card__count-icon" /> {cat.count}</span>
           </a>
         ))}
       </div>
