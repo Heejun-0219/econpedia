@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "뉴욕은 웃고 서울은 울었다, 1480원대 환율이 만든 '코스피의 소외감'";
+const date = "2026-04-13";
+const description = "> 오늘 하루를 한 문장으로 정의한다면:";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">📰 데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <blockquote>
+<p>오늘 하루를 한 문장으로 정의한다면:
+&quot;미국 증시라는 화려한 파티장 밖, 비싼 환율 입장권에 발길을 돌린 외국인들.&quot;</p>
+</blockquote>
+<p>안녕하세요, 이코노입니다! 간밤에 미국 시장은 기분 좋게 올랐는데, 오늘 우리 주식 계좌는 파란불이 켜져서 당황하신 분들 많으시죠? </p>
+<p>숫자만 보면 &quot;미국이 오르면 한국도 오르는 거 아니었어?&quot; 싶지만, 시장의 속마음은 조금 달랐습니다. 오늘 시장이 어떤 &#39;패&#39;를 주고받았는지, 데이터 대시보드부터 열어볼게요.</p>
+<h3>📊 이코노의 데이터 대시보드</h3>
+<table>
+<thead>
+<tr>
+<th align="left">지표</th>
+<th align="left">수치</th>
+<th align="left">변동</th>
+<th align="left"><strong>에디터의 한 줄 해석</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>S&amp;P 500</strong></td>
+<td align="left">6824.14</td>
+<td align="left">+0.11%</td>
+<td align="left">빅테크 형님들의 숨 고르기, 그래도 파티는 계속된다!</td>
+</tr>
+<tr>
+<td align="left"><strong>NASDAQ</strong></td>
+<td align="left">22966.48</td>
+<td align="left">+0.28%</td>
+<td align="left">찔끔 올랐지만, 기술주를 향한 굳건한 믿음 확인.</td>
+</tr>
+<tr>
+<td align="left"><strong>KOSPI</strong></td>
+<td align="left">5808.62</td>
+<td align="left">-0.86%</td>
+<td align="left">나홀로 역주행. 외국인들의 매서운 &#39;팔자&#39; 러시에 휘청.</td>
+</tr>
+<tr>
+<td align="left"><strong>USD/KRW</strong></td>
+<td align="left">1484.08</td>
+<td align="left">-0.09%</td>
+<td align="left">1500원 턱밑. 달러가 너무 비싸서 한국 주식 살 맛이 안 나요.</td>
+</tr>
+<tr>
+<td align="left"><strong>Bitcoin</strong></td>
+<td align="left">$71,872.14</td>
+<td align="left">+1.45%</td>
+<td align="left">코인 시장은 후끈! 위험자산 선호 심리는 여전히 살아있습니다.</td>
+</tr>
+</tbody></table>
+<br>
+
+<h2>[시장의 뒷모습: 왜 움직였나?]</h2>
+<p>미국 증시와 비트코인은 오르는데, 우리 코스피만 -0.86% 하락하며 체면을 구겼어요. 그 범인은 바로 &#39;1480원&#39;이라는 무거운 환율표입니다. 환율이 높다는 건 원화 가치가 떨어졌다는 뜻이거든요. </p>
+<p>외국인 투자자 입장에서 지금 한국 주식시장을 바라보는 심리는 이런 느낌일 수 있어요:</p>
+<ul>
+<li>🍔 <strong>미국 주식 쇼핑:</strong> 달러로 사서 달러로 버니까, 수익률이 곧 내 돈!</li>
+<li>🍲 <strong>한국 주식 쇼핑:</strong> 주식으로 5%를 벌어도, 나중에 달러로 바꿀 때 환율이 떨어져 있으면 오히려 손해를 보네?</li>
+</ul>
+<p>결국 &quot;지금 한국 주식 사면 환차손(환율 변동으로 인해 입는 손해) 때문에 남는 게 없겠다&quot;라는 심리가 발동한 거예요. 그래서 외국인들이 우리 시장에서 짐을 싸서 나갔고, 코스피를 끌고 가는 대형주들이 스르륵 흘러내린 거죠. 반면 미국 시장과 코인은 돈이 몰리며 &#39;위험자산(수익률은 높지만 원금 손실 위험도 큰 자산)&#39;을 향한 투자자들의 식지 않은 사랑을 보여줬습니다.</p>
+<br>
+
+<h2>[독자의 지갑: 그래서 어떻게 되나?]</h2>
+<p>환율이 1480원대라는 건 주식시장을 넘어, 우리 일상에도 꽤 매서운 청구서로 날아올 수 있어요. 당장 이번 주 내 지갑과 통장에는 어떤 변화가 생길까요?</p>
+<ul>
+<li>✈️ <strong>해외여행 &amp; 직구족의 눈물:</strong> 다음 달 해외여행을 계획 중이시라면, 현지에서 쓸 예산을 10~15% 정도 넉넉히 잡으셔야 할 수 있어요. 아마존에서 눈여겨보던 전자기기도 당분간은 장바구니에 고이 모셔둬야 할지 모릅니다.</li>
+<li>🛒 <strong>장바구니 물가 비상:</strong> 우리가 먹는 빵(밀가루), 타는 차(기름)는 다 달러를 주고 사 오잖아요? 환율이 높으면 수입 물가가 비싸져서, 다음 달 마트 영수증이 조금 더 묵직해질 수 있어요.</li>
+<li>📈 <strong>서학개미의 딜레마:</strong> 이미 미국 주식을 가진 서학개미(해외 주식에 직접 투자하는 국내 투자자)분들은 환율 덕에 원화 환산 수익률이 짭짤해지셨을 거예요. 하지만 지금 새로 원화를 달러로 바꿔서 투자하기엔 &#39;비싼 환율&#39;이 꽤 큰 진입장벽이 될 수 있습니다.</li>
+</ul>
+<p>시장의 셈법이 복잡해질 때는 무리하게 베팅하기보다, 내 현금 흐름을 지키며 관망하는 것도 훌륭한 투자 전략이 될 수 있답니다. </p>
+<p>오늘도 똑똑한 하루 보내세요! 💪</p>
+
+    </div>
+  </div>
+</BaseLayout>
