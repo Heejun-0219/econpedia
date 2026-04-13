@@ -1,0 +1,58 @@
+{
+  "slides": [
+    {
+      "type": "cover",
+      "headline": "코스피만 0.86% 하락 📉",
+      "subheadline": "미국은 웃는데 한국은 왜? 🤔",
+      "badge": "2026.04.13 브리핑"
+    },
+    {
+      "type": "data",
+      "title": "오늘의 시장 한눈에 👀",
+      "items": [
+        {
+          "label": "KOSPI",
+          "value": "5808.62",
+          "change": "-0.86%",
+          "direction": "down"
+        },
+        {
+          "label": "NASDAQ",
+          "value": "22966.48",
+          "change": "+0.28%",
+          "direction": "up"
+        },
+        {
+          "label": "USD/KRW",
+          "value": "1484.08",
+          "change": "-0.09%",
+          "direction": "down"
+        },
+        {
+          "label": "Bitcoin",
+          "value": "$71872.14",
+          "change": "+1.45%",
+          "direction": "up"
+        }
+      ]
+    },
+    {
+      "type": "insight",
+      "number": "01",
+      "title": "왜 이렇게 됐을까?",
+      "body": "미국은 파티 중인데 코스피는 0.86% 내렸어요. 😥 1484원의 높은 환율(달러 가격) 때문에 외국인에게 한국 주식의 가성비가 떨어져서일 수 있어요."
+    },
+    {
+      "type": "insight",
+      "number": "02",
+      "title": "내 지갑에 미치는 영향",
+      "body": "1484원 고환율로 해외 직구 시 지갑 출혈이 클 수 있어요. 💸 반면 달러 자산이나 미국 주식 보유자는 환차익(환율 상승 이익)을 기대해볼 수 있답니다!"
+    },
+    {
+      "type": "cta",
+      "headline": "더 자세한 분석은?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+    }
+  ]
+}
