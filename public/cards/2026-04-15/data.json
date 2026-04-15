@@ -1,58 +1,50 @@
 {
   "slides": [
     {
-      "type": "cover",
-      "headline": "코스피 6천 시대 활짝 🚀",
-      "subheadline": "내 계좌도 드디어 빨간불? 🤔",
-      "badge": "2026.04.15 브리핑"
+      "type": "hook",
+      "question": "코스피 6000시대? 내 지갑은?",
+      "teaser": "주가는 역대급인데 환율이 함정 😱",
+      "badge": "2026-04-15 브리핑"
     },
     {
-      "type": "data",
-      "title": "오늘의 시장 한눈에 👀",
+      "type": "surprise",
+      "title": "기묘한 주가와 환율",
+      "body": "그런데 더 놀라운 건 코스피가 6000을 돌파했는데 환율도 1476원이에요! 보통 환율이 오르면 주가는 내리죠. 치킨값과 배달비가 동시에 폭등한 셈이랍니다 🍗",
+      "highlight": "코스피 +2.07%"
+    },
+    {
+      "type": "wallet",
+      "title": "내 지갑에 미치는 영향 💰",
       "items": [
         {
-          "label": "KOSPI",
-          "value": "6091.39",
-          "change": "+2.07%",
-          "direction": "up"
+          "scenario": "아마존 해외직구 영양제",
+          "impact": "약 3,000원↑",
+          "emoji": "💊"
         },
         {
-          "label": "S&P 500",
-          "value": "6979.34",
-          "change": "+0.17%",
-          "direction": "up"
+          "scenario": "국내 주식형 펀드(100만원)",
+          "impact": "평가액 2만원↑ 기대",
+          "emoji": "📈"
         },
         {
-          "label": "USD/KRW",
-          "value": "1476.69원",
-          "change": "+0.40%",
-          "direction": "up"
-        },
-        {
-          "label": "Bitcoin",
-          "value": "$74,098",
-          "change": "-2.00%",
-          "direction": "down"
+          "scenario": "여름 미국 여행(1천달러)",
+          "impact": "경비 약 15만원↑",
+          "emoji": "✈️"
         }
       ]
     },
     {
-      "type": "insight",
-      "number": "01",
-      "title": "왜 이렇게 됐을까?",
-      "body": "코스피가 2.07% 오르며 6천을 뚫었어요! 외국인들이 한국 시장이라는 마트에서 알짜 기업들을 장바구니에 가득 담은 덕분일 수 있어요. 🛒"
-    },
-    {
-      "type": "insight",
-      "number": "02",
-      "title": "내 지갑에 미치는 영향",
-      "body": "국내 ETF(주식 묶음 상품)를 가졌다면 계좌가 따뜻해질 수 있어요! 단, 환율이 1,476원(+0.40%)이라 해외 직구족은 지갑 조심! 💸"
+      "type": "insider",
+      "title": "증권사가 안 알려주는 것 🤫",
+      "body": "전문가들은 강달러에도 한국 수출 기업 실적이 좋아 주가가 오를 수 있다고 봐요. 비싼 환율 덕에 수출 시 원화 환산 마진이 쑥쑥 늘어나기 때문이죠! 👀",
+      "searchKeyword": "강달러 수출주"
     },
     {
       "type": "cta",
-      "headline": "더 자세한 분석은?",
+      "headline": "이 이야기의 끝이 궁금하다면?",
       "url": "econpedia.dedyn.io",
-      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕"
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕",
+      "teaser": "내일은 비트코인 하락 이유를 파헤칩니다 📉"
     }
   ]
 }

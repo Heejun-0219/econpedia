@@ -40,6 +40,24 @@ async function loadMarketData() {
   }
 }
 
+// ─── 최근 블로그 주제 로드 (주제 다각화 엔진) ──────────
+async function loadRecentTopics(days = 7) {
+  const manifestPath = path.join(ROOT, 'src', 'data', 'blog-articles.json');
+  try {
+    const raw = await fs.readFile(manifestPath, 'utf-8');
+    const articles = JSON.parse(raw);
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    const cutoffStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(cutoff);
+    const recent = articles.filter(a => a.date >= cutoffStr);
+    console.log(`📚 최근 ${days}일 블로그 ${recent.length}개 로드 (주제 중복 회피용)`);
+    return recent.map(a => ({ date: a.date, title: a.title }));
+  } catch {
+    console.log('ℹ️  블로그 매니페스트 없음 — 주제 회피 건너뛰');
+    return [];
+  }
+}
+
 // ─── Gemini 호출 헬퍼 (하네스 각 단계에서 공통 사용) ─────
 async function callGemini(prompt, temperature = 0.7, maxOutputTokens = 8192) {
   const response = await ai.models.generateContent({
@@ -57,11 +75,14 @@ async function callGemini(prompt, temperature = 0.7, maxOutputTokens = 8192) {
 }
 
 // ─── 4단계 하네스 파이프라인 ──────────────────────────────
-async function runBlogHarness(formattedData, today) {
+async function runBlogHarness(formattedData, today, recentTopics = []) {
   // Phase 1: 리서치 에이전트 — 핵심 앵글 도출
   console.log('🔬 [Harness 1/4] 리서치 에이전트 — 핵심 앵글 도출 중...');
+  if (recentTopics.length > 0) {
+    console.log(`   🚫 최근 ${recentTopics.length}개 주제 회피 지시 주입`);
+  }
   const research = await callGemini(
-    buildBlogResearchPrompt(formattedData, today),
+    buildBlogResearchPrompt(formattedData, today, recentTopics),
     0.9,  // 창의적 앵글 발굴을 위해 높은 temperature
     4096
   );
@@ -138,10 +159,13 @@ async function saveBlogPost(markdown, dateString) {
   // H1 제거한 본문
   const bodyMarkdown = cleanMarkdown.replace(/^#\s+(.+)$/m, '').trim();
 
-  // 첫 문단 추출 (요약)
+  // 첫 문단 추출 (폴백용)
   const lines = bodyMarkdown.split('\n').filter(l => l.trim() && !l.startsWith('#') && !l.startsWith('---') && !l.startsWith('>'));
   const firstPara = (lines[0] || '').replace(/\*\*/g, '').replace(/\*/g, '').trim();
-  const excerpt = firstPara.length > 155 ? firstPara.slice(0, 155) + '...' : firstPara;
+  const fallbackExcerpt = firstPara.length > 155 ? firstPara.slice(0, 155) + '...' : firstPara;
+
+  // AI 생성 excerpt 우선, 없으면 첣 문단 폴백 (인사말 방지)
+  const excerpt = metadata.excerpt || fallbackExcerpt;
 
   const slug = metadata.slug || dateString;
 
@@ -321,7 +345,10 @@ async function main() {
     const marketData = await loadMarketData();
     const today = marketData.date || Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
-    const blogMarkdown = await runBlogHarness(marketData.formatted, today);
+    // 최근 블로그 주제 로드 (주제 다각화 엔진)
+    const recentTopics = await loadRecentTopics(7);
+
+    const blogMarkdown = await runBlogHarness(marketData.formatted, today, recentTopics);
     const result = await saveBlogPost(blogMarkdown, today);
 
     // ─── 외부 마케팅 파이프라인 연동 ───────────────────────

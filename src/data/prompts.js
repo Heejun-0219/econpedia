@@ -100,9 +100,9 @@ export function buildCardNewsPrompt(marketDataString, today) {
       "type": "wallet",
       "title": "내 지갑에 미치는 영향 💰",
       "items": [
-        { "scenario": "구체적 상황 (예: 해외직구)", "impact": "금액 영향 (예: 3,000원↑)", "emoji": "적절한 이모지" },
-        { "scenario": "구체적 상황", "impact": "금액 영향", "emoji": "이모지" },
-        { "scenario": "구체적 상황", "impact": "금액 영향", "emoji": "이모지" }
+        { "scenario": "구체적 상황 (예: 해외직구)", "impact": "금액 영향 (예: 3,000원↑)", "emoji": "적절한 이모지", "sentiment": "negative" },
+        { "scenario": "구체적 상황", "impact": "금액 영향", "emoji": "이모지", "sentiment": "positive" },
+        { "scenario": "구체적 상황", "impact": "금액 영향", "emoji": "이모지", "sentiment": "negative" }
       ]
     },
     {
@@ -127,6 +127,7 @@ export function buildCardNewsPrompt(marketDataString, today) {
   - 나쁜 예: "오늘 코스피 상승했습니다" (이건 뉴스지 카드뉴스가 아님)
 - surprise: "그런데 더 놀라운 건..." 패턴으로 시작. 오늘 데이터를 일상 물건(치킨값, 택시비, 넷플릭스 구독료 등)에 비유
 - wallet의 items: 월급 300만원 직장인 기준, 구체적 금액으로 환산. 최소 3개
+- wallet의 각 item에 "sentiment" 필드 필수: 독자 지갑에 좋으면 "positive", 나쁘면 "negative". 예) 해외직구 비용 증가 → "negative", 펀드 수익 증가 → "positive"
 - insider의 searchKeyword: 독자가 이 키워드를 구글에 검색하면 관련 심층 기사를 찾을 수 있는 것
 - cta의 teaser: "내일은 OOO에 대해 파헤칩니다" 식으로 기대감 조성
 - 모든 텍스트: 카드뉴스는 글자가 적을수록 좋음 — 간결하게!
@@ -146,7 +147,26 @@ ${marketDataString}
 }
 
 // ── 블로그 하네스 — Phase 1: 리서치 에이전트 ──────────────
-export function buildBlogResearchPrompt(marketDataString, today) {
+export function buildBlogResearchPrompt(marketDataString, today, recentTopics = []) {
+  const topicAvoidance = recentTopics.length > 0
+    ? `\n\n[🚫 최근 다룬 주제 — 반드시 회피]
+아래는 최근 발행된 블로그의 제목과 핵심 프레임입니다.
+이 주제들과 동일하거나 유사한 앵글은 절대 선택하지 마세요.
+새로운 관점, 새로운 자산 클래스, 새로운 경제 현상을 발굴해야 합니다.
+
+${recentTopics.map((t, i) => `${i + 1}. [${t.date}] ${t.title}`).join('\n')}
+
+위 주제를 피하면서, 오늘 데이터에서 아직 분석되지 않은 새로운 앵글을 찾으세요.
+예시 주제 영역 (반드시 이것에 한정되지 않음):
+- 원자재/에너지 시장의 변화
+- 부동산/건설 섹터 시그널
+- 고용/소비 지표의 함의
+- 특정 산업(바이오, 2차전지, AI 외) 심층 분석
+- 글로벌 채권 시장 동향
+- 개인 재무 전략 (보험, 연금, 절세)
+- 신흥국 시장 비교 분석`
+    : '';
+
   return {
     system: `당신은 구글 시니어 리서치 엔지니어(L7)입니다.
 금융 시장 데이터를 분석하여 "아무도 지적하지 않은 핵심 앵글"을 발굴하는 것이 임무입니다.
@@ -156,13 +176,15 @@ export function buildBlogResearchPrompt(marketDataString, today) {
 1. 컨센서스(시장 예상)와 리얼리티(실제 데이터) 사이의 괴리를 찾으세요
 2. 숫자 뒤에 숨겨진 '왜?'를 파고드세요
 3. 역사적 선례와 비교하여 패턴을 찾으세요
-4. 항상 반론을 먼저 생각하세요 — "이 주장이 틀릴 수 있는 시나리오는?"`,
+4. 항상 반론을 먼저 생각하세요 — "이 주장이 틀릴 수 있는 시나리오는?"
+5. 같은 앵글을 반복하는 것은 저널리즘의 실패입니다. 매번 새로운 관점을 제시하세요${topicAvoidance}`,
 
     user: `[시장 데이터]
 ${marketDataString}
 
 위 데이터를 보고 아래 형식으로 정확히 3가지 핵심 앵글을 도출하세요.
 각 앵글은 블로그 심층 분석의 핵심 축이 됩니다.
+**최근 발행 주제와 겹치지 않는 새로운 관점**을 찾으세요.
 
 각 앵글마다 반드시 포함:
 1. **핵심 주장** (1줄 — 기사 제목이 될 수 있을 정도로 각이 있게)
@@ -219,6 +241,7 @@ export function buildBlogDraftPrompt(marketDataString, today, researchOutput) {
   "slug": "professional-analysis-slug-in-english",
   "seoTitle": "전문가급 SEO 제목 (50자 이내)",
   "seoDescription": "독자의 호기심을 자극하는 전문적인 설명 (150자 이내)",
+  "excerpt": "이 글의 핵심 인사이트를 1~2문장으로 요약 (인사말 제외, 분석 내용만). 독자가 이 문장만 읽고도 '읽어볼 가치가 있겠다'고 느끼게. 150자 이내.",
   "tags": ["거시경제", "투자전략", "그 외 관련 태그"]
 }
 \`\`\`
