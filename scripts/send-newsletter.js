@@ -258,10 +258,10 @@ try {
   console.log(`   발송 대상: ${recipients.slice(0, 3).join(', ')}${recipients.length > 3 ? ` 외 ${recipients.length - 3}명` : ''}`);
   console.log(`─────────────────────────────────────────`);
 
-  // 개별 발송 (Resend 무료 플랜 호환)
+  // 개별 발송 (Resend 무료 플랜 호환 - 초당 2건 제한)
   let successCount = 0;
   let failCount = 0;
-  const BATCH_SIZE = 10; // 동시 발송 최대 수
+  const BATCH_SIZE = 2; // 동시 발송 최대 수
 
   for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
     const batch = recipients.slice(i, i + BATCH_SIZE);
@@ -279,9 +279,9 @@ try {
       }
     });
 
-    // Rate limit 방지 (배치간 100ms 대기)
+    // Rate limit 방지 (배치간 1100ms 대기)
     if (i + BATCH_SIZE < recipients.length) {
-      await new Promise(r => setTimeout(r, 100));
+      await new Promise(r => setTimeout(r, 1100));
     }
   }
 

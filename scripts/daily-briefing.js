@@ -41,7 +41,20 @@ async function getMarketData() {
 
     const results = {};
     for (const [key, symbol] of Object.entries(symbols)) {
-      const quote = await yahooFinance.quote(symbol);
+      let quote;
+      let retries = 3;
+      while (retries > 0) {
+        try {
+          quote = await yahooFinance.quote(symbol);
+          break;
+        } catch (e) {
+          retries--;
+          console.warn(`   ⚠️ [${symbol}] Fetch failed, retrying... (${retries} retries left) - ${e.message}`);
+          if (retries === 0) throw e;
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+      
       results[key] = {
         price: quote.regularMarketPrice,
         change: quote.regularMarketChange,
