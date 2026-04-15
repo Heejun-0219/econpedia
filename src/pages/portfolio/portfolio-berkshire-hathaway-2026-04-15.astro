@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "🍎 애플 팔고 '현금 창고' 꽉 채운 버핏, 다가올 겨울을 준비하다?";
+const date = "2026-04-15";
+const description = "애플 비중을 줄이고 현금(단기 국채)을 사상 최대치로 늘린 버핏의 13F 공시. 고금리 시대 버핏의 리스크 관리 전략과 개인 투자자를 위한 인사이트를 정리했습니다.";
+const investorName = "워렌 버핏 / 버크셔 해서웨이";
+const investorEmoji = "🧙";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/portfolio" class="article-header__category">{investorEmoji} 포트폴리오 X-Ray</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>{investorName}</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>{investorEmoji} 대상: {investorName}</h3>
+        <p><strong>분류:</strong> 슈퍼인베스터</p>
+        <p><strong>운용 규모:</strong> 3000억 달러</p>
+        <p><strong>투자 철학:</strong> 장기 가치투자, 경제적 해자 중심</p>
+      </div>
+      
+      <p>안녕하세요! 이코노피디아 수석 경제 에디터 이코노입니다. 👋 </p>
+<p>여러분의 주식 계좌, 안녕하신가요? 요즘 시장이 오르락내리락해서 멀미 나는 분들 많으실 텐데요. 이럴 때일수록 &#39;투자의 구루&#39;들은 어떤 생각을 하고 있는지 그들의 장바구니(포트폴리오)를 훔쳐보는 게 큰 도움이 됩니다. </p>
+<p>오늘 우리가 엑스레이(X-Ray)를 찍어볼 대상은 바로 오마하의 현인, **워런 버핏(Warren Buffett)**이 이끄는 버크셔 해서웨이입니다. </p>
+<hr>
+<p>이번 분기 버크셔 해서웨이의 공시(13F, 미국에 상장된 1억 달러 이상 기관 투자자들이 매 분기 제출하는 포트폴리오 내역서)를 한마디로 요약하면 **&quot;지갑은 닫고, 비상금은 늘렸다&quot;**입니다. </p>
+<h2>📋 주요 포지션 변화: 버핏의 장바구니, 어떻게 바뀌었을까?</h2>
+<p>버핏 할아버지의 투자 철학은 &#39;좋은 기업을 적정 가격에 사서 평생 보유한다&#39;는 가치투자죠. 그런데 이번 장바구니 리스트를 보면 꽤 흥미로운 변화가 눈에 띕니다.</p>
+<table>
+<thead>
+<tr>
+<th align="left">종목명 (티커)</th>
+<th align="center">매매 방향</th>
+<th align="center">비중 변화</th>
+<th align="left">이코노의 한 줄 평</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>애플 (AAPL)</strong></td>
+<td align="center">🔻 매도</td>
+<td align="center">약 5% 축소</td>
+<td align="left">&quot;사랑하지만... 지금은 너무 비싸네&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>옥시덴탈 (OXY)</strong></td>
+<td align="center">🔺 매수</td>
+<td align="center">약 8% 추가</td>
+<td align="left">&quot;기름값 오를 때 든든한 국밥 같은 주식&quot;</td>
+</tr>
+<tr>
+<td align="left"><strong>단기 국채 (T-Bills)</strong></td>
+<td align="center">🔺 매수</td>
+<td align="center">사상 최대치</td>
+<td align="left">&quot;주식 살 거 없으면 이자나 받아야지&quot;</td>
+</tr>
+</tbody></table>
+<ul>
+<li>버핏의 최애 주식인 애플을 또 한 번 덜어냈습니다.</li>
+<li>대신 전통 에너지 기업인 옥시덴탈 페트롤리엄의 비중은 더 늘렸고요.</li>
+<li>가장 중요한 건 <strong>현금성 자산(단기 국채 등) 비중이 역대 최고치</strong>를 찍었다는 사실입니다.</li>
+</ul>
+<blockquote>
+<p><em>&quot;우리는 돈을 버는 것보다 잃지 않는 것을 더 중요하게 생각합니다.&quot;</em> 
+— 워런 버핏의 과거 주주서한 중</p>
+</blockquote>
+<h2>🔍 왜 샀을까? / 왜 팔았을까? (X-Ray 심층 분석)</h2>
+<p>그렇다면 버핏은 왜 지금 이런 선택을 했을까요? 현재의 거시경제(매크로) 상황과 연결해 3가지 포인트로 짚어볼게요.</p>
+<p><strong>1. 애플 매도: &quot;명품이 좋은 건 알지만, 웃돈 주고 사긴 싫어&quot;</strong>
+애플은 여전히 버크셔 포트폴리오의 1등 공신입니다. 하지만 최근 AI 트렌드 속에서 기술주들의 밸류에이션(Valuation, 기업의 현재 가치 평가 수준)이 크게 높아졌죠. </p>
+<ul>
+<li>버핏은 과거 닷컴버블 때도 &quot;이해할 수 없이 비싼 주식은 안 산다&quot;며 기술주를 피했습니다.</li>
+<li>지금의 애플 매도는 기업이 나빠서가 아니라, &#39;비싸게 거래될 때 조금 팔아서 이익을 챙기자&#39;는 리스크 관리 차원일 수 있어요.</li>
+</ul>
+<p><strong>2. 옥시덴탈 추가 매수: &quot;물가 상승(인플레이션)에 대비하는 방패&quot;</strong>
+최근 중동 지역의 지정학적 긴장이 계속되면서 유가가 들썩이고 있습니다. </p>
+<ul>
+<li>기름값이 오르면 우리 지갑에서 나가는 주유비는 늘어나지만, 정유사들의 수익은 좋아집니다.</li>
+<li>버핏은 시장의 불확실성이 커질 때마다 확실한 현금흐름(Cash flow, 기업에 실제로 들어오고 나가는 돈)을 창출하는 에너지 기업을 방패막이로 삼아왔습니다.</li>
+</ul>
+<p><strong>3. 단기 국채 풀매수: &quot;이자가 쏠쏠한데 굳이 위험한 곳에?&quot;</strong>
+현재 미국 기준금리는 여전히 높은 수준을 유지하고 있습니다. 단기 국채(T-bills, 만기가 1년 이하인 미국 정부의 빚문서)만 사둬도 연 4~5%대의 이자를 안전하게 받을 수 있죠.</p>
+<ul>
+<li>&quot;마땅히 싸고 좋은 주식이 안 보일 때는, 무리해서 투자하지 않고 이자 받으며 기다린다.&quot;</li>
+<li>이는 버핏이 과거 2008년 금융위기 직전에도 보여줬던 전형적인 &#39;실탄 장전&#39; 패턴과 비슷합니다.</li>
+</ul>
+<h2>💰 나에게 주는 의미: 내 월급 명세서에 적용해보기</h2>
+<p>자, 여기서 &quot;어? 버핏이 애플 팔았대! 나도 당장 팔아야지!&quot;라고 생각하셨다면 스톱! 🛑 
+슈퍼인베스터의 포트폴리오를 볼 때 우리가 진짜 배워야 할 건 종목 이름이 아니라 **&#39;자산을 대하는 태도&#39;**입니다.</p>
+<ul>
+<li><strong>버핏의 평단가는 우리와 다릅니다:</strong> 버핏이 애플을 처음 산 건 2016년입니다. 이미 엄청난 수익을 낸 상태에서 &#39;비중 조절&#39;을 하는 것과, 이제 막 투자를 시작한 우리가 전량 매도하는 건 완전히 다른 이야기죠.</li>
+<li><strong>내 계좌의 &#39;비상금 통장&#39; 점검하기:</strong> 버핏의 막대한 단기 국채는 우리로 치면 CMA 통장이나 파킹통장에 넣어둔 비상금과 같습니다. </li>
+<li><strong>기다림도 투자다:</strong> 시장이 불안하고 확신이 안 설 때는, 무리하게 주식을 사기보다 현금을 쥐고 기회를 기다리는 것도 훌륭한 투자 전략이 될 수 있어요.</li>
+</ul>
+<p>여러분의 투자 계좌는 지금 주식으로 100% 꽉 차 있나요? 아니면 폭락장이 왔을 때 바겐세일에 참여할 &#39;현금 실탄&#39;이 준비되어 있나요? 이번 달 월급이 들어오면, 내 계좌의 현금 비중을 한 번 점검해 보는 건 어떨까요? 👀</p>
+<hr>
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.25rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+</style>

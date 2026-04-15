@@ -1,0 +1,22 @@
+{
+  "berkshire-hathaway": {
+    "date": "2026-02-17",
+    "eventTriggered": true,
+    "mockData": "최근 2026-02-17 기준 13F 주요 포지션 변동"
+  },
+  "ark-invest": {
+    "date": "2026-04-08",
+    "eventTriggered": true,
+    "mockData": "최근 2026-04-08 기준 13F 주요 포지션 변동"
+  },
+  "renaissance-tech": {
+    "date": "2026-02-12",
+    "eventTriggered": true,
+    "mockData": "최근 2026-02-12 기준 13F 주요 포지션 변동"
+  },
+  "national-pension": {
+    "date": "2026-04-15",
+    "eventTriggered": true,
+    "mockData": "최근 2026-04-15 기준 13F 주요 포지션 변동"
+  }
+}

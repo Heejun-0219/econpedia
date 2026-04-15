@@ -1,0 +1,272 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+
+// Import investors and their analysis data
+let analyses = [];
+let investors = [];
+
+try {
+  const analysesModule = await import('../../data/portfolio-analyses.json');
+  analyses = analysesModule.default || analysesModule;
+} catch (e) {
+  analyses = []; // File might not exist yet
+}
+
+try {
+  const investorsModule = await import('../../data/portfolio-investors.json');
+  investors = investorsModule.default || investorsModule;
+} catch (e) {
+  investors = [];
+}
+
+let companies = [];
+try {
+  const compModule = await import('../../data/insider-companies.json');
+  companies = compModule.default || compModule;
+} catch (e) {
+  companies = [];
+}
+
+const getInfo = (analysis) => {
+  if (analysis.category === 'insider') {
+    const c = companies.find(c => c.id === analysis.investorId) || { emoji: '🏢', name: 'Unknown' };
+    return { ...c, category: 'insider' };
+  }
+  return investors.find(i => i.id === analysis.investorId) || { emoji: '👤', name: 'Unknown', category: 'unknown' };
+};
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${month}월 ${day}일 (${weekdays[d.getDay()]})`;
+}
+
+const categories = [
+  { id: 'all', title: '모두 보기', emoji: '🔍' },
+  { id: 'superinvestor', title: '슈퍼인베스터', emoji: '🧙' },
+  { id: 'fund', title: '액티브 펀드', emoji: '🚀' },
+  { id: 'state', title: '국가 자금', emoji: '🏛' },
+  { id: 'insider', title: 'CEO 내부 거래', emoji: '🕵️' }
+];
+
+---
+
+<BaseLayout 
+  title="포트폴리오 X-Ray" 
+  description="유명 투자자와 기관의 최신 공시를 분석하여 역사적 의미와 투자 인사이트를 제공합니다."
+>
+  <section class="hero hero--portfolio" style="padding: 4rem 0 3rem; background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-background) 100%);">
+    <div class="container text-center">
+      <span class="hero__badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-primary); border: 1px solid rgba(16, 185, 129, 0.2);"><span style="margin-right: 4px;">💼</span> 공시 데이터 심층 분석</span>
+      <h1 class="hero__title" style="font-size: 2.8rem; margin: 1rem 0;">
+        Portfolio X-Ray
+      </h1>
+      <p class="hero__subtitle" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.8;">
+        버크셔 해서웨이, ARK Invest, 국민연금...<br/>그들이 '왜 지금 이 주식을 샀는지' AI가 역사적 맥락과 함께 분석해 드립니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="portfolio-content" style="padding: 2rem 0 5rem;">
+    <div class="container">
+      
+      <!-- Category Tabs (CSS-only filtering via radio buttons could work, but we'll do simple JS filtering) -->
+      <div class="portfolio-tabs">
+        {categories.map((cat, idx) => (
+          <button class={`portfolio-tab ${idx === 0 ? 'active' : ''}`} data-filter={cat.id}>
+            <span class="portfolio-tab-emoji">{cat.emoji}</span> {cat.title}
+          </button>
+        ))}
+      </div>
+
+      <!-- Analysis Grid -->
+      <div class="portfolio-grid" id="portfolio-grid">
+        {analyses.length === 0 ? (
+          <div class="portfolio-empty" style="text-align: center; padding: 4rem; grid-column: 1/-1; background: var(--color-surface); border-radius: 12px; border: 1px dashed var(--color-border);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+            <h3 style="margin: 0 0 0.5rem;">아직 분석된 데이터가 없습니다</h3>
+            <p style="opacity: 0.7; margin: 0;">최신 공시 데이터가 수집되면 여기에 분석본이 올라옵니다.</p>
+          </div>
+        ) : analyses.map((analysis) => {
+          const info = getInfo(analysis);
+          const catName = analysis.category === 'insider' ? '내부자 거래' :
+            info.category === 'superinvestor' ? '슈퍼인베스터' : info.category === 'fund' ? '액티브 펀드' : '국가 자금';
+          
+          return (
+            <a href={`/portfolio/${analysis.slug}`} class={`portfolio-card ${analysis.category === 'insider' ? (analysis.isBuy ? 'insider-buy' : 'insider-sell') : ''}`} data-category={info.category}>
+              <div class="portfolio-card__header">
+                <div class="portfolio-card__avatar">{info.emoji}</div>
+                <div class="portfolio-card__meta">
+                  <span class="portfolio-card__category" style={analysis.category === 'insider' ? (analysis.isBuy ? 'color:#10b981;' : 'color:#ef4444;') : ''}>
+                    {analysis.category === 'insider' ? (analysis.isBuy ? '🟢 BUY 시그널' : '🔴 SELL 시그널') : catName}
+                  </span>
+                  <span class="portfolio-card__date">{formatDate(analysis.date)}</span>
+                </div>
+              </div>
+              <h3 class="portfolio-card__title">{analysis.title}</h3>
+              <p class="portfolio-card__excerpt">{analysis.excerpt}</p>
+              <div class="portfolio-card__footer">
+                <span class="portfolio-card__investor">{info.name}</span>
+                <span class="portfolio-card__read">분석 보기 →</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.portfolio-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+.portfolio-tab {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.75rem 1.25rem;
+  border-radius: 99px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.portfolio-tab:hover {
+  border-color: var(--color-accent-primary);
+  transform: translateY(-2px);
+}
+.portfolio-tab.active {
+  background: var(--color-accent-primary);
+  color: white;
+  border-color: var(--color-accent-primary);
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.portfolio-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: var(--color-text);
+  position: relative;
+  overflow: hidden;
+}
+.portfolio-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 4px;
+  background: linear-gradient(90deg, var(--color-accent-primary), var(--color-accent-secondary));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.portfolio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+  border-color: var(--color-accent-primary);
+}
+.portfolio-card:hover::before { opacity: 1; }
+
+.portfolio-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+.portfolio-card__avatar {
+  font-size: 2rem;
+  background: var(--color-background);
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+}
+.portfolio-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.portfolio-card__category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-accent-primary);
+  letter-spacing: 0.5px;
+}
+.portfolio-card__date {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  opacity: 0.6;
+}
+.portfolio-card__title {
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+.portfolio-card__excerpt {
+  font-size: 0.95rem;
+  opacity: 0.75;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.5;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.portfolio-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--color-border);
+}
+.portfolio-card__investor { opacity: 0.8; }
+.portfolio-card__read { color: var(--color-accent-primary); }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.portfolio-tab');
+  const cards = document.querySelectorAll('.portfolio-card');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Update active tab styling
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const filter = tab.getAttribute('data-filter');
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>

@@ -334,3 +334,126 @@ ${verificationOutput}
   };
 }
 
+// ── 포트폴리오 X-Ray 프롬프트 ─────────────────────────────
+export function buildPortfolioAnalysisPrompt(investor, holdingsData, marketContext) {
+  const system = buildSystemBase(new Date().toISOString().split('T')[0]);
+
+  const instructions = `
+[당신의 임무: X-Ray 포트폴리오 애널리스트]
+당신은 유명 투자자나 기관의 최신 공시 데이터를 분석하여, 그들의 매매 타점을 역사적 맥락과 함께 해석해주는 애널리스트입니다.
+
+[분석 대상 투자자]
+이름: \${investor.name} (\${investor.nameEn})
+분류: \${investor.category}
+스타일: \${investor.philosophy}
+
+[주의사항]
+- 이 콘텐츠의 목적은 "역사적 교육"입니다.
+- 단순 종목 나열을 피하고, "왜 지금 샀을까?"에 집중하세요.
+- 액티브 펀드(ARK 등)의 경우 코어-위성 전략이나 섹터 로테이션 측면에서 분석하세요.
+- 국민연금 등 공적 기금의 경우 거시경제적 자산 배분 측면을 고려하세요.
+- 데이터 환각(hallucination)을 절대 금지합니다. 알려진 사실만 사용하세요.
+
+[출력 형식: 순수 마크다운 — frontmatter 제외]
+
+[구조 가이드]
+1. 헤드라인 (H1)
+   - 투자자의 이번 포지션 변화를 관통하는 촌철살인 한 문장
+
+2. 이번 분기의 결정적 장면 (H2: 📋 주요 포지션 변화)
+   - 투자자의 철학과 이번 매매 내역이 어떻게 연결되는지 서술
+
+3. X-Ray 심층 분석 (H2: 🔍 왜 샀을까? / 왜 팔았을까?)
+   - 당시의 거시경제 시그널(금리, 물가 환율 등), 업황 변화 등을 바탕으로 추론
+   - 역사적 선례 (과거 비슷한 시기의 매매 패턴 비교)
+
+4. 독자의 지갑 (H2: 💰 나에게 주는 의미)
+   - "슈퍼인베스터가 샀으니 나도 사자" 식의 추천 절대 금지
+   - 개인이 이 매매를 통해 배울 수 있는 시장을 보는 관점 제시
+
+[추가 출력 — JSON 블록]
+\`\`\`json
+{
+  "slug": "portfolio-${investor.id}-YYYY-MM-DD",
+  "seoTitle": "${investor.name} 포트폴리오 X-Ray 분석 (50자 이내)",
+  "seoDescription": "이번 공시에 담긴 핵심 인사이트 1~2문장 요약 (150자 이내)",
+  "tags": ["포트폴리오", "공시분석", "${investor.category}"]
+}
+\`\`\`
+`;
+
+  const userMessage = `
+[최신 보유 종목 및 변동 내역]
+\${holdingsData}
+
+[당시 시장 컨텍스트]
+\${marketContext}
+
+위 데이터를 바탕으로, 독자에게 재미와 투자 인사이트를 동시에 주는 완성된 포트폴리오 분석 리포트를 작성하세요.
+`;
+
+  return { system: system + instructions, user: userMessage };
+}
+
+// ── 내부자 거래(Insider Radar) 프롬프트 ─────────────────────────────
+export function buildInsiderAnalysisPrompt(company, triggerData, marketContext) {
+  const system = buildSystemBase(new Date().toISOString().split('T')[0]);
+
+  const instructions = `
+[당신의 임무: 🕵️ 내부자 거래 (Insider Radar) 전문 애널리스트]
+당신은 기업 내부자(CEO, CFO 등 주요 경영진)의 주식 매매 공시(SEC Form 4 또는 DART)를 분석하여, 그 거래에 담긴 진짜 의미(True Signal)를 발굴하는 펀드 매니저입니다.
+
+[분석 대상 거래 정보]
+기업명: \${company.name} (\${company.ticker})
+매매자 직급: \${triggerData.person}
+매매 방향: \${triggerData.type === 'buy' ? '자발적 장내 매수 (Buy)' : '장내 매도 (Sell)'}
+거래 규모: \${triggerData.amount}
+
+[주의사항]
+- 이 콘텐츠의 목적은 "역사적/시그널 교육"입니다.
+- 단순 사실 전달이 아닌, "왜 이 타이밍에 (수십~수백 억의) 지갑을 열었는가 / 닫았는가?"를 입체적으로 분석해야 합니다.
+- 매수(Buy)일 경우, 회사의 저평가 시그널 또는 핵심 임원진의 턴어라운드 자신감 측면을 부각하세요.
+- 매도(Sell)일 경우, 기계적 스톡옵션 행사가 아닌 한, 고점 논란이나 향후 업황 악화 우려 가능성을 균형 있게 짚어주세요.
+- 데이터 환각 절대 금지. 주어진 정보와 현재 상황만으로 추론하세요.
+
+[출력 형식: 순수 마크다운 — frontmatter 제외]
+
+[구조 가이드]
+1. 헤드라인 (H1)
+   - 이 내부자 거래의 성격을 단번에 보여주는 자극적이고 직관적인 한 문장 (예: 🚨 [엔비디아] 젠슨 황은 왜 지금 수천억 원의 주식을 던졌을까?)
+
+2. 오늘의 거래 브리핑 (H2: 📋 C-Level 장바구니 엿보기)
+   - 누가, 얼마나, 언제 샀는지/팔았는지 서술. 금액의 체감 크기를 알 수 있도록 적절히 비유.
+
+3. 매니저의 X-Ray 스캐닝 (H2: 🔍 진짜 이유는 무엇일까?)
+   - 피터 린치의 격언 ("내부자가 주식을 파는 이유는 많지만, 사는 이유는 하나다")을 적절히 활용 가능.
+   - 최근 해당 기업의 주가 하락/상승 흐름, 매크로 등 시장 상황을 바탕으로 추론.
+
+4. 개인 투자자의 관점 (H2: 💰 우리에게 주는 시그널)
+   - "이들이 팔았으니 나도 당장 던져야 하나?" "CEO가 샀으니 무지성 매수해야 하나?"에 대한 가이드.
+   - 맹신에 대한 경고와, 보조 지표로서 내부자 거래를 활용하는 방법 제시.
+
+[추가 출력 — JSON 블록]
+\`\`\`json
+{
+  "slug": "insider-${company.id}-YYYY-MM-DD",
+  "seoTitle": "[${company.ticker}] 내부자 (${triggerData.person}) 거래 집중 분석",
+  "seoDescription": "이 거래에 담긴 회사 핵심 층의 최신 시그널을 확인하세요. (150자 이내)",
+  "category": "insider",
+  "tags": ["내부자거래", "InsiderRadar", "${company.ticker}"]
+}
+\`\`\`
+`;
+
+  const userMessage = `
+[내부자 거래 공시 요약]
+${triggerData.mockData}
+
+[당시 시장/업황 컨텍스트]
+${marketContext}
+
+위 정보를 바탕으로 독자가 스크롤을 멈출 수밖에 없는 치명적인 매력을 가진 내부자 거래 분석 리포트를 작성하세요.
+`;
+
+  return { system: system + instructions, user: userMessage };
+}

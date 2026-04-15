@@ -1,0 +1,72 @@
+[
+  {
+    "id": "berkshire-hathaway",
+    "name": "워렌 버핏 / 버크셔 해서웨이",
+    "nameEn": "Warren Buffett / Berkshire Hathaway",
+    "emoji": "🧙",
+    "category": "superinvestor",
+    "cik": "0001067983",
+    "country": "us",
+    "aum": "3000억 달러",
+    "philosophy": "장기 가치투자, 경제적 해자 중심",
+    "investorCode": "",
+    "lastAnalyzed": null,
+    "lastFilingDate": "2026-02-17"
+  },
+  {
+    "id": "scion-asset",
+    "name": "마이클 버리 / 사이언 애셋",
+    "nameEn": "Michael Burry / Scion Asset Management",
+    "emoji": "🧙",
+    "category": "superinvestor",
+    "cik": "0001423689",
+    "country": "us",
+    "aum": "2억 달러",
+    "philosophy": "딥 밸류 투자, 시장 거시경제 예측 비대칭 베팅",
+    "investorCode": "",
+    "lastAnalyzed": null,
+    "lastFilingDate": null
+  },
+  {
+    "id": "ark-invest",
+    "name": "캐시 우드 / 아크 인베스트",
+    "nameEn": "Cathie Wood / ARK Investment",
+    "emoji": "🚀",
+    "category": "fund",
+    "cik": "0001579982",
+    "country": "us",
+    "aum": "150억 달러",
+    "philosophy": "파괴적 혁신 기업 집중 투자",
+    "investorCode": "",
+    "lastAnalyzed": null,
+    "lastFilingDate": "2026-04-08"
+  },
+  {
+    "id": "renaissance-tech",
+    "name": "짐 시몬스 / 르네상스 테크놀로지스",
+    "nameEn": "Jim Simons / Renaissance Technologies",
+    "emoji": "🚀",
+    "category": "fund",
+    "cik": "0001037389",
+    "country": "us",
+    "aum": "500억 달러",
+    "philosophy": "수학적/통계적 모델 기반 퀀트 투자",
+    "investorCode": "",
+    "lastAnalyzed": null,
+    "lastFilingDate": "2026-02-12"
+  },
+  {
+    "id": "national-pension",
+    "name": "대한민국 국민연금",
+    "nameEn": "National Pension Service",
+    "emoji": "🏛",
+    "category": "state",
+    "cik": "",
+    "country": "kr",
+    "aum": "1000조 원",
+    "philosophy": "안정성과 장기 수익성 동시 추구 공적 기금",
+    "investorCode": "NPS",
+    "lastAnalyzed": null,
+    "lastFilingDate": "2026-04-15"
+  }
+]
