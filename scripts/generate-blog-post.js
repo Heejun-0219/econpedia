@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import dotenv from 'dotenv';
-import { publishToBlogger, publishToTelegram } from './publish-external.js';
+import { publishToBlogger, publishToTelegram, publishThreadToX, publishToThreads, publishToLinkedIn } from './publish-external.js';
 
 // 프롬프트 시스템 import
 import { buildBlogPrompt } from '../src/data/prompts.js';
@@ -234,6 +234,45 @@ async function saveBlogStatus(success, message, slug) {
   console.log(`📋 블로그 상태 저장: ${statusPath}`);
 }
 
+// ─── Gemini → SNS 스레드 콘텐츠 생성 ────────────────────
+async function generateSNSThread(formattedData, title, canonicalUrl) {
+  console.log('🧵 Gemini에 SNS 스레드 콘텐츠 생성 요청 중...');
+
+  const prompt = `당신은 경제 전문 SNS 계정 운영자입니다.
+아래 오늘의 시장 데이터와 블로그 제목을 바탕으로 바이럴되는 한국어 스레드를 작성하세요.
+
+규칙:
+- 6개 포스트로 구성 (JSON 배열 반환)
+- 각 포스트는 반드시 450자 이내 (공백 포함, Threads 500자 제한 고려)
+- 포스트 1: 강렬한 훅 — 오늘 시장의 핵심 한 문장 + 이모지. 마지막에 "🧵 1/6" 추가
+- 포스트 2~5: 각각 주요 인사이트/수치 하나씩. 마지막에 "n/6" 추가
+- 포스트 6: 마무리 인사이트 + CTA. 다음 URL 반드시 포함: ${canonicalUrl}
+- 해시태그: 포스트 6에만 #경제 #투자 #EconPedia 추가
+- 숫자와 퍼센트 적극 활용 (구체적 수치가 인게이지먼트 높음)
+
+블로그 제목: ${title}
+
+시장 데이터:
+${formattedData.slice(0, 2000)}
+
+JSON 배열만 반환하세요. 예시:
+["포스트1 텍스트 🧵 1/6", "포스트2 텍스트 2/6", ...]`;
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash',
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    config: { temperature: 0.8 },
+  });
+
+  const text = response.text;
+  const match = text.match(/\[[\s\S]*\]/);
+  if (!match) throw new Error('SNS 스레드 JSON 파싱 실패: ' + text.slice(0, 200));
+
+  const posts = JSON.parse(match[0]);
+  console.log(`✅ SNS 스레드 ${posts.length}개 포스트 생성 완료`);
+  return posts;
+}
+
 // ─── 메인 ────────────────────────────────────────────────
 async function main() {
   if (!process.env.GEMINI_API_KEY) {
@@ -268,6 +307,37 @@ async function main() {
         externalLogs.push(tgMsg);
       } catch (e) {
         externalLogs.push(`[Telegram] 실패: ${e.message}`);
+      }
+    }
+
+    // 3. Threads / X(Twitter) 스레드 발행
+    if (process.env.THREADS_ACCESS_TOKEN || process.env.X_API_KEY) {
+      try {
+        const posts = await generateSNSThread(marketData.formatted, result.title, canonicalUrl);
+
+        // Threads (Meta)
+        if (process.env.THREADS_ACCESS_TOKEN) {
+          const threadsMsg = await publishToThreads(posts);
+          externalLogs.push(threadsMsg);
+        }
+
+        // X(Twitter) — 레거시, X_API_KEY 있을 때만
+        if (process.env.X_API_KEY) {
+          const xMsg = await publishThreadToX(posts);
+          externalLogs.push(xMsg);
+        }
+      } catch (e) {
+        externalLogs.push(`[SNS 스레드] 실패: ${e.message}`);
+      }
+    }
+    // 4. LinkedIn 게시 (LINKEDIN_ACCESS_TOKEN 설정 시에만 실행)
+    if (process.env.LINKEDIN_ACCESS_TOKEN) {
+      try {
+        const liText = `${result.title}\n\n${result.excerpt}\n\n매일 아침 AI가 분석한 경제 리포트 → EconPedia`;
+        const liMsg  = await publishToLinkedIn(liText, result.title, canonicalUrl);
+        externalLogs.push(liMsg);
+      } catch (e) {
+        externalLogs.push(`[LinkedIn] 실패: ${e.message}`);
       }
     }
     // ──────────────────────────────────────────────────────────
