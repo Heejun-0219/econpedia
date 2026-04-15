@@ -40,17 +40,24 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/daily-briefing.js
 
-      # ── Phase 2: 카드뉴스 이미지 생성 ──────────────────────
+      # ── Phase 2: 카드뉴스 이미지 생성 (월/수/금/일만) ─────────
       - name: 📱 Generate Card News Images
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
-        run: node scripts/generate-card-news.js
+        run: |
+          DAY=$(date -u +%u)  # 1=월 ~ 7=일
+          if [[ "$DAY" =~ ^(1|3|5|7)$ ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "📱 카드뉴스 발행일 (요일: $DAY)"
+            node scripts/generate-card-news.js
+          else
+            echo "⏭️ 카드뉴스 비발행일 (요일: $DAY) — 건너뜁니다"
+          fi
 
-      # ── Phase 3: 블로그 포스트 생성 ────────────────────────
-      - name: 📝 Generate Blog Post
+      # ── Phase 3: 블로그 심층분석 (화/목/일만) ─────────────────
+      - name: 📝 Generate Blog Post (Harness)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BLOGGER_CLIENT_ID: ${{ secrets.BLOGGER_CLIENT_ID }}
@@ -60,7 +67,14 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
-        run: node scripts/generate-blog-post.js
+        run: |
+          DAY=$(date -u +%u)  # 1=월 ~ 7=일
+          if [[ "$DAY" =~ ^(2|4|7)$ ]] || [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "📝 블로그 심층분석 발행일 (요일: $DAY)"
+            node scripts/generate-blog-post.js
+          else
+            echo "⏭️ 블로그 비발행일 (요일: $DAY) — 건너뜁니다"
+          fi
 
       # ── 카드뉴스 30일 보존 정책 (디스크 폭발 방지) ──────────
       - name: 🧹 Cleanup Old Card News (30-day retention)

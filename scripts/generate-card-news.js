@@ -70,7 +70,14 @@ async function generateCardNewsData(formattedData, today) {
     if (!data.slides || data.slides.length !== 5) {
       throw new Error(`❌ 슬라이드 수가 5가 아닙니다: ${data.slides?.length}`);
     }
-    console.log(`✅ 카드뉴스 데이터 생성 완료 (${data.slides.length}장)`);
+    // 새 바이럴 타입과 레거시 타입 모두 허용
+    const validTypes = ['hook', 'surprise', 'wallet', 'insider', 'cta', 'cover', 'data', 'insight'];
+    for (const s of data.slides) {
+      if (!validTypes.includes(s.type)) {
+        console.warn(`   ⚠️ 알 수 없는 슬라이드 타입: ${s.type} — 렌더링 시 폴백 처리`);
+      }
+    }
+    console.log(`✅ 카드뉴스 데이터 생성 완료 (${data.slides.length}장, 타입: ${data.slides.map(s => s.type).join('→')})`);
     return data;
   } catch (e) {
     console.error('❌ JSON 파싱 실패:', e.message);
@@ -173,7 +180,10 @@ async function main() {
     // ─── 텔레그램 카드뉴스 앨범 발행 ───────────────────
     if (process.env.TELEGRAM_BOT_TOKEN) {
       const canonicalUrl = `https://econpedia.dedyn.io/daily/${today}`;
-      const tgMsg = await publishCardNewsToTelegram(cardData.slides[0].headline, imagePaths, canonicalUrl);
+      // 새 바이럴 타입(hook.question)과 레거시(cover.headline) 모두 대응
+      const firstSlide = cardData.slides[0];
+      const tgTitle = firstSlide.question || firstSlide.headline || '오늘의 카드뉴스';
+      const tgMsg = await publishCardNewsToTelegram(tgTitle, imagePaths, canonicalUrl);
       console.log(tgMsg);
     }
     // ──────────────────────────────────────────────────

@@ -16,8 +16,8 @@ import { marked } from 'marked';
 import dotenv from 'dotenv';
 import { publishToBlogger, publishToTelegram, publishThreadToX, publishToThreads, publishToLinkedIn } from './publish-external.js';
 
-// 프롬프트 시스템 import
-import { buildBlogPrompt } from '../src/data/prompts.js';
+// 프롬프트 시스템 import (4단계 하네스)
+import { buildBlogResearchPrompt, buildBlogDraftPrompt, buildBlogVerifyPrompt, buildBlogFinalPrompt } from '../src/data/prompts.js';
 
 dotenv.config();
 
@@ -40,25 +40,61 @@ async function loadMarketData() {
   }
 }
 
-// ─── Gemini → 블로그 마크다운 생성 ───────────────────────
-async function generateBlogContent(formattedData, today) {
-  console.log('📝 Gemini (gemini-3.1-pro-preview)에 시니어 애널리스트 심층 리포트 요청 중...');
-
-  const { system, user } = buildBlogPrompt(formattedData, today);
-
+// ─── Gemini 호출 헬퍼 (하네스 각 단계에서 공통 사용) ─────
+async function callGemini(prompt, temperature = 0.7, maxOutputTokens = 8192) {
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-pro-preview',
     contents: [
-      { role: 'user', parts: [{ text: system + '\n\n' + user }] }
+      { role: 'user', parts: [{ text: prompt.system + '\n\n' + prompt.user }] }
     ],
     config: {
-      temperature: 0.8,
+      temperature,
       topP: 0.9,
-      maxOutputTokens: 8192,
+      maxOutputTokens,
     }
   });
-
   return response.text;
+}
+
+// ─── 4단계 하네스 파이프라인 ──────────────────────────────
+async function runBlogHarness(formattedData, today) {
+  // Phase 1: 리서치 에이전트 — 핵심 앵글 도출
+  console.log('🔬 [Harness 1/4] 리서치 에이전트 — 핵심 앵글 도출 중...');
+  const research = await callGemini(
+    buildBlogResearchPrompt(formattedData, today),
+    0.9,  // 창의적 앵글 발굴을 위해 높은 temperature
+    4096
+  );
+  console.log('   ✅ 리서치 완료 — 3가지 앵글 도출');
+
+  // Phase 2: 시니어 애널리스트 — 심층 분석 초안 작성
+  console.log('📝 [Harness 2/4] 시니어 애널리스트 — 심층 분석 초안 작성 중...');
+  const draft = await callGemini(
+    buildBlogDraftPrompt(formattedData, today, research),
+    0.8,
+    8192  // 6000자+ 심층 분석
+  );
+  console.log('   ✅ 초안 완료');
+
+  // Phase 3: 팩트체커 — 논리/수치 검증
+  console.log('🔍 [Harness 3/4] 팩트체커 — 논리/수치 검증 중...');
+  const verification = await callGemini(
+    buildBlogVerifyPrompt(formattedData, draft),
+    0.3,  // 팩트체크는 낮은 temperature
+    4096
+  );
+  console.log('   ✅ 검증 완료');
+
+  // Phase 4: 최종 에디터 — 피드백 반영 및 원고 완성
+  console.log('✨ [Harness 4/4] 에디터 — 최종 원고 완성 중...');
+  const finalArticle = await callGemini(
+    buildBlogFinalPrompt(draft, verification),
+    0.6,
+    8192
+  );
+  console.log('   ✅ 최종 원고 완성');
+
+  return finalArticle;
 }
 
 // ─── 메타데이터 JSON 추출 ────────────────────────────────
@@ -285,7 +321,7 @@ async function main() {
     const marketData = await loadMarketData();
     const today = marketData.date || Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
-    const blogMarkdown = await generateBlogContent(marketData.formatted, today);
+    const blogMarkdown = await runBlogHarness(marketData.formatted, today);
     const result = await saveBlogPost(blogMarkdown, today);
 
     // ─── 외부 마케팅 파이프라인 연동 ───────────────────────

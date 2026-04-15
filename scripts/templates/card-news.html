@@ -66,21 +66,35 @@
       font-weight: 600;
     }
 
-    /* ── 커버 슬라이드 ─────────────────── */
-    .cover { background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); }
+    /* ── 1. HOOK 슬라이드 (구 커버) ──────── */
+    .hook-slide { background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); }
 
-    .cover .slide-inner {
+    .hook-slide .slide-inner {
       justify-content: center;
       align-items: center;
       text-align: center;
     }
 
-    .cover__headline {
-      font-size: 72px;
+    .hook__question-mark {
+      font-size: 200px;
+      font-weight: 900;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      position: absolute;
+      top: 120px;
+      right: 100px;
+      pointer-events: none;
+    }
+
+    .hook__question {
+      font-size: 68px;
       font-weight: 900;
       letter-spacing: -2px;
-      line-height: 1.2;
-      margin-bottom: 32px;
+      line-height: 1.25;
+      margin-bottom: 36px;
       max-width: 900px;
       background: linear-gradient(135deg, #f9fafb 0%, #93c5fd 100%);
       -webkit-background-clip: text;
@@ -88,15 +102,15 @@
       background-clip: text;
     }
 
-    .cover__subheadline {
-      font-size: 36px;
+    .hook__teaser {
+      font-size: 34px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.55);
       max-width: 800px;
       line-height: 1.4;
     }
 
-    .cover__glow {
+    .hook__glow {
       position: absolute;
       width: 600px;
       height: 600px;
@@ -108,17 +122,69 @@
       pointer-events: none;
     }
 
-    /* ── 데이터 슬라이드 ───────────────── */
-    .data-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
+    /* ── 2. SURPRISE 슬라이드 ─────────── */
+    .surprise-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
 
-    .data-slide__title {
+    .surprise__label {
+      display: inline-block;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.12);
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 1px solid rgba(251, 191, 36, 0.25);
+      margin-bottom: 40px;
+      letter-spacing: 1px;
+    }
+
+    .surprise__title {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.3;
+      margin-bottom: 40px;
+    }
+
+    .surprise__body {
+      font-size: 32px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.7;
+      max-width: 850px;
+      margin-bottom: 48px;
+    }
+
+    .surprise__highlight {
+      display: inline-block;
+      font-size: 72px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #34d399 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .surprise__accent-bar {
+      width: 80px;
+      height: 6px;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+      border-radius: 3px;
+      margin-bottom: 48px;
+    }
+
+    /* ── 3. WALLET 슬라이드 ───────────── */
+    .wallet-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
+
+    .wallet__title {
       font-size: 44px;
       font-weight: 800;
       margin-bottom: 56px;
       letter-spacing: -1px;
     }
 
-    .data-grid {
+    .wallet-grid {
       display: flex;
       flex-direction: column;
       gap: 24px;
@@ -126,7 +192,7 @@
       justify-content: center;
     }
 
-    .data-item {
+    .wallet-item {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 24px;
@@ -136,53 +202,47 @@
       justify-content: space-between;
     }
 
-    .data-item__left {
+    .wallet-item__left {
       display: flex;
       align-items: center;
       gap: 20px;
     }
 
-    .data-item__icon { font-size: 40px; }
+    .wallet-item__icon { font-size: 44px; }
 
-    .data-item__label {
+    .wallet-item__scenario {
       font-size: 28px;
       font-weight: 600;
       color: rgba(255, 255, 255, 0.7);
     }
 
-    .data-item__right { text-align: right; }
-
-    .data-item__value {
-      font-size: 36px;
+    .wallet-item__impact {
+      font-size: 32px;
       font-weight: 800;
       letter-spacing: -0.5px;
+      text-align: right;
     }
 
-    .data-item__change {
-      font-size: 24px;
+    .wallet-item__impact.negative { color: #f87171; }
+    .wallet-item__impact.positive { color: #34d399; }
+
+    /* ── 4. INSIDER 슬라이드 ─────────── */
+    .insider-slide { background: linear-gradient(180deg, #0f172a 0%, #1a1a2e 100%); }
+
+    .insider__badge {
+      display: inline-block;
+      font-size: 16px;
       font-weight: 700;
-      margin-top: 4px;
+      color: #c084fc;
+      background: rgba(192, 132, 252, 0.12);
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 1px solid rgba(192, 132, 252, 0.25);
+      margin-bottom: 40px;
+      letter-spacing: 1px;
     }
 
-    .data-item__change.up { color: #34d399; }
-    .data-item__change.down { color: #f87171; }
-    .data-item__change.flat { color: #9ca3af; }
-
-    /* ── 인사이트 슬라이드 ──────────────── */
-    .insight-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
-
-    .insight__number {
-      font-size: 120px;
-      font-weight: 900;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-      margin-bottom: 24px;
-    }
-
-    .insight__title {
+    .insider__title {
       font-size: 52px;
       font-weight: 800;
       letter-spacing: -1px;
@@ -190,23 +250,49 @@
       margin-bottom: 40px;
     }
 
-    .insight__body {
+    .insider__accent-bar {
+      width: 80px;
+      height: 6px;
+      background: linear-gradient(90deg, #8b5cf6, #c084fc);
+      border-radius: 3px;
+      margin-bottom: 48px;
+    }
+
+    .insider__body {
       font-size: 32px;
       font-weight: 400;
       color: rgba(255, 255, 255, 0.7);
       line-height: 1.7;
       max-width: 850px;
+      margin-bottom: 56px;
     }
 
-    .insight__accent-bar {
-      width: 80px;
-      height: 6px;
-      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-      border-radius: 3px;
-      margin-bottom: 48px;
+    .insider__keyword-box {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 20px;
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
-    /* ── CTA 슬라이드 ──────────────────── */
+    .insider__keyword-icon { font-size: 32px; }
+
+    .insider__keyword-label {
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 4px;
+    }
+
+    .insider__keyword-text {
+      font-size: 28px;
+      font-weight: 700;
+      color: #c084fc;
+    }
+
+    /* ── 5. CTA 슬라이드 ──────────────── */
     .cta-slide { background: linear-gradient(160deg, #1e3a5f 0%, #0f172a 50%, #1a1a2e 100%); }
 
     .cta-slide .slide-inner {
@@ -228,7 +314,7 @@
       font-size: 28px;
       color: rgba(255, 255, 255, 0.6);
       line-height: 1.5;
-      margin-bottom: 56px;
+      margin-bottom: 48px;
       max-width: 700px;
     }
 
@@ -243,37 +329,87 @@
       text-decoration: none;
     }
 
-    .cta__url {
-      margin-top: 32px;
+    .cta__teaser {
+      margin-top: 40px;
       font-size: 22px;
-      color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.35);
+      font-weight: 500;
+    }
+
+    .cta__url {
+      margin-top: 16px;
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.2);
       letter-spacing: 2px;
     }
+
+    /* ── 레거시(cover/data/insight) 하위호환 ─── */
+    .cover { background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); }
+    .cover .slide-inner { justify-content: center; align-items: center; text-align: center; }
+    .cover__headline {
+      font-size: 72px; font-weight: 900; letter-spacing: -2px; line-height: 1.2;
+      margin-bottom: 32px; max-width: 900px;
+      background: linear-gradient(135deg, #f9fafb 0%, #93c5fd 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .cover__subheadline { font-size: 36px; font-weight: 500; color: rgba(255,255,255,0.6); max-width: 800px; line-height: 1.4; }
+    .cover__glow {
+      position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;
+    }
+    .data-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
+    .data-slide__title { font-size: 44px; font-weight: 800; margin-bottom: 56px; letter-spacing: -1px; }
+    .data-grid { display: flex; flex-direction: column; gap: 24px; flex: 1; justify-content: center; }
+    .data-item {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px; padding: 36px 40px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .data-item__left { display: flex; align-items: center; gap: 20px; }
+    .data-item__icon { font-size: 40px; }
+    .data-item__label { font-size: 28px; font-weight: 600; color: rgba(255,255,255,0.7); }
+    .data-item__right { text-align: right; }
+    .data-item__value { font-size: 36px; font-weight: 800; letter-spacing: -0.5px; }
+    .data-item__change { font-size: 24px; font-weight: 700; margin-top: 4px; }
+    .data-item__change.up { color: #34d399; }
+    .data-item__change.down { color: #f87171; }
+    .data-item__change.flat { color: #9ca3af; }
+    .insight-slide { background: linear-gradient(180deg, #0f172a 0%, #111827 100%); }
+    .insight__number {
+      font-size: 120px; font-weight: 900;
+      background: linear-gradient(135deg, rgba(59,130,246,0.3) 0%, rgba(139,92,246,0.3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin-bottom: 24px;
+    }
+    .insight__title { font-size: 52px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 40px; }
+    .insight__body { font-size: 32px; font-weight: 400; color: rgba(255,255,255,0.7); line-height: 1.7; max-width: 850px; }
+    .insight__accent-bar { width: 80px; height: 6px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); border-radius: 3px; margin-bottom: 48px; }
   </style>
 </head>
 <body>
 
-  <!-- 슬라이드 1: 커버 -->
-  <div class="slide cover active" id="slide-0">
-    <div class="cover__glow"></div>
+  <!-- 슬라이드 1: Hook -->
+  <div class="slide hook-slide active" id="slide-0">
+    <div class="hook__glow"></div>
+    <div class="hook__question-mark">?</div>
     <div class="slide-inner">
       <div class="brand-bar">
         <div class="brand-bar__logo">
           <span class="brand-bar__logo-icon">📊</span>
           <span>EconPedia</span>
         </div>
-        <span class="brand-bar__badge" id="cover-badge"></span>
+        <span class="brand-bar__badge" id="hook-badge"></span>
       </div>
       <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <h1 class="cover__headline" id="cover-headline"></h1>
-        <p class="cover__subheadline" id="cover-subheadline"></p>
+        <h1 class="hook__question" id="hook-question"></h1>
+        <p class="hook__teaser" id="hook-teaser"></p>
       </div>
     </div>
     <span class="slide-number">1 / 5</span>
   </div>
 
-  <!-- 슬라이드 2: 데이터 -->
-  <div class="slide data-slide" id="slide-1">
+  <!-- 슬라이드 2: Surprise -->
+  <div class="slide surprise-slide" id="slide-1">
     <div class="slide-inner">
       <div class="brand-bar">
         <div class="brand-bar__logo">
@@ -281,14 +417,19 @@
           <span>EconPedia</span>
         </div>
       </div>
-      <h2 class="data-slide__title" id="data-title"></h2>
-      <div class="data-grid" id="data-grid"></div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <span class="surprise__label">💡 그런데 더 놀라운 건...</span>
+        <div class="surprise__accent-bar"></div>
+        <h2 class="surprise__title" id="surprise-title"></h2>
+        <p class="surprise__body" id="surprise-body"></p>
+        <div class="surprise__highlight" id="surprise-highlight"></div>
+      </div>
     </div>
     <span class="slide-number">2 / 5</span>
   </div>
 
-  <!-- 슬라이드 3: 인사이트 1 -->
-  <div class="slide insight-slide" id="slide-2">
+  <!-- 슬라이드 3: Wallet -->
+  <div class="slide wallet-slide" id="slide-2">
     <div class="slide-inner">
       <div class="brand-bar">
         <div class="brand-bar__logo">
@@ -296,18 +437,14 @@
           <span>EconPedia</span>
         </div>
       </div>
-      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
-        <div class="insight__number" id="insight1-number"></div>
-        <div class="insight__accent-bar"></div>
-        <h2 class="insight__title" id="insight1-title"></h2>
-        <p class="insight__body" id="insight1-body"></p>
-      </div>
+      <h2 class="wallet__title" id="wallet-title"></h2>
+      <div class="wallet-grid" id="wallet-grid"></div>
     </div>
     <span class="slide-number">3 / 5</span>
   </div>
 
-  <!-- 슬라이드 4: 인사이트 2 -->
-  <div class="slide insight-slide" id="slide-3">
+  <!-- 슬라이드 4: Insider -->
+  <div class="slide insider-slide" id="slide-3">
     <div class="slide-inner">
       <div class="brand-bar">
         <div class="brand-bar__logo">
@@ -316,10 +453,17 @@
         </div>
       </div>
       <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
-        <div class="insight__number" id="insight2-number"></div>
-        <div class="insight__accent-bar"></div>
-        <h2 class="insight__title" id="insight2-title"></h2>
-        <p class="insight__body" id="insight2-body"></p>
+        <span class="insider__badge">🤫 INSIDER</span>
+        <div class="insider__accent-bar"></div>
+        <h2 class="insider__title" id="insider-title"></h2>
+        <p class="insider__body" id="insider-body"></p>
+        <div class="insider__keyword-box">
+          <span class="insider__keyword-icon">🔍</span>
+          <div>
+            <div class="insider__keyword-label">이것만 검색해보세요</div>
+            <div class="insider__keyword-text" id="insider-keyword"></div>
+          </div>
+        </div>
       </div>
     </div>
     <span class="slide-number">4 / 5</span>
@@ -339,10 +483,67 @@
         <h2 class="cta__headline" id="cta-headline"></h2>
         <p class="cta__message" id="cta-message"></p>
         <a class="cta__button" href="#">전문 읽기 →</a>
+        <p class="cta__teaser" id="cta-teaser"></p>
         <p class="cta__url" id="cta-url"></p>
       </div>
     </div>
     <span class="slide-number">5 / 5</span>
+  </div>
+
+  <!-- 레거시 슬라이드 (하위호환용 — 기존 JSON이 올 경우) -->
+  <div class="slide cover" id="slide-legacy-cover">
+    <div class="cover__glow"></div>
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo"><span class="brand-bar__logo-icon">📊</span><span>EconPedia</span></div>
+        <span class="brand-bar__badge" id="cover-badge"></span>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <h1 class="cover__headline" id="cover-headline"></h1>
+        <p class="cover__subheadline" id="cover-subheadline"></p>
+      </div>
+    </div>
+  </div>
+  <div class="slide data-slide" id="slide-legacy-data">
+    <div class="slide-inner">
+      <div class="brand-bar"><div class="brand-bar__logo"><span class="brand-bar__logo-icon">📊</span><span>EconPedia</span></div></div>
+      <h2 class="data-slide__title" id="data-title"></h2>
+      <div class="data-grid" id="data-grid"></div>
+    </div>
+  </div>
+  <div class="slide insight-slide" id="slide-legacy-insight1">
+    <div class="slide-inner">
+      <div class="brand-bar"><div class="brand-bar__logo"><span class="brand-bar__logo-icon">📊</span><span>EconPedia</span></div></div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="insight__number" id="insight1-number"></div>
+        <div class="insight__accent-bar"></div>
+        <h2 class="insight__title" id="insight1-title"></h2>
+        <p class="insight__body" id="insight1-body"></p>
+      </div>
+    </div>
+  </div>
+  <div class="slide insight-slide" id="slide-legacy-insight2">
+    <div class="slide-inner">
+      <div class="brand-bar"><div class="brand-bar__logo"><span class="brand-bar__logo-icon">📊</span><span>EconPedia</span></div></div>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div class="insight__number" id="insight2-number"></div>
+        <div class="insight__accent-bar"></div>
+        <h2 class="insight__title" id="insight2-title"></h2>
+        <p class="insight__body" id="insight2-body"></p>
+      </div>
+    </div>
+  </div>
+  <div class="slide cta-slide" id="slide-legacy-cta">
+    <div class="slide-inner">
+      <div class="brand-bar"><div class="brand-bar__logo"><span class="brand-bar__logo-icon">📊</span><span>EconPedia</span></div></div>
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div class="cta__icon">☕</div>
+        <h2 class="cta__headline" id="legacy-cta-headline"></h2>
+        <p class="cta__message" id="legacy-cta-message"></p>
+        <a class="cta__button" href="#">전문 읽기 →</a>
+        <p class="cta__url" id="legacy-cta-url"></p>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -353,10 +554,69 @@
 
       const slide = slideData.slides[slideIndex];
 
+      // ── 새로운 바이럴 타입 ────────────────────────────
+      if (slide.type === 'hook') {
+        document.getElementById('hook-question').textContent = slide.question;
+        document.getElementById('hook-teaser').textContent = slide.teaser;
+        document.getElementById('hook-badge').textContent = slide.badge;
+        document.getElementById('slide-0').classList.add('active');
+        return;
+      }
+
+      if (slide.type === 'surprise') {
+        document.getElementById('surprise-title').textContent = slide.title;
+        document.getElementById('surprise-body').textContent = slide.body;
+        document.getElementById('surprise-highlight').textContent = slide.highlight || '';
+        document.getElementById('slide-1').classList.add('active');
+        return;
+      }
+
+      if (slide.type === 'wallet') {
+        document.getElementById('wallet-title').textContent = slide.title;
+        const grid = document.getElementById('wallet-grid');
+        grid.innerHTML = '';
+        for (const item of slide.items) {
+          const isNeg = (item.impact || '').includes('↑') || (item.impact || '').includes('+');
+          const cls = isNeg ? 'negative' : 'positive';
+          grid.innerHTML += `
+            <div class="wallet-item">
+              <div class="wallet-item__left">
+                <span class="wallet-item__icon">${item.emoji || '💰'}</span>
+                <span class="wallet-item__scenario">${item.scenario}</span>
+              </div>
+              <div class="wallet-item__impact ${cls}">${item.impact}</div>
+            </div>
+          `;
+        }
+        document.getElementById('slide-2').classList.add('active');
+        return;
+      }
+
+      if (slide.type === 'insider') {
+        document.getElementById('insider-title').textContent = slide.title;
+        document.getElementById('insider-body').textContent = slide.body;
+        document.getElementById('insider-keyword').textContent = slide.searchKeyword || '';
+        document.getElementById('slide-3').classList.add('active');
+        return;
+      }
+
+      if (slide.type === 'cta') {
+        document.getElementById('cta-headline').textContent = slide.headline;
+        document.getElementById('cta-message').textContent = slide.message;
+        document.getElementById('cta-url').textContent = slide.url;
+        const teaserEl = document.getElementById('cta-teaser');
+        if (teaserEl) teaserEl.textContent = slide.teaser || '';
+        document.getElementById('slide-4').classList.add('active');
+        return;
+      }
+
+      // ── 레거시 타입 하위호환 ──────────────────────────
       if (slide.type === 'cover') {
         document.getElementById('cover-headline').textContent = slide.headline;
         document.getElementById('cover-subheadline').textContent = slide.subheadline;
         document.getElementById('cover-badge').textContent = slide.badge;
+        document.getElementById('slide-legacy-cover').classList.add('active');
+        return;
       }
 
       if (slide.type === 'data') {
@@ -378,21 +638,21 @@
             </div>
           `;
         }
+        document.getElementById('slide-legacy-data').classList.add('active');
+        return;
       }
 
       if (slide.type === 'insight') {
         const n = slide.number === '01' ? '1' : '2';
+        const elId = `slide-legacy-insight${n}`;
         document.getElementById(`insight${n}-number`).textContent = slide.number;
         document.getElementById(`insight${n}-title`).textContent = slide.title;
         document.getElementById(`insight${n}-body`).textContent = slide.body;
+        document.getElementById(elId).classList.add('active');
+        return;
       }
 
-      if (slide.type === 'cta') {
-        document.getElementById('cta-headline').textContent = slide.headline;
-        document.getElementById('cta-message').textContent = slide.message;
-        document.getElementById('cta-url').textContent = slide.url;
-      }
-
+      // 기본 폴백 — 해당 인덱스의 슬라이드 표시
       document.getElementById(`slide-${slideIndex}`).classList.add('active');
     };
   </script>
