@@ -5,7 +5,7 @@
 //   RESEND_API_KEY       - Resend에서 발급한 API Key
 //   NEWSLETTER_FROM      - 발신자 이메일 (예: briefing@econpedia.dedyn.io)
 //   RESEND_AUDIENCE_ID   - Resend Audiences ID (구독자 전체 발송)
-//   NEWSLETTER_TO        - 폴백용 수신자 (RESEND_AUDIENCE_ID 없을 때만 사용)
+
 
 import { Resend } from 'resend';
 import { readFileSync, writeFileSync } from 'fs';
@@ -29,16 +29,15 @@ const ROOT = join(__dirname, '..');
 const RESEND_API_KEY  = process.env.RESEND_API_KEY;
 const FROM            = process.env.NEWSLETTER_FROM || 'EconPedia <briefing@econpedia.dedyn.io>';
 const AUDIENCE_ID     = process.env.RESEND_AUDIENCE_ID;
-const FALLBACK_TO     = process.env.NEWSLETTER_TO; // Audience 없을 때 폴백
 
 if (!RESEND_API_KEY) {
   console.error('❌ RESEND_API_KEY 환경 변수가 없습니다. 발송을 건너뜁니다.');
   writeStatus(false, 'RESEND_API_KEY 없음');
   process.exit(0);
 }
-if (!AUDIENCE_ID && !FALLBACK_TO) {
-  console.error('❌ RESEND_AUDIENCE_ID 또는 NEWSLETTER_TO 환경 변수가 없습니다.');
-  writeStatus(false, 'AUDIENCE_ID/NEWSLETTER_TO 없음');
+if (!AUDIENCE_ID) {
+  console.error('❌ RESEND_AUDIENCE_ID 환경 변수가 없습니다. (실제구독자 전용)');
+  writeStatus(false, 'AUDIENCE_ID 없음');
   process.exit(0);
 }
 
@@ -237,31 +236,25 @@ const subject = `📊 [EconPedia] ${dateStr} | ${latestArticle.title}`;
 try {
   let recipients = [];
 
-  if (AUDIENCE_ID) {
-    // ── Audience 구독자 전체 발송 ────────────────────────
-    console.log(`   📋 Audience ID: ${AUDIENCE_ID}`);
-    console.log(`   구독자 목록 조회 중...`);
-    recipients = await getAudienceContacts(AUDIENCE_ID);
-    console.log(`   ✅ 활성 구독자 ${recipients.length}명 조회 완료`);
+  // ── Audience 구독자 전체 발송 ────────────────────────
+  console.log(`   📋 Audience ID: ${AUDIENCE_ID}`);
+  console.log(`   구독자 목록 조회 중...`);
+  recipients = await getAudienceContacts(AUDIENCE_ID);
+  console.log(`   ✅ 활성 구독자 ${recipients.length}명 조회 완료`);
 
-    if (recipients.length === 0) {
-      console.log('ℹ️  구독자가 없습니다. 발송을 건너뜁니다.');
-      writeStatus(false, '구독자 0명');
-      process.exit(0);
-    }
-  } else {
-    // ── 폴백: NEWSLETTER_TO 목록 발송 ─────────────────
-    recipients = FALLBACK_TO.split(',').map(e => e.trim()).filter(Boolean);
-    console.log(`   ⚠️  Audience 없음 — 폴백 수신자 ${recipients.length}명`);
+  if (recipients.length === 0) {
+    console.log('ℹ️  구독자가 없습니다. 발송을 건너뜁니다.');
+    writeStatus(false, '구독자 0명');
+    process.exit(0);
   }
 
   console.log(`   발송 대상: ${recipients.slice(0, 3).join(', ')}${recipients.length > 3 ? ` 외 ${recipients.length - 3}명` : ''}`);
   console.log(`─────────────────────────────────────────`);
 
-  // 개별 발송 (Resend 무료 플랜 호환 - 초당 2건 제한)
+  // 개별 발송 (Resend 무료 플랜 호환 - 초당 2건 제한 절대적 회피)
   let successCount = 0;
   let failCount = 0;
-  const BATCH_SIZE = 2; // 동시 발송 최대 수
+  const BATCH_SIZE = 1; // 1명씩 발송하여 확실하게 Rate Limit 우회
 
   for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
     const batch = recipients.slice(i, i + BATCH_SIZE);
@@ -279,9 +272,9 @@ try {
       }
     });
 
-    // Rate limit 방지 (배치간 1100ms 대기)
+    // Rate limit 방지 (1명 발송 후 1500ms 대기)
     if (i + BATCH_SIZE < recipients.length) {
-      await new Promise(r => setTimeout(r, 1100));
+      await new Promise(r => setTimeout(r, 1500));
     }
   }
 
