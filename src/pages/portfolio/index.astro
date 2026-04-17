@@ -30,10 +30,10 @@ try {
 
 const getInfo = (analysis) => {
   if (analysis.category === 'insider') {
-    const c = companies.find(c => c.id === analysis.investorId) || { emoji: '🏢', name: 'Unknown' };
+    const c = companies.find(c => c.id === analysis.investorId) || { initials: '--', name: 'Unknown' };
     return { ...c, category: 'insider' };
   }
-  return investors.find(i => i.id === analysis.investorId) || { emoji: '👤', name: 'Unknown', category: 'unknown' };
+  return investors.find(i => i.id === analysis.investorId) || { initials: '--', name: 'Unknown', category: 'unknown' };
 };
 
 function formatDate(dateStr) {
@@ -45,11 +45,11 @@ function formatDate(dateStr) {
 }
 
 const categories = [
-  { id: 'all', title: '모두 보기', emoji: '🔍' },
-  { id: 'superinvestor', title: '슈퍼인베스터', emoji: '🧙' },
-  { id: 'fund', title: '액티브 펀드', emoji: '🚀' },
-  { id: 'state', title: '국가 자금', emoji: '🏛' },
-  { id: 'insider', title: 'CEO 내부 거래', emoji: '🕵️' }
+  { id: 'all', title: '모두 보기' },
+  { id: 'superinvestor', title: '슈퍼인베스터' },
+  { id: 'fund', title: '액티브 펀드' },
+  { id: 'state', title: '국가 자금' },
+  { id: 'insider', title: 'CEO 내부 거래' }
 ];
 
 ---
@@ -60,7 +60,7 @@ const categories = [
 >
   <section class="hero hero--portfolio" style="padding: 4rem 0 3rem; background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-background) 100%);">
     <div class="container text-center">
-      <span class="hero__badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-primary); border: 1px solid rgba(16, 185, 129, 0.2);"><span style="margin-right: 4px;">💼</span> 공시 데이터 심층 분석</span>
+      <span class="hero__badge" style="background: rgba(16, 185, 129, 0.1); color: var(--color-accent-primary); border: 1px solid rgba(16, 185, 129, 0.2);">공시 데이터 심층 분석</span>
       <h1 class="hero__title" style="font-size: 2.8rem; margin: 1rem 0;">
         Portfolio X-Ray
       </h1>
@@ -77,7 +77,7 @@ const categories = [
       <div class="portfolio-tabs">
         {categories.map((cat, idx) => (
           <button class={`portfolio-tab ${idx === 0 ? 'active' : ''}`} data-filter={cat.id}>
-            <span class="portfolio-tab-emoji">{cat.emoji}</span> {cat.title}
+            {cat.title}
           </button>
         ))}
       </div>
@@ -86,7 +86,7 @@ const categories = [
       <div class="portfolio-grid" id="portfolio-grid">
         {analyses.length === 0 ? (
           <div class="portfolio-empty" style="text-align: center; padding: 4rem; grid-column: 1/-1; background: var(--color-surface); border-radius: 12px; border: 1px dashed var(--color-border);">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+            <Icon name="clock" size={48} style="margin-bottom: 1rem; opacity: 0.4;" />
             <h3 style="margin: 0 0 0.5rem;">아직 분석된 데이터가 없습니다</h3>
             <p style="opacity: 0.7; margin: 0;">최신 공시 데이터가 수집되면 여기에 분석본이 올라옵니다.</p>
           </div>
@@ -98,10 +98,10 @@ const categories = [
           return (
             <a href={`/portfolio/${analysis.slug}`} class={`portfolio-card ${analysis.category === 'insider' ? (analysis.isBuy ? 'insider-buy' : 'insider-sell') : ''}`} data-category={info.category}>
               <div class="portfolio-card__header">
-                <div class="portfolio-card__avatar">{info.emoji}</div>
+                <div class="portfolio-card__avatar investor-initials">{info.initials}</div>
                 <div class="portfolio-card__meta">
                   <span class="portfolio-card__category" style={analysis.category === 'insider' ? (analysis.isBuy ? 'color:#10b981;' : 'color:#ef4444;') : ''}>
-                    {analysis.category === 'insider' ? (analysis.isBuy ? '🟢 BUY 시그널' : '🔴 SELL 시그널') : catName}
+                    {analysis.category === 'insider' ? (analysis.isBuy ? 'BUY' : 'SELL') : catName}
                   </span>
                   <span class="portfolio-card__date">{formatDate(analysis.date)}</span>
                 </div>
@@ -185,6 +185,21 @@ const categories = [
   border-color: var(--color-accent-primary);
 }
 .portfolio-card:hover::before { opacity: 1; }
+
+.investor-initials {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-accent-primary);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
 
 .portfolio-card__header {
   display: flex;

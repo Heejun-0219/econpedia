@@ -5,7 +5,7 @@
     "ticker": "NVDA",
     "cik": "0001045810",
     "country": "us",
-    "emoji": "🟩",
+    "initials": "NV",
     "lastFilingDate": "2026-03-24"
   },
   {
@@ -14,7 +14,7 @@
     "ticker": "AAPL",
     "cik": "0000320193",
     "country": "us",
-    "emoji": "🍎",
+    "initials": "AP",
     "lastFilingDate": "2026-04-03"
   },
   {
@@ -23,7 +23,7 @@
     "ticker": "TSLA",
     "cik": "0001318605",
     "country": "us",
-    "emoji": "⚡",
+    "initials": "TS",
     "lastFilingDate": "2026-04-02"
   },
   {
@@ -32,7 +32,7 @@
     "ticker": "META",
     "cik": "0001326801",
     "country": "us",
-    "emoji": "♾️",
+    "initials": "ME",
     "lastFilingDate": "2026-03-25"
   },
   {
@@ -42,7 +42,7 @@
     "cik": null,
     "corp_code": "00126380",
     "country": "kr",
-    "emoji": "📱",
+    "initials": "SE",
     "lastFilingDate": "2026-04-08"
   },
   {
@@ -52,7 +52,7 @@
     "cik": null,
     "corp_code": "00164742",
     "country": "kr",
-    "emoji": "🚘",
+    "initials": "HY",
     "lastFilingDate": "2026-04-08"
   },
   {
@@ -62,7 +62,7 @@
     "cik": null,
     "corp_code": "00266961",
     "country": "kr",
-    "emoji": "📗",
+    "initials": "NA",
     "lastFilingDate": "2026-04-10"
   }
 ]

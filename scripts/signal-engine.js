@@ -7,29 +7,68 @@
 // 토스 원칙: "보내지 않으면 사용자가 손해를 보는가?"
 //            아니라면, 보내지 않는다.
 
-// ─── 날씨 판정 임계값 ────────────────────────────────
+// ─── 날씨 판정 임계값 ───────────────────────────
 const THRESHOLDS = {
-  // 🌩️ stormy: 긴급 발행 (심층 분석)
-  stormy: {
-    indexChange: 3.0,    // 주요 지수 ±3% 이상
-    currencyChange: 2.0, // 환율 ±2% 이상
-  },
-  // 🌧️ rainy: 중요 발행 (브리핑 + 행동 가이드)
-  rainy: {
-    indexChange: 1.5,    // 주요 지수 ±1.5%
-    currencyChange: 1.0, // 환율 ±1%
-  },
-  // ☁️ cloudy: 간단 발행 (3줄 요약 + 지갑 카드)
-  cloudy: {
-    indexChange: 0.5,    // 주요 지수 ±0.5%
-    currencyChange: 0.3, // 환율 ±0.3%
-  },
-  // ☀️ sunny: 미발행 ("오늘은 평화로운 날이에요")
+  storm:  3.0, // 주요 지수 ±3% 이상
+  rain:   1.5, // 주요 지수 ±1.5% 이상, 또는 환율 ±1% 이상
+  cloudy: 0.5, // 주요 지수 ±0.5% 이상
+  // sunny: 그 이하 (평온한 시장)
 };
 
-// ─── 경제 날씨 판정 ──────────────────────────────────
-export function determineWeather(marketData) {
-  const signals = [];
+const THRESHOLDS_CURRENCY = {
+  storm:  2.0,
+  rain:   1.0,
+  cloudy: 0.3,
+};
+
+// ─── 날씨별 설정 ───────────────────────────────
+const WEATHER_CONFIG = {
+  sunny: {
+    label: '맑음',
+    emoji: '☀️',
+    color: '#34d399', // Emerald 400
+    shouldPublishArticle: false,
+    shouldPublishCardNews: false,
+    shouldPublishBlog: false,
+    contentDepth: 'skip',
+    headline: '특별히 걱정할 일 없는 하루예요',
+  },
+  cloudy: {
+    label: '흐림',
+    emoji: '☁️',
+    color: '#94a3b8', // Slate 400
+    shouldPublishArticle: true,
+    shouldPublishCardNews: false,
+    shouldPublishBlog: false,
+    contentDepth: 'calm',
+    headline: '살짝 움직임이 있지만 걱정할 수준은 아니에요',
+  },
+  rain: {
+    label: '비',
+    emoji: '🌧️',
+    color: '#3b82f6', // Blue 500
+    shouldPublishArticle: true,
+    shouldPublishCardNews: true,
+    shouldPublishBlog: false,
+    contentDepth: 'alert',
+    headline: '시장이 출렁이고 있어요. 체크해볼 게 있어요',
+  },
+  storm: {
+    label: '폭풍',
+    emoji: '🌩️',
+    color: '#ef4444', // Red 500
+    shouldPublishArticle: true,
+    shouldPublishCardNews: true,
+    shouldPublishBlog: true,
+    contentDepth: 'deep',
+    headline: '시장에 큰 변화가 생겼습니다. 대응이 필요해요',
+  },
+};
+
+// ─── 날씨 결정 로직 ─────────────────────────────
+function determineWeather(marketData) {
+  let severity = 'sunny';
+  let signals = [];
 
   const checks = [
     { key: 'sp500',   label: 'S&P 500',  data: marketData.sp500,   type: 'index' },
@@ -40,242 +79,142 @@ export function determineWeather(marketData) {
     { key: 'oil',     label: 'WTI Oil',  data: marketData.oil,     type: 'index' },
   ];
 
-  for (const { key, label, data, type } of checks) {
+  for (const { label, data, type } of checks) {
     const absChange = Math.abs(data.changePercent);
-    const thresholdKey = type === 'currency' ? 'currencyChange' : 'indexChange';
+    
+    const thresholds = type === 'currency' ? THRESHOLDS_CURRENCY : THRESHOLDS;
 
-    if (absChange >= THRESHOLDS.stormy[thresholdKey]) {
-      signals.push({
-        severity: 'stormy',
-        source: label,
-        change: data.changePercent,
-        message: `${label} ${data.changePercent > 0 ? '급등' : '급락'} ${data.changePercent.toFixed(2)}%`,
-      });
-    } else if (absChange >= THRESHOLDS.rainy[thresholdKey]) {
-      signals.push({
-        severity: 'rainy',
-        source: label,
-        change: data.changePercent,
-        message: `${label} ${data.changePercent > 0 ? '상승' : '하락'} ${data.changePercent.toFixed(2)}%`,
-      });
-    } else if (absChange >= THRESHOLDS.cloudy[thresholdKey]) {
-      signals.push({
-        severity: 'cloudy',
-        source: label,
-        change: data.changePercent,
-        message: `${label} 소폭 변동 ${data.changePercent.toFixed(2)}%`,
-      });
+    if (absChange >= thresholds.storm) {
+      severity = 'storm';
+      signals.push({ severity: 'storm', source: label, change: data.changePercent, message: `${label} 급변동 ${data.changePercent.toFixed(2)}%` });
+    } else if (absChange >= thresholds.rain && severity !== 'storm') {
+      severity = 'rain';
+      signals.push({ severity: 'rain', source: label, change: data.changePercent, message: `${label} ${data.changePercent > 0 ? '상승' : '하락'} ${data.changePercent.toFixed(2)}%` });
+    } else if (absChange >= thresholds.cloudy && severity === 'sunny') {
+      severity = 'cloudy';
+      signals.push({ severity: 'cloudy', source: label, change: data.changePercent, message: `${label} 소폭 변동 ${data.changePercent.toFixed(2)}%` });
     }
   }
 
-  // 가장 심각한 시그널로 최종 날씨 결정
-  const severityOrder = ['stormy', 'rainy', 'cloudy'];
-  let finalWeather = 'sunny';
-  for (const severity of severityOrder) {
-    if (signals.some(s => s.severity === severity)) {
-      finalWeather = severity;
-      break;
-    }
+  const config = WEATHER_CONFIG[severity];
+  
+  // 시그널이 있으면 헤드라인 업데이트 (가장 큰 변동 기준)
+  let headline = config.headline;
+  if (signals.length > 0) {
+    const topSignal = signals.sort((a, b) => Math.abs(b.change) - Math.abs(a.change))[0];
+    headline = `${topSignal.message} — ${config.headline}`;
   }
 
   return {
-    weather: finalWeather,
+    weather: severity,
     signals,
-    ...getWeatherMeta(finalWeather, signals),
+    ...config,
+    headline,
   };
 }
 
-// ─── 날씨별 메타데이터 ───────────────────────────────
-function getWeatherMeta(weather, signals) {
-  const meta = {
-    sunny: {
-      emoji: '☀️',
-      label: '맑음',
-      headline: '특별히 걱정할 일 없는 하루예요',
-      shouldPublishArticle: false,
-      shouldPublishCardNews: false,
-      shouldPublishBlog: false,
-      contentDepth: 'skip',           // 발행하지 않음
-      color: '#34d399',               // 초록
-    },
-    cloudy: {
-      emoji: '☁️',
-      label: '흐림',
-      headline: '살짝 움직임이 있지만 걱정할 수준은 아니에요',
-      shouldPublishArticle: true,
-      shouldPublishCardNews: true,
-      shouldPublishBlog: false,
-      contentDepth: 'calm',           // 3줄 요약 + 지갑 카드
-      color: '#94a3b8',               // 회색
-    },
-    rainy: {
-      emoji: '🌧️',
-      label: '비',
-      headline: '시장이 출렁이고 있어요. 체크해볼 게 있어요',
-      shouldPublishArticle: true,
-      shouldPublishCardNews: true,
-      shouldPublishBlog: true,
-      contentDepth: 'alert',          // 브리핑 + 행동 가이드
-      color: '#3b82f6',               // 파랑
-    },
-    stormy: {
-      emoji: '🌩️',
-      label: '폭풍',
-      headline: '시장에 큰 변동이 있어요. 꼭 확인하세요',
-      shouldPublishArticle: true,
-      shouldPublishCardNews: true,
-      shouldPublishBlog: true,
-      contentDepth: 'storm',          // 심층 분석
-      color: '#ef4444',               // 빨강
-    },
-  };
-
-  const m = meta[weather];
-  // stormy/rainy일 때 가장 심각한 시그널의 원인을 헤드라인에 반영
-  if ((weather === 'stormy' || weather === 'rainy') && signals.length > 0) {
-    const topSignal = signals[0];
-    m.headline = topSignal.message + ' — ' + m.headline;
-  }
-
-  return m;
-}
-
-// ─── 지갑 영향 계산기 ────────────────────────────────
-// 경제 지표를 "내 지갑"의 ₩ 단위로 번역합니다.
+// ─── 지갑 영향 계산 (₩ 단위) ───────────────────────
 export function calculateWalletImpact(marketData) {
   const impacts = [];
 
-  // 1. 환율 → 해외여행/해외직구 환산
+  // 1. KRW -> 해외여행/직구 체감
   const krwChange = marketData.krw.changePercent;
-  const krwPrice = marketData.krw.price;
-  // 100만원 환전 기준 영향
   const exchangeImpact = Math.round(10000 * (krwChange / 100)); // ₩ 기준
-  if (Math.abs(krwChange) > 0.1) {
-    impacts.push({
-      category: 'travel',
-      emoji: '✈️',
-      label: '해외여행·직구',
-      change: exchangeImpact,
-      sentiment: krwChange > 0 ? 'negative' : 'positive', // 원화 약세 = 해외 비용 증가
-      message: krwChange > 0
-        ? `100만원 환전 시 ${Math.abs(exchangeImpact).toLocaleString()}원 더 비싸졌어요`
-        : `100만원 환전 시 ${Math.abs(exchangeImpact).toLocaleString()}원 아꼈어요`,
-    });
-  }
+  impacts.push({
+    category: 'travel',
+    emoji: '✈️',
+    label: '해외여행·직구',
+    change: exchangeImpact,
+    sentiment: Math.abs(krwChange) < 0.1 ? 'neutral' : (krwChange > 0 ? 'negative' : 'positive'),
+    message: Math.abs(krwChange) < 0.1 
+      ? '환율이 안정적이에요' 
+      : (krwChange > 0 ? `100만원 환전 시 ${Math.abs(exchangeImpact).toLocaleString()}원 더 비싸졌어요` : `100만원 환전 시 ${Math.abs(exchangeImpact).toLocaleString()}원 아꼈어요`),
+  });
 
-  // 2. KOSPI → 국내 주식 투자 체감
+  // 2. KOSPI -> 국내 주식 투자 체감
   const kospiChange = marketData.kospi.changePercent;
-  // 1000만원 투자 기준
   const stockImpact = Math.round(10_000_000 * (kospiChange / 100));
-  if (Math.abs(kospiChange) > 0.3) {
-    impacts.push({
-      category: 'investment',
-      emoji: '📊',
-      label: '국내 주식',
-      change: stockImpact,
-      sentiment: kospiChange > 0 ? 'positive' : 'negative',
-      message: kospiChange > 0
-        ? `1천만원 투자 기준 약 ${Math.abs(stockImpact).toLocaleString()}원 올랐어요`
-        : `1천만원 투자 기준 약 ${Math.abs(stockImpact).toLocaleString()}원 빠졌어요`,
-    });
-  }
+  impacts.push({
+    category: 'investment',
+    emoji: '📊',
+    label: '국내 주식·투자',
+    change: stockImpact,
+    sentiment: Math.abs(kospiChange) < 0.3 ? 'neutral' : (kospiChange > 0 ? 'positive' : 'negative'),
+    message: Math.abs(kospiChange) < 0.3
+      ? '국내 시장이 조용해요'
+      : (kospiChange > 0 ? `1천만원 투자 기준 약 ${Math.abs(stockImpact).toLocaleString()}원 올랐어요` : `1천만원 투자 기준 약 ${Math.abs(stockImpact).toLocaleString()}원 빠졌어요`),
+  });
 
-  // 3. 비트코인 → 코인 투자 체감
+  // 3. 비트코인 -> 코인 투자 체감
   const btcChange = marketData.bitcoin.changePercent;
-  const btcImpact = Math.round(1_000_000 * (btcChange / 100)); // 100만원 투자 기준
-  if (Math.abs(btcChange) > 1.0) {
-    impacts.push({
-      category: 'crypto',
-      emoji: '₿',
-      label: '비트코인',
-      change: btcImpact,
-      sentiment: btcChange > 0 ? 'positive' : 'negative',
-      message: btcChange > 0
-        ? `100만원 투자 기준 약 ${Math.abs(btcImpact).toLocaleString()}원 올랐어요`
-        : `100만원 투자 기준 약 ${Math.abs(btcImpact).toLocaleString()}원 빠졌어요`,
-    });
-  }
+  const btcImpact = Math.round(1_000_000 * (btcChange / 100));
+  impacts.push({
+    category: 'crypto',
+    emoji: '₿',
+    label: '비트코인·코인',
+    change: btcImpact,
+    sentiment: Math.abs(btcChange) < 1.0 ? 'neutral' : (btcChange > 0 ? 'positive' : 'negative'),
+    message: Math.abs(btcChange) < 1.0
+      ? '가상자산 시장이 횡보 중이에요'
+      : (btcChange > 0 ? `100만원 투자 기준 약 ${Math.abs(btcImpact).toLocaleString()}원 올랐어요` : `100만원 투자 기준 약 ${Math.abs(btcImpact).toLocaleString()}원 빠졌어요`),
+  });
 
-  // 4. S&P 500 → 미국 주식/ETF 투자 체감
+  // 4. S&P 500 -> 미국 주식/ETF 투자 체감
   const spChange = marketData.sp500.changePercent;
-  // 환율 효과 포함: 미국 주식은 환율 × 수익률
   const usStockImpact = Math.round(5_000_000 * ((spChange + krwChange) / 100));
-  if (Math.abs(spChange) > 0.5 || Math.abs(krwChange) > 0.3) {
-    const totalChange = spChange + krwChange;
-    impacts.push({
-      category: 'us_stock',
-      emoji: '🇺🇸',
-      label: '미국 주식·ETF',
-      change: usStockImpact,
-      sentiment: totalChange > 0 ? 'positive' : 'negative',
-      message: totalChange > 0
-        ? `500만원 투자 기준 약 ${Math.abs(usStockImpact).toLocaleString()}원 올랐어요 (환율 효과 포함)`
-        : `500만원 투자 기준 약 ${Math.abs(usStockImpact).toLocaleString()}원 빠졌어요 (환율 효과 포함)`,
-    });
-  }
+  const totalUSChange = spChange + krwChange;
+  impacts.push({
+    category: 'us_stock',
+    emoji: '🇺🇸',
+    label: '미국 주식·ETF',
+    change: usStockImpact,
+    sentiment: Math.abs(totalUSChange) < 0.5 ? 'neutral' : (totalUSChange > 0 ? 'positive' : 'negative'),
+    message: Math.abs(totalUSChange) < 0.5
+      ? '미국 시장 변화가 작아요'
+      : (totalUSChange > 0 ? `500만원 투자 기준 약 ${Math.abs(usStockImpact).toLocaleString()}원 올랐어요 (환율 포함)` : `500만원 투자 기준 약 ${Math.abs(usStockImpact).toLocaleString()}원 빠졌어요 (환율 포함)`),
+  });
 
-  // 5. 기준금리 → 주택담보대출 이자 체감
-  if (marketData.baseRate && marketData.baseRate.change !== 0) {
-    const rateChange = marketData.baseRate.change;
-    // 3억원 대출 기준, 월 이자 변동액 계산
-    const monthlyInterestChange = Math.round((300_000_000 * (rateChange / 100)) / 12);
-    impacts.push({
-      category: 'housing',
-      emoji: '🏠',
-      label: '주거비 (대출이자)',
-      change: monthlyInterestChange,
-      sentiment: rateChange > 0 ? 'negative' : 'positive', // 금리 인상은 주거비 증가 (부정적)
-      message: rateChange > 0
-        ? `3억원 대출 기준, 이번 달 이자가 약 ${Math.abs(monthlyInterestChange).toLocaleString()}원 늘었어요`
-        : `3억원 대출 기준, 이번 달 이자가 약 ${Math.abs(monthlyInterestChange).toLocaleString()}원 줄었어요`,
-    });
-  }
+  // 5. 기준금리 -> 주택담보대출 이자 체감
+  const rateChange = marketData.baseRate ? marketData.baseRate.change : 0;
+  const monthlyInterestChange = Math.round((300_000_000 * (rateChange / 100)) / 12);
+  impacts.push({
+    category: 'housing',
+    emoji: '🏠',
+    label: '주거비·대출이자',
+    change: monthlyInterestChange,
+    sentiment: rateChange === 0 ? 'neutral' : (rateChange > 0 ? 'negative' : 'positive'),
+    message: rateChange === 0
+      ? '대출 금리에 변화가 없어요 😌'
+      : (rateChange > 0 ? `3억원 대출 기준, 월 이자가 약 ${Math.abs(monthlyInterestChange).toLocaleString()}원 늘었어요` : `3억원 대출 기준, 월 이자가 약 ${Math.abs(monthlyInterestChange).toLocaleString()}원 줄었어요`),
+  });
 
-  // 6. 소비자물가지수(CPI) → 장바구니 체감
-  if (marketData.cpi && Math.abs(marketData.cpi.changePercent) > 0.1) {
-    const cpiChange = marketData.cpi.changePercent;
-    // 월 식비 80만원 기준
-    const groceryImpact = Math.round(800_000 * (cpiChange / 100));
-    impacts.push({
-      category: 'grocery',
-      emoji: '🛒',
-      label: '장바구니',
-      change: groceryImpact,
-      sentiment: cpiChange > 0 ? 'negative' : 'positive',
-      message: cpiChange > 0
-        ? `월 식비 80만원 기준, 체감 물가가 ${Math.abs(groceryImpact).toLocaleString()}원 올랐어요`
-        : `월 식비 80만원 기준, 체감 물가가 ${Math.abs(groceryImpact).toLocaleString()}원 내렸어요`,
-    });
-  }
+  // 6. 소비자물가지수(CPI) -> 장바구니 체감
+  const cpiChange = marketData.cpi ? marketData.cpi.changePercent : 0;
+  const groceryImpact = Math.round(800_000 * (cpiChange / 100));
+  impacts.push({
+    category: 'grocery',
+    emoji: '🛒',
+    label: '장바구니·물가',
+    change: groceryImpact,
+    sentiment: Math.abs(cpiChange) < 0.1 ? 'neutral' : (cpiChange > 0 ? 'negative' : 'positive'),
+    message: Math.abs(cpiChange) < 0.1
+      ? '물가가 안정권이에요'
+      : (cpiChange > 0 ? `월 식비 80만원 기준, 체감 물가가 ${Math.abs(groceryImpact).toLocaleString()}원 올랐어요` : `월 식비 80만원 기준, 체감 물가가 ${Math.abs(groceryImpact).toLocaleString()}원 내렸어요`),
+  });
 
-  // 7. 유가(WTI) → 주유비 체감
-  if (marketData.oil && Math.abs(marketData.oil.changePercent) > 0.5) {
-    const oilChange = marketData.oil.changePercent;
-    // 주유 5만원 기준, 국제유가 변동의 약 50%가 체감된다고 가정
-    const gasImpact = Math.round(50_000 * (oilChange / 100) * 0.5);
-    impacts.push({
-      category: 'gasoline',
-      emoji: '⛽',
-      label: '주유비',
-      change: gasImpact,
-      sentiment: oilChange > 0 ? 'negative' : 'positive',
-      message: oilChange > 0
-        ? `주유 5만원 할 때 체감 비용이 약 ${Math.abs(gasImpact).toLocaleString()}원 올랐어요`
-        : `주유 5만원 할 때 체감 비용이 약 ${Math.abs(gasImpact).toLocaleString()}원 내렸어요`,
-    });
-  }
-
-  // 변동이 거의 없는 평화로운 날
-  if (impacts.length === 0) {
-    impacts.push({
-      category: 'calm',
-      emoji: '😌',
-      label: '내 지갑',
-      change: 0,
-      sentiment: 'neutral',
-      message: '오늘은 지갑에 영향을 주는 변화가 없어요',
-    });
-  }
+  // 7. 유가(WTI) -> 주유비 체감
+  const oilChange = marketData.oil ? marketData.oil.changePercent : 0;
+  const gasImpact = Math.round(50_000 * (oilChange / 100) * 0.5);
+  impacts.push({
+    category: 'gasoline',
+    emoji: '⛽',
+    label: '주유비·기름값',
+    change: gasImpact,
+    sentiment: Math.abs(oilChange) < 0.5 ? 'neutral' : (oilChange > 0 ? 'negative' : 'positive'),
+    message: Math.abs(oilChange) < 0.5
+      ? '기름값 변동이 거의 없어요'
+      : (oilChange > 0 ? `주유 5만원 할 때 약 ${Math.abs(gasImpact).toLocaleString()}원 올랐어요` : `주유 5만원 할 때 약 ${Math.abs(gasImpact).toLocaleString()}원 내렸어요`),
+  });
 
   return impacts;
 }
