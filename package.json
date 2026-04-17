@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=20.9.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -12,14 +12,16 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.8",
     "@google/genai": "^1.48.0",
-    "astro": "^6.1.2",
+    "astro": "5.0.0",
     "dotenv": "^17.4.0",
     "google-auth-library": "^10.6.2",
     "googleapis": "^171.4.0",
     "marked": "^17.0.5",
     "puppeteer": "^24.40.0",
     "resend": "^6.10.0",
+    "typescript": "^5.9.3",
     "yahoo-finance2": "^3.14.0"
   }
 }

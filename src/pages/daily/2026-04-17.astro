@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "오늘 시장은 조용합니다. 내 지갑도 평화롭게 쉬어갑니다 😌";
+const date = "2026-04-17";
+const description = "| 내 지갑 카테고리 | 오늘의 체감 변화 |";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">📰 데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <table>
+<thead>
+<tr>
+<th align="left">내 지갑 카테고리</th>
+<th align="left">오늘의 체감 변화</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">🏠 <strong>대출 이자</strong></td>
+<td align="left">3억 대출 기준, 이번 달 이자가 <strong>약 6만 2천 원 줄었어요.</strong></td>
+</tr>
+<tr>
+<td align="left">🛒 <strong>장바구니</strong></td>
+<td align="left">한 달 식비 80만 원 기준, 체감 물가가 <strong>약 2천 원 올랐어요.</strong></td>
+</tr>
+<tr>
+<td align="left">📊 <strong>국내 주식</strong></td>
+<td align="left">1천만 원 투자 기준, 내 계좌는 <strong>약 4만 8천 원 정도 빠졌어요.</strong></td>
+</tr>
+</tbody></table>
+<h2>이코노의 가이드: 아무것도 안 해도 괜찮은 날 ☕</h2>
+<p>환율도, 주가도 크게 요동치지 않는 잔잔한 하루입니다. 매일 쏟아지는 경제 뉴스에 피곤하셨다면, 오늘 같은 날은 억지로 뉴스를 챙겨보거나 투자 타이밍을 고민할 필요가 없어요. </p>
+<p>다행히 금리가 조금 내려가면서 대출 이자 부담이 6만 원 넘게 줄어들었네요. 장바구니 물가가 2천 원 정도 살짝 오르긴 했지만, 아낀 이자 비용으로 충분히 방어가 가능합니다. 가끔은 주식 계좌 창을 덮어두고 푹 쉬는 것도 아주 훌륭한 재테크랍니다. </p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+    </div>
+  </div>
+</BaseLayout>

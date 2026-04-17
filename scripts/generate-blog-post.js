@@ -345,6 +345,12 @@ async function main() {
     const marketData = await loadMarketData();
     const today = marketData.date || Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
+    if (marketData.weatherData && marketData.weatherData.shouldPublishBlog === false) {
+      console.log('😴 날씨가 평화로워 오늘 블로그 심층 분석은 발행하지 않습니다.');
+      await saveBlogStatus(true, '평화로운 날씨로 블로그 발행 스킵', null);
+      process.exit(0);
+    }
+
     // 최근 블로그 주제 로드 (주제 다각화 엔진)
     const recentTopics = await loadRecentTopics(7);
 

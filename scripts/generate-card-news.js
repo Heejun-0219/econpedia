@@ -41,10 +41,10 @@ async function loadMarketData() {
 }
 
 // ─── Gemini → 카드뉴스 JSON 생성 ─────────────────────────
-async function generateCardNewsData(formattedData, today) {
+async function generateCardNewsData(formattedData, weatherData, today) {
   console.log('🎨 Gemini에 카드뉴스 데이터 요청 중...');
 
-  const { system, user } = buildCardNewsPrompt(formattedData, today);
+  const { system, user } = buildCardNewsPrompt(formattedData, weatherData, today);
 
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-pro-preview',
@@ -67,11 +67,11 @@ async function generateCardNewsData(formattedData, today) {
 
   try {
     const data = JSON.parse(jsonStr);
-    if (!data.slides || data.slides.length !== 5) {
-      throw new Error(`❌ 슬라이드 수가 5가 아닙니다: ${data.slides?.length}`);
+    if (!data.slides || data.slides.length !== 1) {
+      throw new Error(`❌ 슬라이드 수가 1이 아닙니다: ${data.slides?.length}`);
     }
     // 새 바이럴 타입과 레거시 타입 모두 허용
-    const validTypes = ['hook', 'surprise', 'wallet', 'insider', 'cta', 'cover', 'data', 'insight'];
+    const validTypes = ['all_in_one', 'hook', 'surprise', 'wallet', 'insider', 'cta', 'cover', 'data', 'insight'];
     for (const s of data.slides) {
       if (!validTypes.includes(s.type)) {
         console.warn(`   ⚠️ 알 수 없는 슬라이드 타입: ${s.type} — 렌더링 시 폴백 처리`);
@@ -130,7 +130,7 @@ async function renderCardImages(cardData, dateString) {
     });
 
     imagePaths.push(imgPath);
-    console.log(`   📷 Slide ${i + 1}/5 saved: ${imgPath}`);
+    console.log(`   📷 Slide ${i + 1}/${cardData.slides.length} saved: ${imgPath}`);
   }
 
   await browser.close();
@@ -147,7 +147,7 @@ async function saveCardNewsStatus(success, message, dateString, outputDir) {
     message,
     date: dateString,
     outputDir: outputDir || null,
-    slideCount: success ? 5 : 0,
+    slideCount: success ? 1 : 0,
     ts: new Date().toISOString(),
   };
   await fs.writeFile(statusPath, JSON.stringify(status, null, 2), 'utf-8');
@@ -166,8 +166,14 @@ async function main() {
     const marketData = await loadMarketData();
     const today = marketData.date || Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
+    if (marketData.weatherData && marketData.weatherData.shouldPublishCardNews === false) {
+      console.log('😴 날씨가 평화로워 오늘 카드뉴스는 발행하지 않습니다.');
+      await saveCardNewsStatus(true, '평화로운 날씨로 카드뉴스 발행 스킵', today, null);
+      process.exit(0);
+    }
+
     // Gemini로 카드뉴스 데이터 생성
-    const cardData = await generateCardNewsData(marketData.formatted, today);
+    const cardData = await generateCardNewsData(marketData.formatted, marketData.weatherData, today);
 
     // 카드뉴스 JSON 저장 (디버깅 용도)
     const jsonPath = path.join(ROOT, 'public', 'cards', today, 'data.json');
@@ -188,7 +194,7 @@ async function main() {
     }
     // ──────────────────────────────────────────────────
 
-    await saveCardNewsStatus(true, `${today} 카드뉴스 5장 생성`, today, outputDir);
+    await saveCardNewsStatus(true, `${today} 카드뉴스 1장 생성`, today, outputDir);
     console.log('🚀 Card News Pipeline Completed Successfully.');
 
   } catch (error) {

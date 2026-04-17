@@ -27,121 +27,113 @@ ${PERSONA.restrictions.map(r => `- ${r}`).join('\n')}
 `;
 }
 
-// ── 기사 프롬프트 (데일리 브리핑) ────────────────────────
-export function buildArticlePrompt(marketDataString, today) {
+// ── 기사 프롬프트 (데일리 브리핑 - 날씨별 분기) ────────────────────────
+export function buildArticlePrompt(marketDataString, weatherData, today) {
   const system = buildSystemBase(today);
 
-  const instructions = `
+  let instructions = '';
+
+  if (weatherData.weather === 'cloudy') {
+    instructions = `
 [출력 형식: 순수 마크다운 — frontmatter 제외]
 
-[시니어 에디터의 특강: 오늘 기사의 핵심]
-- "데이터를 읽어주지 말고, 시장의 '심리'를 읽어주세요."
-- 단순히 환율이 올랐다가 아니라, 환율 상승이 '왜' 한국 증시의 하방 압력으로 작용했는지, 그 과정에서 외국인은 어떤 '패'를 던졌는지 분석하세요.
-- 자극적인 이모지보다, 무릎을 탁 치게 만드는 '촌철살인'의 비유를 사용하세요.
+[클라우디(Cloudy) 데이 지시사항]
+- 오늘은 시장 변동이 적은 평범한 날입니다. 억지로 뉴스를 만들지 마세요.
+- 짧고 가볍게 3줄로 요약하세요.
+- 각 요약은 독자의 생활(금리, 환율)과 연결된 "지갑 영향" 위주여야 합니다.
 
 [구조 가이드]
-1. 시장의 서사(Narrative)를 담은 헤드라인 (H1)
-   - "숫자 뒤에 숨은 본질을 찌르세요." (예: "코스피의 굴욕, 반도체 독주가 멈춘 날")
-
-2. 오늘 시장의 '결정적 장면' (인용구 블록)
-   - "> 오늘 하루를 한 문장으로 정의한다면:" 
-   - 시장의 흐름을 관통하는 통찰력 있는 한 문장.
-
-3. 데이터 대시보드 (Table)
-   - 지표 | 수치 | 변동 | **에디터의 한 줄 해석 (중요)**
-
-4. [시장의 뒷모습: 왜 움직였나?] (H2)
-   - 뉴스 리포팅이 아닙니다. '인과관계'를 분석하세요. 
-   - (예: 미 국채 금리 상승 → 기술주 밸류에이션 부담 → 국내 성장주 동반 하락)
-
-5. [독자의 지갑: 그래서 어떻게 되나?] (H2)
-   - 독자가 오늘 당장 느낄 변화(장바구니 물가, 대출 이자, 환전 타이밍)를 구체적으로 짚어주세요.
-
-6. 시니어의 한 마디 (Sign-off)
+1. 헤드라인 (H1)
+   - 예: "오늘 시장은 조용합니다. 내 지갑도 평화롭네요 😌"
+2. 오늘 내 지갑 요약 (Table)
+   - 아래 '지갑 영향 요약'을 바탕으로 2~3개 항목만 간단히 정리
+3. 이코노의 가이드 (H2)
+   - 뉴스 없이 쉬어가는 날의 마인드셋이나 가벼운 팁 한 마디.
+4. 시니어의 한 마디 (Sign-off)
    - "${PERSONA.brandVoice.signOff}"
 `;
+  } else if (weatherData.weather === 'rainy' || weatherData.weather === 'stormy') {
+    instructions = `
+[출력 형식: 순수 마크다운 — frontmatter 제외]
 
-  const userMessage = `오늘의 시장 데이터입니다:
+[경고(Alert/Storm) 데이 지시사항]
+- 오늘 시장에 큰 변동(${weatherData.weather})이 발생했습니다.
+- 원인 분석보다 이 상황이 "내 지갑과 대출, 환전"에 미칠 실질적 영향을 먼저 짚어주세요.
+
+[구조 가이드]
+1. 헤드라인 (H1)
+   - 코스피 몇 퍼센트 하락 같은 숫자가 아니라, 현상과 결과를 요약.
+   - 예: "환율이 1,480원을 뚫었습니다. 해외 직구족은 당분간 장바구니를 비우세요"
+2. 🚨 오늘 왜 이러는 걸까? (H2)
+   - 1~2문단으로 시장 상황 원인 직관적 설명 (전문용어 자제)
+3. 💰 내 지갑 가이드 (H2)
+   - 아래 '지갑 영향 요약' 데이터를 기반으로 독자가 지금 당장 취해야 할, 혹은 주의해야 할 행동 가이드 제시
+4. 시니어의 한 마디 (Sign-off)
+   - "${PERSONA.brandVoice.signOff}"
+`;
+  } else {
+    // 혹시라도 이 프롬프트가 불렸다면 (원래 sunny는 프롬프트 호출 자체를 안 함)
+    instructions = `
+[출력 형식: 순수 마크다운 — frontmatter 제외]
+# 오늘은 평화로운 날이에요 ☀️
+오늘은 특별한 경제 이벤트가 없습니다. 지갑 걱정 없이 편안한 하루 보내세요!
+`;
+  }
+
+  const userMessage = `[오늘의 시장 데이터]
 ${marketDataString}
 
-위 데이터를 바탕으로, 경제에 무지한 독자도 '아, 그래서 이렇구나!'라고 무릎을 칠 수 있는 통찰력 있는 브리핑을 작성하세요.`;
+[지갑 영향 요약 (Signal Engine 제공)]
+${weatherData.walletSummary}
+
+위 데이터를 바탕으로 친절하고 명확하게 오늘 하루의 가이드를 작성하세요.`;
 
   return { system: system + instructions, user: userMessage };
 }
 
-// ── 카드뉴스 프롬프트 (바이럴 엔진) ──────────────────────
-export function buildCardNewsPrompt(marketDataString, today) {
+// ── 카드뉴스 프롬프트 (1장 압축 올인원) ──────────────────────
+export function buildCardNewsPrompt(marketDataString, weatherData, today) {
   const system = buildSystemBase(today);
 
   const instructions = `
 [출력 형식: JSON만 출력 — 마크다운 코드블록 없이 순수 JSON]
 
-[핵심 전략: 호기심 갭 + 서프라이즈 팩트]
-당신은 인스타 100만 팔로워를 가진 경제 크리에이터입니다.
-사람들이 "에? 진짜?" 하고 스크롤을 멈추게 만드는 5장의 카드를 만드세요.
-시장 데이터를 단순 나열하지 말고, '반직관적 사실'과 '일상 비유'로 변환하세요.
+[핵심 전략: 1장에 모든 걸 담는 고효율 카드]
+당신은 토스증권의 SNS 콘텐츠 기획자입니다.
+5장짜리 정보 나열 카드뉴스는 이제 끝났습니다. 바쁜 현대인을 위해 인스타 스와이프 없이 '단 1장'으로 끝나는 직관적인 카드뉴스를 만드세요.
 
-[슬라이드 전략 — 정확히 5장]
+[슬라이드 전략 — 단 1장 (올인원)]
 {
   "slides": [
     {
-      "type": "hook",
-      "question": "반직관적 질문 — 스크롤을 멈추게 하는 한 문장 (20자 이내)",
-      "teaser": "궁금증을 증폭시키는 힌트 (25자 이내)",
-      "badge": "${today} 브리핑"
-    },
-    {
-      "type": "surprise",
-      "title": "놀라운 답변 (15자 이내)",
-      "body": "답변의 맥락과 '더 놀라운 사실'. 오늘 시장 데이터를 일상 물건에 비유 (80자 이내)",
-      "highlight": "핵심 수치 하나 (예: +5.2%)"
-    },
-    {
-      "type": "wallet",
-      "title": "내 지갑에 미치는 영향 💰",
-      "items": [
-        { "scenario": "구체적 상황 (예: 해외직구)", "impact": "금액 영향 (예: 3,000원↑)", "emoji": "적절한 이모지", "sentiment": "negative" },
-        { "scenario": "구체적 상황", "impact": "금액 영향", "emoji": "이모지", "sentiment": "positive" },
-        { "scenario": "구체적 상황", "impact": "금액 영향", "emoji": "이모지", "sentiment": "negative" }
-      ]
-    },
-    {
-      "type": "insider",
-      "title": "증권사가 안 알려주는 것 🤫",
-      "body": "전문가만 아는 인사이트. 구글링하고 싶어지는 내용 (80자 이내)",
-      "searchKeyword": "독자가 검색할 만한 키워드 1개"
-    },
-    {
-      "type": "cta",
-      "headline": "이 이야기의 끝이 궁금하다면?",
-      "url": "econpedia.dedyn.io",
-      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕",
-      "teaser": "내일 카드뉴스 예고 한 줄 (25자 이내)"
+      "type": "all_in_one",
+      "headline": "가장 인상적인 한 문장 (독자가 멈칫할 만한 내용)",
+      "badge": "${today} 시장 분석",
+      "walletItems": [
+         { "label": "항목1 (예: 여행)", "impact": "금액/결과 (예: 1만원 상승)", "trend": "up" },
+         { "label": "항목2", "impact": "결과", "trend": "down" },
+         { "label": "항목3", "impact": "결과", "trend": "flat" }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
     }
   ]
 }
 
 [필수 규칙]
-- hook의 question: 반드시 "?'로 끝나는 의문문. 숫자 포함 시 임팩트 2배
-  - 좋은 예: "커피값으로 삼성전자 살 수 있던 시절이 있었다고?"
-  - 나쁜 예: "오늘 코스피 상승했습니다" (이건 뉴스지 카드뉴스가 아님)
-- surprise: "그런데 더 놀라운 건..." 패턴으로 시작. 오늘 데이터를 일상 물건(치킨값, 택시비, 넷플릭스 구독료 등)에 비유
-- wallet의 items: 월급 300만원 직장인 기준, 구체적 금액으로 환산. 최소 3개
-- wallet의 각 item에 "sentiment" 필드 필수: 독자 지갑에 좋으면 "positive", 나쁘면 "negative". 예) 해외직구 비용 증가 → "negative", 펀드 수익 증가 → "positive"
-- insider의 searchKeyword: 독자가 이 키워드를 구글에 검색하면 관련 심층 기사를 찾을 수 있는 것
-- cta의 teaser: "내일은 OOO에 대해 파헤칩니다" 식으로 기대감 조성
-- 모든 텍스트: 카드뉴스는 글자가 적을수록 좋음 — 간결하게!
-- 전문용어 절대 금지. 친구에게 카톡으로 설명하는 톤
+- headline: 거시경제 용어 말고 일상 용어 사용.
+- walletItems: 제공된 '지갑 영향 요약' 데이터를 기반으로 최대한 채워주세요. (trend는 up, down, flat 중 하나)
 `;
 
-  const userMessage = `다음은 오늘 아침의 최신 금융/경제 데이터입니다:
+  const userMessage = `다음은 오늘 아침의 최신 시장/지갑 영향 데이터입니다:
 
+[시장 데이터]
 ${marketDataString}
 
-위 데이터를 분석하되, 단순히 "코스피가 올랐다/내렸다"가 아니라
-독자가 "에? 진짜?" 하고 스크롤을 멈추는 반직관적 사실을 찾아서
-인스타그램 카드뉴스용 5장 슬라이드 JSON을 생성해주세요.
-데이터를 나열하지 말고, 이야기를 만드세요.`;
+[지갑 영향 요약]
+${weatherData.walletSummary}
+
+위 데이터를 바탕으로, 단 1장에 들어갈 "올인원 경제 가이드" JSON을 생성해주세요.`;
 
   return { system: system + instructions, user: userMessage };
 }

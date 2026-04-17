@@ -1,0 +1,313 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+import fs from 'fs';
+import path from 'path';
+
+// Load market data
+let marketData = { weatherData: { weather: 'sunny', emoji: '☀️', label: '맑음', headline: '오늘은 평화로운 날이에요', color: '#34d399', walletImpacts: [] } };
+try {
+  const mdPath = path.resolve(process.cwd(), '.market-data.json');
+  if (fs.existsSync(mdPath)) {
+    marketData = JSON.parse(fs.readFileSync(mdPath, 'utf8'));
+    if (!marketData.weatherData) marketData.weatherData = { weather: 'cloudy', emoji: '☁️', label: '흐림', headline: '위젯 데이터를 로딩중입니다...', color: '#94a3b8', walletImpacts: [] };
+  }
+} catch (e) {
+  console.warn('Could not load .market-data.json', e.message);
+}
+
+const w = marketData.weatherData;
+
+const impactIcons = {
+  housing: 'home',
+  travel: 'airplane',
+  grocery: 'shopping-cart',
+  gasoline: 'gas-pump',
+  investment: 'chart-pie',
+  crypto: 'currency-bitcoin',
+  us_stock: 'flag-usa',
+  calm: 'smile'
+};
+
+const getGuideLink = (category) => {
+  const map = {
+    housing: '/economy/finance',
+    travel: '/economy/global',
+    grocery: '/economy/finance',
+    gasoline: '/economy/finance',
+    investment: '/economy/investment',
+    crypto: '/economy/investment',
+    us_stock: '/economy/global'
+  };
+  return map[category] || '/economy/basics';
+};
+---
+
+<BaseLayout
+  title="내 지갑 대시보드"
+  description="오늘의 거시경제 변화가 내 생활비에 미치는 영향을 단 1초 만에 확인하세요."
+>
+  <div class="container">
+    <div class="page-header" style="margin-top: 40px; margin-bottom: 40px; text-align: center;">
+      <span class="page-badge" style="background: var(--color-accent-primary-alpha); color: var(--color-accent-primary); padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 14px;">Wallet X-Ray</span>
+      <h1 class="page-title" style="margin-top: 16px; font-size: 42px; font-weight: 800;">내 지갑 대시보드</h1>
+      <p class="page-subtitle" style="margin-top: 12px; font-size: 18px; color: var(--text-muted); max-width: 600px; margin-inline: auto;">
+        거시경제 숫자 말고, **내 지갑에서 빠져나가는 진짜 돈**을 보여드립니다. 오늘 하루 내 자산과 소비에 영향을 주는 변화를 확인하세요.
+      </p>
+    </div>
+
+    <!-- Weather summary card -->
+    <div class="wallet-summary" style={`background: radial-gradient(circle at top right, ${w.color}15, transparent); border: 1px solid ${w.color}30; border-radius: 24px; padding: 32px; margin-bottom: 48px; text-align: center;`}>
+      <div style={`display: flex; justify-content: center; color: ${w.color}; margin-bottom: 16px;`}>
+        <Icon name={`weather-${w.weather}`} size={64} />
+      </div>
+      <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">{w.label}</h2>
+      <p style="font-size: 20px; color: var(--text-primary);">{w.headline}</p>
+    </div>
+
+    <!-- Detail Grid -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
+      <h2 style="font-size: 24px; font-weight: 700; margin: 0;">세부 지갑 영향 (오늘 기준)</h2>
+      <button id="open-wallet-settings" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--gradient-primary); color: white; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;">
+        <Icon name="settings" size={16} /> 내 지갑 맞춤설정
+      </button>
+    </div>
+    <div class="wallet-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 64px;">
+      {w.walletImpacts && w.walletImpacts.length > 0 ? (
+        w.walletImpacts.map((im) => (
+          <div class="wallet-card" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s;">
+            <div class="wallet-card__header" style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="display: inline-flex; color: var(--text-muted);">
+                  <Icon name={impactIcons[im.category] || 'document'} size={32} />
+                </span>
+                <span style="font-size: 18px; font-weight: 600; color: var(--text-muted);">{im.label}</span>
+              </div>
+              <div class="wallet-card__badge" style={`padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; background: ${im.sentiment === 'positive' ? '#10b98120' : im.sentiment === 'negative' ? '#ef444420' : '#6b728020'}; color: ${im.sentiment === 'positive' ? '#10b981' : im.sentiment === 'negative' ? '#ef4444' : '#6b7280'};`}>
+                {im.sentiment === 'positive' ? '긍정적' : im.sentiment === 'negative' ? '부정적' : '평안함'}
+              </div>
+            </div>
+            
+            <div class="wallet-card__body">
+              <div class="wallet-card__value" style={`font-size: 26px; font-weight: 800; line-height: 1.3; color: ${im.sentiment === 'positive' ? '#10b981' : im.sentiment === 'negative' ? '#ef4444' : 'var(--text-primary)'};`}>
+                {im.message.split(' (')[0]}
+              </div>
+              {im.message.includes('(') && (
+                <div class="wallet-card__note" style="margin-top: 8px; font-size: 14px; color: var(--text-muted);">
+                  {im.message.substring(im.message.indexOf('('))}
+                </div>
+              )}
+            </div>
+
+            {im.category !== 'calm' && (
+              <div class="wallet-card__action" style="margin-top: auto; padding-top: 16px; border-top: 1px dashed var(--border-color);">
+                <a href={getGuideLink(im.category)} style="text-decoration: none; width: 100%; background: transparent; border: none; color: var(--color-accent-primary); font-weight: 600; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  대응 가이드 보기 <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <div style="grid-column: 1 / -1; padding: 48px; text-align: center; color: var(--text-muted); background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color);">
+          데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.
+        </div>
+      )}
+    </div>
+
+    <!-- Personalization Modal -->
+    <div id="settings-modal" style="display: none; position: fixed; inset: 0; z-index: 2000; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+      <div style="background: var(--bg-card); padding: 32px; border-radius: 24px; width: 90%; max-width: 480px; box-shadow: 0 24px 64px rgba(0,0,0,0.4); max-height: 90vh; overflow-y: auto;">
+        <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 8px;">내 지갑 맞춤설정</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">실제 데이터를 입력하면 더 정확하게 계산해 드립니다. 브라우저에만 안전하게 저장됩니다.</p>
+        
+        <form id="settings-form" style="display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">주담대/전세대출 원금 (원)</label>
+            <input type="number" id="input-housing" placeholder="예: 300000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">월 식료품/외식비 (원)</label>
+            <input type="number" id="input-grocery" placeholder="예: 800000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">1회 주유비 (원)</label>
+            <input type="number" id="input-gasoline" placeholder="예: 50000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">국내 주식 투자금 (원)</label>
+            <input type="number" id="input-investment" placeholder="예: 10000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">미국 주식/ETF 투자금 (원)</label>
+            <input type="number" id="input-us_stock" placeholder="예: 5000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">비트코인 투자금 (원)</label>
+            <input type="number" id="input-crypto" placeholder="예: 1000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">해외여행/직구 예산 (원)</label>
+            <input type="number" id="input-travel" placeholder="예: 1000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+          </div>
+          
+          <div style="display: flex; gap: 12px; margin-top: 16px;">
+            <button type="button" id="close-wallet-settings" style="flex: 1; padding: 14px; background: var(--color-bg-primary); border: 1px solid var(--border-color); border-radius: 12px; color: var(--color-text-primary); font-weight: 600; cursor: pointer;">취소</button>
+            <button type="submit" style="flex: 1; padding: 14px; background: var(--color-accent-primary); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">저장하고 계산하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <script id="market-raw-data" type="application/json" set:html={JSON.stringify(marketData.raw || {})}></script>
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const rawDataEl = document.getElementById('market-raw-data');
+        if (!rawDataEl) return;
+        const raw = JSON.parse(rawDataEl.textContent);
+        
+        const DEFAULTS = {
+          housing: 300000000,
+          grocery: 800000,
+          gasoline: 50000,
+          investment: 10000000,
+          us_stock: 5000000,
+          crypto: 1000000,
+          travel: 1000000
+        };
+
+        const loadSettings = () => {
+          const saved = localStorage.getItem('econpedia_wallet_settings');
+          return saved ? { ...DEFAULTS, ...JSON.parse(saved) } : DEFAULTS;
+        };
+
+        const settings = loadSettings();
+
+        // Modals logic
+        const modal = document.getElementById('settings-modal');
+        const openBtn = document.getElementById('open-wallet-settings');
+        const closeBtn = document.getElementById('close-wallet-settings');
+        const form = document.getElementById('settings-form');
+
+        if(openBtn) {
+          openBtn.addEventListener('click', () => {
+            Object.keys(DEFAULTS).forEach(key => {
+              const input = document.getElementById('input-' + key);
+              if (input) input.value = settings[key];
+            });
+            modal.style.display = 'flex';
+          });
+        }
+
+        if(closeBtn) {
+          closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+          });
+        }
+
+        if(form) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            Object.keys(DEFAULTS).forEach(key => {
+              const input = document.getElementById('input-' + key);
+              if (input) {
+                settings[key] = input.value === '' ? DEFAULTS[key] : Number(input.value);
+              }
+            });
+            localStorage.setItem('econpedia_wallet_settings', JSON.stringify(settings));
+            modal.style.display = 'none';
+            recalculate();
+          });
+        }
+
+        const formatChange = (change, upText, downText) => {
+          if (change === 0) return '변동 없어요 😌';
+          return change > 0 ? upText : downText;
+        };
+
+        // Recalculation logic
+        const recalculate = () => {
+          // 1. Housing (Base Rate)
+          if (raw.baseRate) {
+            const change = Math.round((settings.housing * (raw.baseRate.change / 100)) / 12);
+            updateCard('housing', `내 대출금 기준 이번 달 이자가 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '늘었어요', '줄었어요')}`);
+          }
+          // 2. Grocery (CPI)
+          if (raw.cpi) {
+            const change = Math.round(settings.grocery * (raw.cpi.changePercent / 100));
+            updateCard('grocery', `내 식비 기준 체감 물가가 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '내렸어요')}`);
+          }
+          // 3. Gasoline (WTI Oil)
+          if (raw.oil) {
+            const change = Math.round(settings.gasoline * (raw.oil.changePercent / 100) * 0.5);
+            updateCard('gasoline', `1회 주유 시 체감 비용이 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '내렸어요')}`);
+          }
+          // 4. Investment (KOSPI)
+          if (raw.kospi) {
+            const change = Math.round(settings.investment * (raw.kospi.changePercent / 100));
+            updateCard('investment', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`);
+          }
+          // 5. US Stock (S&P500 + KRW)
+          if (raw.sp500 && raw.krw) {
+            const change = Math.round(settings.us_stock * ((raw.sp500.changePercent + raw.krw.changePercent) / 100));
+            updateCard('us_stock', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`);
+          }
+          // 6. Travel (KRW)
+          if (raw.krw) {
+            const change = Math.round(settings.travel * (raw.krw.changePercent / 100));
+            updateCard('travel', `내 예산 기준 환전 시 ${Math.abs(change).toLocaleString()}원 더 ${formatChange(change, '비싸졌어요', '아꼈어요')}`);
+          }
+          // 7. Crypto (Bitcoin)
+          if (raw.bitcoin) {
+            const change = Math.round(settings.crypto * (raw.bitcoin.changePercent / 100));
+            updateCard('crypto', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`);
+          }
+        };
+
+        const updateCard = (category, newMessage) => {
+          // Find the card by checking its category icon or title
+          const cards = document.querySelectorAll('.wallet-card');
+          cards.forEach(card => {
+            const badge = card.querySelector('.wallet-card__header span:nth-child(2)');
+            if (!badge) return;
+            const text = badge.textContent.trim();
+            // Map category to rough Korean label matching
+            const map = {
+              'housing': '주거비',
+              'grocery': '장바구니',
+              'gasoline': '주유비',
+              'investment': '국내 주식',
+              'us_stock': '미국 주식',
+              'crypto': '비트코인',
+              'travel': '해외여행',
+            };
+            if (text.includes(map[category])) {
+              const valEl = card.querySelector('.wallet-card__value');
+              if (valEl) {
+                // small flash animation
+                valEl.style.opacity = '0';
+                setTimeout(() => {
+                  valEl.textContent = newMessage;
+                  valEl.style.opacity = '1';
+                }, 150);
+              }
+            }
+          });
+        };
+
+        // Run once on load if settings are saved
+        if (localStorage.getItem('econpedia_wallet_settings')) {
+          recalculate();
+        }
+      });
+    </script>
+  </div>
+</BaseLayout>
+
+<style>
+  .wallet-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent-primary-alpha);
+  }
+</style>

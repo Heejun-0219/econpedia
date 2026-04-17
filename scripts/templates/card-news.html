@@ -66,6 +66,20 @@
       font-weight: 600;
     }
 
+    /* ── 올인원 슬라이드 (Phase 1) ──────── */
+    .all-in-one-slide { background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0a0f1e 100%); }
+    .aio__headline { font-size: 60px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.3; margin-bottom: 48px; background: linear-gradient(135deg, #f9fafb 0%, #93c5fd 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .aio__wallet-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 40px; display: flex; flex-direction: column; gap: 24px; margin-bottom: 48px; }
+    .aio-item { display: flex; align-items: center; justify-content: space-between; }
+    .aio-item__label { font-size: 28px; font-weight: 600; color: rgba(255, 255, 255, 0.8); display: flex; align-items: center; gap: 16px; }
+    .aio-item__impact { font-size: 32px; font-weight: 800; }
+    .aio-item__impact.up { color: #f87171; } /* 비용 증가 등 부정적 의미로 주로 쓰임, 색상은 데이터에 따라 매핑 */
+    .aio-item__impact.down { color: #34d399; }
+    .aio-item__impact.flat { color: #9ca3af; }
+    .aio__cta { font-size: 24px; color: #93c5fd; display: flex; align-items: center; gap: 12px; font-weight: 700; margin-top: auto; justify-content: center; }
+    .aio__logo-watermark { position: absolute; right: 0; bottom: 0; opacity: 0.05; width: 400px; height: 400px; pointer-events: none; }
+
+
     /* ── 1. HOOK 슬라이드 (구 커버) ──────── */
     .hook-slide { background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%); }
 
@@ -388,6 +402,26 @@
 </head>
 <body>
 
+  <!-- 슬라이드 0: All in One -->
+  <div class="slide all-in-one-slide active" id="slide-all-in-one">
+    <div class="slide-inner">
+      <div class="brand-bar">
+        <div class="brand-bar__logo">
+          <svg class="nav__logo-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="36" height="36"> <rect x="1" y="16" width="5" height="7" rx="1.5" fill="currentColor" opacity="0.3"></rect> <rect x="9.5" y="10" width="5" height="13" rx="1.5" fill="currentColor" opacity="0.65"></rect> <rect x="18" y="4" width="5" height="19" rx="1.5" fill="currentColor"></rect> <path d="M3.5 16 Q12 3.5 20.5 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"></path> </svg>
+          <span>EconPedia</span>
+        </div>
+        <span class="brand-bar__badge" id="aio-badge"></span>
+      </div>
+      <h1 class="aio__headline" id="aio-headline"></h1>
+      <div class="aio__wallet-box" id="aio-wallet-box"></div>
+      <div class="aio__cta">
+        <span id="aio-cta-text">전문 읽기</span>
+        <span style="opacity:0.5; margin-left:24px;" id="aio-cta-url">econpedia.dedyn.io</span>
+      </div>
+    </div>
+  </div>
+
+
   <!-- 슬라이드 1: Hook -->
   <div class="slide hook-slide active" id="slide-0">
     <div class="hook__glow"></div>
@@ -553,6 +587,30 @@
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
 
       const slide = slideData.slides[slideIndex];
+
+      // ── 올인원 타입 ────────────────────────────
+      if (slide.type === 'all_in_one') {
+        document.getElementById('aio-badge').textContent = slide.badge;
+        document.getElementById('aio-headline').textContent = slide.headline;
+        document.getElementById('aio-cta-text').textContent = slide.ctaText || '자세히 보기';
+        if (slide.url) document.getElementById('aio-cta-url').textContent = slide.url;
+        
+        const box = document.getElementById('aio-wallet-box');
+        box.innerHTML = '';
+        if (slide.walletItems && slide.walletItems.length > 0) {
+          for (const item of slide.walletItems) {
+            box.innerHTML += `
+              <div class="aio-item">
+                <span class="aio-item__label">${item.label}</span>
+                <span class="aio-item__impact ${item.trend || 'flat'}">${item.impact}</span>
+              </div>
+            `;
+          }
+        }
+        
+        document.getElementById('slide-all-in-one').classList.add('active');
+        return;
+      }
 
       // ── 새로운 바이럴 타입 ────────────────────────────
       if (slide.type === 'hook') {

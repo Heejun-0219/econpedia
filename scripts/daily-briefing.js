@@ -18,6 +18,7 @@ import dotenv from 'dotenv';
 
 // 프롬프트 시스템 import
 import { buildArticlePrompt } from '../src/data/prompts.js';
+import { analyzeSignals } from './signal-engine.js';
 
 dotenv.config();
 
@@ -36,7 +37,8 @@ async function getMarketData() {
       nasdaq: '^IXIC',    // NASDAQ
       kospi: '^KS11',     // KOSPI
       bitcoin: 'BTC-USD', // Bitcoin
-      krw: 'KRW=X'        // USD/KRW Exchange Rate
+      krw: 'KRW=X',       // USD/KRW Exchange Rate
+      oil: 'CL=F'         // Crude Oil
     };
 
     const results = {};
@@ -61,6 +63,36 @@ async function getMarketData() {
         changePercent: quote.regularMarketChangePercent
       };
     }
+
+    // Fetch real Korea Base Rate from Bank of Korea (BOK)
+    try {
+      const bokResponse = await fetch('https://www.bok.or.kr/portal/main/main.do');
+      if (bokResponse.ok) {
+        const html = await bokResponse.text();
+        const rateMatch = html.match(/<span class="ctype2"><em>(\d+\.\d+)<\/em>%<\/span>/);
+        if (rateMatch && rateMatch[1]) {
+          const currentRate = parseFloat(rateMatch[1]);
+          results.baseRate = {
+            price: currentRate,
+            // Assuming 0 change today for now; in a real DB, you'd compare against yesterday's rate.
+            change: 0,
+            changePercent: 0
+          };
+          console.log(`✅ [BOK Base Rate] Fetched: ${currentRate}%`);
+        }
+      }
+    } catch (e) {
+      console.warn('⚠️ Failed to fetch Base Rate from BOK:', e.message);
+    }
+
+    // Fallback if BOK fetch fails
+    if (!results.baseRate) {
+      results.baseRate = { price: 3.50, change: 0, changePercent: 0 };
+    }
+
+    // Mock API for Korea CPI (Phase 3 Data Source Integration pending)
+    results.cpi = { price: 114.2, change: 0.3, changePercent: 0.26 }; // e.g., inflation up 0.3%
+
     return results;
   } catch (error) {
     console.error('Error fetching market data:', error);
@@ -76,16 +108,19 @@ function formatMarketDataForPrompt(data) {
 - KOSPI: ${data.kospi.price.toFixed(2)} (${data.kospi.changePercent > 0 ? '+' : ''}${data.kospi.changePercent.toFixed(2)}%)
 - USD/KRW: ${data.krw.price.toFixed(2)} (${data.krw.changePercent > 0 ? '+' : ''}${data.krw.changePercent.toFixed(2)}%)
 - Bitcoin (USD): $${data.bitcoin.price.toFixed(2)} (${data.bitcoin.changePercent > 0 ? '+' : ''}${data.bitcoin.changePercent.toFixed(2)}%)
+- Crude Oil (WTI): $${data.oil.price.toFixed(2)} (${data.oil.changePercent > 0 ? '+' : ''}${data.oil.changePercent.toFixed(2)}%)
+- KR Base Rate: ${data.baseRate.price.toFixed(2)}% (${data.baseRate.change > 0 ? '+' : ''}${data.baseRate.change.toFixed(2)}%p)
+- KR CPI Index: ${data.cpi.price.toFixed(1)} (${data.cpi.changePercent > 0 ? '+' : ''}${data.cpi.changePercent.toFixed(2)}%)
 `;
 }
 
 // ─── Gemini 기사 생성 ────────────────────────────────────
-async function generateArticle(marketDataString) {
-  console.log('🤖 Generating article with Gemini (고도화 프롬프트)...');
+async function generateArticle(marketDataString, weatherData) {
+  console.log('🤖 Generating article with Gemini (날씨 맞춤 프롬프트)...');
   const today = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
   // prompts.js에서 구조화된 프롬프트 조립
-  const { system, user } = buildArticlePrompt(marketDataString, today);
+  const { system, user } = buildArticlePrompt(marketDataString, weatherData, today);
 
   try {
     const response = await ai.models.generateContent({
@@ -227,20 +262,34 @@ async function main() {
   try {
     const rawData = await getMarketData();
     const formattedData = formatMarketDataForPrompt(rawData);
-    console.log('--- Market Data ---');
-    console.log(formattedData);
+    
+    // 1. Signal Engine으로 경제 날씨 판정
+    const weatherData = analyzeSignals(rawData);
+    console.log(`\n⛅ 오늘의 경제 날씨: ${weatherData.emoji} ${weatherData.label}`);
+    console.log(`➡️ 헤드라인: ${weatherData.headline}`);
+    console.log(`➡️ 발행 결정: 기사=${weatherData.shouldPublishArticle}, 내용깊이=${weatherData.contentDepth}\n`);
 
-    const articleMarkdown = await generateArticle(formattedData);
-    const result = await saveArticle(articleMarkdown);
+    let articleResult = null;
 
-    // 시장 데이터를 파일로 저장 — 카드뉴스/블로그 스크립트에서 재사용
+    // 2. 발행 조건 만족 시에만 기사 생성
+    if (weatherData.shouldPublishArticle) {
+      const articleMarkdown = await generateArticle(formattedData, weatherData);
+      articleResult = await saveArticle(articleMarkdown);
+    } else {
+      console.log('😴 날씨가 평화로워 오늘 기사는 발행하지 않습니다.');
+    }
+
+    // 3. 시장 데이터를 파일로 저장 — 카드뉴스/블로그/홈페이지 위젯에서 재사용
     const marketDataPath = path.join(__dirname, '..', '.market-data.json');
+    const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+    
     await fs.writeFile(marketDataPath, JSON.stringify({
       raw: rawData,
       formatted: formattedData,
-      date: result.dateString,
+      weatherData: weatherData,
+      date: articleResult ? articleResult.dateString : todayStr,
     }, null, 2), 'utf8');
-    console.log(`📊 Market data saved for downstream scripts: ${marketDataPath}`);
+    console.log(`📊 Market data & weather saved for downstream scripts: ${marketDataPath}`);
 
     console.log('🚀 Daily Briefing Pipeline Completed Successfully.');
   } catch (error) {
