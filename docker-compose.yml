@@ -1,12 +1,45 @@
 services:
-  econpedia:
+  nginx:
     image: ghcr.io/heejun-0219/econpedia:latest
-    container_name: econpedia
+    container_name: econpedia-nginx
     restart: unless-stopped
+    command: ["nginx", "-g", "daemon off;"]
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - api
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "0.2"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  api:
+    image: ghcr.io/heejun-0219/econpedia:latest
+    container_name: econpedia-api
+    restart: unless-stopped
+    command: ["node", "server.js"]
+    working_dir: /app/api
+    env_file:
+      - .env
+    volumes:
+      - /opt/econpedia/data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
       interval: 30s
       timeout: 3s
       retries: 3
@@ -15,7 +48,7 @@ services:
       resources:
         limits:
           memory: 256M
-          cpus: "0.5"
+          cpus: "0.3"
     logging:
       driver: "json-file"
       options:

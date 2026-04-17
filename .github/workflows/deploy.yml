@@ -45,91 +45,48 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # === 5. Zero-Downtime Deploy to Oracle Cloud (Optimized) ===
-      - name: 🚀 Deploy to Oracle Cloud
+      # === 5. Copy Docker Compose File ===
+      - name: 📁 Copy docker-compose.yml to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USER }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/opt/econpedia"
+
+      # === 6. Deploy via Docker Compose (Graceful) ===
+      - name: 🚀 Deploy via Docker Compose
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.OCI_HOST }}
           username: ${{ secrets.OCI_USER }}
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
+            cd /opt/econpedia
+            
             echo "🔐 GHCR Login..."
             echo "${{ secrets.GHCR_TOKEN }}" | sudo docker login ghcr.io -u heejun-0219 --password-stdin
 
-            IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-            
+            echo "📝 Creating .env file securely..."
+            cat << 'EOF' > .env
+            RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
+            RESEND_AUDIENCE_ID=${{ secrets.RESEND_AUDIENCE_ID }}
+            ALLOWED_ORIGIN=https://econpedia.dedyn.io
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+            EOF
+            chmod 600 .env
+
             echo "📥 Pulling latest image..."
-            sudo docker pull $IMAGE
+            sudo docker compose pull
 
-            # --- PREPARE NEW CONTAINER ---
-            echo "🆕 Starting NEW container for health check..."
-            sudo docker rm -f econpedia-new 2>/dev/null || true
-            
-            # Start new container on temp ports to check health
-            sudo docker run -d \
-              --name econpedia-new \
-              --restart unless-stopped \
-              -p 8080:80 -p 8443:443 \
-              -v /etc/letsencrypt:/etc/letsencrypt:ro \
-              -v /opt/econpedia/data:/app/data \
-              -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
-              -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
-              -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
-              -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
-              -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
-              --memory=384m --cpus=0.5 \
-              --health-cmd="wget -qO /dev/null http://localhost/health || exit 1" \
-              --health-interval=5s --health-timeout=3s --health-retries=5 \
-              $IMAGE
-
-            echo "⏳ Waiting for health check..."
-            HEALTHY=false
-            for i in $(seq 1 30); do
-              STATUS=$(sudo docker inspect --format='{{.State.Health.Status}}' econpedia-new 2>/dev/null || echo "starting")
-              if [ "$STATUS" = "healthy" ]; then
-                HEALTHY=true
-                break
-              fi
-              echo "   Health: $STATUS ($i/30)"
-              sleep 2
-            done
-
-            if [ "$HEALTHY" = false ]; then
-              echo "❌ Health check FAILED. Aborting."
-              sudo docker logs econpedia-new --tail 50
-              sudo docker rm -f econpedia-new
-              exit 1
-            fi
-
-            echo "✅ Health check PASSED. Swapping containers..."
-
-            # --- ATOMIC SWAP (Minimize Downtime) ---
-            sudo docker stop econpedia 2>/dev/null || true
-            sudo docker rm econpedia 2>/dev/null || true
-            
-            # Now we stop the 'new' one briefly to rename and re-map to main ports
-            # This is the most resource-efficient way on single-node OCI
-            sudo docker stop econpedia-new
-            sudo docker rm econpedia-new
-
-            echo "🚀 Final start on production ports..."
-            sudo docker run -d \
-              --name econpedia \
-              --restart unless-stopped \
-              -p 80:80 -p 443:443 \
-              -v /etc/letsencrypt:/etc/letsencrypt:ro \
-              -v /opt/econpedia/data:/app/data \
-              -e RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}" \
-              -e RESEND_AUDIENCE_ID="${{ secrets.RESEND_AUDIENCE_ID }}" \
-              -e ALLOWED_ORIGIN="https://econpedia.dedyn.io" \
-              -e TELEGRAM_BOT_TOKEN="${{ secrets.TELEGRAM_BOT_TOKEN }}" \
-              -e TELEGRAM_CHAT_ID="${{ secrets.TELEGRAM_CHAT_ID }}" \
-              --memory=384m --cpus=0.5 \
-              $IMAGE
+            echo "🚀 Starting new containers with minimal downtime..."
+            # docker compose up -d recreates containers that have changes.
+            # with nginx and api split, they will restart gracefully without command line secrets exposure.
+            sudo docker compose up -d
 
             echo "🧹 Cleanup..."
             sudo docker image prune -f
             echo "✨ Deployment successful!"
-            sudo docker ps -a --filter name=econpedia
-
-
+            sudo docker compose ps

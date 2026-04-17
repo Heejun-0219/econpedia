@@ -56,9 +56,24 @@ async function flushStats() {
 
 // 30초마다 디스크에 기록 (테스트 및 안정성 강화)
 setInterval(flushStats, 30 * 1000);
-// 프로세스 종료 시에도 저장
-process.on('SIGTERM', async () => { await flushStats(); process.exit(0); });
-process.on('SIGINT', async () => { await flushStats(); process.exit(0); });
+// 프로세스 종료 시에도 저장 (Graceful Shutdown)
+const shutdown = () => {
+  console.log('⚠️ SIGTERM/SIGINT 수신. API 서버 Graceful Shutdown 시작...');
+  server.close(async () => {
+    console.log('✅ 기존 연결 처리 완료 및 HTTP 서버 종료.');
+    await flushStats();
+    process.exit(0);
+  });
+  
+  // 5초 내에 정상 종료되지 않으면 강제 종료
+  setTimeout(() => {
+    console.error('🚨 Graceful Shutdown 타임아웃. 강제 종료합니다.');
+    process.exit(1);
+  }, 5000);
+};
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
 
 
 // ─── 간단한 인메모리 Rate Limiter ────────────────────────
