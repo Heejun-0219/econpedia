@@ -1,0 +1,53 @@
+{
+  "slides": [
+    {
+      "type": "hook",
+      "question": "코스피 6000 돌파(+2%), 진짜라고?",
+      "teaser": "환율 1475원인데 이게 가능해?",
+      "badge": "2026-04-16 브리핑"
+    },
+    {
+      "type": "surprise",
+      "title": "환율과 주가의 배신 😲",
+      "body": "달러 비싸면 주가 내린다는 건 옛말! 놀라운 건 수출 실적이 치킨값 오르듯 뛰며 코스피(한국 주가지수)를 크게 끌어올렸다는 거예요.",
+      "highlight": "코스피 +2.07%"
+    },
+    {
+      "type": "wallet",
+      "title": "내 지갑에 미치는 영향 💰",
+      "items": [
+        {
+          "scenario": "100달러 영양제 해외직구",
+          "impact": "환율 1475원 적용, 약 5천원 더 냄",
+          "emoji": "💊",
+          "sentiment": "negative"
+        },
+        {
+          "scenario": "국내 인덱스 펀드 100만원",
+          "impact": "코스피 상승(+2.07%)으로 2만원 수익",
+          "emoji": "📈",
+          "sentiment": "positive"
+        },
+        {
+          "scenario": "나스닥 ETF 100만원",
+          "impact": "주가(+1.59%) 올라 1.5만원 수익",
+          "emoji": "🦅",
+          "sentiment": "positive"
+        }
+      ]
+    },
+    {
+      "type": "insider",
+      "title": "증권사가 안 알려주는 것 🤫",
+      "body": "지수가 올라도 다 오르는 건 아니에요. 고환율 혜택을 보는 수출주와 재료비 부담이 커진 내수주(국내 소비재 기업)의 양극화가 심해질 수 있어요.",
+      "searchKeyword": "고환율 수혜주"
+    },
+    {
+      "type": "cta",
+      "headline": "이 이야기의 끝이 궁금하다면?",
+      "url": "econpedia.dedyn.io",
+      "message": "EconPedia에서 매일 아침 경제 브리핑을 받아보세요 ☕",
+      "teaser": "내일은 비트코인 7만불의 비밀 파헤치기!"
+    }
+  ]
+}
