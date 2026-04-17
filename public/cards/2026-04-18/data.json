@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "기름값 2천원 아꼈는데, 밥값으로 2천원 더 나가요 🥲",
+      "badge": "2026-04-18 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "⛽ 주유비",
+          "impact": "5만원 주유 시 약 1,966원 아껴요",
+          "trend": "down"
+        },
+        {
+          "label": "🛒 장바구니",
+          "impact": "월 식비 80만원 기준 2,080원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "📊 국내 주식",
+          "impact": "1천만원 투자 시 약 5만 5천원 빠졌어요",
+          "trend": "down"
+        },
+        {
+          "label": "₿ 비트코인",
+          "impact": "100만원 투자 시 약 3만 3천원 올랐어요",
+          "trend": "up"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
