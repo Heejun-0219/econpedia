@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
+import TickerLogo from '../../components/TickerLogo.astro';
 
 // Import investors and their analysis data
 let analyses = [];
@@ -98,7 +99,13 @@ const categories = [
           return (
             <a href={`/portfolio/${analysis.slug}`} class={`portfolio-card ${analysis.category === 'insider' ? (analysis.isBuy ? 'insider-buy' : 'insider-sell') : ''}`} data-category={info.category}>
               <div class="portfolio-card__header">
-                <div class="portfolio-card__avatar investor-initials">{info.initials}</div>
+                <TickerLogo
+                  domain={info.domain}
+                  initials={info.initials}
+                  name={info.name}
+                  size={40}
+                  class="portfolio-card__avatar"
+                />
                 <div class="portfolio-card__meta">
                   <span class="portfolio-card__category" style={analysis.category === 'insider' ? (analysis.isBuy ? 'color:#10b981;' : 'color:#ef4444;') : ''}>
                     {analysis.category === 'insider' ? (analysis.isBuy ? 'BUY' : 'SELL') : catName}
@@ -186,35 +193,13 @@ const categories = [
 }
 .portfolio-card:hover::before { opacity: 1; }
 
-.investor-initials {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--color-accent-primary);
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  letter-spacing: 0.02em;
-}
-
 .portfolio-card__header {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 1rem;
 }
-.portfolio-card__avatar {
-  font-size: 2rem;
-  background: var(--color-background);
-  width: 48px; height: 48px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-}
+/* .portfolio-card__avatar 스타일은 TickerLogo 컴포넌트가 담당 */
 .portfolio-card__meta {
   display: flex;
   flex-direction: column;

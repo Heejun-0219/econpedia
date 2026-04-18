@@ -6,6 +6,7 @@
     "cik": "0001045810",
     "country": "us",
     "initials": "NV",
+    "domain": "nvidia.com",
     "lastFilingDate": "2026-03-24"
   },
   {
@@ -15,6 +16,7 @@
     "cik": "0000320193",
     "country": "us",
     "initials": "AP",
+    "domain": "apple.com",
     "lastFilingDate": "2026-04-17"
   },
   {
@@ -24,6 +26,7 @@
     "cik": "0001318605",
     "country": "us",
     "initials": "TS",
+    "domain": "tesla.com",
     "lastFilingDate": "2026-04-02"
   },
   {
@@ -33,6 +36,7 @@
     "cik": "0001326801",
     "country": "us",
     "initials": "ME",
+    "domain": "meta.com",
     "lastFilingDate": "2026-04-17"
   },
   {
@@ -43,6 +47,7 @@
     "corp_code": "00126380",
     "country": "kr",
     "initials": "SE",
+    "domain": "samsung.com",
     "lastFilingDate": "2026-04-08"
   },
   {
@@ -53,6 +58,7 @@
     "corp_code": "00164742",
     "country": "kr",
     "initials": "HY",
+    "domain": "hyundai.com",
     "lastFilingDate": "2026-04-08"
   },
   {
@@ -63,6 +69,7 @@
     "corp_code": "00266961",
     "country": "kr",
     "initials": "NA",
+    "domain": "naver.com",
     "lastFilingDate": "2026-04-10"
   }
 ]

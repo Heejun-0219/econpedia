@@ -68,11 +68,98 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Visit Tracker -->
     <script is:inline>
-      // 페이지 로드 시 한 번만 방문자 카운트 올리기 (간단한 세션 스토리지 체크로 중복 방지)
+      // 기존 단순 방문자 카운트
       if (!sessionStorage.getItem('visited')) {
         fetch('/api/track').catch(() => {});
         sessionStorage.setItem('visited', '1');
       }
+    </script>
+
+    <!-- Analytics Tracker (체류 시간 / 이탈률 자체 분석 로직) -->
+    <script is:inline>
+      (function() {
+        try {
+          const SESSION_KEY = 'ep_session_id';
+          const PAGE_VIEW_KEY = 'ep_page_views';
+          let sessionId = sessionStorage.getItem(SESSION_KEY);
+          let isNewSession = false;
+          
+          if (!sessionId) {
+            sessionId = 'sess_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem(SESSION_KEY, sessionId);
+            sessionStorage.setItem(PAGE_VIEW_KEY, '1');
+            isNewSession = true;
+          } else {
+            sessionStorage.setItem(PAGE_VIEW_KEY, parseInt(sessionStorage.getItem(PAGE_VIEW_KEY) || '1') + 1);
+          }
+
+          const pageViews = parseInt(sessionStorage.getItem(PAGE_VIEW_KEY));
+          const isFirstPage = pageViews === 1;
+
+          // 1. Pageview 기록
+          fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'pageview', path: window.location.pathname, isNewSession })
+          }).catch(() => {});
+
+          let startTime = Date.now();
+          let totalTimeSent = 0;
+
+          // 2. 체류 시간 및 이탈률 전송 함수
+          function sendAnalytics(isUnload = false) {
+            const timeSpent = Math.floor((Date.now() - startTime) / 1000) - totalTimeSent;
+            
+            if (timeSpent > 0) {
+              const dwellPayload = JSON.stringify({ type: 'dwell', timeSpent, path: window.location.pathname });
+              
+              if (isUnload && navigator.sendBeacon) {
+                navigator.sendBeacon('/api/analytics', dwellPayload);
+                
+                // 10초 미만 체류 후 사이트를 떠나고, 조회한 페이지가 1개뿐이면 이탈(Bounce)로 간주
+                if (isFirstPage && (timeSpent + totalTimeSent) < 10) {
+                  navigator.sendBeacon('/api/analytics', JSON.stringify({ type: 'bounce', path: window.location.pathname }));
+                }
+              } else if (!isUnload) {
+                fetch('/api/analytics', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: dwellPayload
+                }).catch(() => {});
+                totalTimeSent += timeSpent;
+              }
+            }
+          }
+
+          // 15초마다 주기적으로 체류 시간 동기화
+          setInterval(() => {
+            if (document.visibilityState === 'visible') {
+              sendAnalytics();
+            }
+          }, 15000);
+
+          // 탭 변경/종료 시 처리
+          document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+              sendAnalytics(true);
+            } else {
+              startTime = Date.now();
+              totalTimeSent = 0;
+            }
+          });
+        } catch(e) {
+          console.error('Analytics tracking error:', e);
+        }
+      })();
+    </script>
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ECONPEDIA1"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ECONPEDIA1');
     </script>
 
     <!-- Google AdSense -->

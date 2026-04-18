@@ -78,7 +78,8 @@ function formatDate(dateStr) {
   <!-- Hero (Weather Widget) -->
   <section class="hero" style={`background: radial-gradient(circle at center, ${w.color}15 0%, transparent 70%); border-bottom: 1px solid ${w.color}30;`}>
     <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-      <span class="hero__badge" style={`color: ${w.color}; background: ${w.color}20; border: 1px solid ${w.color}40;`}>
+      <span class="hero__badge" style={`color: ${w.color}; background: ${w.color}20; border: 1px solid ${w.color}40; display: inline-flex; align-items: center; gap: 6px;`}>
+        <Icon name="econ-weather" size={16} />
         오늘의 경제 날씨
       </span>
       <h1 class="hero__title" style="margin-top: 24px; font-size: clamp(40px, 8vw, 64px); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 16px;">

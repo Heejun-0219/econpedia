@@ -199,6 +199,32 @@ const server = createServer(async (req, res) => {
     return sendJSON(res, 200, { success: true });
   }
 
+  // ── POST /api/analytics (체류 시간 / 이탈률 수집) ───────────────
+  if (req.method === 'POST' && path === '/api/analytics') {
+    let body;
+    try { body = await parseBody(req); }
+    catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
+
+    const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+    if (!stats.analytics) stats.analytics = { daily: {} };
+    if (!stats.analytics.daily[todayStr]) {
+      stats.analytics.daily[todayStr] = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0 };
+    }
+    
+    const todayStats = stats.analytics.daily[todayStr];
+    
+    if (body.type === 'pageview') {
+      todayStats.pageviews += 1;
+      if (body.isNewSession) todayStats.sessions += 1;
+    } else if (body.type === 'dwell') {
+      todayStats.totalDwell += (body.timeSpent || 0);
+    } else if (body.type === 'bounce') {
+      todayStats.bounces += 1;
+    }
+
+    return sendJSON(res, 200, { success: true });
+  }
+
   // ── POST /api/subscribe ────────────────────────────────
   if (req.method === 'POST' && path === '/api/subscribe') {
     // Rate limit

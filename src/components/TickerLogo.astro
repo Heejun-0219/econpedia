@@ -1,0 +1,133 @@
+---
+/**
+ * TickerLogo — 회사/투자자 로고 컴포넌트
+ *
+ * domain 있으면 → Clearbit Logo API 이미지 (실제 로고)
+ * domain 없으면 → initials 배지 (EconPedia 고유 스타일)
+ * 이미지 로드 실패 → initials 배지로 자동 fallback
+ */
+export interface Props {
+  /** clearbit.com 도메인. 예: "apple.com", "nvidia.com" */
+  domain?: string | null;
+  /** 2자 이니셜 배지 텍스트. 예: "AP", "NV" */
+  initials: string;
+  /** 접근성용 alt 텍스트 */
+  name?: string;
+  /** 사이즈(px). 기본 40 */
+  size?: number;
+  class?: string;
+}
+
+const {
+  domain,
+  initials,
+  name = initials,
+  size = 40,
+  class: className = '',
+} = Astro.props;
+
+const logoUrl = domain
+  ? `https://logo.clearbit.com/${domain}?size=${size * 2}`
+  : null;
+---
+
+<div
+  class:list={['ticker-logo', { 'ticker-logo--has-img': !!logoUrl }, className]}
+  style={`--tl-size: ${size}px`}
+  data-initials={initials}
+  title={name}
+>
+  {logoUrl && (
+    <img
+      class="ticker-logo__img"
+      src={logoUrl}
+      alt={name}
+      width={size}
+      height={size}
+      loading="lazy"
+      decoding="async"
+    />
+  )}
+  <span class="ticker-logo__fallback" aria-hidden="true">{initials}</span>
+</div>
+
+<style>
+.ticker-logo {
+  width: var(--tl-size);
+  height: var(--tl-size);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* initials 배지 기본 스타일 */
+  background: var(--color-accent-primary);
+  color: #fff;
+  font-size: calc(var(--tl-size) * 0.3);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-family: var(--font-sans);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+/* 로고 이미지 영역 */
+.ticker-logo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* 로고는 항상 흰 배경 위에 — 투명 PNG 배경 보정 */
+  background: #ffffff;
+  /* 이미지가 있을 때 배지 텍스트 가림 */
+  z-index: 1;
+  border-radius: inherit;
+  padding: calc(var(--tl-size) * 0.1);
+}
+
+/* 기본 fallback 텍스트 */
+.ticker-logo__fallback {
+  position: relative;
+  z-index: 0;
+  line-height: 1;
+  user-select: none;
+}
+
+/* 로고 이미지가 있을 때 → 배지 border 추가, background 교체 */
+.ticker-logo--has-img {
+  background: var(--color-bg-secondary, #f8f9fa);
+  border-color: var(--color-border);
+}
+
+/* JS가 img-error 클래스를 추가하면 이미지 숨기고 initials 표시 */
+.ticker-logo--img-error {
+  background: var(--color-accent-primary);
+  border-color: transparent;
+}
+.ticker-logo--img-error .ticker-logo__img {
+  display: none;
+}
+</style>
+
+<script>
+  // 이미지 로드 실패 시 initials 배지로 fallback
+  (function () {
+    function handleLogoError(img: HTMLImageElement) {
+      const wrapper = img.closest<HTMLElement>('.ticker-logo');
+      if (!wrapper) return;
+      wrapper.classList.remove('ticker-logo--has-img');
+      wrapper.classList.add('ticker-logo--img-error');
+    }
+
+    document.querySelectorAll<HTMLImageElement>('.ticker-logo__img').forEach((img) => {
+      if (img.complete && img.naturalWidth === 0) {
+        handleLogoError(img);
+      } else {
+        img.addEventListener('error', () => handleLogoError(img), { once: true });
+      }
+    });
+  })();
+</script>

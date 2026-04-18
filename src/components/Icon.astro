@@ -94,6 +94,17 @@ const icons: Record<string, string> = {
     <line x1="11" y1="13.5" x2="20" y2="13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
     <line x1="11" y1="17" x2="16" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>`,
 
+  // 오늘의 경제 날씨 — 섹션 전용 아이콘 (태양+구름+경제 스파크라인 복합)
+  // weather-* 아이콘은 "현재 상태"를 표현, econ-weather는 "기능 자체"를 표현
+  'econ-weather': `
+    <circle cx="15.5" cy="6" r="2.5" fill="currentColor" opacity="0.18" stroke="currentColor" stroke-width="1.4"/>
+    <line x1="15.5" y1="2.5" x2="15.5" y2="3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>
+    <line x1="18.1" y1="3.4" x2="17.4" y2="4.1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>
+    <line x1="19" y1="6" x2="18" y2="6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>
+    <path d="M5.5 13H13.5a2.5 2.5 0 000-5 3.5 3.5 0 00-6.5-1.5A3 3 0 005.5 13z" fill="currentColor" opacity="0.18" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <polyline points="3,20 5.5,17.5 8.5,19 12,16 16.5,18.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="16.5" cy="18.5" r="1.5" fill="currentColor"/>`,
+
   // === 날씨 아이콘 ===
   'weather-sunny': `
     <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2" fill="none"/>
@@ -114,8 +125,8 @@ const icons: Record<string, string> = {
     <path d="M17.5 13H9a7 7 0 116.71-4.9A5.5 5.5 0 0117.5 13z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
 
   'weather-stormy': `
-    <path d="M13 14l-4 6h6l-4 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M17.5 13H9a7 7 0 116.71-4.9A5.5 5.5 0 0117.5 13z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+    <path d="M17.5 13H9a7 7 0 116.71-4.9A5.5 5.5 0 0117.5 13z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M13 14l-3.5 5h4.5l-4 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
 
   // === 지갑 영향 카테고리 아이콘 ===
   'home': `
@@ -177,6 +188,54 @@ const icons: Record<string, string> = {
   'clock': `
     <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.75" fill="none"/>
     <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>`,
+
+  // ============================================================
+  // === EconPedia 전용 아이콘 — 우리만의 것 =====================
+  // ============================================================
+
+  // EconPedia 브랜드 마크 — favicon의 산봉우리 "A" 형태 단순화
+  'econpedia': `
+    <path d="M12 2L20.5 20H3.5L12 2Z" fill="currentColor" opacity="0.12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M12 7.5L9 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.55"/>
+    <path d="M12 7.5L15 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity="0.55"/>
+    <path d="M7.5 21c1.3 0.8 2.8 1.2 4.5 1.2s3.2-0.4 4.5-1.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.7"/>`,
+
+  // 캔들스틱 차트 — 주식 차트의 EconPedia 버전 (3개 캔들: 상승-하락-상승)
+  'candle': `
+    <line x1="6" y1="3" x2="6" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="4" y="6" width="4" height="7" rx="0.5" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="6" y1="13" x2="6" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="12" y1="5" x2="12" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="10" y="9" width="4" height="9" rx="0.5" fill="currentColor" opacity="0.5" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="12" y1="18" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="18" y1="4" x2="18" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="16" y="7" width="4" height="8" rx="0.5" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="18" y1="15" x2="18" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+
+  // 강세장 — 위로 돌진하는 황소 뿔 실루엣
+  'bull': `
+    <path d="M4 18c0-4 3-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/>
+    <path d="M7 11L4 6l3 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M17 11l3-5-3 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <circle cx="12" cy="9" r="3" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="9" y1="21" x2="15" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>`,
+
+  // 약세장 — 아래로 내려치는 곰발 흔적
+  'bear': `
+    <path d="M4 8c0 4 3 7 8 7s8-3 8-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" fill="none"/>
+    <path d="M6 8L3 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M18 8l3-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="12" cy="10" r="3" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+    <line x1="10" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.7"/>
+    <line x1="14" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" opacity="0.7"/>`,
+
+  // 13F 공시 — 투자자 포트폴리오 공시 서류 (Portfolio X-Ray 전용)
+  '13f': `
+    <rect x="4" y="2" width="14" height="18" rx="2" fill="currentColor" opacity="0.08" stroke="currentColor" stroke-width="1.75"/>
+    <line x1="8" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <line x1="8" y1="10.5" x2="16" y2="10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <line x1="8" y1="14" x2="13" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+    <text x="6.5" y="19.5" font-size="4.5" font-weight="700" fill="currentColor" opacity="0.85" font-family="monospace">13F</text>`,
 };
 ---
 
