@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
 
@@ -20,6 +21,26 @@ const SEC_HEADERS = {
   'User-Agent': 'EconPedia econpedia@dedyn.io',
   'Accept': 'application/json'
 };
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+async function getDomainWithAI(companyName) {
+  try {
+    const prompt = `Find the official main website domain for the company/investor named "${companyName}".
+Return ONLY the full domain name with extension (e.g., apple.com, ark-invest.com, nps.or.kr). Do not include https://, www, or any other text. If you cannot find it, return exactly "unknown".`;
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: { temperature: 0.1, maxOutputTokens: 500 }
+    });
+    const domain = response.text?.trim().toLowerCase();
+    if (!domain || domain === 'unknown' || domain.includes(' ') || !domain.includes('.')) return null;
+    return domain;
+  } catch (e) {
+    console.error('AI Domain Fetch Error:', e);
+    return null;
+  }
+}
 
 async function fetchSecLatestFilingDate(cik) {
   try {
@@ -76,6 +97,20 @@ async function main() {
     
     for (const inv of investors) {
       console.log(`- [${inv.category}] ${inv.name} 공시 확인 중...`);
+      
+      // 도메인이 없는 신규 투자자/회사일 경우 AI를 통해 자동 추가
+      if (!inv.domain) {
+        console.log(`  🔍 도메인 정보가 없어 AI로 검색 중...`);
+        const domain = await getDomainWithAI(inv.name);
+        if (domain) {
+          inv.domain = domain;
+          shouldUpdateManifest = true;
+          console.log(`  ✅ 도메인 추가 완료: ${domain}`);
+        } else {
+          console.log(`  ⚠️ 도메인을 찾을 수 없음 (fallback 사용 예정)`);
+        }
+      }
+
       let latestDate = null;
       
       if (inv.cik) {

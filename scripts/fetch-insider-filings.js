@@ -26,14 +26,14 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 async function getDomainWithAI(companyName) {
   try {
     const prompt = `Find the official main website domain for the company named "${companyName}".
-Return ONLY the domain name (e.g., apple.com, tesla.com, samsung.com). Do not include https://, www, or any other text. If you cannot find it, return exactly "unknown".`;
+Return ONLY the full domain name with extension (e.g., apple.com, tesla.com, samsung.com). Do not include https://, www, or any other text. If you cannot find it, return exactly "unknown".`;
     const response = await ai.models.generateContent({
       model: 'gemini-3.1-pro-preview',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      config: { temperature: 0.1, maxOutputTokens: 50 }
+      config: { temperature: 0.1, maxOutputTokens: 500 }
     });
-    const domain = response.text.trim().toLowerCase();
-    if (domain === 'unknown' || domain.includes(' ')) return null;
+    const domain = response.text?.trim().toLowerCase();
+    if (!domain || domain === 'unknown' || domain.includes(' ') || !domain.includes('.')) return null;
     return domain;
   } catch (e) {
     console.error('AI Domain Fetch Error:', e);

@@ -48,7 +48,7 @@
     "country": "kr",
     "initials": "SE",
     "domain": "samsung.com",
-    "lastFilingDate": "2026-04-08"
+    "lastFilingDate": "2026-04-17"
   },
   {
     "id": "hyundai",
@@ -59,7 +59,7 @@
     "country": "kr",
     "initials": "HY",
     "domain": "hyundai.com",
-    "lastFilingDate": "2026-04-08"
+    "lastFilingDate": "2026-04-16"
   },
   {
     "id": "naver",
@@ -70,6 +70,6 @@
     "country": "kr",
     "initials": "NA",
     "domain": "naver.com",
-    "lastFilingDate": "2026-04-10"
+    "lastFilingDate": "2026-04-17"
   }
 ]

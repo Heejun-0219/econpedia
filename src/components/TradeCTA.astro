@@ -9,8 +9,24 @@ export interface Props {
 
 const { ticker, name, price = "₩85,300", change = "▲ 1.2%", isPositive = true } = Astro.props;
 
-// 토스증권 가상 딥링크 (실제로는 모바일 여부 판단 후 스토어/앱 딥링크 라우팅)
-const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
+// ISIN 매핑 데이터 (토스증권 상세 및 주문 페이지용)
+const isinMap = {
+  'META': 'US20120518001',
+  'AAPL': 'US0378331005',
+  'NVDA': 'US67066G1040',
+  'TSLA': 'US88160R1014',
+  'MSFT': 'US5949181045',
+  'AMZN': 'US0231351067',
+  'GOOGL': 'US02079K3059',
+  'NFLX': 'US64110L1061',
+  '005380': 'KR7005380001', 
+  '005930': 'KR7005930003',
+  'ARKK': 'US00214Q1040',
+  'BRK.B': 'US0846707026',
+  '069500': 'KR7069500007',
+};
+
+const isin = isinMap[ticker] || ticker;
 ---
 
 <div class="trade-cta-widget">
@@ -21,12 +37,19 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
     </div>
     <div class="trade-cta__price-block">
       <span class="trade-cta__price">{price}</span>
-      <span class={`trade-cta__change ${isPositive ? 'positive' : 'negative'}`}>{change}</span>
+      <span class={isPositive ? 'trade-cta__change positive' : 'trade-cta__change negative'}>{change}</span>
     </div>
   </div>
   
   <div class="trade-cta__actions">
-    <a href={tossDeepLink} class="trade-cta__btn trade-cta__btn--primary">토스증권에서 바로 구매하기</a>
+    <button 
+      class="trade-cta__btn trade-cta__btn--primary" 
+      data-trade-buy-btn 
+      data-ticker={ticker} 
+      data-isin={isin}
+    >
+      토스증권에서 바로 구매하기
+    </button>
     <button class="trade-cta__btn trade-cta__btn--secondary" data-trade-watchlist-btn data-name={name} data-ticker={ticker}>관심 종목에 담기 ♡</button>
   </div>
 </div>
@@ -35,8 +58,38 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
   import { supabase } from '../lib/supabase.js';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('[data-trade-watchlist-btn]');
-    buttons.forEach(btn => {
+    // 1. 매수 버튼 클릭 처리 (PC/Mobile 분기)
+    const buyButtons = document.querySelectorAll('[data-trade-buy-btn]');
+    buyButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const ticker = e.currentTarget.getAttribute('data-ticker');
+        const isin = e.currentTarget.getAttribute('data-isin');
+        
+        // PC/Mobile 판단
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+          // 모바일: 앱 딥링크 (ISIN 기반이 더 정확함)
+          const deepLink = `supertoss://stock/item?code=${isin}`;
+          window.location.href = deepLink;
+          
+          // 앱 미설치 시 유니버설 링크로 폴백 (1.5초 후)
+          setTimeout(() => {
+            window.location.href = `https://toss.im/stock/item?code=${isin}`;
+          }, 1500);
+        } else {
+          // PC: 웹 트레이딩 뷰 주문 화면으로 이동
+          const webUrl = isin.startsWith('US') || isin.startsWith('KR')
+            ? `https://www.tossinvest.com/stocks/${isin}/order`
+            : `https://www.tossinvest.com/stocks/${ticker}`;
+          window.open(webUrl, '_blank');
+        }
+      });
+    });
+
+    // 2. 관심종목 버튼 클릭 처리
+    const watchlistButtons = document.querySelectorAll('[data-trade-watchlist-btn]');
+    watchlistButtons.forEach(btn => {
       btn.addEventListener('click', async (e) => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -48,7 +101,6 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
         
         const name = e.currentTarget.getAttribute('data-name');
         alert(`${name} 종목이 관심 목록에 추가되었습니다!`);
-        // 향후 Supabase DB (watchlist 테이블)에 저장하는 로직 추가
       });
     });
   });
@@ -59,7 +111,7 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
   margin-top: 3rem;
   padding: 1.5rem;
   border-radius: 16px;
-  background: var(--color-surface);
+  background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
@@ -80,7 +132,7 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
 .trade-cta__name {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--color-text-primary);
 }
 
 .trade-cta__ticker {
@@ -96,7 +148,7 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
   display: block;
   font-size: 1.3rem;
   font-weight: 800;
-  color: var(--color-text);
+  color: var(--color-text-primary);
 }
 
 .trade-cta__change {
@@ -104,7 +156,6 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
   font-weight: 600;
 }
 
-/* 한국/토스증권식 등락률 색상 (상승: 빨강, 하락: 파랑) */
 .trade-cta__change.positive { color: #f04452; } 
 .trade-cta__change.negative { color: #3182f6; } 
 
@@ -127,7 +178,7 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
 }
 
 .trade-cta__btn--primary {
-  background: #3182f6; /* 토스 블루 */
+  background: #3182f6; 
   color: white;
 }
 
@@ -136,13 +187,13 @@ const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
 }
 
 .trade-cta__btn--secondary {
-  background: var(--color-bg-secondary);
-  color: var(--color-text);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   border: 1px solid var(--color-border);
 }
 
 .trade-cta__btn--secondary:hover {
-  background: var(--color-surface-hover);
+  background: var(--color-bg-card-hover);
 }
 
 @media (max-width: 600px) {
