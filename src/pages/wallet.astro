@@ -127,33 +127,33 @@ const getGuideLink = (category) => {
         <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">실제 데이터를 입력하면 더 정확하게 계산해 드립니다. 브라우저에만 안전하게 저장됩니다.</p>
         
         <form id="settings-form" style="display: flex; flex-direction: column; gap: 16px;">
-          <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">주담대/전세대출 원금 (원)</label>
-            <input type="number" id="input-housing" placeholder="예: 300000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+                    <div>
+            <label class="wallet-label">주담대/전세대출 원금 (원)</label>
+            <input type="text" inputmode="numeric" id="input-housing" placeholder="예: 300,000,000" class="wallet-input" />
           </div>
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">월 식료품/외식비 (원)</label>
-            <input type="number" id="input-grocery" placeholder="예: 800000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+            <label class="wallet-label">월 식료품/외식비 (원)</label>
+            <input type="text" inputmode="numeric" id="input-grocery" placeholder="예: 800,000" class="wallet-input" />
           </div>
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">1회 주유비 (원)</label>
-            <input type="number" id="input-gasoline" placeholder="예: 50000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+            <label class="wallet-label">1회 주유비 (원)</label>
+            <input type="text" inputmode="numeric" id="input-gasoline" placeholder="예: 50,000" class="wallet-input" />
           </div>
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">국내 주식 투자금 (원)</label>
-            <input type="number" id="input-investment" placeholder="예: 10000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+            <label class="wallet-label">국내 주식 투자금 (원)</label>
+            <input type="text" inputmode="numeric" id="input-investment" placeholder="예: 10,000,000" class="wallet-input" />
           </div>
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">미국 주식/ETF 투자금 (원)</label>
-            <input type="number" id="input-us_stock" placeholder="예: 5000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+            <label class="wallet-label">미국 주식/ETF 투자금 (원)</label>
+            <input type="text" inputmode="numeric" id="input-us_stock" placeholder="예: 5,000,000" class="wallet-input" />
           </div>
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">비트코인 투자금 (원)</label>
-            <input type="number" id="input-crypto" placeholder="예: 1000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+            <label class="wallet-label">비트코인 투자금 (원)</label>
+            <input type="text" inputmode="numeric" id="input-crypto" placeholder="예: 1,000,000" class="wallet-input" />
           </div>
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">해외여행/직구 예산 (원)</label>
-            <input type="number" id="input-travel" placeholder="예: 1000000" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;" />
+            <label class="wallet-label">해외여행/직구 예산 (원)</label>
+            <input type="text" inputmode="numeric" id="input-travel" placeholder="예: 1,000,000" class="wallet-input" />
           </div>
           
           <div style="display: flex; gap: 12px; margin-top: 16px;">
@@ -233,11 +233,57 @@ const getGuideLink = (category) => {
         const closeBtn = document.getElementById('close-wallet-settings');
         const form = document.getElementById('settings-form');
 
+        // 천 단위 콤마 포맷터
+        const formatNumberWithCommas = (num) => {
+          if (!num) return '';
+          return num.toString().replace(/B(?=(d{3})+(?!d))/g, ',');
+        };
+
+        const parseNumberFromCommas = (str) => {
+          if (!str) return 0;
+          return Number(str.replace(/,/g, ''));
+        };
+
+        // 입력 폼에 콤마 및 화살표 단위 증감 적용
+        Object.keys(DEFAULTS).forEach(key => {
+          const input = document.getElementById('input-' + key);
+          if (input) {
+            // 값 입력 시 자동 콤마
+            input.addEventListener('input', (e) => {
+              const cursorPosition = e.target.selectionStart;
+              const originalLength = e.target.value.length;
+              
+              const rawValue = e.target.value.replace(/[^0-9]/g, '');
+              const formatted = formatNumberWithCommas(rawValue);
+              e.target.value = formatted;
+              
+              const diff = formatted.length - originalLength;
+              e.target.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+            });
+
+            // 위아래 방향키 단위 증감
+            input.addEventListener('keydown', (e) => {
+              if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                let val = parseNumberFromCommas(e.target.value) || 0;
+                const step = key === 'housing' ? 1000000 : 10000;
+                
+                if (e.key === 'ArrowUp') val += step;
+                if (e.key === 'ArrowDown') val -= step;
+                if (val < 0) val = 0;
+                
+                e.target.value = formatNumberWithCommas(val);
+              }
+            });
+          }
+        });
+
+
         if(openBtn) {
           openBtn.addEventListener('click', () => {
             Object.keys(DEFAULTS).forEach(key => {
               const input = document.getElementById('input-' + key);
-              if (input) input.value = settings[key];
+              if (input) input.value = formatNumberWithCommas(settings[key]);
             });
             modal.style.display = 'flex';
           });
@@ -255,7 +301,8 @@ const getGuideLink = (category) => {
             Object.keys(DEFAULTS).forEach(key => {
               const input = document.getElementById('input-' + key);
               if (input) {
-                settings[key] = input.value === '' ? DEFAULTS[key] : Number(input.value);
+                const parsed = parseNumberFromCommas(input.value);
+                settings[key] = parsed === 0 ? DEFAULTS[key] : parsed;
               }
             });
 
@@ -417,6 +464,12 @@ const getGuideLink = (category) => {
   .wallet-card:hover {
     transform: translateY(-4px);
     border-color: var(--color-accent-primary-alpha);
+  }
+  .wallet-label {
+    display: block; font-size: 13px; font-weight: 600; color: var(--color-text-secondary); margin-bottom: 4px;
+  }
+  .wallet-input {
+    width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--color-border); background: var(--color-bg-primary); color: var(--color-text-primary); font-size: 16px;
   }
 </style>
 .color = color;
