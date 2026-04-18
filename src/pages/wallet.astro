@@ -372,6 +372,65 @@ const getGuideLink = (category) => {
 
         // 초기 실행
         recalculate();
+
+        // 알림 신청 로직
+        const alertForm = document.getElementById('wallet-alert-form');
+        if (alertForm) {
+          alertForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('wallet-alert-email');
+            const email = emailInput.value;
+            const submitBtn = alertForm.querySelector('button');
+            const originalText = submitBtn.textContent;
+
+            try {
+              submitBtn.textContent = '신청 중...';
+              submitBtn.disabled = true;
+
+              const res = await fetch('/api/wallet-subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, settings })
+              });
+
+              const data = await res.json();
+              if (data.success) {
+                alert(data.message);
+                emailInput.value = '';
+              } else {
+                alert(data.error || '오류가 발생했습니다.');
+              }
+            } catch (err) {
+              alert('네트워크 오류가 발생했습니다.');
+            } finally {
+              submitBtn.textContent = originalText;
+              submitBtn.disabled = false;
+            }
+          });
+        }
+      });
+    </script>
+  </div>
+</BaseLayout>
+
+<style>
+  .wallet-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-accent-primary-alpha);
+  }
+</style>
+.color = color;
+                    badgeEl.style.borderColor = 'currentColor';
+                  }
+                  valEl.style.opacity = '1';
+                }, 150);
+              }
+            }
+          });
+        };
+
+        // 초기 실행
+        recalculate();
       });
     </script>
   </div>

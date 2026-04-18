@@ -252,6 +252,28 @@ const server = createServer(async (req, res) => {
     return sendJSON(res, 200, { success: true, results: polls[pollId] });
   }
 
+  // ── POST /api/wallet-subscribe (지갑 알림 구독) ───────────────────
+  if (req.method === 'POST' && path === '/api/wallet-subscribe') {
+    let body;
+    try { body = await parseBody(req); }
+    catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
+
+    const { email, settings } = body;
+    if (!email || !isValidEmail(email)) {
+      return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
+    }
+    if (!settings) {
+      return sendJSON(res, 400, { error: '설정값이 필요합니다.' });
+    }
+
+    wallets[email] = {
+      settings,
+      subscribedAt: new Date().toISOString()
+    };
+    
+    return sendJSON(res, 200, { success: true, message: '변동 시 알림 구독이 완료되었습니다!' });
+  }
+
   // ── POST /api/subscribe ────────────────────────────────
   if (req.method === 'POST' && path === '/api/subscribe') {
     // Rate limit
