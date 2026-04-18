@@ -18,6 +18,7 @@ const {
 } = Astro.props;
 
 import BaseLayout from './BaseLayout.astro';
+import PollWidget from '../components/PollWidget.astro';
 ---
 
 <BaseLayout title={title} description={description} article={true}>
@@ -78,6 +79,17 @@ import BaseLayout from './BaseLayout.astro';
     <div class="article-content">
       <slot />
     </div>
+
+    <!-- Inline Poll Widget (초경량 투표) -->
+    <PollWidget 
+      id={Astro.url.pathname.replace(/\//g, '_')} 
+      question="이 이슈, 어떻게 생각하나요?" 
+      options={[
+        { id: 'buy', label: '지금 당장 살 때다!', emoji: '🚀' },
+        { id: 'hold', label: '조금 더 지켜보자', emoji: '👀' },
+        { id: 'sell', label: '위험해, 팔 때다', emoji: '🏃' }
+      ]}
+    />
 
     <!-- Related Articles (체류 시간 극대화) -->
     {relatedArticles.length > 0 && (

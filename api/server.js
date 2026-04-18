@@ -225,6 +225,33 @@ const server = createServer(async (req, res) => {
     return sendJSON(res, 200, { success: true });
   }
 
+  // ── GET /api/poll (투표 결과 조회) ────────────────────────────────
+  if (req.method === 'GET' && path.startsWith('/api/poll/')) {
+    const pollId = path.replace('/api/poll/', '').split('?')[0];
+    if (!pollId) return sendJSON(res, 400, { error: 'Invalid poll id' });
+    
+    const results = polls[pollId] || {};
+    return sendJSON(res, 200, { success: true, results });
+  }
+
+  // ── POST /api/poll (투표 제출) ────────────────────────────────
+  if (req.method === 'POST' && path.startsWith('/api/poll/')) {
+    const pollId = path.replace('/api/poll/', '').split('?')[0];
+    if (!pollId) return sendJSON(res, 400, { error: 'Invalid poll id' });
+
+    let body;
+    try { body = await parseBody(req); }
+    catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
+
+    const { option } = body;
+    if (!option) return sendJSON(res, 400, { error: 'Option required' });
+
+    if (!polls[pollId]) polls[pollId] = {};
+    polls[pollId][option] = (polls[pollId][option] || 0) + 1;
+    
+    return sendJSON(res, 200, { success: true, results: polls[pollId] });
+  }
+
   // ── POST /api/subscribe ────────────────────────────────
   if (req.method === 'POST' && path === '/api/subscribe') {
     // Rate limit

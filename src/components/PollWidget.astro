@@ -1,0 +1,233 @@
+---
+export interface Props {
+  id: string;
+  question: string;
+  options: { label: string; id: string; emoji: string }[];
+}
+
+const { id, question, options } = Astro.props;
+---
+
+<div class="poll-widget" data-poll-id={id}>
+  <div class="poll-widget__header">
+    <span class="poll-widget__badge">📊 퀵 투표</span>
+    <h3 class="poll-widget__question">{question}</h3>
+  </div>
+
+  <div class="poll-widget__body">
+    <div class="poll-options">
+      {options.map((opt) => (
+        <button class="poll-btn" data-option={opt.id}>
+          <span class="poll-btn__emoji">{opt.emoji}</span>
+          <span class="poll-btn__label">{opt.label}</span>
+          <span class="poll-btn__percentage" style="display:none;"></span>
+          <div class="poll-btn__progress" style="width: 0%;"></div>
+        </button>
+      ))}
+    </div>
+    <div class="poll-widget__footer">
+      <span class="poll-widget__total-votes">투표를 기다리고 있어요</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const widgets = document.querySelectorAll('.poll-widget');
+
+    widgets.forEach(async (widget) => {
+      const pollId = widget.getAttribute('data-poll-id');
+      const buttons = widget.querySelectorAll('.poll-btn');
+      const totalVotesEl = widget.querySelector('.poll-widget__total-votes');
+
+      // Helper to update UI
+      const updateUI = (results, votedOption = null) => {
+        const total = Object.values(results).reduce((a, b) => a + b, 0);
+        
+        if (total > 0) {
+          totalVotesEl.textContent = `현재 ${total}명 참여 중`;
+        }
+
+        buttons.forEach(btn => {
+          const optId = btn.getAttribute('data-option');
+          const count = results[optId] || 0;
+          const percentage = total === 0 ? 0 : Math.round((count / total) * 100);
+
+          btn.classList.add('poll-btn--voted');
+          if (votedOption && votedOption !== optId) {
+            btn.classList.add('poll-btn--unselected');
+          }
+
+          const progressEl = btn.querySelector('.poll-btn__progress');
+          const percentageEl = btn.querySelector('.poll-btn__percentage');
+
+          if (progressEl) progressEl.style.width = `${percentage}%`;
+          if (percentageEl) {
+            percentageEl.textContent = `${percentage}%`;
+            percentageEl.style.display = 'inline-block';
+          }
+
+          btn.disabled = true; // Prevent multiple votes
+        });
+      };
+
+      // Check if user already voted
+      const storageKey = `ep_poll_${pollId}`;
+      const savedVote = localStorage.getItem(storageKey);
+
+      try {
+        const res = await fetch(`/api/poll/${pollId}`);
+        const data = await res.json();
+        
+        if (savedVote && data.success) {
+          updateUI(data.results, savedVote);
+        } else if (data.success && Object.keys(data.results).length > 0) {
+          // You might want to show results anyway, but let's keep it hidden until they vote
+        }
+      } catch (e) {
+        console.error('Failed to load poll results', e);
+      }
+
+      // Handle vote
+      buttons.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          if (localStorage.getItem(storageKey)) return; // Double check
+
+          const optId = e.currentTarget.getAttribute('data-option');
+          
+          try {
+            const res = await fetch(`/api/poll/${pollId}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ option: optId })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              localStorage.setItem(storageKey, optId);
+              updateUI(data.results, optId);
+            }
+          } catch (e) {
+            console.error('Failed to submit vote', e);
+            alert('투표 중 오류가 발생했습니다.');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+.poll-widget {
+  margin: 3rem 0;
+  padding: 2rem;
+  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.poll-widget__header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.poll-widget__badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 99px;
+  margin-bottom: 8px;
+}
+
+.poll-widget__question {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.poll-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px 20px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  text-align: left;
+}
+
+.poll-btn:hover:not(:disabled) {
+  border-color: var(--color-accent-primary);
+  background: var(--color-surface-hover);
+  transform: translateY(-2px);
+}
+
+.poll-btn__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(59, 130, 246, 0.15); /* Light blue progress */
+  z-index: 1;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.poll-btn__emoji {
+  font-size: 1.5rem;
+  margin-right: 12px;
+  z-index: 2;
+}
+
+.poll-btn__label {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  z-index: 2;
+  flex: 1;
+}
+
+.poll-btn__percentage {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text);
+  z-index: 2;
+}
+
+.poll-btn:disabled {
+  cursor: default;
+}
+
+.poll-btn--voted {
+  border-color: transparent;
+}
+
+.poll-btn--unselected {
+  opacity: 0.6;
+}
+.poll-btn--unselected .poll-btn__progress {
+  background: var(--color-border);
+}
+
+.poll-widget__footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+</style>
