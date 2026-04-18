@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import { GoogleGenAI } from '@google/genai';
 
 dotenv.config();
 
@@ -19,6 +20,26 @@ const SEC_HEADERS = {
   'User-Agent': 'EconPedia econpedia@dedyn.io',
   'Accept': 'application/json'
 };
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+async function getDomainWithAI(companyName) {
+  try {
+    const prompt = `Find the official main website domain for the company named "${companyName}".
+Return ONLY the domain name (e.g., apple.com, tesla.com, samsung.com). Do not include https://, www, or any other text. If you cannot find it, return exactly "unknown".`;
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: { temperature: 0.1, maxOutputTokens: 50 }
+    });
+    const domain = response.text.trim().toLowerCase();
+    if (domain === 'unknown' || domain.includes(' ')) return null;
+    return domain;
+  } catch (e) {
+    console.error('AI Domain Fetch Error:', e);
+    return null;
+  }
+}
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -214,6 +235,20 @@ async function main() {
 
     for (const comp of companies) {
       console.log(`[${comp.country.toUpperCase()}] ${comp.name} 확인 중...`);
+      
+      // 도메인이 없는 신규 회사일 경우 AI를 통해 자동 추가
+      if (!comp.domain) {
+        console.log(`  🔍 도메인 정보가 없어 AI로 검색 중...`);
+        const domain = await getDomainWithAI(comp.name);
+        if (domain) {
+          comp.domain = domain;
+          shouldUpdateManifest = true;
+          console.log(`  ✅ 도메인 추가 완료: ${domain}`);
+        } else {
+          console.log(`  ⚠️ 도메인을 찾을 수 없음 (fallback 사용 예정)`);
+        }
+      }
+
       let latestDate = null;
       let parsedData = null;
 

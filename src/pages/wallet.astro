@@ -236,7 +236,7 @@ const getGuideLink = (category) => {
         // 천 단위 콤마 포맷터
         const formatNumberWithCommas = (num) => {
           if (!num) return '';
-          return num.toString().replace(/B(?=(d{3})+(?!d))/g, ',');
+          return Number(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         };
 
         const parseNumberFromCommas = (str) => {
@@ -250,7 +250,7 @@ const getGuideLink = (category) => {
           if (input) {
             // 값 입력 시 자동 콤마
             input.addEventListener('input', (e) => {
-              const cursorPosition = e.target.selectionStart;
+              let cursorPosition = e.target.selectionStart;
               const originalLength = e.target.value.length;
               
               const rawValue = e.target.value.replace(/[^0-9]/g, '');
@@ -258,7 +258,8 @@ const getGuideLink = (category) => {
               e.target.value = formatted;
               
               const diff = formatted.length - originalLength;
-              e.target.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
+              const newCursor = Math.max(0, cursorPosition + diff);
+              e.target.setSelectionRange(newCursor, newCursor);
             });
 
             // 위아래 방향키 단위 증감
