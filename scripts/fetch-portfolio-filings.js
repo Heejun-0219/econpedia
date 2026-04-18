@@ -42,6 +42,25 @@ Return ONLY the full domain name with extension (e.g., apple.com, ark-invest.com
   }
 }
 
+async function getIsinWithAI(companyName, ticker) {
+  try {
+    const prompt = `Find the ISIN (International Securities Identification Number) for the company/ETF "${companyName}" with ticker "${ticker}". 
+If it's an investor/fund, find the ISIN for their most representative main ETF or stock if possible.
+Return ONLY the 12-character ISIN code (e.g., US67066G1040, KR7005930003). If you cannot find it, return exactly "unknown".`;
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: { temperature: 0.1, maxOutputTokens: 50 }
+    });
+    const isin = response.text?.trim().toUpperCase();
+    if (!isin || isin === 'UNKNOWN' || isin.length !== 12) return null;
+    return isin;
+  } catch (e) {
+    console.error('AI ISIN Fetch Error:', e);
+    return null;
+  }
+}
+
 async function fetchSecLatestFilingDate(cik) {
   try {
     const paddedCik = cik.padStart(10, '0');
@@ -108,6 +127,19 @@ async function main() {
           console.log(`  ✅ 도메인 추가 완료: ${domain}`);
         } else {
           console.log(`  ⚠️ 도메인을 찾을 수 없음 (fallback 사용 예정)`);
+        }
+      }
+
+      // ISIN 정보가 없는 경우 AI를 통해 자동 추가
+      if (!inv.isin) {
+        console.log(`  🔍 ISIN 정보가 없어 AI로 검색 중...`);
+        const isin = await getIsinWithAI(inv.name, inv.ticker);
+        if (isin) {
+          inv.isin = isin;
+          shouldUpdateManifest = true;
+          console.log(`  ✅ ISIN 추가 완료: ${isin}`);
+        } else {
+          console.log(`  ⚠️ ISIN을 찾을 수 없음`);
         }
       }
 

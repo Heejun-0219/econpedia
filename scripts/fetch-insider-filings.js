@@ -41,6 +41,24 @@ Return ONLY the full domain name with extension (e.g., apple.com, tesla.com, sam
   }
 }
 
+async function getIsinWithAI(companyName, ticker) {
+  try {
+    const prompt = `Find the ISIN (International Securities Identification Number) for the company "${companyName}" with ticker "${ticker}".
+Return ONLY the 12-character ISIN code (e.g., US67066G1040, KR7005930003). If you cannot find it, return exactly "unknown".`;
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.1-pro-preview',
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: { temperature: 0.1, maxOutputTokens: 50 }
+    });
+    const isin = response.text?.trim().toUpperCase();
+    if (!isin || isin === 'UNKNOWN' || isin.length !== 12) return null;
+    return isin;
+  } catch (e) {
+    console.error('AI ISIN Fetch Error:', e);
+    return null;
+  }
+}
+
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 // ── SEC: 최신 Form 4 공시 메타데이터 수집 ────────────────────────
@@ -246,6 +264,19 @@ async function main() {
           console.log(`  ✅ 도메인 추가 완료: ${domain}`);
         } else {
           console.log(`  ⚠️ 도메인을 찾을 수 없음 (fallback 사용 예정)`);
+        }
+      }
+
+      // ISIN 정보가 없는 경우 AI를 통해 자동 추가
+      if (!comp.isin) {
+        console.log(`  🔍 ISIN 정보가 없어 AI로 검색 중...`);
+        const isin = await getIsinWithAI(comp.name, comp.ticker);
+        if (isin) {
+          comp.isin = isin;
+          shouldUpdateManifest = true;
+          console.log(`  ✅ ISIN 추가 완료: ${isin}`);
+        } else {
+          console.log(`  ⚠️ ISIN을 찾을 수 없음`);
         }
       }
 

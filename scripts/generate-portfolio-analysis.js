@@ -86,7 +86,12 @@ const investorEmoji = "${investor.emoji}";
       
       ${htmlContent}
 
-      <TradeCTA ticker="SPY" name="${investor.name} 관련 ETF" isPositive={true} />
+      <TradeCTA 
+        ticker="${investor.ticker || 'SPY'}" 
+        name="${investor.name} 관련 지수" 
+        isPositive={true} 
+        isin="${investor.isin || ''}"
+      />
 
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>

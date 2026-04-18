@@ -5,12 +5,13 @@ export interface Props {
   price?: string;
   change?: string;
   isPositive?: boolean;
+  isin?: string;
 }
 
-const { ticker, name, price = "₩85,300", change = "▲ 1.2%", isPositive = true } = Astro.props;
+const { ticker, name, price = "₩85,300", change = "▲ 1.2%", isPositive = true, isin: isinProp } = Astro.props;
 
-// ISIN 매핑 데이터 (토스증권 상세 및 주문 페이지용)
-const isinMap = {
+// ISIN 매핑 데이터 (Fallback 및 레거시 대응)
+const isinMap: Record<string, string> = {
   'META': 'US20120518001',
   'AAPL': 'US0378331005',
   'NVDA': 'US67066G1040',
@@ -26,7 +27,7 @@ const isinMap = {
   '069500': 'KR7069500007',
 };
 
-const isin = isinMap[ticker] || ticker;
+const isin = isinProp || isinMap[ticker] || ticker;
 ---
 
 <div class="trade-cta-widget">
@@ -62,14 +63,15 @@ const isin = isinMap[ticker] || ticker;
     const buyButtons = document.querySelectorAll('[data-trade-buy-btn]');
     buyButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const ticker = e.currentTarget.getAttribute('data-ticker');
-        const isin = e.currentTarget.getAttribute('data-isin');
+        const target = e.currentTarget as HTMLElement;
+        const ticker = target.getAttribute('data-ticker') || '';
+        const isin = target.getAttribute('data-isin') || '';
         
         // PC/Mobile 판단
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         if (isMobile) {
-          // 모바일: 앱 딥링크 (ISIN 기반이 더 정확함)
+          // 모바일: 앱 딥링크 (supertoss://stock/item?code=ISIN)
           const deepLink = `supertoss://stock/item?code=${isin}`;
           window.location.href = deepLink;
           
@@ -78,8 +80,9 @@ const isin = isinMap[ticker] || ticker;
             window.location.href = `https://toss.im/stock/item?code=${isin}`;
           }, 1500);
         } else {
-          // PC: 웹 트레이딩 뷰 주문 화면으로 이동
-          const webUrl = isin.startsWith('US') || isin.startsWith('KR')
+          // PC: 웹 트레이딩 뷰 주문 화면 (https://www.tossinvest.com/stocks/[ISIN]/order)
+          // ISIN이 없는 경우 티커 기반 기본 페이지로 이동
+          const webUrl = (isin && (isin.startsWith('US') || isin.startsWith('KR')))
             ? `https://www.tossinvest.com/stocks/${isin}/order`
             : `https://www.tossinvest.com/stocks/${ticker}`;
           window.open(webUrl, '_blank');

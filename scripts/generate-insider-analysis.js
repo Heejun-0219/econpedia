@@ -96,7 +96,12 @@ const companyEmoji = "${company.emoji}";
 
       ${htmlContent}
 
-      <TradeCTA ticker="${company.ticker || company.id}" name="${company.name}" isPositive={${isBuy}} />
+      <TradeCTA 
+        ticker="${company.ticker || company.id}" 
+        name="${company.name}" 
+        isPositive={${isBuy}} 
+        isin="${company.isin || ''}"
+      />
 
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>
