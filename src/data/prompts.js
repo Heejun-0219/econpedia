@@ -52,7 +52,7 @@ export function buildArticlePrompt(marketDataString, weatherData, today) {
 4. 시니어의 한 마디 (Sign-off)
    - "${PERSONA.brandVoice.signOff}"
 `;
-  } else if (weatherData.weather === 'rainy' || weatherData.weather === 'stormy') {
+  } else if (weatherData.weather === 'rain' || weatherData.weather === 'storm') {
     instructions = `
 [출력 형식: 순수 마크다운 — frontmatter 제외]
 

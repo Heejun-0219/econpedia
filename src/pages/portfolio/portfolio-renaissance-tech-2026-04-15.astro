@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
 
 const title = "수학 천재들의 펀드, 빅테크를 덜어내고 '전봇대'와 '알약'을 샀다?";
 const date = "2026-04-15";
@@ -87,6 +88,8 @@ const investorEmoji = "🚀";
 </li>
 </ol>
 <p>오늘의 포트폴리오 X-Ray 분석이 여러분의 투자 근육을 키우는 데 도움이 되셨길 바라며, 다음번에도 흥미로운 데이터와 함께 돌아오겠습니다. 지금까지 이코노였습니다! 👋</p>
+
+      <TradeCTA ticker="SPY" name="르네상스 관련 펀드" isPositive={true} />
 
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>

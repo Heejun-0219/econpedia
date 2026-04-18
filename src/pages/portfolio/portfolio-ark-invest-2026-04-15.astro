@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
 
 const title = "칩(Chip)에서 약(Pill)으로? 돈나무 언니의 시선이 머문 곳 👀";
 const date = "2026-04-15";
@@ -95,6 +96,8 @@ const investorEmoji = "🚀";
 </ol>
 <p>투자는 결국 &#39;세상이 어디로 흘러가는가&#39;를 맞추는 거대한 퍼즐 게임과 같아요. 오늘 아크 인베스트의 지갑을 훔쳐본 것이 여러분의 퍼즐 조각을 맞추는 데 작은 힌트가 되었길 바라요! 다음 주에 또 재미있는 남의 지갑 이야기로 돌아올게요. 👋</p>
 <hr>
+
+      <TradeCTA ticker="ARKK" name="ARK Innovation ETF" isPositive={true} />
 
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>

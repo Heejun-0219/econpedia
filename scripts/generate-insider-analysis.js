@@ -96,6 +96,8 @@ const companyEmoji = "${company.emoji}";
 
       ${htmlContent}
 
+      <TradeCTA ticker="${company.ticker || company.id}" name="${company.name}" isPositive={${isBuy}} />
+
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>
         <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
 
 const title = "🍎 애플 팔고 '현금 창고' 꽉 채운 버핏, 다가올 겨울을 준비하다?";
 const date = "2026-04-15";
@@ -104,6 +105,8 @@ const investorEmoji = "🧙";
 </ul>
 <p>여러분의 투자 계좌는 지금 주식으로 100% 꽉 차 있나요? 아니면 폭락장이 왔을 때 바겐세일에 참여할 &#39;현금 실탄&#39;이 준비되어 있나요? 이번 달 월급이 들어오면, 내 계좌의 현금 비중을 한 번 점검해 보는 건 어떨까요? 👀</p>
 <hr>
+
+      <TradeCTA ticker="BRK.B" name="버크셔 해서웨이" isPositive={true} />
 
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>

@@ -1,0 +1,153 @@
+---
+export interface Props {
+  ticker: string;
+  name: string;
+  price?: string;
+  change?: string;
+  isPositive?: boolean;
+}
+
+const { ticker, name, price = "₩85,300", change = "▲ 1.2%", isPositive = true } = Astro.props;
+
+// 토스증권 가상 딥링크 (실제로는 모바일 여부 판단 후 스토어/앱 딥링크 라우팅)
+const tossDeepLink = `supertoss://stock/item?code=${ticker}`;
+---
+
+<div class="trade-cta-widget">
+  <div class="trade-cta__header">
+    <div class="trade-cta__info">
+      <span class="trade-cta__name">{name}</span>
+      <span class="trade-cta__ticker">{ticker}</span>
+    </div>
+    <div class="trade-cta__price-block">
+      <span class="trade-cta__price">{price}</span>
+      <span class={`trade-cta__change ${isPositive ? 'positive' : 'negative'}`}>{change}</span>
+    </div>
+  </div>
+  
+  <div class="trade-cta__actions">
+    <a href={tossDeepLink} class="trade-cta__btn trade-cta__btn--primary">토스증권에서 바로 구매하기</a>
+    <button class="trade-cta__btn trade-cta__btn--secondary" data-trade-watchlist-btn data-name={name} data-ticker={ticker}>관심 종목에 담기 ♡</button>
+  </div>
+</div>
+
+<script>
+  import { supabase } from '../lib/supabase.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('[data-trade-watchlist-btn]');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          alert('관심 종목에 담으려면 로그인이 필요합니다. 먼저 로그인해주세요.');
+          const loginBtn = document.getElementById('auth-login-btn');
+          if (loginBtn) loginBtn.click();
+          return;
+        }
+        
+        const name = e.currentTarget.getAttribute('data-name');
+        alert(`${name} 종목이 관심 목록에 추가되었습니다!`);
+        // 향후 Supabase DB (watchlist 테이블)에 저장하는 로직 추가
+      });
+    });
+  });
+</script>
+
+<style>
+.trade-cta-widget {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.trade-cta__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.trade-cta__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trade-cta__name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.trade-cta__ticker {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.trade-cta__price-block {
+  text-align: right;
+}
+
+.trade-cta__price {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.trade-cta__change {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* 한국/토스증권식 등락률 색상 (상승: 빨강, 하락: 파랑) */
+.trade-cta__change.positive { color: #f04452; } 
+.trade-cta__change.negative { color: #3182f6; } 
+
+.trade-cta__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.trade-cta__btn {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.trade-cta__btn--primary {
+  background: #3182f6; /* 토스 블루 */
+  color: white;
+}
+
+.trade-cta__btn--primary:hover {
+  background: #1b64da;
+}
+
+.trade-cta__btn--secondary {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.trade-cta__btn--secondary:hover {
+  background: var(--color-surface-hover);
+}
+
+@media (max-width: 600px) {
+  .trade-cta__actions {
+    flex-direction: column;
+  }
+}
+</style>

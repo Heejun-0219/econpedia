@@ -2,12 +2,12 @@
 /**
  * TickerLogo — 회사/투자자 로고 컴포넌트
  *
- * domain 있으면 → Clearbit Logo API 이미지 (실제 로고)
+ * domain 있으면 → Google Favicon S2 API 이미지 (실제 로고)
  * domain 없으면 → initials 배지 (EconPedia 고유 스타일)
  * 이미지 로드 실패 → initials 배지로 자동 fallback
  */
 export interface Props {
-  /** clearbit.com 도메인. 예: "apple.com", "nvidia.com" */
+  /** 회사 도메인. 예: "apple.com", "nvidia.com" */
   domain?: string | null;
   /** 2자 이니셜 배지 텍스트. 예: "AP", "NV" */
   initials: string;
@@ -26,8 +26,10 @@ const {
   class: className = '',
 } = Astro.props;
 
+// Google Favicon S2 — Clearbit 대체, 무료, 안정적
+// sz=128 → 최대 128px PNG (retina 대응 충분)
 const logoUrl = domain
-  ? `https://logo.clearbit.com/${domain}?size=${size * 2}`
+  ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
   : null;
 ---
 
