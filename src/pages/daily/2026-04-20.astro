@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "🛢️ 기름값이 훅 떨어졌습니다. 주유소 가실 분들은 조금만 더 기다려보세요!";
+const date = "2026-04-20";
+const description = "안녕하세요, 이코노입니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">📰 데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>안녕하세요, 이코노입니다. </p>
+<p>오늘은 시장에 꽤 큰 변동이 있는 날입니다. 보통 뉴스를 보면 가슴이 철렁하시겠지만, 오늘은 우리 지갑에 **&#39;기분 좋은 폭우&#39;**가 내렸습니다. 바로 국제 기름값이 하루 만에 10% 가까이 뚝 떨어지는 큰 변화가 있었거든요. </p>
+<p>당장 내 생활비와 투자금에 어떤 영향이 있는지, 복잡한 숫자 다 빼고 딱 떨어지는 &#39;원화&#39;로 정리해 드릴게요.</p>
+<hr>
+<h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>전 세계 공장과 자동차를 굴리는 &#39;국제 유가(기름값)&#39;가 갑자기 크게 미끄러졌습니다. 보통 글로벌 경제가 조금 천천히 굴러갈 것 같을 때, &quot;앞으로 기름 쓸 일이 줄어들겠네?&quot;라는 생각에 기름값이 훅 떨어지곤 합니다. </p>
+<p>나라 경제를 걱정하는 뉴스도 나오겠지만, 당장 출퇴근길에 운전대를 잡아야 하는 우리에게는 <strong>당장의 주유비 부담이 확 줄어드는 반가운 소식</strong>입니다. 반면, 한국 주식 시장과 비트코인은 오늘 하루 잠시 쉬어가는 모습을 보이며 소폭 하락했습니다. </p>
+<hr>
+<h2>💰 내 지갑 가이드</h2>
+<p>지금 당장 내 지갑과 통장에 어떤 변화가 생겼는지 확인해 볼까요?</p>
+<p><strong>⛽ 주유비는 아끼고, 주말 나들이 계획하세요</strong></p>
+<ul>
+<li><strong>주유비:</strong> 오늘 당장 주유소에서 <strong>5만 원어치 기름을 넣는다면 약 2,353원을 아낄 수 있습니다.</strong> 국제 기름값이 떨어졌으니 조만간 동네 주유소 가격도 더 내려갈 확률이 높습니다. 기름통이 텅 빈 게 아니라면, 주유를 며칠 미루시는 것도 좋은 전략입니다.</li>
+</ul>
+<p><strong>🛒 밥상 물가는 아직 팍팍해요</strong></p>
+<ul>
+<li><strong>장바구니:</strong> 기름값은 내렸지만 밥상 물가는 조금 올랐습니다. <strong>한 달 식비를 80만 원 쓴다고 가정하면, 체감상 2,080원 정도 비용이 늘어난 수준</strong>입니다. 커피 한 잔 값도 안 되지만, 장볼 때 할인 코너를 한 번 더 둘러보시면 좋겠습니다.</li>
+</ul>
+<p><strong>✈️ 달러 환율은 여전히 비싸요</strong></p>
+<ul>
+<li><strong>환전·직구:</strong> 환율이 아주 살짝 내렸지만, <strong>100만 원을 달러로 바꿀 때 고작 89원 아끼는 수준</strong>입니다. 여전히 1달러에 1,460원대인 &#39;초고환율&#39; 상태이니, 급하지 않은 아마존 직구나 해외 결제는 당분간 장바구니에만 담아두세요.</li>
+</ul>
+<p><strong>📊 내 투자금은 잠시 숨 고르기 중</strong></p>
+<ul>
+<li><strong>국내 주식:</strong> 내 계좌에 <strong>1,000만 원이 들어있다면 오늘은 약 54,818원 정도 빠졌습니다.</strong> 치킨 두 마리 값이 날아갔지만, 너무 속상해하지 마세요. </li>
+<li><strong>비트코인:</strong> 코인 지갑에 <strong>100만 원을 넣어뒀다면 약 25,153원 정도 하락</strong>했습니다. </li>
+<li><strong>미국 주식:</strong> 어젯밤 미국 시장은 내 계좌에 큰 영향을 줄 만한 변화가 없었습니다. 오늘은 주식 앱을 덮어두고 편안하게 주무셔도 좋습니다.</li>
+</ul>
+<p><strong>🏠 대출 이자는 평화롭습니다</strong></p>
+<ul>
+<li><strong>주거비:</strong> 다행히 오늘 대출 금리에는 아무런 변화가 없습니다. 이자 낼 날짜만 잘 챙겨두시면 됩니다. 😌</li>
+</ul>
+<hr>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+    </div>
+  </div>
+</BaseLayout>
