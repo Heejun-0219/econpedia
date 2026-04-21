@@ -9,6 +9,7 @@ import { createServer } from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import yahooFinance from 'yahoo-finance2';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,51 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || 'https://econpedia.dedyn.io
 
 // ─── 데이터 파일 초기화 ──────────────────────────────
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+
+// ─── 실시간 시장 데이터 폴링 (10초 주기) ───────────────────
+let latestMarketData = null;
+
+async function startMarketDataPolling() {
+  const symbols = {
+    sp500: '^GSPC',
+    nasdaq: '^IXIC',
+    kospi: '^KS11',
+    bitcoin: 'BTC-USD',
+    krw: 'KRW=X',
+    oil: 'CL=F'
+  };
+
+  console.log('🔄 Market data polling loop started...');
+  
+  while (true) {
+    try {
+      const results = {};
+      // Promise.all to fetch concurrently for faster update
+      const promises = Object.entries(symbols).map(async ([key, symbol]) => {
+        try {
+          const quote = await yahooFinance.quote(symbol);
+          results[key] = {
+            price: quote.regularMarketPrice,
+            change: quote.regularMarketChange,
+            changePercent: quote.regularMarketChangePercent
+          };
+        } catch (err) {
+          // ignore individual fetch failure to keep others updating
+        }
+      });
+      await Promise.all(promises);
+      if (Object.keys(results).length > 0) {
+        latestMarketData = results;
+      }
+    } catch (e) {
+      console.error('⚠️ Market data polling error:', e.message);
+    }
+    
+    // Wait 10 seconds before next fetch
+    await new Promise(resolve => setTimeout(resolve, 10000));
+  }
+}
+startMarketDataPolling();
 
 // 인메모리 카운터 (디스크 I/O 제거 — 5분마다 비동기 플러시)
 let stats = { total: 0, daily: {} };
@@ -176,6 +222,11 @@ const server = createServer(async (req, res) => {
       audience: AUDIENCE_ID ? '설정됨' : '미설정',
       ts: new Date().toISOString(),
     });
+  }
+
+  // ── GET /api/market-data (실시간 시장 데이터 폴링용) ─────────
+  if (req.method === 'GET' && path === '/api/market-data') {
+    return sendJSON(res, 200, { success: true, data: latestMarketData });
   }
 
   // ── GET /api/stats (슬랙 리포트용) ──────────────────────────
