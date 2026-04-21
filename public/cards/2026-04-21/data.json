@@ -1,0 +1,43 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "기름값 360원 아꼈는데, 밥값으로 2천 원 더 나가게 생겼어요 🥲",
+      "badge": "2026-04-21 시장 분석",
+      "walletItems": [
+        {
+          "label": "🛒 식비·물가",
+          "impact": "월 식비 80만 원 기준 2,080원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "⛽ 주유비",
+          "impact": "5만 원 주유 시 363원 아낄 수 있어요",
+          "trend": "down"
+        },
+        {
+          "label": "₿ 비트코인",
+          "impact": "100만 원 투자했다면 27,141원 벌었어요",
+          "trend": "up"
+        },
+        {
+          "label": "📊 국내 주식",
+          "impact": "1천만 원 투자 기준 43,880원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "✈️ 해외여행",
+          "impact": "100만 원 환전 시 약 3,100원 더 비싸졌어요",
+          "trend": "up"
+        },
+        {
+          "label": "🏠 대출 이자",
+          "impact": "다행히 금리 변동 없이 평화로워요",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}

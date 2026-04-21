@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "월급 빼고 다 오르는 줄 알았는데, 오늘은 기름값이 확 내렸어요!",
+      "badge": "2026-04-20 내 지갑 날씨",
+      "walletItems": [
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 2,353원 절약",
+          "trend": "down"
+        },
+        {
+          "label": "장바구니",
+          "impact": "월 식비 80만원 기준 2,080원 지출 증가",
+          "trend": "up"
+        },
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 투자 시 약 5만 5천원 증발",
+          "trend": "down"
+        },
+        {
+          "label": "대출이자",
+          "impact": "금리 변화 없이 평화로워요",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
