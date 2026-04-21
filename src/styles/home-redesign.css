@@ -164,3 +164,22 @@
 .i7-legend{margin-top:16px;padding-top:16px;border-top:1px dashed var(--color-border);display:flex;gap:16px;flex-wrap:wrap;font-size:0.72rem;color:var(--color-text-muted)}
 .i7-legend span{display:inline-flex;align-items:center;gap:5px}
 .i7-legend b{color:var(--color-text-primary);font-weight:700}
+
+/* ========== TICKER FLASH ANIMATIONS ========== */
+@keyframes tickerFlashUp {
+  0% { background-color: rgba(22, 163, 74, 0.4); transform: translateY(-2px); }
+  100% { background-color: var(--color-bg-card); transform: translateY(0); }
+}
+@keyframes tickerFlashDn {
+  0% { background-color: rgba(239, 68, 68, 0.4); transform: translateY(-2px); }
+  100% { background-color: var(--color-bg-card); transform: translateY(0); }
+}
+.h1-imp {
+  transition: all 0.2s ease-out;
+}
+.h1-imp.ticker-flash.up {
+  animation: tickerFlashUp 1s ease-out;
+}
+.h1-imp.ticker-flash.dn {
+  animation: tickerFlashDn 1s ease-out;
+}

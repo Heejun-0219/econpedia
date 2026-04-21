@@ -5,6 +5,7 @@ import dailyArticles from '../data/daily-articles.json';
 import fs from 'fs';
 import path from 'path';
 import '../styles/home-redesign.css';
+import MarketTicker from '../components/MarketTicker.jsx';
 
 const latestBriefings = [...dailyArticles]
   .sort((a, b) => b.date.localeCompare(a.date))
@@ -521,34 +522,6 @@ try {
           }
         })
         .catch(e => console.warn('Stats load failed', e));
-
-      // ── 실시간 시장 데이터 폴링 (10초 주기) ──
-      setInterval(async () => {
-        try {
-          const res = await fetch('/api/market-data');
-          const json = await res.json();
-          if (json.success && json.data) {
-            const r = json.data;
-            const updateImpact = (id, data, prefix='') => {
-              if (!data) return;
-              const el = document.getElementById('impact-' + id);
-              const vEl = document.getElementById('impact-' + id + '-v');
-              const dEl = document.getElementById('impact-' + id + '-d');
-              if (el && vEl && dEl) {
-                el.className = `h1-imp ${data.changePercent > 0 ? 'up' : 'dn'}`;
-                vEl.textContent = prefix + data.price.toFixed(2);
-                dEl.textContent = `${data.changePercent > 0 ? '↑' : '↓'} ${Math.abs(data.changePercent).toFixed(2)}%`;
-              }
-            };
-            updateImpact('oil', r.oil, '$');
-            updateImpact('kospi', r.kospi);
-            updateImpact('krw', r.krw, '₩');
-            updateImpact('sp500', r.sp500);
-          }
-        } catch (e) {
-          console.warn('Market data poll failed', e);
-        }
-      }, 10000);
 
       document.querySelectorAll('.search-tag').forEach(function(tag) {
         tag.addEventListener('click', function(e) {

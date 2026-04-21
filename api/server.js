@@ -27,6 +27,7 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 // ─── 실시간 시장 데이터 폴링 (10초 주기) ───────────────────
 let latestMarketData = null;
+let sseClients = [];
 
 async function startMarketDataPolling() {
   const symbols = {
@@ -43,7 +44,6 @@ async function startMarketDataPolling() {
   while (true) {
     try {
       const results = {};
-      // Promise.all to fetch concurrently for faster update
       const promises = Object.entries(symbols).map(async ([key, symbol]) => {
         try {
           const quote = await yahooFinance.quote(symbol);
@@ -53,12 +53,18 @@ async function startMarketDataPolling() {
             changePercent: quote.regularMarketChangePercent
           };
         } catch (err) {
-          // ignore individual fetch failure to keep others updating
+          // ignore individual fetch failure
         }
       });
       await Promise.all(promises);
       if (Object.keys(results).length > 0) {
         latestMarketData = results;
+        
+        // SSE 클라이언트들에게 브로드캐스트 (실시간 스트림)
+        const dataStr = JSON.stringify({ success: true, data: latestMarketData });
+        sseClients.forEach(client => {
+          client.res.write(`data: ${dataStr}\n\n`);
+        });
       }
     } catch (e) {
       console.error('⚠️ Market data polling error:', e.message);
@@ -380,6 +386,22 @@ const server = createServer(async (req, res) => {
     try {
       const result = await removeContact(email);
       console.log(`[unsubscribe] ✅ ${email}`);
+      return sendJSON(res, 200, { success: true, ...result });
+    } catch (err) {
+      console.error(`[unsubscribe] ❌ ${email}: ${err.message}`);
+      return sendJSON(res, 500, { error: '구독 취소 중 오류가 발생했습니다.' });
+    }
+  }
+
+  // 404
+  return sendJSON(res, 404, { error: 'Not found' });
+});
+
+server.listen(PORT, () => {
+  console.log(`🚀 EconPedia Subscribe API 서버 실행 중 — port ${PORT}`);
+  console.log(`   Audience ID: ${AUDIENCE_ID || '⚠️ 미설정'}`);
+});
+ console.log(`[unsubscribe] ✅ ${email}`);
       return sendJSON(res, 200, { success: true, ...result });
     } catch (err) {
       console.error(`[unsubscribe] ❌ ${email}: ${err.message}`);
