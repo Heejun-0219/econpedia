@@ -138,6 +138,18 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
     cssClass: isToday ? 'today' : isPast ? 'past' : ''
   };
 });
+
+// ─── 트래픽 메트릭 로드 (빌드 타임) ─────────────────────
+let siteStats = { total_visitors: 0, daily_visitors: 0 };
+try {
+  // 배포된 환경의 API에서 통계 데이터를 긁어옴 (SSG 빌드 시 최신값 반영)
+  const statsRes = await fetch('https://econpedia.dedyn.io/api/stats');
+  if (statsRes.ok) {
+    siteStats = await statsRes.json();
+  }
+} catch (err) {
+  console.warn('⚠️ 빌드 중 사이트 통계 로드 실패:', err.message);
+}
 ---
 
 <BaseLayout
@@ -192,7 +204,7 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
       <div class="cta-row">
         <a href={latestBriefings[0] ? latestBriefings[0].href : '/daily'} class="cta-p" style="text-decoration:none">오늘 브리핑 3분 읽기 →</a>
         <a href="#newsletter-block" class="cta-s" style="text-decoration:none">매일 아침 받기</a>
-        <div class="cta-t">이미 <b id="stat-daily-readers">90명</b>이 읽었어요. 함께해보세요!</div>
+        <div class="cta-t">이미 <b id="stat-daily-readers">{siteStats.daily_visitors.toLocaleString()}명</b>이 읽었어요. 함께해보세요!</div>
       </div>
       <div class="h1-impact">
         <div id="impact-oil" class={`h1-imp ${r.oil?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">원유(WTI)</div><div class="v" id="impact-oil-v">${r.oil?.price.toFixed(2) || '68.20'}</div><div class="d" id="impact-oil-d">{r.oil?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.oil?.changePercent || 3.1).toFixed(2)}%</div></div>
@@ -499,13 +511,13 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
       fetch('/api/stats')
         .then(res => res.json())
         .then(data => {
-          if (data && data.total_visitors) {
+          if (data && data.total_visitors !== undefined) {
             const subEl = document.getElementById('stat-subscribers');
-            if (subEl) subEl.textContent = (14000 + data.total_visitors).toLocaleString();
+            if (subEl) subEl.textContent = data.total_visitors.toLocaleString();
           }
           if (data && data.daily_visitors !== undefined) {
             const dailyEl = document.getElementById('stat-daily-readers');
-            if (dailyEl) dailyEl.textContent = (90 + data.daily_visitors).toLocaleString() + '명';
+            if (dailyEl) dailyEl.textContent = data.daily_visitors.toLocaleString() + '명';
           }
         })
         .catch(e => console.warn('Stats load failed', e));
