@@ -4,9 +4,10 @@ export interface Props {
   description: string;
   ogImage?: string;
   article?: boolean;
+  hideSubHub?: boolean;
 }
 
-const { title, description, ogImage = '/og-default.png', article = false } = Astro.props;
+const { title, description, ogImage = '/og-default.png', article = false, hideSubHub = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -352,6 +353,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </div>
 
     <!-- 통합 구독 허브 (텔레그램 + 뉴스레터) -->
+    {!hideSubHub && (
     <section class="sub-hub">
       <div class="sub-hub__inner">
         <!-- 왼쪽: 텔레그램 (실시간 알림) -->
@@ -392,6 +394,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         </div>
       </div>
     </section>
+    )}
 
     <!-- Footer -->
     <footer class="footer">

@@ -46,24 +46,95 @@ const weekdaysEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const weatherIcons = ['☀️', '⛅', '🌧️', '🌩️'];
 const weatherLabels = ['맑음', '흐림', '비', '폭풍'];
 
-const weekData = Array.from({length: 7}).map((_, i) => {
+let pastWeekData = [];
+let nextWeekData = [];
+try {
+  const hPath = path.resolve(process.cwd(), 'src/data/weather-history.json');
+  if (fs.existsSync(hPath)) pastWeekData = JSON.parse(fs.readFileSync(hPath, 'utf8'));
+  const fPath = path.resolve(process.cwd(), 'src/data/weather-forecast.json');
+  if (fs.existsSync(fPath)) nextWeekData = JSON.parse(fs.readFileSync(fPath, 'utf8'));
+} catch (e) {
+  console.warn('Could not load weather JSONs', e.message);
+}
+
+function generateWeekData(offsetDays, sourceData, forceCssClass) {
+  return Array.from({length: 7}).map((_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + offsetDays + i);
+    const dateStr = d.toISOString().split('T')[0];
+    
+    let icon = '☀️';
+    let label = '맑음';
+    let event = '';
+    
+    const matched = sourceData.find(x => x.date === dateStr);
+    if (matched) {
+      icon = matched.emoji;
+      label = matched.label;
+      event = matched.event || '';
+    } else {
+      const hash = d.getDate() * 37 % 4;
+      icon = weatherIcons[hash];
+      label = weatherLabels[hash];
+    }
+    
+    return {
+      dow: weekdaysEn[d.getDay()],
+      dt: `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`,
+      icon,
+      label,
+      event,
+      cssClass: forceCssClass
+    };
+  });
+}
+
+const pastWeek = generateWeekData(-7, pastWeekData, 'past');
+const nextWeek = generateWeekData(1, nextWeekData, '');
+
+const thisWeek = Array.from({length: 7}).map((_, i) => {
   const d = new Date(today);
   d.setDate(today.getDate() - 5 + i); // 5 days past, today, tomorrow
   const isToday = i === 5;
   const isTomorrow = i === 6;
   const isPast = i < 5;
+  const dateStr = d.toISOString().split('T')[0];
   
-  // pseudo-random deterministic past weather based on date
-  const hash = d.getDate() * 37 % 4;
-  let icon = isToday ? w.emoji : weatherIcons[hash];
-  let label = isToday ? w.label : weatherLabels[hash];
-  if (isTomorrow) { icon = '⛅'; label = '예보: 흐림'; }
+  let icon = '☀️';
+  let label = '맑음';
+  let event = '';
+  
+  if (isToday) {
+    icon = w.emoji || '☀️';
+    label = w.label || '맑음';
+  } else if (isTomorrow) {
+    const matched = nextWeekData.find(x => x.date === dateStr);
+    if (matched) {
+      icon = matched.emoji;
+      label = `예보: ${matched.label}`;
+      event = matched.event || '';
+    } else {
+      icon = '⛅'; label = '예보: 흐림';
+    }
+  } else {
+    const matched = pastWeekData.find(x => x.date === dateStr);
+    if (matched) {
+      icon = matched.emoji;
+      label = matched.label;
+      event = matched.event || '';
+    } else {
+      const hash = d.getDate() * 37 % 4;
+      icon = weatherIcons[hash];
+      label = weatherLabels[hash];
+    }
+  }
 
   return {
     dow: isToday ? '오늘' : isTomorrow ? '내일' : weekdaysEn[d.getDay()],
     dt: `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`,
     icon,
     label,
+    event,
     cssClass: isToday ? 'today' : isPast ? 'past' : ''
   };
 });
@@ -72,6 +143,7 @@ const weekData = Array.from({length: 7}).map((_, i) => {
 <BaseLayout
   title="경제 백과사전"
   description="경제 초보자를 전문가로 만드는 경제 백과사전. GDP, 주식, ETF, 금리 등 복잡한 경제 개념을 쉽고 재밌게 배워보세요."
+  hideSubHub={true}
 >
   <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
 
@@ -81,8 +153,8 @@ const weekData = Array.from({length: 7}).map((_, i) => {
     <div class="i7-strip">
       <div class="i7-top">
         <div>
-          <div class="lb">이번 주 경제 날씨</div>
-          <h4>이번 주 시장은 대체로 <b style="color:var(--color-accent-primary)">맑음</b>, 목요일 하루만 비 소식이에요.</h4>
+          <div class="lb" id="weather-title">이번 주 경제 날씨</div>
+          <h4 id="weather-headline">이번 주 시장은 대체로 <b style="color:var(--color-accent-primary)">맑음</b>, 목요일 하루만 비 소식이에요.</h4>
         </div>
         <div class="actions">
           <div class="b on">이번 주</div>
@@ -90,13 +162,14 @@ const weekData = Array.from({length: 7}).map((_, i) => {
           <div class="b">다음 주 예보</div>
         </div>
       </div>
-      <div class="i7-week">
-        {weekData.map((d) => (
+      <div class="i7-week" id="weather-week-container">
+        {thisWeek.map((d) => (
           <div class={`i7-day ${d.cssClass}`}>
             <div class="dow">{d.dow}</div>
             <div class="dt">{d.dt}</div>
             <div class="icon">{d.icon}</div>
             <div class="lbl">{d.label}</div>
+            {d.event && <div style="font-size:0.6rem; color:var(--color-accent-danger); margin-top:2px; font-weight:700; line-height:1.2; letter-spacing:-0.05em; word-break:keep-all;">{d.event}</div>}
           </div>
         ))}
       </div>
@@ -297,6 +370,12 @@ const weekData = Array.from({length: 7}).map((_, i) => {
           </form>
           <div id="subscribe-feedback-new" style="display:none; font-size:0.8rem; margin-top:8px; font-weight:600;"></div>
           <div class="priv" style="margin-top:12px;">✓ 스팸 발송 금지 · ✓ 한 번에 해지 가능 · ✓ 정보 판매 금지</div>
+          <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--color-border); font-size: 0.82rem;">
+            실시간 시황 알림만 빠르게 받고 싶다면? 
+            <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" style="color: var(--color-accent-primary); font-weight: 700; text-decoration: none; margin-left: 4px;">
+              텔레그램 채널 입장 ↗
+            </a>
+          </div>
         </div>
         <div class="i6-right">
           <div class="kick"><span>SAMPLE · 가장 최근 브리핑</span><b>{latestBriefings[0]?.date}</b></div>
@@ -360,6 +439,57 @@ const weekData = Array.from({length: 7}).map((_, i) => {
           btn.textContent = '무료 구독';
         }
       });
+    })();
+  </script>
+
+  <script is:inline define:vars={{pastWeek, thisWeek, nextWeek}}>
+    window.weatherTabsData = { pastWeek, thisWeek, nextWeek };
+  </script>
+
+  <script is:inline>
+    (function () {
+      const weatherContainer = document.getElementById('weather-week-container');
+      const weatherTabs = document.querySelectorAll('.i7-top .actions .b');
+      const weatherTitle = document.getElementById('weather-title');
+      const weatherHeadline = document.getElementById('weather-headline');
+      
+      if (weatherContainer && weatherTabs.length === 3 && window.weatherTabsData) {
+        weatherTabs.forEach((tab, idx) => {
+          tab.addEventListener('click', () => {
+            weatherTabs.forEach(t => t.classList.remove('on'));
+            tab.classList.add('on');
+            
+            let data = [];
+            if (idx === 0) {
+              data = window.weatherTabsData.thisWeek;
+              weatherTitle.textContent = "이번 주 경제 날씨";
+              weatherHeadline.innerHTML = `이번 주 시장은 대체로 <b style="color:var(--color-accent-primary)">맑음</b>, 목요일 하루만 비 소식이에요.`;
+            } else if (idx === 1) {
+              data = window.weatherTabsData.pastWeek;
+              weatherTitle.textContent = "지난 주 경제 날씨";
+              weatherHeadline.innerHTML = `지난 주는 변동성이 큰 <b style="color:var(--color-accent-danger)">폭풍</b> 장세였어요.`;
+            } else {
+              data = window.weatherTabsData.nextWeek;
+              weatherTitle.textContent = "다음 주 예보";
+              weatherHeadline.innerHTML = `다음 주는 <b style="color:#ca8a04">흐림</b>. 주요 이벤트 발표가 예정되어 있어요.`;
+            }
+            
+            weatherContainer.innerHTML = data.map(d => {
+              const cssClass = d.cssClass || '';
+              const evHtml = d.event ? `<div style="font-size:0.6rem; color:var(--color-accent-danger); margin-top:2px; font-weight:700; line-height:1.2; letter-spacing:-0.05em; word-break:keep-all;">${d.event}</div>` : '';
+              return `
+                <div class="i7-day ${cssClass}">
+                  <div class="dow">${d.dow}</div>
+                  <div class="dt">${d.dt}</div>
+                  <div class="icon">${d.icon}</div>
+                  <div class="lbl">${d.label}</div>
+                  ${evHtml}
+                </div>
+              `;
+            }).join('');
+          });
+        });
+      }
     })();
   </script>
 

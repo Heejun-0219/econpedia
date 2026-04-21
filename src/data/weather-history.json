@@ -1,0 +1,9 @@
+[
+  { "date": "2026-04-10", "weather": "cloudy", "label": "흐림", "emoji": "☁️", "event": "" },
+  { "date": "2026-04-11", "weather": "sunny", "label": "맑음", "emoji": "☀️", "event": "" },
+  { "date": "2026-04-12", "weather": "sunny", "label": "맑음", "emoji": "☀️", "event": "" },
+  { "date": "2026-04-13", "weather": "rain", "label": "비", "emoji": "🌧️", "event": "" },
+  { "date": "2026-04-14", "weather": "sunny", "label": "맑음", "emoji": "☀️", "event": "" },
+  { "date": "2026-04-15", "weather": "storm", "label": "폭풍", "emoji": "🌩️", "event": "주요국 금리결정" },
+  { "date": "2026-04-16", "weather": "cloudy", "label": "흐림", "emoji": "☁️", "event": "" }
+]

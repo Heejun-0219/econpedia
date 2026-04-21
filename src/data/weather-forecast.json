@@ -1,0 +1,9 @@
+[
+  { "date": "2026-04-21", "weather": "cloudy", "label": "흐림", "emoji": "☁️", "event": "한국은행 금통위" },
+  { "date": "2026-04-22", "weather": "storm", "label": "폭풍", "emoji": "🌩️", "event": "FOMC 회의록" },
+  { "date": "2026-04-23", "weather": "rain", "label": "비", "emoji": "🌧️", "event": "미국 CPI 발표" },
+  { "date": "2026-04-24", "weather": "sunny", "label": "맑음", "emoji": "☀️", "event": "" },
+  { "date": "2026-04-25", "weather": "sunny", "label": "맑음", "emoji": "☀️", "event": "" },
+  { "date": "2026-04-26", "weather": "sunny", "label": "맑음", "emoji": "☀️", "event": "" },
+  { "date": "2026-04-27", "weather": "cloudy", "label": "흐림", "emoji": "☁️", "event": "테슬라 실적" }
+]
