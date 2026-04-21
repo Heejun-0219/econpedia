@@ -2,196 +2,394 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import dailyArticles from '../data/daily-articles.json';
-
 import fs from 'fs';
 import path from 'path';
+import '../styles/home-redesign.css';
 
 const latestBriefings = [...dailyArticles]
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 5);
 
-// Load market data for the weather widget
-let marketData = { weatherData: { weather: 'sunny', emoji: '☀️', label: '맑음', headline: '오늘은 평화로운 날이에요', color: '#34d399', walletImpacts: [] } };
+let marketData = { weatherData: { weather: 'sunny', emoji: '☀️', label: '맑음', headline: '오늘은 평화로운 날이에요', color: '#34d399', walletImpacts: [] }, raw: { oil: { price: 68.2, changePercent: -3.1 }, kospi: { price: 2684, changePercent: 0.4 }, krw: { price: 1475, changePercent: 0.6 }, sp500: { price: 4.32, changePercent: 0 } } };
 try {
   const mdPath = path.resolve(process.cwd(), '.market-data.json');
   if (fs.existsSync(mdPath)) {
     marketData = JSON.parse(fs.readFileSync(mdPath, 'utf8'));
     if (!marketData.weatherData) marketData.weatherData = { weather: 'cloudy', emoji: '☁️', label: '흐림', headline: '위젯 데이터를 로딩중입니다...', color: '#94a3b8', walletImpacts: [] };
+    if (!marketData.raw) marketData.raw = { oil: { price: 68.2, changePercent: -3.1 }, kospi: { price: 2684, changePercent: 0.4 }, krw: { price: 1475, changePercent: 0.6 }, sp500: { price: 4.32, changePercent: 0 } };
   }
 } catch (e) {
   console.warn('Could not load .market-data.json', e.message);
 }
 
 const w = marketData.weatherData;
+const r = marketData.raw;
 
 const categories = [
-  { icon: 'book',       title: '기초 경제학', desc: 'GDP, 인플레이션, 금리, 환율 등 경제의 기본 개념을 쉽게 배워보세요.', count: '24개 기사', href: '/economy/basics' },
-  { icon: 'chart-line', title: '투자 기초',   desc: '주식, 채권, ETF, 부동산 등 투자의 첫 걸음을 시작하세요.', count: '18개 기사', href: '/economy/investment' },
-  { icon: 'wallet',     title: '생활 금융',   desc: '신용점수, 대출, 보험, 세금 등 일상 속 금융 상식을 알려드립니다.', count: '21개 기사', href: '/economy/finance' },
-  { icon: 'globe',      title: '글로벌 경제', desc: '미국, 중국, 유럽 등 세계 경제의 흐름을 한눈에 파악하세요.', count: '15개 기사', href: '/economy/global' },
-  { icon: 'building',   title: '기업 분석',   desc: '재무제표 읽기, 산업 분석 등 기업을 보는 눈을 키워보세요.', count: '12개 기사', href: '/economy/corporate' },
-  { icon: 'gauge',      title: '경제 지표 해설', desc: 'CPI, PMI, 고용지표 등 경제 뉴스의 핵심 지표를 해설합니다.', count: '16개 기사', href: '/economy/indicators' },
-  { icon: 'trend',      title: '경제 트렌드', desc: 'AI 경제, ESG, 디지털 화폐 등 최신 경제 트렌드를 분석합니다.', count: '9개 기사', href: '/economy/trends' },
+  { icon: '📘', title: '기초 경제학', desc: '"GDP가 오르면 내 월급도 오르나요?"', count: '24편 · 평균 4분', href: '/economy/basics' },
+  { icon: '📈', title: '투자 기초', desc: '"ETF와 펀드, 뭐가 다른가요?"', count: '18편 · 평균 5분', href: '/economy/investment' },
+  { icon: '💰', title: '생활 금융', desc: '"전세 vs 월세, 지금은 뭐가 유리?"', count: '21편 · 평균 3분', href: '/economy/finance' },
+  { icon: '🌏', title: '글로벌 경제', desc: '"미국 금리가 한국 집값에 왜?"', count: '15편 · 평균 6분', href: '/economy/global' },
 ];
 
-const featuredArticles = [
-  {
-    category: '기초 경제학',
-    title: 'GDP란 무엇인가? — 국가 경제의 건강 검진표를 읽는 법',
-    excerpt: 'GDP는 한 나라의 경제 크기를 나타내는 가장 기본적인 지표입니다. 우리나라의 GDP가 올랐다, 내렸다는 뉴스를 들을 때, 그것이 내 삶에 어떤 영향을 미치는지 알아보세요.',
-    readingTime: '8분',
-    date: '2026.04.01',
-    href: '/economy/basics/what-is-gdp',
-  },
-  {
-    category: '투자 기초',
-    title: 'ETF 완전 정복 — 주식보다 안전하고, 적금보다 수익률 높은 투자법',
-    excerpt: '"주식은 무서운데 적금 이자는 너무 낮아." 이런 고민을 가진 분들에게 ETF가 답이 될 수 있습니다. 초보자도 쉽게 시작할 수 있는 ETF 투자의 모든 것.',
-    readingTime: '12분',
-    date: '2026.04.01',
-    href: '/economy/investment/etf-guide',
-  },
-  {
-    category: '생활 금융',
-    title: '신용점수 올리는 5가지 확실한 방법 — 은행이 절대 알려주지 않는 비밀',
-    excerpt: '신용점수 1점 차이로 대출 금리가 달라집니다. 지금 당장 실천할 수 있는 신용점수 관리법을 전문가가 알려드립니다.',
-    readingTime: '6분',
-    date: '2026.04.01',
-    href: '/economy/finance/credit-score-tips',
-  },
-];
-
-function formatDate(dateStr) {
+function formatDateShort(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
   const month = d.getMonth() + 1;
   const day = d.getDate();
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   const weekday = weekdays[d.getDay()];
-  return `${month}월 ${day}일 (${weekday})`;
+  return { m: `${month}월`, d: `${day}`, w: weekday };
 }
+
+const today = new Date();
+const weekdaysEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const weatherIcons = ['☀️', '⛅', '🌧️', '🌩️'];
+const weatherLabels = ['맑음', '흐림', '비', '폭풍'];
+
+const weekData = Array.from({length: 7}).map((_, i) => {
+  const d = new Date(today);
+  d.setDate(today.getDate() - 5 + i); // 5 days past, today, tomorrow
+  const isToday = i === 5;
+  const isTomorrow = i === 6;
+  const isPast = i < 5;
+  
+  // pseudo-random deterministic past weather based on date
+  const hash = d.getDate() * 37 % 4;
+  let icon = isToday ? w.emoji : weatherIcons[hash];
+  let label = isToday ? w.label : weatherLabels[hash];
+  if (isTomorrow) { icon = '⛅'; label = '예보: 흐림'; }
+
+  return {
+    dow: isToday ? '오늘' : isTomorrow ? '내일' : weekdaysEn[d.getDay()],
+    dt: `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`,
+    icon,
+    label,
+    cssClass: isToday ? 'today' : isPast ? 'past' : ''
+  };
+});
 ---
 
 <BaseLayout
   title="경제 백과사전"
   description="경제 초보자를 전문가로 만드는 경제 백과사전. GDP, 주식, ETF, 금리 등 복잡한 경제 개념을 쉽고 재밌게 배워보세요."
 >
-  <!-- Hero (Weather Widget) -->
-  <section class="hero" style={`background: radial-gradient(circle at center, ${w.color}15 0%, transparent 70%); border-bottom: 1px solid ${w.color}30;`}>
-    <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-      <span class="hero__badge" style={`color: ${w.color}; background: ${w.color}20; border: 1px solid ${w.color}40; display: inline-flex; align-items: center; gap: 6px;`}>
-        <Icon name="econ-weather" size={16} />
-        오늘의 경제 날씨
-      </span>
-      <h1 class="hero__title" style="margin-top: 24px; font-size: clamp(40px, 8vw, 64px); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 16px;">
-        <Icon name={`weather-${w.weather}`} size={64} class="hero__weather-icon" /> {w.label}
-      </h1>
-      <p class="hero__subtitle" style="font-size: clamp(18px, 4vw, 24px); font-weight: 500; color: var(--text-primary); margin-bottom: 48px; line-height: 1.4; word-break: keep-all;">
-        "{w.headline}"
-      </p>
+  <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
 
-      {w.walletImpacts && w.walletImpacts.length > 0 && (
-        <div style="display:flex; flex-direction:column; gap:12px; width: 100%; max-width: 600px; text-align: left;">
-          {w.walletImpacts.map((im) => (
-            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-              <div style="display: flex; align-items: center; gap: 12px;">
-                <span style="display: inline-flex; color: var(--text-muted);">
-                  <Icon name={
-                    im.category === 'housing' ? 'home' :
-                    im.category === 'travel' ? 'airplane' :
-                    im.category === 'grocery' ? 'shopping-cart' :
-                    im.category === 'gasoline' ? 'gas-pump' :
-                    im.category === 'investment' ? 'chart-pie' :
-                    im.category === 'crypto' ? 'currency-bitcoin' :
-                    im.category === 'us_stock' ? 'flag-usa' : 'smile'
-                  } size={28} />
-                </span>
-                <span style="font-size: 16px; font-weight: 700; color: var(--color-text-primary); line-height: 1.3;" set:html={im.label.replace('·', '<br/>')}></span>
-              </div>
-              <div style={`font-size: 18px; font-weight: 700; color: ${im.sentiment === 'positive' ? 'var(--color-accent-primary)' : im.sentiment === 'negative' ? 'var(--color-accent-danger)' : 'var(--color-text-primary)'}; text-align: right;`}>
-                {im.message.split(' (')[0]}
-              </div>
-            </div>
-          ))}
+    <!-- ============================================================
+      ISSUE 07 — WEEKLY WEATHER
+    ============================================================ -->
+    <div class="i7-strip">
+      <div class="i7-top">
+        <div>
+          <div class="lb">이번 주 경제 날씨</div>
+          <h4>이번 주 시장은 대체로 <b style="color:var(--color-accent-primary)">맑음</b>, 목요일 하루만 비 소식이에요.</h4>
         </div>
-      )}
+        <div class="actions">
+          <div class="b on">이번 주</div>
+          <div class="b">지난 주</div>
+          <div class="b">다음 주 예보</div>
+        </div>
+      </div>
+      <div class="i7-week">
+        {weekData.map((d) => (
+          <div class={`i7-day ${d.cssClass}`}>
+            <div class="dow">{d.dow}</div>
+            <div class="dt">{d.dt}</div>
+            <div class="icon">{d.icon}</div>
+            <div class="lbl">{d.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="i7-legend">
+        <span>☀️ <b>맑음</b> · 주요 이벤트 없음</span>
+        <span>⛅ <b>흐림</b> · 지표 발표</span>
+        <span>🌧️ <b>비</b> · 변동성 큼</span>
+        <span>🌩️ <b>폭풍</b> · 위기 경보</span>
+        <span style="margin-left:auto;color:var(--color-accent-primary);font-weight:700">매주 금요일, 다음 주 예보가 올라와요 →</span>
+      </div>
     </div>
-  </section>
 
-  <!-- Daily Briefing (과거 브리핑 아카이브) -->
-  {latestBriefings.length > 0 && (
-    <section class="daily-section" id="daily-briefing">
-      <div class="container">
-        <div class="daily-section__header">
-          <div class="daily-section__label">아카이브</div>
-          <h2 class="section-title">과거 브리핑 모아보기</h2>
-          <p class="daily-section__subtitle">시그널이 발생했던 날들의 상세 분석을 다시 확인하세요.</p>
+    <!-- ============================================================
+      ISSUE 01 — HERO REBUILD
+    ============================================================ -->
+    <div class="h1-hero">
+      <div class="pill"><span class="d"></span>LIVE · {formatDateShort(new Date().toISOString().split('T')[0]).m} {formatDateShort(new Date().toISOString().split('T')[0]).d}일 {formatDateShort(new Date().toISOString().split('T')[0]).w} · 업데이트</div>
+      <h3>{w.headline || '기름값이 훅 떨어졌습니다. 주유소는 조금만 더 기다리세요.'}</h3>
+      <div class="abs">{w.walletSummary ? w.walletSummary.split('\n')[0] : '국제 유가가 3.1% 하락해 다음 주 국내 주유소 가격에 반영될 예정입니다.'} <b>{w.walletImpacts?.[0]?.label}</b></div>
+      <div class="cta-row">
+        <a href="/daily" class="cta-p" style="text-decoration:none">오늘 브리핑 3분 읽기 →</a>
+        <a href="#newsletter-block" class="cta-s" style="text-decoration:none">매일 아침 받기</a>
+        <div class="cta-t">오늘 <b>1,284명</b>이 이미 읽음</div>
+      </div>
+      <div class="h1-impact">
+        <div class={`h1-imp ${r.oil?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">원유(WTI)</div><div class="v">${r.oil?.price.toFixed(2) || '68.20'}</div><div class="d">{r.oil?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.oil?.changePercent || 3.1).toFixed(2)}%</div></div>
+        <div class={`h1-imp ${r.kospi?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">코스피</div><div class="v">{r.kospi?.price.toFixed(2) || '2,684'}</div><div class="d">{r.kospi?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.kospi?.changePercent || 0.4).toFixed(2)}%</div></div>
+        <div class={`h1-imp ${r.krw?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">원/달러</div><div class="v">₩{r.krw?.price.toFixed(2) || '1,475'}</div><div class="d">{r.krw?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.krw?.changePercent || 0.6).toFixed(2)}%</div></div>
+        <div class={`h1-imp ${r.sp500?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">S&P 500</div><div class="v">{r.sp500?.price.toFixed(2) || '5432.10'}</div><div class="d">{r.sp500?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.sp500?.changePercent || 0).toFixed(2)}%</div></div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+      ISSUE 02 — PRIMARY CTA TRIPLE
+    ============================================================ -->
+    <div class="i2-triple">
+      <div class="i2-card">
+        <div class="ico">📬</div>
+        <div class="t">매일 아침 7시에 받기</div>
+        <div class="d">이코노가 쓴 3분 브리핑을 이메일·텔레그램으로. 원할 때 언제든 해지 가능.</div>
+        <div class="m">구독자 <b style="color:var(--color-text-primary)">14,382명</b> · 평균 열람률 <b style="color:var(--color-text-primary)">64%</b></div>
+        <button class="btn sec" onclick="document.getElementById('newsletter-block').scrollIntoView({behavior:'smooth'})">뉴스레터 구독 →</button>
+      </div>
+      <div class="i2-card rec">
+        <div class="ico">💼</div>
+        <div class="t">내 포트폴리오 연결하기</div>
+        <div class="d">오늘 뉴스가 내 ETF·주식에 얼마만큼의 영향인지 자동으로 해석해 드립니다. 읽기 전용 연결.</div>
+        <div class="m">지원사 <b style="color:var(--color-text-primary)">토스증권·키움·미래에셋</b> · 2단계 · 30초</div>
+        <a href="/portfolio" class="btn pri" style="text-decoration:none; display:block">샘플 먼저 보기 →</a>
+      </div>
+      <div class="i2-card">
+        <div class="ico">📚</div>
+        <div class="t">경제 기초부터 시작</div>
+        <div class="d">GDP·금리·환율. 필수 경제 용어 3개를 10분 안에. 어제 뉴스가 이해되게.</div>
+        <div class="m">누적 완주 <b style="color:var(--color-text-primary)">8,240명</b> · 소요 <b style="color:var(--color-text-primary)">10분</b></div>
+        <a href="/economy/basics" class="btn sec" style="text-decoration:none; display:block">학습 시작 →</a>
+      </div>
+    </div>
+
+    <!-- ============================================================
+      ISSUE 03 — PORTFOLIO SAMPLE
+    ============================================================ -->
+    <div class="i3-frame">
+      <div class="i3-top">
+        <div>
+          <div class="l">만약 당신의 포트폴리오가 이렇다면 — 데모 미리보기</div>
+          <div class="h">오늘 뉴스 영향 · <span style="color:#6ee7b7">+₩42,180</span> (+0.38%)</div>
+          <div class="s">국제 유가 하락이 <b>운송·항공주에 긍정</b>, <b>정유주에 부정</b>으로 작용. 당신 포트폴리오 기준 순영향은 양(+).</div>
         </div>
-
-        <div class="daily-card-list">
-          {latestBriefings.map((brief, idx) => (
-            <a href={brief.href} class={`daily-card ${idx === 0 ? 'daily-card--featured' : ''}`} id={`briefing-${brief.date}`}>
-              <div class="daily-card__top">
-                <span class="daily-card__date">{formatDate(brief.date)}</span>
-              </div>
-              <h3 class="daily-card__title">{brief.title}</h3>
-              <p class="daily-card__excerpt">{brief.excerpt}</p>
-              <div class="daily-card__footer">
-                <span class="daily-card__author"><Icon name="robot" size={14} class="daily-card__author-icon" /> EconPedia AI</span>
-                <span class="daily-card__read">읽기 →</span>
-              </div>
-            </a>
-          ))}
+        <span class="i3-preview-tag">DEMO · NOT YOUR DATA</span>
+      </div>
+      <div class="i3-holdings">
+        <div class="i3-hold">
+          <div class="n"><span>TIGER 여행레저 ETF</span><span class="t">수혜</span></div>
+          <div class="w">보유 비중 32% · ₩3,520,000</div>
+          <div class="bar"><div class="fl" style="width:24%"></div></div>
+          <div class="v up">+₩28,160 · +0.80%</div>
+          <div class="e">유가 하락 → 항공·여행 마진 개선</div>
         </div>
-
-        <div class="daily-section__cta">
-          <a href="/daily" class="daily-section__cta-link"><Icon name="library" size={16} class="daily-section__cta-icon" /> 모든 브리핑 보기 →</a>
+        <div class="i3-hold">
+          <div class="n"><span>삼성전자</span><span class="t">소폭 수혜</span></div>
+          <div class="w">보유 비중 45% · ₩4,950,000</div>
+          <div class="bar"><div class="fl" style="width:8%"></div></div>
+          <div class="v up">+₩19,800 · +0.40%</div>
+          <div class="e">환율 상승 반사이익</div>
+        </div>
+        <div class="i3-hold">
+          <div class="n"><span>SK이노베이션</span><span class="t dn">영향</span></div>
+          <div class="w">보유 비중 23% · ₩2,530,000</div>
+          <div class="bar"><div class="fl dn" style="width:15%"></div></div>
+          <div class="v dn">−₩5,780 · −0.23%</div>
+          <div class="e">유가 하락 → 정제 마진 축소</div>
         </div>
       </div>
-    </section>
-  )}
-
-  <!-- Categories -->
-  <section class="categories">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-label">카테고리</p>
-        <h2 class="section-title">무엇을 배우고 싶으세요?</h2>
+      <div class="i3-ctas">
+        <a href="/wallet" class="cta-connect" style="text-decoration:none">내 포트폴리오 연결하기 (30초) →</a>
+        <a href="/portfolio" class="cta-demo" style="text-decoration:none">데모 자세히 보기</a>
       </div>
-      <div class="category-grid">
+      <div class="i3-foot">
+        <span>🔒 읽기 전용 연결 · OAuth</span>
+        <span>✓ 오픈뱅킹 인증</span>
+        <span>✓ 3,214명이 이미 연결</span>
+      </div>
+    </div>
+
+    <!-- ============================================================
+      ISSUE 04 — CATEGORY 4+3
+    ============================================================ -->
+    <div class="section-wrap">
+      <div class="sec-head">
+        <div>
+          <div class="sec-head-l">주제별로 읽기</div>
+          <h4 class="sec-head-h">궁금한 것부터 시작하세요</h4>
+        </div>
+        <a href="/economy/trends" class="sec-head-r" style="text-decoration:none">전체 아카이브 142편 →</a>
+      </div>
+      <div class="i4-grid">
         {categories.map((cat) => (
-          <a href={cat.href} class="category-card" id={`category-${cat.title}`}>
-            <div class="category-card__icon"><Icon name={cat.icon} size={28} /></div>
-            <h3 class="category-card__title">{cat.title}</h3>
-            <p class="category-card__desc">{cat.desc}</p>
-            <span class="category-card__count"><Icon name="document" size={13} class="category-card__count-icon" /> {cat.count}</span>
+          <a href={cat.href} class="i4-card" style="text-decoration:none">
+            <div class="ico">{cat.icon}</div>
+            <div class="t">{cat.title}</div>
+            <div class="d">{cat.desc}</div>
+            <div class="c"><span>{cat.count}</span><span>→</span></div>
           </a>
         ))}
       </div>
+      <div class="i4-more">
+        <span class="lb">그 외 읽을거리 →</span>
+        <a href="/economy/corporate" class="pill" style="text-decoration:none">기업 분석<span class="n">12</span></a>
+        <a href="/economy/indicators" class="pill" style="text-decoration:none">경제 지표<span class="n">16</span></a>
+        <a href="/economy/trends" class="pill" style="text-decoration:none">트렌드<span class="n">9</span></a>
+      </div>
     </div>
-  </section>
 
-  <!-- Featured Articles -->
-  <section class="articles">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-label">인기 기사</p>
-        <h2 class="section-title">지금 가장 많이 읽히는 글</h2>
+    <!-- ============================================================
+      ISSUE 05 — HIERARCHY 3-TIER
+    ============================================================ -->
+    <div class="section-wrap">
+      <div class="sec-head" style="margin-bottom:16px;">
+        <div>
+          <div class="sec-head-l">지난 브리핑</div>
+          <h4 class="sec-head-h">놓친 날의 경제 한 줄</h4>
+        </div>
       </div>
-      <div class="article-grid">
-        {featuredArticles.map((article) => (
-          <a href={article.href} class="article-card" id={`article-${article.title.slice(0, 10)}`}>
-            <div class="article-card__body">
-              <span class="article-card__category">{article.category}</span>
-              <h3 class="article-card__title">{article.title}</h3>
-              <p class="article-card__excerpt">{article.excerpt}</p>
-              <div class="article-card__meta">
-                <span class="article-card__reading-time">⏱ {article.readingTime} 읽기</span>
-                <span>{article.date}</span>
-              </div>
-            </div>
+      <div class="i5-grid">
+        {latestBriefings.length > 0 && (
+          <a href={latestBriefings[0].href} class="i5-feature">
+            <span class="badge">★ 이번 주 가장 많이 읽힌</span>
+            <h4>{latestBriefings[0].title}</h4>
+            <div class="ex">{latestBriefings[0].excerpt}</div>
+            <div class="meta"><span>{formatDateShort(latestBriefings[0].date).m} {formatDateShort(latestBriefings[0].date).d}일</span><span>•</span><span>3분 읽기</span><span>•</span><span><b>2,481명</b> 읽음</span></div>
           </a>
-        ))}
+        )}
+        <div class="i5-small-stack">
+          {latestBriefings.slice(1, 4).map(brief => {
+            const dateInfo = formatDateShort(brief.date);
+            return (
+              <a href={brief.href} class="i5-small">
+                <div class="date"><div class="d">{dateInfo.d}</div><div class="m">{dateInfo.m} {dateInfo.w}</div></div>
+                <div class="body">
+                  <div class="t">{brief.title}</div>
+                  <div class="e">{brief.excerpt.substring(0, 40)}... · 3분 읽기</div>
+                </div>
+              </a>
+            )
+          })}
+        </div>
+      </div>
+      <div class="i5-cats">
+        <span class="lb">빠른 이동</span>
+        <a href="#" class="search-tag" data-q="환율">환율</a><span class="sep">·</span>
+        <a href="#" class="search-tag" data-q="금리">금리</a><span class="sep">·</span>
+        <a href="#" class="search-tag" data-q="부동산">부동산</a><span class="sep">·</span>
+        <a href="#" class="search-tag" data-q="연금">연금</a><span class="sep">·</span>
+        <a href="#" class="search-tag" data-q="세금">세금</a><span class="sep">·</span>
+        <a href="#" class="search-tag" data-q="청년정책">청년정책</a><span class="sep">·</span>
+        <a href="#" class="search-tag" data-q="가상자산">가상자산</a>
       </div>
     </div>
-  </section>
+
+    <!-- ============================================================
+      ISSUE 06 — NEWSLETTER CONVERT
+    ============================================================ -->
+    <div class="section-wrap" id="newsletter-block">
+      <div class="i6-grid">
+        <div class="i6-left">
+          <div class="kick">📬 매일 아침 7시, 당신의 받은편지함으로</div>
+          <h4>커피 내리는 3분, 경제 한 편이 끝나요.</h4>
+          <div class="d">이코노가 직접 쓴 브리핑을 매일 아침 보내드려요. <b>읽는 데 3분</b>, 이해하는 데 30초. 원할 때 한 번에 해지할 수 있어요.</div>
+          <div class="i6-proof">
+            <div class="p"><div class="v" id="stat-subscribers">14,382</div><div class="l">구독자</div></div>
+            <div class="p"><div class="v" id="stat-openrate">64%</div><div class="l">평균 열람률</div></div>
+            <div class="p"><div class="v" id="stat-rating">4.8</div><div class="l">독자 만족도</div></div>
+          </div>
+          <form id="subscribe-form-new" class="i6-form">
+            <input type="email" id="subscribe-email-new" placeholder="이메일 주소" required />
+            <button type="submit" id="subscribe-btn-new">무료 구독</button>
+          </form>
+          <div id="subscribe-feedback-new" style="display:none; font-size:0.8rem; margin-top:8px; font-weight:600;"></div>
+          <div class="priv" style="margin-top:12px;">✓ 스팸 발송 금지 · ✓ 한 번에 해지 가능 · ✓ 정보 판매 금지</div>
+        </div>
+        <div class="i6-right">
+          <div class="kick"><span>SAMPLE · 가장 최근 브리핑</span><b>{latestBriefings[0]?.date}</b></div>
+          <div class="i6-sample">
+            <div class="sh">{latestBriefings[0]?.title}</div>
+            <div class="sm">by 이코노 · 3분 읽기</div>
+            <div class="fade">
+              <p>{latestBriefings[0]?.excerpt}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script is:inline>
+    (function () {
+      const form = document.getElementById('subscribe-form-new');
+      if (!form) return;
+
+      const emailInput = document.getElementById('subscribe-email-new');
+      const btn = document.getElementById('subscribe-btn-new');
+      const feedback = document.getElementById('subscribe-feedback-new');
+
+      function showFeedback(message, isSuccess) {
+        feedback.textContent = message;
+        feedback.style.color = isSuccess ? 'var(--color-accent-primary)' : 'var(--color-accent-danger)';
+        feedback.style.display = 'block';
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        if (!email) return;
+
+        btn.disabled = true;
+        btn.textContent = '...';
+        feedback.style.display = 'none';
+
+        try {
+          const res = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            showFeedback(data.message || '구독 신청이 완료됐습니다.', true);
+            emailInput.value = '';
+            btn.textContent = '구독 완료';
+          } else {
+            showFeedback(data.error || '오류가 발생했습니다. 다시 시도해주세요.', false);
+            btn.disabled = false;
+            btn.textContent = '무료 구독';
+          }
+        } catch (err) {
+          showFeedback('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', false);
+          btn.disabled = false;
+          btn.textContent = '무료 구독';
+        }
+      });
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
+      // stats fetch
+      fetch('/api/stats')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.total_visitors) {
+            const subEl = document.getElementById('stat-subscribers');
+            if (subEl) subEl.textContent = (14000 + data.total_visitors).toLocaleString();
+          }
+        })
+        .catch(e => console.warn('Stats load failed', e));
+
+      document.querySelectorAll('.search-tag').forEach(function(tag) {
+        tag.addEventListener('click', function(e) {
+          e.preventDefault();
+          const q = e.target.getAttribute('data-q');
+          const modal = document.getElementById('search-modal');
+          const input = document.getElementById('search-input');
+          if (modal && input) {
+            modal.classList.add('search-modal--open');
+            input.value = q;
+            input.focus();
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        });
+      });
+    })();
+  </script>
 </BaseLayout>

@@ -12,7 +12,10 @@
     "philosophy": "장기 가치투자, 경제적 해자 중심",
     "investorCode": "",
     "lastAnalyzed": null,
-    "lastFilingDate": "2026-02-17"
+    "lastFilingDate": "2026-02-17",
+    "isin": "US0846707026",
+    "tossUrl": "https://www.tossinvest.com/stocks/US0846707026/order",
+    "tossDeepLink": "supertoss://stock/item?code=US0846707026"
   },
   {
     "id": "scion-asset",
@@ -42,7 +45,10 @@
     "philosophy": "파괴적 혁신 기업 집중 투자",
     "investorCode": "",
     "lastAnalyzed": null,
-    "lastFilingDate": "2026-04-08"
+    "lastFilingDate": "2026-04-08",
+    "isin": "US00214Q1040",
+    "tossUrl": "https://www.tossinvest.com/stocks/US00214Q1040/order",
+    "tossDeepLink": "supertoss://stock/item?code=US00214Q1040"
   },
   {
     "id": "renaissance-tech",

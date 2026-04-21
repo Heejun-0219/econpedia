@@ -50,7 +50,7 @@ Return ONLY the 12-character ISIN code (e.g., US67066G1040, KR7005930003). If yo
     const response = await ai.models.generateContent({
       model: 'gemini-3.1-pro-preview',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      config: { temperature: 0.1, maxOutputTokens: 50 }
+      config: { temperature: 0.1, maxOutputTokens: 2000 }
     });
     const isin = response.text?.trim().toUpperCase();
     if (!isin || isin === 'UNKNOWN' || isin.length !== 12) return null;
@@ -136,8 +136,10 @@ async function main() {
         const isin = await getIsinWithAI(inv.name, inv.ticker);
         if (isin) {
           inv.isin = isin;
+          inv.tossUrl = `https://www.tossinvest.com/stocks/${isin}/order`;
+          inv.tossDeepLink = `supertoss://stock/item?code=${isin}`;
           shouldUpdateManifest = true;
-          console.log(`  ✅ ISIN 추가 완료: ${isin}`);
+          console.log(`  ✅ ISIN 및 토스 링크 추가 완료: ${isin}`);
         } else {
           console.log(`  ⚠️ ISIN을 찾을 수 없음`);
         }

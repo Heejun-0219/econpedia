@@ -7,7 +7,10 @@
     "country": "us",
     "initials": "NV",
     "domain": "nvidia.com",
-    "lastFilingDate": "2026-03-24"
+    "lastFilingDate": "2026-03-24",
+    "isin": "US67066G1040",
+    "tossUrl": "https://www.tossinvest.com/stocks/US67066G1040/order",
+    "tossDeepLink": "supertoss://stock/item?code=US67066G1040"
   },
   {
     "id": "aapl",
@@ -17,7 +20,10 @@
     "country": "us",
     "initials": "AP",
     "domain": "apple.com",
-    "lastFilingDate": "2026-04-17"
+    "lastFilingDate": "2026-04-17",
+    "isin": "US0378331005",
+    "tossUrl": "https://www.tossinvest.com/stocks/US0378331005/order",
+    "tossDeepLink": "supertoss://stock/item?code=US0378331005"
   },
   {
     "id": "tsla",
@@ -27,7 +33,10 @@
     "country": "us",
     "initials": "TS",
     "domain": "tesla.com",
-    "lastFilingDate": "2026-04-02"
+    "lastFilingDate": "2026-04-02",
+    "isin": "US88160R1014",
+    "tossUrl": "https://www.tossinvest.com/stocks/US88160R1014/order",
+    "tossDeepLink": "supertoss://stock/item?code=US88160R1014"
   },
   {
     "id": "meta",
@@ -37,7 +46,10 @@
     "country": "us",
     "initials": "ME",
     "domain": "meta.com",
-    "lastFilingDate": "2026-04-17"
+    "lastFilingDate": "2026-04-17",
+    "isin": "US30303M1027",
+    "tossUrl": "https://www.tossinvest.com/stocks/US30303M1027/order",
+    "tossDeepLink": "supertoss://stock/item?code=US30303M1027"
   },
   {
     "id": "samsung",
@@ -48,7 +60,10 @@
     "country": "kr",
     "initials": "SE",
     "domain": "samsung.com",
-    "lastFilingDate": "2026-04-17"
+    "lastFilingDate": "2026-04-17",
+    "isin": "KR7005930003",
+    "tossUrl": "https://www.tossinvest.com/stocks/KR7005930003/order",
+    "tossDeepLink": "supertoss://stock/item?code=KR7005930003"
   },
   {
     "id": "hyundai",
@@ -59,7 +74,10 @@
     "country": "kr",
     "initials": "HY",
     "domain": "hyundai.com",
-    "lastFilingDate": "2026-04-16"
+    "lastFilingDate": "2026-04-16",
+    "isin": "KR7005380001",
+    "tossUrl": "https://www.tossinvest.com/stocks/KR7005380001/order",
+    "tossDeepLink": "supertoss://stock/item?code=KR7005380001"
   },
   {
     "id": "naver",
@@ -70,6 +88,9 @@
     "country": "kr",
     "initials": "NA",
     "domain": "naver.com",
-    "lastFilingDate": "2026-04-17"
+    "lastFilingDate": "2026-04-17",
+    "isin": "KR7035420009",
+    "tossUrl": "https://www.tossinvest.com/stocks/KR7035420009/order",
+    "tossDeepLink": "supertoss://stock/item?code=KR7035420009"
   }
 ]
