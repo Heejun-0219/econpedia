@@ -1,0 +1,43 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "투자 계좌는 쏠쏠하게 불어나고, 대출 이자는 평화로운 하루예요.",
+      "badge": "2026-04-23 시장 분석",
+      "walletItems": [
+        {
+          "label": "국내주식 (1천만원 투자)",
+          "impact": "+46,114원",
+          "trend": "up"
+        },
+        {
+          "label": "미국주식 (500만원 투자)",
+          "impact": "+26,701원",
+          "trend": "up"
+        },
+        {
+          "label": "비트코인 (100만원 투자)",
+          "impact": "+38,431원",
+          "trend": "up"
+        },
+        {
+          "label": "월 식비 (80만원 기준)",
+          "impact": "2,080원 증가",
+          "trend": "up"
+        },
+        {
+          "label": "해외여행 (100만원 환전)",
+          "impact": "51원 절약",
+          "trend": "down"
+        },
+        {
+          "label": "대출이자 및 주유비",
+          "impact": "변동 없음",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
