@@ -318,7 +318,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       <div class="i3-foot">
         <span>🔒 읽기 전용 연결 · OAuth</span>
         <span>✓ 오픈뱅킹 인증</span>
-        <span>✓ 3,214명이 이미 연결</span>
+        <span>✓ <span id="stat-portfolio-users">{Number(siteStats.portfolio_users).toLocaleString()}</span>명이 이미 연결</span>
       </div>
     </div>
 
@@ -331,7 +331,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
           <div class="sec-head-l">주제별로 읽기</div>
           <h4 class="sec-head-h">궁금한 것부터 시작하세요</h4>
         </div>
-        <a href="/economy/trends" class="sec-head-r" style="text-decoration:none">전체 아카이브 142편 →</a>
+        <a href="/economy/trends" class="sec-head-r" style="text-decoration:none">전체 아카이브 {blogArticles.length + dailyArticles.length}편 →</a>
       </div>
       <div class="i4-grid">
         {categories.map((cat) => (
@@ -546,13 +546,35 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       fetch('/api/stats')
         .then(res => res.json())
         .then(data => {
-          if (data && data.total_visitors !== undefined) {
-            const subEl = document.getElementById('stat-subscribers');
-            if (subEl) subEl.textContent = data.total_visitors.toLocaleString();
-          }
-          if (data && data.daily_visitors !== undefined) {
+          if (!data) return;
+          
+          if (data.daily_visitors !== undefined) {
             const dailyEl = document.getElementById('stat-daily-readers');
-            if (dailyEl) dailyEl.textContent = data.daily_visitors.toLocaleString() + '명';
+            if (dailyEl) dailyEl.textContent = Number(data.daily_visitors).toLocaleString() + '명';
+          }
+          if (data.subscribers !== undefined) {
+            const subEl = document.getElementById('stat-subscribers');
+            const subEl2 = document.getElementById('stat-i2-subscribers');
+            if (subEl) subEl.textContent = Number(data.subscribers).toLocaleString();
+            if (subEl2) subEl2.textContent = Number(data.subscribers).toLocaleString() + '명';
+          }
+          if (data.openRate !== undefined) {
+            const orEl = document.getElementById('stat-openrate');
+            const orEl2 = document.getElementById('stat-i2-openrate');
+            if (orEl) orEl.textContent = data.openRate + '%';
+            if (orEl2) orEl2.textContent = data.openRate + '%';
+          }
+          if (data.rating !== undefined) {
+            const rEl = document.getElementById('stat-rating');
+            if (rEl) rEl.textContent = data.rating;
+          }
+          if (data.course_completions !== undefined) {
+            const cEl = document.getElementById('stat-i2-completions');
+            if (cEl) cEl.textContent = Number(data.course_completions).toLocaleString() + '명';
+          }
+          if (data.portfolio_users !== undefined) {
+            const pEl = document.getElementById('stat-portfolio-users');
+            if (pEl) pEl.textContent = Number(data.portfolio_users).toLocaleString();
           }
         })
         .catch(e => console.warn('Stats load failed', e));
@@ -568,6 +590,13 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
             input.value = q;
             input.focus();
             input.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        });
+      });
+    })();
+  </script>
+</BaseLayout>
+));
           }
         });
       });
