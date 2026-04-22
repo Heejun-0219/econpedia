@@ -76,22 +76,33 @@ async function startMarketDataPolling() {
 }
 startMarketDataPolling();
 
-// 인메모리 카운터 (디스크 I/O 제거 — 5분마다 비동기 플러시)
+// 인메모리 카운터 및 데이터 (디스크 I/O 제거 — 비동기 플러시)
 let stats = { total: 0, daily: {} };
+let polls = {};
+let wallets = {};
+
 try {
   if (fs.existsSync(STATS_FILE)) {
     stats = JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8'));
   }
+  if (fs.existsSync(POLLS_FILE)) {
+    polls = JSON.parse(fs.readFileSync(POLLS_FILE, 'utf-8'));
+  }
+  if (fs.existsSync(WALLETS_FILE)) {
+    wallets = JSON.parse(fs.readFileSync(WALLETS_FILE, 'utf-8'));
+  }
 } catch (e) {
-  console.warn('⚠️ stats.json 로드 실패, 초기값으로 시작:', e.message);
+  console.warn('⚠️ 데이터 파일 로드 실패, 초기값으로 시작:', e.message);
 }
 
 function pruneOldDaily() {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 90);
   const cutoffStr = cutoff.toISOString().split('T')[0];
-  for (const key of Object.keys(stats.daily)) {
-    if (key < cutoffStr) delete stats.daily[key];
+  if (stats.daily) {
+    for (const key of Object.keys(stats.daily)) {
+      if (key < cutoffStr) delete stats.daily[key];
+    }
   }
 }
 
@@ -100,9 +111,10 @@ async function flushStats() {
     pruneOldDaily();
     const { writeFile } = await import('fs/promises');
     await writeFile(STATS_FILE, JSON.stringify(stats, null, 2), 'utf-8');
-    // console.log(`[stats] ✅ Flushed to disk at ${new Date().toISOString()}`); // 조용한 로그
+    await writeFile(POLLS_FILE, JSON.stringify(polls, null, 2), 'utf-8');
+    await writeFile(WALLETS_FILE, JSON.stringify(wallets, null, 2), 'utf-8');
   } catch (e) {
-    console.error('⚠️ stats.json 비동기 플러시 실패:', e.message);
+    console.error('⚠️ 데이터 비동기 플러시 실패:', e.message);
   }
 }
 
@@ -386,22 +398,6 @@ const server = createServer(async (req, res) => {
     try {
       const result = await removeContact(email);
       console.log(`[unsubscribe] ✅ ${email}`);
-      return sendJSON(res, 200, { success: true, ...result });
-    } catch (err) {
-      console.error(`[unsubscribe] ❌ ${email}: ${err.message}`);
-      return sendJSON(res, 500, { error: '구독 취소 중 오류가 발생했습니다.' });
-    }
-  }
-
-  // 404
-  return sendJSON(res, 404, { error: 'Not found' });
-});
-
-server.listen(PORT, () => {
-  console.log(`🚀 EconPedia Subscribe API 서버 실행 중 — port ${PORT}`);
-  console.log(`   Audience ID: ${AUDIENCE_ID || '⚠️ 미설정'}`);
-});
- console.log(`[unsubscribe] ✅ ${email}`);
       return sendJSON(res, 200, { success: true, ...result });
     } catch (err) {
       console.error(`[unsubscribe] ❌ ${email}: ${err.message}`);
