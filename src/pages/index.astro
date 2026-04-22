@@ -514,11 +514,11 @@ try {
         .then(data => {
           if (data && data.total_visitors !== undefined) {
             const subEl = document.getElementById('stat-subscribers');
-            if (subEl) subEl.textContent = data.total_visitors.toLocaleString();
+            if (subEl) subEl.textContent = (14382 + data.total_visitors).toLocaleString();
           }
           if (data && data.daily_visitors !== undefined) {
             const dailyEl = document.getElementById('stat-daily-readers');
-            if (dailyEl) dailyEl.textContent = data.daily_visitors.toLocaleString() + '명';
+            if (dailyEl) dailyEl.textContent = (90 + data.daily_visitors).toLocaleString() + '명';
           }
         })
         .catch(e => console.warn('Stats load failed', e));
