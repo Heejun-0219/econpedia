@@ -1,0 +1,40 @@
+{
+  "totalImpact": "+₩42,180",
+  "totalChangePercent": "+0.38%",
+  "summary": "국제 유가 하락이 <b>운송·항공주에 긍정</b>, <b>정유주에 부정</b>으로 작용. 당신 포트폴리오 기준 순영향은 양(+).",
+  "holdings": [
+    {
+      "name": "TIGER 여행레저 ETF",
+      "signalLabel": "수혜",
+      "signalClass": "",
+      "weight": "보유 비중 32% · ₩3,520,000",
+      "barWidth": "24%",
+      "barClass": "",
+      "impactValue": "+₩28,160 · +0.80%",
+      "impactClass": "up",
+      "reason": "유가 하락 → 항공·여행 마진 개선"
+    },
+    {
+      "name": "삼성전자",
+      "signalLabel": "소폭 수혜",
+      "signalClass": "",
+      "weight": "보유 비중 45% · ₩4,950,000",
+      "barWidth": "8%",
+      "barClass": "",
+      "impactValue": "+₩19,800 · +0.40%",
+      "impactClass": "up",
+      "reason": "환율 상승 반사이익"
+    },
+    {
+      "name": "SK이노베이션",
+      "signalLabel": "영향",
+      "signalClass": "dn",
+      "weight": "보유 비중 23% · ₩2,530,000",
+      "barWidth": "15%",
+      "barClass": "dn",
+      "impactValue": "−₩5,780 · −0.23%",
+      "impactClass": "dn",
+      "reason": "유가 하락 → 정제 마진 축소"
+    }
+  ]
+}

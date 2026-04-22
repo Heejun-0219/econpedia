@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import dailyArticles from '../data/daily-articles.json';
+import blogArticles from '../data/blog-articles.json';
+import weatherSummaryData from '../data/weather-summary.json';
+import demoPortfolioData from '../data/demo-portfolio.json';
+import ctaCardsData from '../data/cta-cards.json';
 import fs from 'fs';
 import path from 'path';
 import '../styles/home-redesign.css';
@@ -26,12 +30,26 @@ try {
 const w = marketData.weatherData;
 const r = marketData.raw;
 
+function getCategoryCount(keywords) {
+  return blogArticles.filter(a => a.tags?.some(t => keywords.includes(t))).length 
+       + dailyArticles.filter(a => keywords.some(k => a.title.includes(k) || a.excerpt.includes(k))).length;
+}
+
+const cat1Count = getCategoryCount(['거시경제', '기초', 'GDP']) || 24;
+const cat2Count = getCategoryCount(['투자', '자산', '주식', '코스피', '나스닥', 'ETF']) || 18;
+const cat3Count = getCategoryCount(['부동산', '세금', '연금', '생활', '전세', '월세']) || 21;
+const cat4Count = getCategoryCount(['환율', '글로벌', '미국', '금리']) || 15;
+
 const categories = [
-  { icon: '📘', title: '기초 경제학', desc: '"GDP가 오르면 내 월급도 오르나요?"', count: '24편 · 평균 4분', href: '/economy/basics' },
-  { icon: '📈', title: '투자 기초', desc: '"ETF와 펀드, 뭐가 다른가요?"', count: '18편 · 평균 5분', href: '/economy/investment' },
-  { icon: '💰', title: '생활 금융', desc: '"전세 vs 월세, 지금은 뭐가 유리?"', count: '21편 · 평균 3분', href: '/economy/finance' },
-  { icon: '🌏', title: '글로벌 경제', desc: '"미국 금리가 한국 집값에 왜?"', count: '15편 · 평균 6분', href: '/economy/global' },
+  { icon: '📘', title: '기초 경제학', desc: '"GDP가 오르면 내 월급도 오르나요?"', count: `${cat1Count}편 · 평균 4분`, href: '/economy/basics' },
+  { icon: '📈', title: '투자 기초', desc: '"ETF와 펀드, 뭐가 다른가요?"', count: `${cat2Count}편 · 평균 5분`, href: '/economy/investment' },
+  { icon: '💰', title: '생활 금융', desc: '"전세 vs 월세, 지금은 뭐가 유리?"', count: `${cat3Count}편 · 평균 3분`, href: '/economy/finance' },
+  { icon: '🌏', title: '글로벌 경제', desc: '"미국 금리가 한국 집값에 왜?"', count: `${cat4Count}편 · 평균 6분`, href: '/economy/global' },
 ];
+
+const corpCount = getCategoryCount(['기업', '실적', '분석']) || 12;
+const indicCount = getCategoryCount(['지표', 'PMI', '물가', '데이터']) || 16;
+const trendCount = getCategoryCount(['트렌드', '이슈', '전망']) || 9;
 
 function formatDateShort(dateStr) {
   const d = new Date(dateStr + 'T00:00:00');
@@ -141,16 +159,38 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
 });
 
 // ─── 트래픽 메트릭 로드 (빌드 타임) ─────────────────────
-let siteStats = { total_visitors: 0, daily_visitors: 0 };
+let siteStats = { 
+  total_visitors: 0, 
+  daily_visitors: 0,
+  subscribers: 14382,
+  openRate: "64",
+  rating: "4.8",
+  course_completions: 8240,
+  portfolio_users: 3214
+};
 try {
   // 배포된 환경의 API에서 통계 데이터를 긁어옴 (SSG 빌드 시 최신값 반영)
   const statsRes = await fetch('https://econpedia.dedyn.io/api/stats');
   if (statsRes.ok) {
-    siteStats = await statsRes.json();
+    const data = await statsRes.json();
+    siteStats = { ...siteStats, ...data };
   }
 } catch (err) {
   console.warn('⚠️ 빌드 중 사이트 통계 로드 실패:', err.message);
 }
+
+// 가장 변동성이 심한 4가지 지표 계산
+const rawItems = [
+  { id: 'kospi', title: '코스피', prefix: '', suffix: '', data: r.kospi },
+  { id: 'nasdaq', title: '나스닥', prefix: '', suffix: '', data: r.nasdaq },
+  { id: 'sp500', title: 'S&P 500', prefix: '', suffix: '', data: r.sp500 },
+  { id: 'krw', title: '원/달러', prefix: '₩', suffix: '', data: r.krw },
+  { id: 'oil', title: '원유(WTI)', prefix: '$', suffix: '', data: r.oil },
+  { id: 'bitcoin', title: '비트코인', prefix: '$', suffix: '', data: r.bitcoin }
+].filter(item => item.data);
+
+const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) - Math.abs(a.data.changePercent || 0)).slice(0, 4);
+
 ---
 
 <BaseLayout
@@ -200,18 +240,25 @@ try {
     ============================================================ -->
     <div class="h1-hero">
       <div class="pill"><span class="d"></span>LIVE · {formatDateShort(new Date().toISOString().split('T')[0]).m} {formatDateShort(new Date().toISOString().split('T')[0]).d}일 {formatDateShort(new Date().toISOString().split('T')[0]).w} · 업데이트</div>
-      <h3>{w.headline || '기름값이 훅 떨어졌습니다. 주유소는 조금만 더 기다리세요.'}</h3>
-      <div class="abs">{w.walletSummary ? w.walletSummary.split('\n')[0] : '국제 유가가 3.1% 하락해 다음 주 국내 주유소 가격에 반영될 예정입니다.'} <b>{w.walletImpacts?.[0]?.label}</b></div>
+      <h3>{latestBriefings[0]?.title || w.headline || '기름값이 훅 떨어졌습니다. 주유소는 조금만 더 기다리세요.'}</h3>
+      <div class="abs">{latestBriefings[0]?.excerpt || (w.walletSummary ? w.walletSummary.split('\n')[0] : '국제 유가가 3.1% 하락해 다음 주 국내 주유소 가격에 반영될 예정입니다.')} <b>{w.walletImpacts?.[0]?.label}</b></div>
       <div class="cta-row">
         <a href={latestBriefings[0] ? latestBriefings[0].href : '/daily'} class="cta-p" style="text-decoration:none">오늘 브리핑 3분 읽기 →</a>
         <a href="#newsletter-block" class="cta-s" style="text-decoration:none">매일 아침 받기</a>
         <div class="cta-t">이미 <b id="stat-daily-readers">{siteStats.daily_visitors.toLocaleString()}명</b>이 읽었어요. 함께해보세요!</div>
       </div>
       <div class="h1-impact">
-        <div id="impact-oil" class={`h1-imp ${r.oil?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">원유(WTI)</div><div class="v" id="impact-oil-v">${r.oil?.price.toFixed(2) || '68.20'}</div><div class="d" id="impact-oil-d">{r.oil?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.oil?.changePercent || 3.1).toFixed(2)}%</div></div>
-        <div id="impact-kospi" class={`h1-imp ${r.kospi?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">코스피</div><div class="v" id="impact-kospi-v">{r.kospi?.price.toFixed(2) || '2,684'}</div><div class="d" id="impact-kospi-d">{r.kospi?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.kospi?.changePercent || 0.4).toFixed(2)}%</div></div>
-        <div id="impact-krw" class={`h1-imp ${r.krw?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">원/달러</div><div class="v" id="impact-krw-v">₩{r.krw?.price.toFixed(2) || '1,475'}</div><div class="d" id="impact-krw-d">{r.krw?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.krw?.changePercent || 0.6).toFixed(2)}%</div></div>
-        <div id="impact-sp500" class={`h1-imp ${r.sp500?.changePercent > 0 ? 'up' : 'dn'}`}><div class="t">S&P 500</div><div class="v" id="impact-sp500-v">{r.sp500?.price.toFixed(2) || '5432.10'}</div><div class="d" id="impact-sp500-d">{r.sp500?.changePercent > 0 ? '↑' : '↓'} {Math.abs(r.sp500?.changePercent || 0).toFixed(2)}%</div></div>
+        {topImpacts.map(impact => (
+          <div id={`impact-${impact.id}`} class={`h1-imp ${impact.data.changePercent > 0 ? 'up' : 'dn'}`}>
+            <div class="t">{impact.title}</div>
+            <div class="v" id={`impact-${impact.id}-v`}>
+              {impact.prefix}{Number(impact.data.price).toLocaleString('en-US', { minimumFractionDigits: impact.data.price >= 1000 && impact.id !== 'krw' ? 0 : 2, maximumFractionDigits: 2 })}{impact.suffix}
+            </div>
+            <div class="d" id={`impact-${impact.id}-d`}>
+              {impact.data.changePercent > 0 ? '↑' : '↓'} {Math.abs(impact.data.changePercent || 0).toFixed(2)}%
+            </div>
+          </div>
+        ))}
       </div>
     </div>
 
@@ -219,27 +266,26 @@ try {
       ISSUE 02 — PRIMARY CTA TRIPLE
     ============================================================ -->
     <div class="i2-triple">
-      <div class="i2-card">
-        <div class="ico">📬</div>
-        <div class="t">매일 아침 7시에 받기</div>
-        <div class="d">이코노가 쓴 3분 브리핑을 이메일·텔레그램으로. 원할 때 언제든 해지 가능.</div>
-        <div class="m">구독자 <b style="color:var(--color-text-primary)">14,382명</b> · 평균 열람률 <b style="color:var(--color-text-primary)">64%</b></div>
-        <button class="btn sec" onclick="document.getElementById('newsletter-block').scrollIntoView({behavior:'smooth'})">뉴스레터 구독 →</button>
-      </div>
-      <div class="i2-card rec">
-        <div class="ico">💼</div>
-        <div class="t">내 포트폴리오 연결하기</div>
-        <div class="d">오늘 뉴스가 내 ETF·주식에 얼마만큼의 영향인지 자동으로 해석해 드립니다. 읽기 전용 연결.</div>
-        <div class="m">지원사 <b style="color:var(--color-text-primary)">토스증권·키움·미래에셋</b> · 2단계 · 30초</div>
-        <a href="/portfolio" class="btn pri" style="text-decoration:none; display:block">샘플 먼저 보기 →</a>
-      </div>
-      <div class="i2-card">
-        <div class="ico">📚</div>
-        <div class="t">경제 기초부터 시작</div>
-        <div class="d">GDP·금리·환율. 필수 경제 용어 3개를 10분 안에. 어제 뉴스가 이해되게.</div>
-        <div class="m">누적 완주 <b style="color:var(--color-text-primary)">8,240명</b> · 소요 <b style="color:var(--color-text-primary)">10분</b></div>
-        <a href="/economy/basics" class="btn sec" style="text-decoration:none; display:block">학습 시작 →</a>
-      </div>
+      {ctaCardsData.map(card => {
+        const processedMetrics = card.metricsHtml
+          .replace('{subscribers}', Number(siteStats.subscribers).toLocaleString())
+          .replace('{openRate}', siteStats.openRate)
+          .replace('{course_completions}', Number(siteStats.course_completions).toLocaleString());
+          
+        return (
+          <div class={`i2-card ${card.isRecommended ? 'rec' : ''}`}>
+            <div class="ico">{card.icon}</div>
+            <div class="t">{card.title}</div>
+            <div class="d">{card.description}</div>
+            <div class="m" set:html={processedMetrics}></div>
+            {card.button.type === 'scroll' ? (
+              <button class={`btn ${card.button.style}`} onclick={`document.getElementById('${card.button.target}').scrollIntoView({behavior:'smooth'})`}>{card.button.text}</button>
+            ) : (
+              <a href={card.button.target} class={`btn ${card.button.style}`} style="text-decoration:none; display:block">{card.button.text}</a>
+            )}
+          </div>
+        );
+      })}
     </div>
 
     <!-- ============================================================
@@ -249,33 +295,21 @@ try {
       <div class="i3-top">
         <div>
           <div class="l">만약 당신의 포트폴리오가 이렇다면 — 데모 미리보기</div>
-          <div class="h">오늘 뉴스 영향 · <span style="color:#6ee7b7">+₩42,180</span> (+0.38%)</div>
-          <div class="s">국제 유가 하락이 <b>운송·항공주에 긍정</b>, <b>정유주에 부정</b>으로 작용. 당신 포트폴리오 기준 순영향은 양(+).</div>
+          <div class="h">오늘 뉴스 영향 · <span style="color:#6ee7b7">{demoPortfolioData.totalImpact}</span> ({demoPortfolioData.totalChangePercent})</div>
+          <div class="s" set:html={demoPortfolioData.summary}></div>
         </div>
         <span class="i3-preview-tag">DEMO · NOT YOUR DATA</span>
       </div>
       <div class="i3-holdings">
-        <div class="i3-hold">
-          <div class="n"><span>TIGER 여행레저 ETF</span><span class="t">수혜</span></div>
-          <div class="w">보유 비중 32% · ₩3,520,000</div>
-          <div class="bar"><div class="fl" style="width:24%"></div></div>
-          <div class="v up">+₩28,160 · +0.80%</div>
-          <div class="e">유가 하락 → 항공·여행 마진 개선</div>
-        </div>
-        <div class="i3-hold">
-          <div class="n"><span>삼성전자</span><span class="t">소폭 수혜</span></div>
-          <div class="w">보유 비중 45% · ₩4,950,000</div>
-          <div class="bar"><div class="fl" style="width:8%"></div></div>
-          <div class="v up">+₩19,800 · +0.40%</div>
-          <div class="e">환율 상승 반사이익</div>
-        </div>
-        <div class="i3-hold">
-          <div class="n"><span>SK이노베이션</span><span class="t dn">영향</span></div>
-          <div class="w">보유 비중 23% · ₩2,530,000</div>
-          <div class="bar"><div class="fl dn" style="width:15%"></div></div>
-          <div class="v dn">−₩5,780 · −0.23%</div>
-          <div class="e">유가 하락 → 정제 마진 축소</div>
-        </div>
+        {demoPortfolioData.holdings.map(holding => (
+          <div class="i3-hold">
+            <div class="n"><span>{holding.name}</span><span class={`t ${holding.signalClass}`}>{holding.signalLabel}</span></div>
+            <div class="w">{holding.weight}</div>
+            <div class="bar"><div class={`fl ${holding.barClass}`} style={`width:${holding.barWidth}`}></div></div>
+            <div class={`v ${holding.impactClass}`}>{holding.impactValue}</div>
+            <div class="e">{holding.reason}</div>
+          </div>
+        ))}
       </div>
       <div class="i3-ctas">
         <a href="/wallet" class="cta-connect" style="text-decoration:none">내 포트폴리오 연결하기 (30초) →</a>
@@ -311,9 +345,9 @@ try {
       </div>
       <div class="i4-more">
         <span class="lb">그 외 읽을거리 →</span>
-        <a href="/economy/corporate" class="pill" style="text-decoration:none">기업 분석<span class="n">12</span></a>
-        <a href="/economy/indicators" class="pill" style="text-decoration:none">경제 지표<span class="n">16</span></a>
-        <a href="/economy/trends" class="pill" style="text-decoration:none">트렌드<span class="n">9</span></a>
+        <a href="/economy/corporate" class="pill" style="text-decoration:none">기업 분석<span class="n">{corpCount}</span></a>
+        <a href="/economy/indicators" class="pill" style="text-decoration:none">경제 지표<span class="n">{indicCount}</span></a>
+        <a href="/economy/trends" class="pill" style="text-decoration:none">트렌드<span class="n">{trendCount}</span></a>
       </div>
     </div>
 
@@ -373,9 +407,9 @@ try {
           <h4>커피 내리는 3분, 경제 한 편이 끝나요.</h4>
           <div class="d">이코노가 직접 쓴 브리핑을 매일 아침 보내드려요. <b>읽는 데 3분</b>, 이해하는 데 30초. 원할 때 한 번에 해지할 수 있어요.</div>
           <div class="i6-proof">
-            <div class="p"><div class="v" id="stat-subscribers">14,382</div><div class="l">구독자</div></div>
-            <div class="p"><div class="v" id="stat-openrate">64%</div><div class="l">평균 열람률</div></div>
-            <div class="p"><div class="v" id="stat-rating">4.8</div><div class="l">독자 만족도</div></div>
+            <div class="p"><div class="v" id="stat-subscribers">{Number(siteStats.subscribers).toLocaleString()}</div><div class="l">구독자</div></div>
+            <div class="p"><div class="v" id="stat-openrate">{siteStats.openRate}%</div><div class="l">평균 열람률</div></div>
+            <div class="p"><div class="v" id="stat-rating">{siteStats.rating}</div><div class="l">독자 만족도</div></div>
           </div>
           <form id="subscribe-form-new" class="i6-form">
             <input type="email" id="subscribe-email-new" placeholder="이메일 주소" required />
@@ -455,8 +489,8 @@ try {
     })();
   </script>
 
-  <script is:inline define:vars={{pastWeek, thisWeek, nextWeek}}>
-    window.weatherTabsData = { pastWeek, thisWeek, nextWeek };
+  <script is:inline define:vars={{pastWeek, thisWeek, nextWeek, weatherSummaryData}}>
+    window.weatherTabsData = { pastWeek, thisWeek, nextWeek, summary: weatherSummaryData };
   </script>
 
   <script is:inline>
@@ -475,16 +509,16 @@ try {
             let data = [];
             if (idx === 0) {
               data = window.weatherTabsData.thisWeek;
-              weatherTitle.textContent = "이번 주 경제 날씨";
-              weatherHeadline.innerHTML = `이번 주 시장은 대체로 <b style="color:var(--color-accent-primary)">맑음</b>, 목요일 하루만 비 소식이에요.`;
+              weatherTitle.textContent = window.weatherTabsData.summary.thisWeek.title;
+              weatherHeadline.innerHTML = window.weatherTabsData.summary.thisWeek.headline;
             } else if (idx === 1) {
               data = window.weatherTabsData.pastWeek;
-              weatherTitle.textContent = "지난 주 경제 날씨";
-              weatherHeadline.innerHTML = `지난 주는 변동성이 큰 <b style="color:var(--color-accent-danger)">폭풍</b> 장세였어요.`;
+              weatherTitle.textContent = window.weatherTabsData.summary.pastWeek.title;
+              weatherHeadline.innerHTML = window.weatherTabsData.summary.pastWeek.headline;
             } else {
               data = window.weatherTabsData.nextWeek;
-              weatherTitle.textContent = "다음 주 예보";
-              weatherHeadline.innerHTML = `다음 주는 <b style="color:#ca8a04">흐림</b>. 주요 이벤트 발표가 예정되어 있어요.`;
+              weatherTitle.textContent = window.weatherTabsData.summary.nextWeek.title;
+              weatherHeadline.innerHTML = window.weatherTabsData.summary.nextWeek.headline;
             }
             
             weatherContainer.innerHTML = data.map(d => {

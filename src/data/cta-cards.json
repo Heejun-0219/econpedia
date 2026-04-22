@@ -1,0 +1,44 @@
+[
+  {
+    "id": "newsletter",
+    "icon": "📬",
+    "title": "매일 아침 7시에 받기",
+    "description": "이코노가 쓴 3분 브리핑을 이메일·텔레그램으로. 원할 때 언제든 해지 가능.",
+    "metricsHtml": "구독자 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-subscribers\">{subscribers}명</b> · 평균 열람률 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-openrate\">{openRate}%</b>",
+    "button": {
+      "text": "뉴스레터 구독 →",
+      "style": "sec",
+      "type": "scroll",
+      "target": "newsletter-block"
+    },
+    "isRecommended": false
+  },
+  {
+    "id": "portfolio",
+    "icon": "💼",
+    "title": "내 포트폴리오 연결하기",
+    "description": "오늘 뉴스가 내 ETF·주식에 얼마만큼의 영향인지 자동으로 해석해 드립니다. 읽기 전용 연결.",
+    "metricsHtml": "지원사 <b style=\"color:var(--color-text-primary)\">토스증권·키움·미래에셋</b> · 2단계 · 30초",
+    "button": {
+      "text": "샘플 먼저 보기 →",
+      "style": "pri",
+      "type": "link",
+      "target": "/portfolio"
+    },
+    "isRecommended": true
+  },
+  {
+    "id": "basics",
+    "icon": "📚",
+    "title": "경제 기초부터 시작",
+    "description": "GDP·금리·환율. 필수 경제 용어 3개를 10분 안에. 어제 뉴스가 이해되게.",
+    "metricsHtml": "누적 완주 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-completions\">{course_completions}명</b> · 소요 <b style=\"color:var(--color-text-primary)\">10분</b>",
+    "button": {
+      "text": "학습 시작 →",
+      "style": "sec",
+      "type": "link",
+      "target": "/economy/basics"
+    },
+    "isRecommended": false
+  }
+]

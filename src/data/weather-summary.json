@@ -1,0 +1,5 @@
+{
+  "pastWeek": { "title": "지난 주 경제 날씨", "headline": "지난 주는 변동성이 큰 <b style='color:var(--color-accent-danger)'>폭풍</b> 장세였어요." },
+  "thisWeek": { "title": "이번 주 경제 날씨", "headline": "이번 주 시장은 대체로 <b style='color:var(--color-accent-primary)'>맑음</b>, 목요일 하루만 비 소식이에요." },
+  "nextWeek": { "title": "다음 주 예보", "headline": "<b style='color:#ca8a04'>흐림</b>. 주요 지표 발표가 예정되어 있어요." }
+}
