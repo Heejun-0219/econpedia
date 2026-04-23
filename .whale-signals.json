@@ -1,0 +1,32 @@
+[
+  {
+    "id": "form4-amzn-2026-04-21",
+    "type": "insider",
+    "market": "us",
+    "source": "SEC Form 4",
+    "companyName": "Amazon.com Inc.",
+    "ticker": "AMZN",
+    "cik": "0001018724",
+    "person": "Jassy Andrew R / President and CEO",
+    "direction": "sell",
+    "amount": "$7.9M (약 115억 원)",
+    "totalValue": 7905000,
+    "date": "2026-04-21",
+    "significance": 70
+  },
+  {
+    "id": "form4-meta-2026-04-22",
+    "type": "insider",
+    "market": "us",
+    "source": "SEC Form 4",
+    "companyName": "Meta Platforms Inc.",
+    "ticker": "META",
+    "cik": "0001326801",
+    "person": "Olivan Javier / Chief Operating Officer",
+    "direction": "sell",
+    "amount": "$1.1M (약 15억 원)",
+    "totalValue": 1057539.9500000002,
+    "date": "2026-04-22",
+    "significance": 30
+  }
+]

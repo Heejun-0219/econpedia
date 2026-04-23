@@ -341,10 +341,11 @@ export function buildPortfolioAnalysisPrompt(investor, holdingsData, marketConte
 
 [주의사항]
 - 이 콘텐츠의 목적은 "역사적 교육"입니다.
-- 단순 종목 나열을 피하고, "왜 지금 샀을까?"에 집중하세요.
+- 단순 종목 나열을 피하고, 제공된 "실제 13F 변동 데이터"를 바탕으로 "왜 지금 샀을까/팔았을까?"에 집중하세요.
 - 액티브 펀드(ARK 등)의 경우 코어-위성 전략이나 섹터 로테이션 측면에서 분석하세요.
 - 국민연금 등 공적 기금의 경우 거시경제적 자산 배분 측면을 고려하세요.
-- 데이터 환각(hallucination)을 절대 금지합니다. 알려진 사실만 사용하세요.
+- **절대적 금지**: 데이터 환각(hallucination)을 금지합니다. 제공된 [최신 13F 주요 포지션 변동]에 있는 종목 외에 없는 종목을 지어내지 마세요.
+- **표현 제한**: "강력 매수하세요", "무조건 사야 합니다"와 같은 확정적, 단정적 투자 권유 표현을 금지합니다. 건조하고 객관적인 애널리스트 톤을 유지하세요.
 
 [출력 형식: 순수 마크다운 — frontmatter 제외]
 
@@ -445,6 +446,71 @@ ${triggerData.mockData}
 ${marketContext}
 
 위 정보를 바탕으로 독자가 스크롤을 멈출 수밖에 없는 치명적인 매력을 가진 내부자 거래 분석 리포트를 작성하세요.
+`;
+
+  return { system: system + instructions, user: userMessage };
+}
+
+// ── 🐋 Whale Alert 통합 프롬프트 ─────────────────────────────
+export function buildWhaleAnalysisPrompt(signal, marketContext) {
+  const system = buildSystemBase(new Date().toISOString().split('T')[0]);
+  const isBuy = signal.direction === 'buy';
+  const marketFlag = signal.market === 'us' ? '🇺🇸' : '🇰🇷';
+
+  const instructions = `
+[당신의 임무: 🐋 Whale Alert 전문 애널리스트]
+당신은 ${marketFlag} 시장에서 발생한 거대 자금 흐름(내부자 거래, 기관 포트폴리오 변동)을 분석하여, 그 거래에 담긴 진짜 의미를 발굴하는 펀드 매니저입니다.
+
+[분석 대상 거래 정보 — 이것은 SEC/DART 공시에서 직접 파싱된 팩트 데이터입니다]
+기업명: ${signal.companyName} (${signal.ticker})
+매매자: ${signal.person}
+매매 방향: ${isBuy ? '자발적 장내 매수 (Buy)' : '장내 매도 (Sell)'}
+거래 규모: ${signal.amount}
+데이터 출처: ${signal.source}
+공시 날짜: ${signal.date}
+
+[주의사항]
+- 이 콘텐츠의 목적은 "역사적/시그널 교육"입니다.
+- 단순 사실 전달이 아닌, "왜 이 타이밍에 지갑을 열었는가/닫았는가?"를 입체적으로 분석하세요.
+- **절대적 금지**: 데이터 환각(hallucination). 위 팩트 데이터에 없는 종목이나 인물을 지어내지 마세요.
+- **표현 제한**: "강력 매수하세요", "무조건 사야 합니다"와 같은 확정적 투자 권유 표현을 금지합니다.
+
+[출력 형식: 순수 마크다운 — frontmatter 제외]
+
+[구조 가이드]
+1. 헤드라인 (H1)
+   - 이 거래의 성격을 단번에 보여주는 자극적이고 직관적인 한 문장
+
+2. 오늘의 거래 브리핑 (H2: 📋 Whale의 장바구니)
+   - 누가, 얼마나, 언제 샀는지/팔았는지 서술. 금액의 체감 크기를 비유로 설명.
+
+3. 심층 분석 (H2: 🔍 왜 지금?)
+   - 최근 기업의 주가/실적 흐름, 매크로 환경을 바탕으로 추론.
+   - 역사적 선례가 있다면 비교.
+
+4. 독자의 관점 (H2: 💰 내 지갑에 주는 시그널)
+   - 맹목적 추종 경고 + 보조 지표로서 활용하는 방법.
+
+[추가 출력 — JSON 블록]
+\\\`\\\`\\\`json
+{
+  "slug": "whale-${signal.ticker.toLowerCase()}-${signal.date}",
+  "seoTitle": "[${signal.ticker}] ${signal.person} ${isBuy ? '매수' : '매도'} 심층 분석 (50자 이내)",
+  "seoDescription": "이 거래에 담긴 핵심 시그널을 확인하세요. (150자 이내)",
+  "category": "${signal.type}",
+  "tags": ["WhaleAlert", "${signal.ticker}", "${isBuy ? '매수' : '매도'}"]
+}
+\\\`\\\`\\\`
+`;
+
+  const userMessage = `
+[Whale Signal 데이터 (공시 기반 팩트)]
+${JSON.stringify(signal, null, 2)}
+
+[당시 시장/업황 컨텍스트]
+${marketContext}
+
+위 정보를 바탕으로 독자가 스크롤을 멈출 수밖에 없는 Whale Alert 분석 리포트를 작성하세요.
 `;
 
   return { system: system + instructions, user: userMessage };
