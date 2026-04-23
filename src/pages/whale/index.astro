@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TickerLogo from '../../components/TickerLogo.astro';
+
+let analyses = [];
+try {
+  const mod = await import('../../data/whale-analyses.json');
+  analyses = mod.default || mod;
+} catch { analyses = []; }
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${month}월 ${day}일 (${weekdays[d.getDay()]})`;
+}
+
+const categories = [
+  { id: 'all', title: '모두 보기', emoji: '🐋' },
+  { id: 'us', title: '🇺🇸 US', emoji: '' },
+  { id: 'kr', title: '🇰🇷 KR', emoji: '' },
+];
+---
+
+<BaseLayout
+  title="🐋 Whale Alert"
+  description="미국·한국 시장의 거대 자금 흐름을 매일 자동 스캔합니다. 내부자 거래, 기관 포지션 변동을 AI가 분석합니다."
+>
+  <section class="hero hero--whale" style="padding: 4rem 0 3rem; background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-background) 100%);">
+    <div class="container text-center">
+      <span class="hero__badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2);">전체 시장 자동 스캔</span>
+      <h1 class="hero__title" style="font-size: 2.8rem; margin: 1rem 0;">
+        🐋 Whale Alert
+      </h1>
+      <p class="hero__subtitle" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.8;">
+        미국·한국 시장에서 오늘 가장 큰 돈이 움직인 곳.<br/>고정 목록 없이, AI가 매일 수백 건의 공시를 스캔합니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="whale-content" style="padding: 2rem 0 5rem;">
+    <div class="container">
+      <div class="whale-tabs">
+        {categories.map((cat, idx) => (
+          <button class={`whale-tab ${idx === 0 ? 'active' : ''}`} data-filter={cat.id}>
+            {cat.emoji} {cat.title}
+          </button>
+        ))}
+      </div>
+
+      <div class="whale-grid" id="whale-grid">
+        {analyses.length === 0 ? (
+          <div class="whale-empty">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🐋</div>
+            <h3 style="margin: 0 0 0.5rem;">아직 감지된 Whale Signal이 없습니다</h3>
+            <p style="opacity: 0.7; margin: 0;">매일 07:00 KST에 전체 시장을 자동 스캔합니다.</p>
+          </div>
+        ) : analyses.map((a) => {
+          const isBuy = a.isBuy;
+          const dirClass = isBuy ? 'whale-card--buy' : 'whale-card--sell';
+          return (
+            <a href={`/whale/${a.slug}`} class={`whale-card ${dirClass}`} data-market={a.market}>
+              <div class="whale-card__header">
+                <div class="whale-card__badge-row">
+                  <span class="whale-card__market">{a.market === 'us' ? '🇺🇸' : '🇰🇷'}</span>
+                  <span class={`whale-card__direction ${isBuy ? 'buy' : 'sell'}`}>
+                    {isBuy ? '🟢 BUY' : '🔴 SELL'}
+                  </span>
+                  <span class="whale-card__score" title="시그널 중요도">⚡{a.significance}</span>
+                </div>
+                <span class="whale-card__date">{formatDate(a.date)}</span>
+              </div>
+              <h3 class="whale-card__title">{a.title}</h3>
+              <p class="whale-card__excerpt">{a.excerpt}</p>
+              <div class="whale-card__footer">
+                <span class="whale-card__ticker">{a.companyName} ({a.ticker})</span>
+                <span class="whale-card__read">분석 보기 →</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+.whale-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+.whale-tab {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.75rem 1.25rem;
+  border-radius: 99px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.whale-tab:hover { border-color: #38bdf8; transform: translateY(-2px); }
+.whale-tab.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+
+.whale-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+.whale-empty {
+  text-align: center; padding: 4rem; grid-column: 1/-1;
+  background: var(--color-surface); border-radius: 12px; border: 1px dashed var(--color-border);
+}
+
+.whale-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: var(--color-text);
+  position: relative;
+  overflow: hidden;
+}
+.whale-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.whale-card--buy::before { background: linear-gradient(90deg, #10b981, #34d399); }
+.whale-card--sell::before { background: linear-gradient(90deg, #ef4444, #f87171); }
+.whale-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+.whale-card:hover::before { opacity: 1; }
+
+.whale-card__header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+}
+.whale-card__badge-row { display: flex; align-items: center; gap: 8px; }
+.whale-card__market { font-size: 1.2rem; }
+.whale-card__direction {
+  font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+}
+.whale-card__direction.buy { background: rgba(16,185,129,0.1); color: #10b981; }
+.whale-card__direction.sell { background: rgba(239,68,68,0.1); color: #ef4444; }
+.whale-card__score {
+  font-size: 0.7rem; font-weight: 700; padding: 2px 6px; border-radius: 4px;
+  background: rgba(56,189,248,0.1); color: #38bdf8;
+}
+.whale-card__date { font-size: 0.8rem; opacity: 0.6; }
+.whale-card__title { font-size: 1.15rem; margin: 0 0 0.75rem; line-height: 1.4; }
+.whale-card__excerpt {
+  font-size: 0.95rem; opacity: 0.75; margin: 0 0 1.5rem; line-height: 1.5;
+  flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.whale-card__footer {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.85rem; font-weight: 600; padding-top: 1rem; border-top: 1px dashed var(--color-border);
+}
+.whale-card__ticker { opacity: 0.8; }
+.whale-card__read { color: #38bdf8; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.whale-tab');
+  const cards = document.querySelectorAll('.whale-card');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.getAttribute('data-filter');
+      cards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-market') === filter) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
