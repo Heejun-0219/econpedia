@@ -235,9 +235,10 @@ const getGuideLink = (category) => {
         const userNameEl = document.getElementById('user-name');
         const userAvatarEl = document.getElementById('user-avatar');
 
-        // Check Auth
+        // Check Auth using getSession (handles initial load)
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+          const { data: { session }, error } = await supabase.auth.getSession();
+          if (error) console.error("getSession error:", error);
           if (session) {
             currentUser = session.user;
             showAuthView(currentUser);
@@ -250,12 +251,33 @@ const getGuideLink = (category) => {
           showUnauthView();
         }
 
+        // Listen for auth state changes (crucial for OAuth redirects parsing)
+        supabase.auth.onAuthStateChange(async (event, session) => {
+          console.log("Supabase Auth Event:", event);
+          if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
+            if (!currentUser || currentUser.id !== session.user.id) {
+              currentUser = session.user;
+              showAuthView(currentUser);
+              await loadSettings(currentUser.id);
+            }
+          } else if (event === 'SIGNED_OUT') {
+            currentUser = null;
+            showUnauthView();
+          }
+        });
+
         // Google Login Action
         document.getElementById('btn-google-login')?.addEventListener('click', async () => {
-          await supabase.auth.signInWithOAuth({ 
+          const redirectUrl = window.location.origin + '/wallet';
+          console.log("Redirecting to:", redirectUrl);
+          const { error } = await supabase.auth.signInWithOAuth({ 
             provider: 'google', 
-            options: { redirectTo: window.location.origin + '/wallet' } 
+            options: { redirectTo: redirectUrl } 
           });
+          if (error) {
+            console.error("OAuth Error:", error.message);
+            alert("로그인 창을 띄우는 데 실패했습니다: " + error.message);
+          }
         });
 
         // Demo Login Action (Skip Auth)
@@ -294,27 +316,34 @@ const getGuideLink = (category) => {
         }
 
         async function loadSettings(userId) {
-          if (userId) {
-            const { data, error } = await supabase
-              .from('user_settings')
-              .select('*')
-              .eq('user_id', userId)
-              .single();
-            
-            if (data && !error) {
-              const dbSettings = { ...data };
-              delete dbSettings.id;
-              delete dbSettings.user_id;
-              delete dbSettings.created_at;
-              settings = { ...DEFAULTS, ...dbSettings };
+          try {
+            if (userId) {
+              const { data, error } = await supabase
+                .from('user_settings')
+                .select('*')
+                .eq('user_id', userId)
+                .single();
+              
+              if (data && !error) {
+                const dbSettings = { ...data };
+                delete dbSettings.id;
+                delete dbSettings.user_id;
+                delete dbSettings.created_at;
+                settings = { ...DEFAULTS, ...dbSettings };
+              } else {
+                const saved = localStorage.getItem('econpedia_wallet_settings');
+                if (saved) {
+                  settings = { ...DEFAULTS, ...JSON.parse(saved) };
+                  const { error: upsertErr } = await supabase.from('user_settings').upsert({ user_id: userId, ...settings });
+                  if (upsertErr) console.warn("Supabase upsert failed:", upsertErr.message);
+                }
+              }
             } else {
               const saved = localStorage.getItem('econpedia_wallet_settings');
-              if (saved) {
-                settings = { ...DEFAULTS, ...JSON.parse(saved) };
-                await supabase.from('user_settings').upsert({ user_id: userId, ...settings });
-              }
+              if (saved) settings = { ...DEFAULTS, ...JSON.parse(saved) };
             }
-          } else {
+          } catch(err) {
+            console.warn("loadSettings error (Supabase RLS/table missing?):", err.message);
             const saved = localStorage.getItem('econpedia_wallet_settings');
             if (saved) settings = { ...DEFAULTS, ...JSON.parse(saved) };
           }
@@ -408,13 +437,13 @@ const getGuideLink = (category) => {
           });
         }
 
-        const formatChange = (change, upText, downText) => {
+        function formatChange(change, upText, downText) {
           if (change === 0) return '변동 없어요 😌';
           return change > 0 ? upText : downText;
-        };
+        }
 
         // Recalculation logic
-        const recalculate = () => {
+        function recalculate() {
           if (raw.baseRate) {
             const change = Math.round((settings.housing * (raw.baseRate.change / 100)) / 12);
             updateCard('housing', `내 대출금 기준 이번 달 이자가 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '늘었어요', '줄었어요')}`, change);
@@ -443,9 +472,9 @@ const getGuideLink = (category) => {
             const change = Math.round(settings.crypto * (raw.bitcoin.changePercent / 100));
             updateCard('crypto', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`, change);
           }
-        };
+        }
 
-        const updateCard = (category, newMessage, changeValue) => {
+        function updateCard(category, newMessage, changeValue) {
           const cards = document.querySelectorAll('.wallet-card');
           cards.forEach(card => {
             const badgeLabel = card.querySelector('.wallet-card__header span:nth-child(2)');
