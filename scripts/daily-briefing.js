@@ -349,10 +349,72 @@ async function main() {
       throw e;
     }
 
+    // 4. 텔레그램 채널 Push 알림 — "Push First" 전략
+    if (articleResult) {
+      await sendTelegramBriefing(articleResult, weatherData);
+    }
+
     console.log('🚀 Daily Briefing Pipeline Completed Successfully.');
   } catch (error) {
     console.error('Pipeline failed:', error);
     process.exit(1);
+  }
+}
+
+// ─── 텔레그램 데일리 브리핑 Push ───────────────────────────
+async function sendTelegramBriefing(articleResult, weatherData) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID || process.env.TELEGRAM_OWNER_ID;
+
+  if (!token || !chatId) {
+    console.log('⏭️ TELEGRAM_BOT_TOKEN 미설정 — 텔레그램 Push 건너뜀');
+    return;
+  }
+
+  const articleUrl = `https://econpedia.dedyn.io/daily/${articleResult.dateString}/?utm_source=telegram&utm_medium=push&utm_campaign=daily`;
+
+  // 지갑 영향 요약 (top 3 변동 항목)
+  const walletLines = (weatherData.walletImpacts || [])
+    .filter(w => w.sentiment !== 'neutral')
+    .sort((a, b) => Math.abs(b.change) - Math.abs(a.change))
+    .slice(0, 3)
+    .map(w => `${w.emoji} ${w.message}`)
+    .join('\n');
+
+  const text = [
+    `${weatherData.emoji} *오늘의 경제 날씨: ${weatherData.label}*`,
+    ``,
+    `📰 *${articleResult.title}*`,
+    ``,
+    articleResult.excerpt,
+    ``,
+    walletLines ? `💰 *내 지갑 타격감*\n${walletLines}` : '',
+    ``,
+    `👉 [3분 브리핑 전문 읽기](${articleUrl})`,
+    ``,
+    `📮 매일 아침 이 브리핑을 받으려면 👉 [뉴스레터 구독](https://econpedia.dedyn.io/#newsletter-block?utm_source=telegram)`,
+  ].filter(Boolean).join('\n');
+
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'Markdown',
+        disable_web_page_preview: false,
+      }),
+    });
+
+    if (res.ok) {
+      console.log('✅ [Telegram] 데일리 브리핑 Push 전송 성공');
+    } else {
+      const err = await res.json();
+      console.warn(`⚠️ [Telegram] Push 전송 실패: ${err.description}`);
+    }
+  } catch (e) {
+    console.warn(`⚠️ [Telegram] Push 통신 에러: ${e.message}`);
   }
 }
 

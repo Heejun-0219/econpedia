@@ -220,10 +220,53 @@ async function main() {
 
     const resultMeta = await saveAnalysisPage(signal, rawOutput, metadata, isin);
     await updateManifest(resultMeta);
+
+    // 텔레그램 Push 알림
+    await sendWhaleTelegram(signal, resultMeta);
+
     console.log(`✅ [${signal.ticker}] 분석 완료.\n`);
   }
 
   console.log('🚀 Whale Alert Pipeline Completed Successfully.');
+}
+
+// ─── 텔레그램 Whale Alert Push ───────────────────────────
+async function sendWhaleTelegram(signal, meta) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID || process.env.TELEGRAM_OWNER_ID;
+  if (!token || !chatId) return;
+
+  const flag = signal.market === 'us' ? '🇺🇸' : '🇰🇷';
+  const dir = signal.direction === 'buy' ? '🟢 매수' : '🔴 매도';
+  const url = `https://econpedia.dedyn.io/whale/${meta.slug}/?utm_source=telegram&utm_medium=push&utm_campaign=whale`;
+
+  const text = [
+    `🐋 *Whale Alert — 내부자 거래 포착*`,
+    ``,
+    `${flag} *${signal.companyName}* (${signal.ticker})`,
+    `${dir} · ${signal.amount}`,
+    `👤 ${signal.person}`,
+    ``,
+    `📰 *${meta.title}*`,
+    ``,
+    `👉 [AI 분석 읽기](${url})`,
+  ].join('\n');
+
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'Markdown',
+        disable_web_page_preview: false,
+      }),
+    });
+    console.log(`  📨 [Telegram] Whale Push 전송 완료`);
+  } catch (e) {
+    console.warn(`  ⚠️ [Telegram] Whale Push 실패: ${e.message}`);
+  }
 }
 
 main();

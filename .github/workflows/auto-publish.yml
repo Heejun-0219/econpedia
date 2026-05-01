@@ -34,10 +34,13 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      # ── Phase 1: 데일리 브리핑 (기사) 생성 ─────────────────
+      # ── Phase 1: 데일리 브리핑 (기사) 생성 + 텔레그램 Push ────
       - name: 🤖 Generate Daily Briefing Article
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
         run: node scripts/daily-briefing.js
 
       # ── Phase 2: 카드뉴스 이미지 생성 (월/수/금/일만) ─────────
@@ -81,6 +84,9 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DART_API_KEY: ${{ secrets.DART_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_OWNER_ID: ${{ secrets.TELEGRAM_OWNER_ID }}
         run: |
           echo "🐋 1단계: 미국·한국 시장 전체 스캔"
           node scripts/scan-whale-activity.js || echo "✅ 유의미한 시그널 없음"
