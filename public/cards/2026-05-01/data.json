@@ -1,0 +1,43 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "미국 주식은 4만원 벌었는데, 내 밥값은 2천원 더 들겠네요 🥲",
+      "badge": "2026-05-01 내 지갑 변화",
+      "walletItems": [
+        {
+          "label": "🇺🇸 미국 주식 (500만원 기준)",
+          "impact": "약 43,691원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "📊 국내 주식 (1천만원 기준)",
+          "impact": "약 137,545원 빠졌어요",
+          "trend": "down"
+        },
+        {
+          "label": "🛒 장바구니 식비 (월 80만원)",
+          "impact": "체감 물가가 2,080원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "⛽ 주유비 (5만원 주유 시)",
+          "impact": "약 478원 아꼈어요",
+          "trend": "down"
+        },
+        {
+          "label": "₿ 비트코인 (100만원 기준)",
+          "impact": "약 25,744원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "🏠 주거비·대출이자",
+          "impact": "오늘은 평화로워요 😌",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
