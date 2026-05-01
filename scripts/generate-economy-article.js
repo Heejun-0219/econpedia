@@ -76,7 +76,7 @@ async function generateArticleContent(target) {
 마크다운 본문만 출력하세요. 제목(h1)은 포함하지 마세요.`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-preview-04-17',
+    model: 'gemini-3.1-pro-preview',
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     config: { temperature: 0.6, maxOutputTokens: 8192 },
   });

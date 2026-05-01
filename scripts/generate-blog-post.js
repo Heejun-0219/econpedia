@@ -319,7 +319,7 @@ JSON 배열만 반환하세요. 예시:
 ["포스트1 텍스트 🧵 1/6", "포스트2 텍스트 2/6", ...]`;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-3.1-pro-preview',
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     config: { temperature: 0.8 },
   });

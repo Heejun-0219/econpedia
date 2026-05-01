@@ -6,7 +6,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 async function run() {
   const prompt = "What is the 12-character ISIN code for NVIDIA (NVDA)? Respond with ONLY the code.";
   const response = await ai.models.generateContent({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-3.1-pro-preview',
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     config: { temperature: 0.1, maxOutputTokens: 100 }
   });
