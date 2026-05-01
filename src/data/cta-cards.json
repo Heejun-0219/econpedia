@@ -4,7 +4,7 @@
     "icon": "📬",
     "title": "매일 아침 7시에 받기",
     "description": "이코노가 쓴 3분 브리핑을 이메일·텔레그램으로. 원할 때 언제든 해지 가능.",
-    "metricsHtml": "구독자 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-subscribers\">{subscribers}명</b> · 평균 열람률 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-openrate\">{openRate}%</b>",
+    "metricsHtml": "구독자 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-subscribers\">{subscribers}명</b> · 매일 발행",
     "button": {
       "text": "뉴스레터 구독 →",
       "style": "sec",
@@ -23,7 +23,7 @@
       "text": "샘플 먼저 보기 →",
       "style": "pri",
       "type": "link",
-      "target": "/whale"
+      "target": "/wallet"
     },
     "isRecommended": true
   },
@@ -32,7 +32,7 @@
     "icon": "📚",
     "title": "경제 기초부터 시작",
     "description": "GDP·금리·환율. 필수 경제 용어 3개를 10분 안에. 어제 뉴스가 이해되게.",
-    "metricsHtml": "누적 완주 <b style=\"color:var(--color-text-primary)\" id=\"stat-i2-completions\">{course_completions}명</b> · 소요 <b style=\"color:var(--color-text-primary)\">10분</b>",
+    "metricsHtml": "필수 경제 용어 <b style=\"color:var(--color-text-primary)\">3개</b> · 소요 <b style=\"color:var(--color-text-primary)\">10분</b>",
     "button": {
       "text": "학습 시작 →",
       "style": "sec",

@@ -162,11 +162,8 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
 let siteStats = { 
   total_visitors: 0, 
   daily_visitors: 0,
-  subscribers: 14382,
-  openRate: "64",
-  rating: "4.8",
-  course_completions: 8240,
-  portfolio_users: 3214
+  subscribers: 0,
+  portfolio_users: 0
 };
 try {
   // 배포된 환경의 API에서 통계 데이터를 긁어옴 (SSG 빌드 시 최신값 반영)

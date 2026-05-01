@@ -247,19 +247,36 @@ const server = createServer(async (req, res) => {
     return sendJSON(res, 200, { success: true, data: latestMarketData });
   }
 
-  // ── GET /api/stats (슬랙 리포트용) ──────────────────────────
+  // ── GET /api/stats (슬랙 리포트용 + 홈페이지 Social Proof) ──────────
   if (req.method === 'GET' && path === '/api/stats') {
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     const todayCount = stats.daily[todayStr] || 0;
-    
+
+    // Resend API에서 실제 구독자 수 조회
+    let subscriberCount = 0;
+    try {
+      if (RESEND_API_KEY && AUDIENCE_ID) {
+        const resendRes = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
+          headers: { Authorization: `Bearer ${RESEND_API_KEY}` },
+        });
+        if (resendRes.ok) {
+          const resendData = await resendRes.json();
+          const activeContacts = (resendData.data || []).filter(c => !c.unsubscribed);
+          subscriberCount = activeContacts.length;
+        }
+      }
+    } catch (e) {
+      console.warn('⚠️ Resend 구독자 수 조회 실패:', e.message);
+    }
+
+    // 지갑 알림 구독자 수 (실제 등록된 수)
+    const walletUserCount = Object.keys(wallets).length;
+
     return sendJSON(res, 200, {
       total_visitors: stats.total || 0,
       daily_visitors: todayCount,
-      subscribers: 14382,
-      openRate: "64",
-      rating: "4.8",
-      course_completions: 8240,
-      portfolio_users: 3214,
+      subscribers: subscriberCount,
+      portfolio_users: walletUserCount,
       ts: new Date().toISOString(),
     });
   }
