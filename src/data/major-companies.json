@@ -1,6 +1,6 @@
 {
-  "_description": "노이즈 필터용 주요 기업 CIK 사전. 감시 대상이 아닌 필터입니다. SEC EFTS에서 반환된 수백 건 중 주요 기업만 빠르게 걸러냅니다.",
-  "_lastUpdated": "2026-04-24",
+  "_description": "전체 시장(Full Market) 내부자 거래 스캔 시, 해당 기업들의 거래가 포착되면 'Major Bonus (+20점)' 가산점을 부여하여 노이즈를 뚫고 상단에 노출시키기 위한 사내 딕셔너리입니다.",
+  "_lastUpdated": "2026-05-01",
   "us": {
     "0000320193": { "ticker": "AAPL", "name": "Apple Inc." },
     "0001652044": { "ticker": "GOOGL", "name": "Alphabet Inc." },
