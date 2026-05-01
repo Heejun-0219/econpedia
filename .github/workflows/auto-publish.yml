@@ -119,7 +119,6 @@ jobs:
             src/data/whale-analyses.json \
             src/pages/portfolio/*.astro \
             src/data/portfolio-*.json \
-            src/data/insider-*.json \
             public/cards/
 
           # 변경사항이 없으면 종료
@@ -144,7 +143,6 @@ jobs:
             src/data/whale-analyses.json \
             src/pages/portfolio/*.astro \
             src/data/portfolio-*.json \
-            src/data/insider-*.json \
             public/cards/
 
           git commit -m "docs: Auto-published daily briefing + blog + card news"
