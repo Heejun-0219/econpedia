@@ -252,19 +252,60 @@ const description = "${safeDescription}";
   }
 }
 
+// ─── 슬랙 에러 알림 ──────────────────────────────────────
+async function sendSlackError(context, error) {
+  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+  if (!webhookUrl) return;
+
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  let errorDetail = '';
+  
+  if (errorMessage.includes('429') && errorMessage.includes('spending cap')) {
+    errorDetail = '💡 *원인:* Gemini API 월 사용량 한도(Spending Cap) 초과\n💡 *조치:* <https://ai.studio/spend|Google AI Studio Billing> 에서 한도 확인 및 수정 또는 API 키 교체 필요';
+  } else if (context.includes('Market Data Fetch')) {
+    errorDetail = '💡 *원인:* Yahoo Finance 또는 한국은행 API 크롤링 실패 (네트워크 이슈, API 구조 변경 등)';
+  } else if (context.includes('Environment')) {
+    errorDetail = '💡 *원인:* 필수 환경변수(.env) 누락';
+  }
+
+  const payload = {
+    text: `🚨 *EconPedia 파이프라인 에러 알림*\n\n*발생 단계:* ${context}\n\n*에러 내용:*\n\`\`\`\n${errorMessage}\n\`\`\`\n\n${errorDetail}`
+  };
+
+  try {
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    console.log('✅ Slack error notification sent.');
+  } catch (e) {
+    console.error('❌ Failed to send Slack notification:', e);
+  }
+}
+
 // ─── 메인 파이프라인 ─────────────────────────────────────
 async function main() {
   if (!process.env.GEMINI_API_KEY) {
-    console.error('❌ Error: GEMINI_API_KEY environment variable is not set.');
+    const msg = 'GEMINI_API_KEY environment variable is not set.';
+    console.error(`❌ Error: ${msg}`);
+    await sendSlackError('Environment Validation', new Error(msg));
     process.exit(1);
   }
 
   try {
-    const rawData = await getMarketData();
-    const formattedData = formatMarketDataForPrompt(rawData);
+    let rawData, formattedData, weatherData;
     
-    // 1. Signal Engine으로 경제 날씨 판정
-    const weatherData = analyzeSignals(rawData);
+    try {
+      rawData = await getMarketData();
+      formattedData = formatMarketDataForPrompt(rawData);
+      // 1. Signal Engine으로 경제 날씨 판정
+      weatherData = analyzeSignals(rawData);
+    } catch (e) {
+      await sendSlackError('Market Data Fetch (시장 데이터 크롤링)', e);
+      throw e;
+    }
+
     console.log(`\n⛅ 오늘의 경제 날씨: ${weatherData.emoji} ${weatherData.label}`);
     console.log(`➡️ 헤드라인: ${weatherData.headline}`);
     console.log(`➡️ 발행 결정: 기사=${weatherData.shouldPublishArticle}, 내용깊이=${weatherData.contentDepth}\n`);
@@ -273,23 +314,40 @@ async function main() {
 
     // 2. 발행 조건 만족 시에만 기사 생성
     if (weatherData.shouldPublishArticle) {
-      const articleMarkdown = await generateArticle(formattedData, weatherData);
-      articleResult = await saveArticle(articleMarkdown);
+      let articleMarkdown;
+      try {
+        articleMarkdown = await generateArticle(formattedData, weatherData);
+      } catch (e) {
+        await sendSlackError('Article Generation (Gemini AI 기사 생성)', e);
+        throw e;
+      }
+      
+      try {
+        articleResult = await saveArticle(articleMarkdown);
+      } catch (e) {
+        await sendSlackError('File Save (Astro 파일 및 Manifest 저장)', e);
+        throw e;
+      }
     } else {
       console.log('😴 날씨가 평화로워 오늘 기사는 발행하지 않습니다.');
     }
 
     // 3. 시장 데이터를 파일로 저장 — 카드뉴스/블로그/홈페이지 위젯에서 재사용
-    const marketDataPath = path.join(__dirname, '..', '.market-data.json');
-    const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
-    
-    await fs.writeFile(marketDataPath, JSON.stringify({
-      raw: rawData,
-      formatted: formattedData,
-      weatherData: weatherData,
-      date: articleResult ? articleResult.dateString : todayStr,
-    }, null, 2), 'utf8');
-    console.log(`📊 Market data & weather saved for downstream scripts: ${marketDataPath}`);
+    try {
+      const marketDataPath = path.join(__dirname, '..', '.market-data.json');
+      const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+      
+      await fs.writeFile(marketDataPath, JSON.stringify({
+        raw: rawData,
+        formatted: formattedData,
+        weatherData: weatherData,
+        date: articleResult ? articleResult.dateString : todayStr,
+      }, null, 2), 'utf8');
+      console.log(`📊 Market data & weather saved for downstream scripts: ${marketDataPath}`);
+    } catch (e) {
+      await sendSlackError('Market Data Save (시장 데이터 JSON 저장)', e);
+      throw e;
+    }
 
     console.log('🚀 Daily Briefing Pipeline Completed Successfully.');
   } catch (error) {

@@ -1,0 +1,3 @@
+{
+  "text": "🚨 *EconPedia 파이프라인 에러 알림*\n\n*Gemini API 사용량 한도(Spending Cap) 초과*로 인해 `scripts/daily-briefing.js` 데일리 브리핑 기사 생성 중 에러가 발생했습니다.\n\n*에러 내용:*\n```\nApiError: {\"error\":{\"code\":429,\"message\":\"Your project has exceeded its monthly spending cap. Please go to AI Studio at https://ai.studio/spend to manage your project spend cap...\",\"status\":\"RESOURCE_EXHAUSTED\"}}\n```\n\n*조치 필요 사항:*\n• <https://ai.studio/spend|Google AI Studio Billing>에 접속하여 프로젝트 지출 한도를 늘리거나 유료 플랜으로 전환해 주세요.\n• 또는 `.env`의 `GEMINI_API_KEY`를 사용 가능한 새로운 키로 교체해 주세요."
+}
