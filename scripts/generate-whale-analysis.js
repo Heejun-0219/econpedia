@@ -72,6 +72,7 @@ async function saveAnalysisPage(signal, markdownContent, metadata, isin) {
 
   const astroComponent = `---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
 
 const title = "${safeTitle}";
 const date = "${signal.date}";

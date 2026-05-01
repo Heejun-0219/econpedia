@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const title = "이용약관 및 면책조항";
+const description = "EconPedia 이용약관 및 투자 유의 면책조항 안내입니다.";
+---
+
+<BaseLayout title={title} description={description} hideSubHub={true}>
+  <div class="legal-layout">
+    <div class="legal-header">
+      <h1 class="legal-header__title">이용약관 및 면책조항</h1>
+      <p class="legal-header__date">최종 수정일: 2026년 5월 1일</p>
+    </div>
+
+    <div class="legal-content">
+      <h2>제1장 총칙</h2>
+      <h3>제1조 (목적)</h3>
+      <p>본 약관은 EconPedia(이하 "회사" 또는 "사이트")가 제공하는 모든 서비스의 이용조건 및 절차, 이용자와 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.</p>
+
+      <h3>제2조 (약관의 효력과 변경)</h3>
+      <p>본 약관은 사이트 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력이 발생합니다. 회사는 합리적인 사유가 발생할 경우 관련 법령에 위배되지 않는 범위 안에서 약관을 개정할 수 있습니다.</p>
+
+      <h2>제2장 서비스 이용 및 정보의 성격</h2>
+      <h3>제3조 (정보의 제공 및 한계)</h3>
+      <p>본 사이트에서 제공하는 경제, 주식, 가상화폐, 부동산 등 각종 금융 관련 정보 및 AI가 생성한 브리핑 기사는 단순한 <strong>정보 제공 및 학술적 참고를 목적</strong>으로 합니다. 당사는 제공된 정보의 정확성, 완전성, 신뢰성, 적시성을 보장하지 않습니다.</p>
+
+      <h3>제4조 (투자 면책 조항 / Disclaimer)</h3>
+      <ul>
+        <li><strong>투자 권유 아님:</strong> 본 사이트에서 제공하는 모든 데이터, 분석, 기사 및 의견은 투자 권유, 주식 종목 추천 또는 전문적인 금융 자문(Financial Advice)이 아닙니다.</li>
+        <li><strong>책임의 귀속:</strong> 본 사이트의 정보를 바탕으로 이루어진 주식 매매, 가상화폐 거래 등 <strong>모든 형태의 투자 결정 및 그로 인해 발생하는 손익에 대한 법적 책임은 전적으로 투자자(이용자) 본인에게 있습니다.</strong></li>
+        <li><strong>손해 배상 면책:</strong> 회사는 사이트 이용으로 인해 발생한 직·간접적인 금전적 손해에 대해 어떠한 법적 책임도 지지 않습니다. 이용자는 스스로의 판단과 책임 하에 투자 결정을 내리셔야 합니다.</li>
+      </ul>
+
+      <h2>제3장 사용자의 의무</h2>
+      <h3>제5조 (사용자 의무)</h3>
+      <p>이용자는 본 사이트의 정보를 무단으로 대량 크롤링, 복제, 배포하거나 상업적 목적으로 재가공하여 판매할 수 없습니다. 또한 사이트의 정상적인 운영을 방해하는 해킹, 악성코드 배포 등의 행위를 금지합니다.</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-layout {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  
+  .legal-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--glass-border);
+  }
+  
+  .legal-header__title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--color-text-main);
+  }
+  
+  .legal-header__date {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+  
+  .legal-content {
+    line-height: 1.8;
+    color: var(--color-text-main);
+  }
+  
+  .legal-content h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    color: var(--color-text-main);
+    border-bottom: 2px solid var(--color-accent-primary);
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+
+  .legal-content h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    color: var(--color-text-main);
+  }
+  
+  .legal-content p {
+    margin-bottom: 16px;
+    font-size: 1.05rem;
+  }
+  
+  .legal-content ul {
+    margin-bottom: 24px;
+    padding-left: 24px;
+    background-color: var(--color-bg-elevated);
+    padding: 20px 20px 20px 40px;
+    border-radius: 8px;
+    border-left: 4px solid var(--color-accent-primary);
+  }
+  
+  .legal-content li {
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+  }
+  
+  .legal-content strong {
+    font-weight: 700;
+    color: var(--color-accent-primary);
+  }
+</style>

@@ -169,6 +169,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
 
     <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-8793696080407617">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8793696080407617" crossorigin="anonymous"></script>
   </head>
   <body>
@@ -283,6 +284,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Main Content -->
     <main>
+      {article && (
+        <div style="background-color: var(--color-bg-elevated); padding: 16px; margin-bottom: 32px; border-radius: 12px; border: 1px solid var(--color-accent-primary); font-size: 14px; color: var(--color-text-muted); display: flex; gap: 12px; align-items: flex-start; opacity: 0.9;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-primary)" stroke-width="2" width="20" height="20" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <div style="line-height: 1.6;">
+            <strong>안내:</strong> 본 기사는 EconPedia AI 엔진이 최신 금융 데이터 및 뉴스를 종합하여 작성한 자동 큐레이션 콘텐츠입니다. 참고용으로만 활용해주시기 바랍니다.
+          </div>
+        </div>
+      )}
       <slot />
     </main>
 
@@ -437,11 +446,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             <li><a href="/about">EconPedia 소개</a></li>
             <li><a href="/contact">문의하기</a></li>
             <li><a href="/advertise">광고 문의</a></li>
+            <li><a href="/privacy">개인정보처리방침</a></li>
+            <li><a href="/terms">이용약관 및 면책조항</a></li>
           </ul>
         </div>
       </div>
-      <div class="footer__bottom">
-        <p>&copy; 2026 EconPedia. 경제를 쉽게, 모두에게.</p>
+      <div class="footer__bottom" style="margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--glass-border); text-align: left; font-size: 13px; color: var(--color-text-muted); line-height: 1.6;">
+        <p style="margin-bottom: 12px;"><strong>투자 유의 및 면책 조항 (Disclaimer):</strong> EconPedia에서 제공하는 모든 정보 및 데이터는 투자 판단의 참고 자료일 뿐이며, 투자 권유 또는 전문적인 금융 자문을 목적으로 하지 않습니다. 주식, 가상화폐 등 금융 상품의 가치는 변동될 수 있으며, 투자 결정 및 그 결과에 대한 모든 법적 책임은 투자자 본인에게 있습니다. 당사는 제공된 정보의 정확성이나 완전성을 보장하지 않으며, 이로 인해 발생하는 직·간접적인 손해에 대해 어떠한 법적 책임도 지지 않습니다.</p>
+        <p>&copy; 2026 EconPedia. All rights reserved.</p>
       </div>
     </footer>
 
