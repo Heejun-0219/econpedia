@@ -19,7 +19,6 @@ export const CATEGORIES = {
         readingTime: '7분',
         date: '2026.04.01',
         href: '/economy/basics/inflation-explained',
-        comingSoon: true,
       },
       {
         title: '금리란? — 한국은행이 금리를 올리면 일어나는 일들',

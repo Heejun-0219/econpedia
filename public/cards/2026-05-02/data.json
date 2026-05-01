@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "내 주식은 13만원 빠졌는데, 장바구니 물가는 또 올랐어요 🥲",
+      "badge": "2026-05-02 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 기준 약 13.7만원 빠졌어요",
+          "trend": "down"
+        },
+        {
+          "label": "비트코인",
+          "impact": "100만원 기준 약 2.6만원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "장바구니",
+          "impact": "월 식비 80만원 기준 약 2,080원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 약 611원 아꼈어요",
+          "trend": "down"
+        },
+        {
+          "label": "대출이자",
+          "impact": "금리 변화 없이 평화로워요",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
