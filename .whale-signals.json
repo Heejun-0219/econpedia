@@ -1,21 +1,51 @@
 [
   {
-    "id": "form4-amzn-2026-04-21",
+    "id": "dart-068270-2026-04-30",
+    "type": "insider",
+    "market": "kr",
+    "source": "DART 지분공시",
+    "companyName": "셀트리온",
+    "ticker": "068270",
+    "corpCode": "00413046",
+    "person": "최병서 / 전무",
+    "direction": "buy",
+    "amount": "3,000주 취득",
+    "totalValue": 3000,
+    "date": "2026-04-30",
+    "significance": 70
+  },
+  {
+    "id": "form4-amzn-2026-04-28",
     "type": "insider",
     "market": "us",
     "source": "SEC Form 4",
     "companyName": "Amazon.com Inc.",
     "ticker": "AMZN",
     "cik": "0001018724",
-    "person": "Jassy Andrew R / President and CEO",
+    "person": "RUBINSTEIN JONATHAN / Director",
     "direction": "sell",
-    "amount": "$7.9M (약 115억 원)",
-    "totalValue": 7905000,
-    "date": "2026-04-21",
-    "significance": 70
+    "amount": "$1.0M (약 15억 원)",
+    "totalValue": 1000740,
+    "date": "2026-04-28",
+    "significance": 55
   },
   {
-    "id": "form4-meta-2026-04-22",
+    "id": "dart-105560-2026-04-30",
+    "type": "insider",
+    "market": "kr",
+    "source": "DART 지분공시",
+    "companyName": "KB금융",
+    "ticker": "105560",
+    "corpCode": "00688996",
+    "person": "나상록 / 전무",
+    "direction": "buy",
+    "amount": "195주 취득",
+    "totalValue": 195,
+    "date": "2026-04-30",
+    "significance": 50
+  },
+  {
+    "id": "form4-meta-2026-04-29",
     "type": "insider",
     "market": "us",
     "source": "SEC Form 4",
@@ -24,9 +54,9 @@
     "cik": "0001326801",
     "person": "Olivan Javier / Chief Operating Officer",
     "direction": "sell",
-    "amount": "$1.1M (약 15억 원)",
-    "totalValue": 1057539.9500000002,
-    "date": "2026-04-22",
+    "amount": "$1.0M (약 15억 원)",
+    "totalValue": 1043156.2000000002,
+    "date": "2026-04-29",
     "significance": 30
   }
 ]
