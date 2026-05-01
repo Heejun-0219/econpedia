@@ -197,9 +197,14 @@ async function scanDartInsider(majorCorpCodes) {
   const bgnDe = weekAgo.toISOString().split('T')[0].replace(/-/g, '');
   const endDe = today.toISOString().split('T')[0].replace(/-/g, '');
 
+  const majorByTicker = {};
+  for (const [code, info] of Object.entries(majorCorpCodes)) {
+    majorByTicker[info.ticker] = { ...info, originalCode: code };
+  }
+
   try {
-    // pblntf_ty=J: 지분공시
-    const url = `https://opendart.fss.or.kr/api/list.json?crtfc_key=${apiKey}&bgn_de=${bgnDe}&end_de=${endDe}&pblntf_ty=J&page_count=100`;
+    // pblntf_ty=D: 지분공시 (임원/주요주주)
+    const url = `https://opendart.fss.or.kr/api/list.json?crtfc_key=${apiKey}&bgn_de=${bgnDe}&end_de=${endDe}&pblntf_ty=D&page_count=100`;
     const res = await fetch(url);
     if (!res.ok) return signals;
     const data = await res.json();
@@ -207,11 +212,11 @@ async function scanDartInsider(majorCorpCodes) {
 
     console.log(`  📊 최근 지분공시: ${data.total_count}건`);
 
-    // 주요 기업 필터 + 임원/주요주주 보고서만
+    // 주요 기업 필터 + 임원/주요주주 보고서만 (stock_code로 매핑)
     const relevant = data.list.filter(item => {
       const isListed = item.corp_cls === 'Y' || item.corp_cls === 'K';
       const isInsider = item.report_nm?.includes('임원') || item.report_nm?.includes('주요주주');
-      const isMajor = majorCorpCodes[item.corp_code];
+      const isMajor = majorByTicker[item.stock_code];
       return isListed && isInsider && isMajor;
     });
     console.log(`  🎯 주요 기업 임원 거래: ${relevant.length}건`);
@@ -236,7 +241,7 @@ async function scanDartInsider(majorCorpCodes) {
         const person = [rep.repror, rep.isu_exctv_ofcps].filter(v => v && v !== '-').join(' / ');
         const absStr = Math.abs(changeCount).toLocaleString('ko-KR');
         const amount = `${absStr}주 ${isBuy ? '취득' : '처분'}`;
-        const info = majorCorpCodes[item.corp_code];
+        const info = majorByTicker[item.stock_code];
 
         signals.push({
           id: `dart-${info.ticker}-${rep.rcept_dt}`,
