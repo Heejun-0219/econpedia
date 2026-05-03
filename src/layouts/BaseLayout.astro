@@ -284,14 +284,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Main Content -->
     <main>
-      {article && (
-        <div style="background-color: var(--color-bg-elevated); padding: 16px; margin-bottom: 32px; border-radius: 12px; border: 1px solid var(--color-accent-primary); font-size: 14px; color: var(--color-text-muted); display: flex; gap: 12px; align-items: flex-start; opacity: 0.9;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-primary)" stroke-width="2" width="20" height="20" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <div style="line-height: 1.6;">
-            <strong>안내:</strong> 본 기사는 EconPedia AI 엔진이 최신 금융 데이터 및 뉴스를 종합하여 작성한 자동 큐레이션 콘텐츠입니다. 참고용으로만 활용해주시기 바랍니다.
-          </div>
-        </div>
-      )}
+      {/* AI disclaimer removed for cleaner UI. Footer disclaimer serves the legal purpose. */}
       <slot />
     </main>
 
