@@ -75,13 +75,37 @@ async function generateArticleContent(target) {
 
 마크다운 본문만 출력하세요. 제목(h1)은 포함하지 마세요.`;
 
-  const response = await ai.models.generateContent({
+  console.log(`   📝 [초안 작성 중...]`);
+  const draftResponse = await ai.models.generateContent({
     model: 'gemini-3.1-pro-preview',
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     config: { temperature: 0.6, maxOutputTokens: 8192 },
   });
+  const draftText = draftResponse.text;
 
-  return response.text;
+  console.log(`   🕵️‍♂️ [수석 에디터 QC 중...]`);
+  const qcPrompt = `당신은 EconPedia의 수석 에디터(데스크)입니다.
+아래는 주니어 에디터가 작성한 경제 백과사전 기사의 초안입니다.
+당신의 임무는 이 초안을 검수하고, 완벽하게 다듬어진 최종본을 마크다운으로 반환하는 것입니다.
+
+[검수 기준]
+1. 거슬리는 메타 발언 제거: "본 기사는 AI가 작성했습니다", "주의사항", "면책조항", "마무리하며", "결론적으로" 같은 상투적이거나 AI 특유의 꼬리말/머리말을 완벽하게 삭제하세요. 면책 조항은 사이트 하단에 이미 있으므로 본문에 중복해서 넣을 필요가 전혀 없습니다.
+2. 문체 통일: 독자에게 직접 이야기하듯 친근하고 매끄러운 "~합니다", "~해요" 체를 유지하되, 교과서처럼 딱딱하고 기계적인 느낌이 나지 않도록 자연스럽게 윤문하세요.
+3. 가독성 극대화: 문장이 불필요하게 길면 나누고, 핵심 내용이 눈에 잘 띄도록 소제목(h2, h3)과 볼드체(**)를 적절히 활용하세요.
+4. 순수 마크다운: HTML 태그는 절대 사용하지 마세요. 제목(h1)도 본문에 포함하지 마세요.
+
+[초안 기사]
+${draftText}
+
+초안의 장점과 지식은 100% 유지하되, 위의 검수 기준을 엄격하게 적용하여 완전히 다듬어진 최종 마크다운 본문만 출력해주세요.`;
+
+  const finalResponse = await ai.models.generateContent({
+    model: 'gemini-3.1-pro-preview',
+    contents: [{ role: 'user', parts: [{ text: qcPrompt }] }],
+    config: { temperature: 0.4, maxOutputTokens: 8192 },
+  });
+
+  return finalResponse.text;
 }
 
 async function saveArticlePage(target, markdownContent) {

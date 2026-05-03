@@ -211,14 +211,35 @@ async function main() {
     if (isin) console.log(`  🔗 ISIN: ${isin}`);
 
     const prompt = buildWhaleAnalysisPrompt(signal, marketContext);
+    console.log(`  📝 [초안 작성 중...]`);
     const rawOutput = await callGemini(prompt, 0.7);
-    const metadata = extractJsonBlock(rawOutput) || {
+
+    console.log(`  🕵️‍♂️ [수석 에디터 QC 중...]`);
+    const qcPrompt = {
+      system: `당신은 EconPedia의 수석 에디터(데스크)이자 금융 컴플라이언스 전문가입니다.`,
+      user: `아래는 주니어 애널리스트가 작성한 내부자 거래(Whale Alert) 분석 기사의 초안입니다.
+당신의 임무는 이 초안을 검수하고, 다음 기준에 맞게 완벽히 다듬어진 최종본을 반환하는 것입니다.
+
+[검수 기준]
+1. 불필요한 메타 발언 제거: "본 분석은 AI가 작성했습니다", "결론적으로", "마무리하며", "참고로 이 데이터는" 같은 상투적인 문구를 모두 제거하세요.
+2. 컴플라이언스 준수: "반드시 매수하세요", "강력 추천합니다" 같은 확정적인 투자 권유 뉘앙스가 있다면 중립적인 분석(예: "긍정적인 시그널로 해석될 수 있습니다")으로 톤다운하세요.
+3. 포맷팅 유지: 초안 최상단에 있는 메타데이터 블록(\`\`\`json ... \`\`\`)은 절대로 훼손하지 말고 그대로 최상단에 유지하세요.
+4. 가독성 극대화: 단락을 짧게 나누고, 중요한 수치나 인사이트는 볼드체(**)를 활용하세요. 문체는 "~합니다" 체를 사용하세요.
+
+[초안 기사]
+${rawOutput}
+
+위 기준을 엄격히 적용하여 교정된 전체 텍스트(JSON 메타데이터 블록 포함)를 그대로 출력해주세요.`
+    };
+    
+    const finalOutput = await callGemini(qcPrompt, 0.4);
+    const metadata = extractJsonBlock(finalOutput) || {
       slug: `whale-${signal.ticker.toLowerCase()}-${signal.date}`,
       seoTitle: `[${signal.ticker}] ${signal.person} 거래 분석`,
       seoDescription: "Whale Alert 분석 결과입니다."
     };
 
-    const resultMeta = await saveAnalysisPage(signal, rawOutput, metadata, isin);
+    const resultMeta = await saveAnalysisPage(signal, finalOutput, metadata, isin);
     await updateManifest(resultMeta);
 
     // 텔레그램 Push 알림
