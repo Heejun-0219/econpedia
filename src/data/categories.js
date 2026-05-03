@@ -26,7 +26,6 @@ export const CATEGORIES = {
         readingTime: '9분',
         date: '2026.04.01',
         href: '/economy/basics/interest-rate-basics',
-        comingSoon: true,
       },
       {
         title: '환율이란? — 1달러가 1,300원이면 좋은 건가, 나쁜 건가',
