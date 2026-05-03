@@ -60,7 +60,8 @@ function formatDateShort(dateStr) {
   return { m: `${month}월`, d: `${day}`, w: weekday };
 }
 
-const today = new Date();
+// KST(UTC+9) 기준 오늘 날짜 — GitHub Actions는 UTC 22:00 실행 → 빌드 시 UTC 날짜는 KST보다 하루 뒤처짐
+const today = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
 const weekdaysEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 const weatherIcons = ['☀️', '⛅', '🌧️', '🌩️'];
 const weatherLabels = ['맑음', '흐림', '비', '폭풍'];
@@ -236,7 +237,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       ISSUE 01 — HERO REBUILD
     ============================================================ -->
     <div class="h1-hero">
-      <div class="pill"><span class="d"></span>LIVE · {formatDateShort(new Date().toISOString().split('T')[0]).m} {formatDateShort(new Date().toISOString().split('T')[0]).d}일 {formatDateShort(new Date().toISOString().split('T')[0]).w} · 업데이트</div>
+      <div class="pill"><span class="d"></span>LIVE · {formatDateShort(new Date(new Date().getTime() + 9*60*60*1000).toISOString().split('T')[0]).m} {formatDateShort(new Date(new Date().getTime() + 9*60*60*1000).toISOString().split('T')[0]).d}일 {formatDateShort(new Date(new Date().getTime() + 9*60*60*1000).toISOString().split('T')[0]).w} · 업데이트</div>
       <h3>{latestBriefings[0]?.title || w.headline || '기름값이 훅 떨어졌습니다. 주유소는 조금만 더 기다리세요.'}</h3>
       <div class="abs">{latestBriefings[0]?.excerpt || (w.walletSummary ? w.walletSummary.split('\n')[0] : '국제 유가가 3.1% 하락해 다음 주 국내 주유소 가격에 반영될 예정입니다.')} <b>{w.walletImpacts?.[0]?.label}</b></div>
       <div class="cta-row">
