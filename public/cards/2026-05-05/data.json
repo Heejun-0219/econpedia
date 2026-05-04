@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "오늘 내 주식 계좌 확인 필수! 1천만원 뒀다면 51만원 올랐어요",
+      "badge": "2026-05-05 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 기준 51만 2천원 껑충",
+          "trend": "up"
+        },
+        {
+          "label": "비트코인",
+          "impact": "100만원 기준 1만 4천원 쏠쏠하게 상승",
+          "trend": "up"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 301원 절약",
+          "trend": "down"
+        },
+        {
+          "label": "장바구니",
+          "impact": "월 식비 80만원 기준 2,080원 더 들어요",
+          "trend": "up"
+        },
+        {
+          "label": "대출이자",
+          "impact": "오늘도 평화로움, 변동 없어요",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "내일 내 지갑은 어떨까? 미리 대비하기"
+    }
+  ]
+}

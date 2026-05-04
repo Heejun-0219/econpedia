@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "내 주식 계좌에 50만 원이 들어온 날, 해외 직구 장바구니는 잠시 비워두세요";
+const date = "2026-05-05";
+const description = "🚨 오늘 왜 이러는 걸까?";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">📰 데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>🚨 <strong>오늘 왜 이러는 걸까?</strong></p>
+<p>오늘 우리나라 주식 시장에 그야말로 기분 좋은 &#39;태풍&#39;이 불었습니다. 평소라면 몇 달에 걸쳐 오를 만한 큰 폭의 상승이 하루 만에 일어났거든요. 외국인 투자자들이 한국 시장에 매력을 느끼고 큰돈을 싸 들고 와서 우리 기업들을 장바구니에 마구 담은 덕분입니다. </p>
+<p>하지만 마냥 웃을 수만은 없는 이유도 있습니다. 달러의 몸값이 1,470원대 후반까지 훌쩍 뛰면서 여전히 고공행진 중이기 때문입니다. 주식 계좌는 따뜻해졌지만, 바다 건너로 나갈 돈을 생각하면 셈법이 복잡해지는 하루네요.</p>
+<hr>
+<p>💰 <strong>내 지갑 가이드</strong></p>
+<p><strong>📊 국내 주식: &quot;오늘은 앱 열고 웃으셔도 좋습니다&quot;</strong>
+국내 주식에 1천만 원을 투자해 두셨다면, 오늘 하루에만 내 계좌에 약 <strong>51만 2천 원</strong>이 불어났을 거예요. 웬만한 직장인의 한 달 교통비와 통신비를 합친 것보다 큰돈이 하루 만에 생겼네요. 기분 좋게 계좌를 확인하시되, 시장이 뜨겁다고 해서 무리하게 빚을 내서 투자하는 것은 언제나 조심하셔야 합니다.</p>
+<p><strong>✈️ 환율(여행·직구): &quot;달러 결제는 다음으로 미루세요&quot;</strong>
+달러가 너무 비쌉니다. 100만 원을 환전할 때 어제보다 28원을 더 내야 하는 것도 문제지만, 1달러에 1,475원이라는 숫자 자체가 우리 지갑에 큰 부담입니다. 
+👉 <strong>Action:</strong> 당분간 아마존, 알리익스프레스 등에서 달러로 결제해야 하는 해외 직구는 잠시 멈추세요. 다가오는 여름휴가로 미국 여행을 계획 중이시라면, 숙소 결제 등은 환율이 조금 진정될 때까지 기다려보시는 걸 추천합니다.</p>
+<p><strong>🇺🇸 미국 주식: &quot;어젯밤은 평화로웠습니다&quot;</strong>
+간밤 미국 주식 시장은 아주 조용하게 지나갔습니다. 내 미국 주식 계좌도 어제와 큰 차이가 없을 테니, 오늘은 밤잠 설치지 마시고 푹 주무셔도 좋습니다.</p>
+<p><strong>🛒 생활비와 주유비: &quot;예산은 그대로 유지하세요&quot;</strong>
+월 식비로 80만 원을 쓴다고 가정했을 때, 체감 물가가 약 <strong>2,080원</strong> 정도 올랐습니다. 반면 퇴근길 주유소에서 5만 원어치 기름을 넣으면 어제보다 <strong>300원</strong> 정도 아낄 수 있네요. 
+👉 <strong>Action:</strong> 오르고 내린 비용을 다 합쳐도 커피 한 잔 값에 못 미치는 작은 변화입니다. 이번 달 생활비 예산은 수정할 필요 없이 그대로 밀고 나가시면 됩니다.</p>
+<p><strong>🏠 대출 이자: &quot;걱정 내려놓으세요&quot;</strong>
+한국은행 기준금리가 변하지 않았습니다. 매달 통장에서 빠져나가는 전세자금대출이나 주택담보대출 이자가 당장 오르지 않으니, 이자 걱정은 오늘 하루 접어두셔도 괜찮습니다.</p>
+<p><strong>₿ 비트코인: &quot;소소한 치킨값 벌었어요&quot;</strong>
+비트코인에 100만 원을 넣어두셨다면 오늘 약 <strong>1만 4천 원</strong> 정도 올랐습니다. 기분 좋게 치킨 한 마리 시켜 드실 수 있는 쏠쏠한 수익이네요. </p>
+<hr>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+    </div>
+  </div>
+</BaseLayout>
