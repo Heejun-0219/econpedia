@@ -529,6 +529,17 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       const weekThis = document.getElementById('week-this');
       const weekPast = document.getElementById('week-past');
       const weekNext = document.getElementById('week-next');
+
+      // Scroll to "today" on initial load for mobile
+      if (weekThis) {
+        // Use setTimeout to ensure layout is calculated on mobile
+        setTimeout(() => {
+          const todayEl = weekThis.querySelector('.today');
+          if (todayEl && weekThis.scrollWidth > weekThis.clientWidth) {
+            weekThis.scrollLeft = todayEl.offsetLeft - (weekThis.clientWidth / 2) + (todayEl.clientWidth / 2);
+          }
+        }, 100);
+      }
       
       if (weatherTabs.length === 3 && window.weatherTabsData && weekThis && weekPast && weekNext) {
         weatherTabs.forEach((tab, idx) => {
