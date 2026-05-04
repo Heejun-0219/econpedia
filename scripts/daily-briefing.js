@@ -198,7 +198,9 @@ async function saveArticle(content) {
   const excerpt = extractExcerpt(content);
 
   // Convert markdown to HTML using marked
-  const htmlContent = marked.parse(content);
+  // Pre-process **bold** text manually since marked struggles with Korean particles attached to it
+  const preProcessedContent = content.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  const htmlContent = marked.parse(preProcessedContent);
 
   // Escape backticks and dollar signs for Astro template literal safety
   const safeTitle = title.replace(/`/g, "'");

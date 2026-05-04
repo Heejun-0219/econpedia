@@ -59,7 +59,9 @@ async function saveAnalysisPage(signal, markdownContent, metadata, isin) {
   const titleMatch = cleanMarkdown.match(/^#\s+(.+)$/m);
   if (titleMatch) title = titleMatch[1].replace(/"/g, "'");
   const bodyMarkdown = cleanMarkdown.replace(/^#\s+(.+)$/m, '').trim();
-  const htmlContent = marked.parse(bodyMarkdown);
+  // Pre-process **bold** text manually since marked struggles with Korean particles attached to it
+  const preProcessedMarkdown = bodyMarkdown.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  const htmlContent = marked.parse(preProcessedMarkdown);
 
   const slug = metadata.slug || `whale-${signal.ticker.toLowerCase()}-${signal.date}`;
   const safeTitle = title.replace(/"/g, "'");

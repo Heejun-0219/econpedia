@@ -199,7 +199,9 @@ async function saveBlogPost(markdown, dateString) {
     }
   } catch {}
 
-  const htmlContent = coverImageHtml + marked.parse(bodyMarkdown) + ctaHtml;
+  // Pre-process **bold** text manually since marked struggles with Korean particles attached to it
+  const preProcessedMarkdown = bodyMarkdown.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  const htmlContent = coverImageHtml + marked.parse(preProcessedMarkdown) + ctaHtml;
 
   const safeTitle = title.replace(/`/g, "'");
   const safeDescription = (metadata.seoDescription || excerpt).replace(/`/g, "'").replace(/"/g, "'");

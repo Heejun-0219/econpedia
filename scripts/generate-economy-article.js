@@ -111,7 +111,9 @@ ${draftText}
 async function saveArticlePage(target, markdownContent) {
   const { category, article, filePath, hrefParts } = target;
   
-  const htmlContent = marked.parse(markdownContent);
+  // Pre-process **bold** text manually since marked struggles with Korean particles attached to it
+  const preProcessedMarkdown = markdownContent.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  const htmlContent = marked.parse(preProcessedMarkdown);
   const safeTitle = article.title.replace(/"/g, "'");
   const safeExcerpt = article.excerpt.replace(/"/g, "'");
   const categorySlug = hrefParts[1]; // 'basics', 'investment', etc.
