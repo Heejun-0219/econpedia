@@ -18,21 +18,21 @@ function formatDate(dateStr) {
 }
 
 const categories = [
-  { id: 'all', title: '모두 보기', emoji: '🐋' },
-  { id: 'us', title: '🇺🇸 US', emoji: '' },
-  { id: 'kr', title: '🇰🇷 KR', emoji: '' },
+  { id: 'all', title: '모두 보기' },
+  { id: 'us', title: 'US' },
+  { id: 'kr', title: 'KR' },
 ];
 ---
 
 <BaseLayout
-  title="🐋 Whale Alert"
+  title="Whale Alert"
   description="미국·한국 시장의 거대 자금 흐름을 매일 자동 스캔합니다. 내부자 거래, 기관 포지션 변동을 AI가 분석합니다."
 >
   <section class="hero hero--whale" style="padding: 4rem 0 3rem; background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-background) 100%);">
     <div class="container text-center">
       <span class="hero__badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2);">전체 시장 자동 스캔</span>
       <h1 class="hero__title" style="font-size: 2.8rem; margin: 1rem 0;">
-        🐋 Whale Alert
+        Whale Alert
       </h1>
       <p class="hero__subtitle" style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.8;">
         미국·한국 시장에서 오늘 가장 큰 돈이 움직인 곳.<br/>고정 목록 없이, AI가 매일 수백 건의 공시를 스캔합니다.
@@ -45,7 +45,7 @@ const categories = [
       <div class="whale-tabs">
         {categories.map((cat, idx) => (
           <button class={`whale-tab ${idx === 0 ? 'active' : ''}`} data-filter={cat.id}>
-            {cat.emoji} {cat.title}
+            {cat.title}
           </button>
         ))}
       </div>
@@ -53,7 +53,7 @@ const categories = [
       <div class="whale-grid" id="whale-grid">
         {analyses.length === 0 ? (
           <div class="whale-empty">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🐋</div>
+            <Icon name="clock" size={48} style="margin-bottom: 1rem; opacity: 0.4;" />
             <h3 style="margin: 0 0 0.5rem;">아직 감지된 Whale Signal이 없습니다</h3>
             <p style="opacity: 0.7; margin: 0;">매일 07:00 KST에 전체 시장을 자동 스캔합니다.</p>
           </div>
@@ -64,11 +64,11 @@ const categories = [
             <a href={`/whale/${a.slug}`} class={`whale-card ${dirClass}`} data-market={a.market}>
               <div class="whale-card__header">
                 <div class="whale-card__badge-row">
-                  <span class="whale-card__market">{a.market === 'us' ? '🇺🇸' : '🇰🇷'}</span>
+                  <span class="whale-card__market">{a.market === 'us' ? 'US' : 'KR'}</span>
                   <span class={`whale-card__direction ${isBuy ? 'buy' : 'sell'}`}>
-                    {isBuy ? '🟢 BUY' : '🔴 SELL'}
+                    {isBuy ? 'BUY' : 'SELL'}
                   </span>
-                  <span class="whale-card__score" title="시그널 중요도">⚡{a.significance}</span>
+                  <span class="whale-card__score" title="시그널 중요도">{a.significance}</span>
                 </div>
                 <span class="whale-card__date">{formatDate(a.date)}</span>
               </div>
@@ -183,6 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
+= 'none';
         }
       });
     });

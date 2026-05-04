@@ -41,10 +41,10 @@ const cat3Count = getCategoryCount(['부동산', '세금', '연금', '생활', '
 const cat4Count = getCategoryCount(['환율', '글로벌', '미국', '금리']) || 15;
 
 const categories = [
-  { icon: '📘', title: '기초 경제학', desc: '"GDP가 오르면 내 월급도 오르나요?"', count: `${cat1Count}편 · 평균 4분`, href: '/economy/basics' },
-  { icon: '📈', title: '투자 기초', desc: '"ETF와 펀드, 뭐가 다른가요?"', count: `${cat2Count}편 · 평균 5분`, href: '/economy/investment' },
-  { icon: '💰', title: '생활 금융', desc: '"전세 vs 월세, 지금은 뭐가 유리?"', count: `${cat3Count}편 · 평균 3분`, href: '/economy/finance' },
-  { icon: '🌏', title: '글로벌 경제', desc: '"미국 금리가 한국 집값에 왜?"', count: `${cat4Count}편 · 평균 6분`, href: '/economy/global' },
+  { icon: 'book', title: '기초 경제학', desc: '"GDP가 오르면 내 월급도 오르나요?"', count: `${cat1Count}편 · 평균 4분`, href: '/economy/basics' },
+  { icon: 'chart-line', title: '투자 기초', desc: '"ETF와 펀드, 뭐가 다른가요?"', count: `${cat2Count}편 · 평균 5분`, href: '/economy/investment' },
+  { icon: 'wallet', title: '생활 금융', desc: '"전세 vs 월세, 지금은 뭐가 유리?"', count: `${cat3Count}편 · 평균 3분`, href: '/economy/finance' },
+  { icon: 'globe', title: '글로벌 경제', desc: '"미국 금리가 한국 집값에 왜?"', count: `${cat4Count}편 · 평균 6분`, href: '/economy/global' },
 ];
 
 const corpCount = getCategoryCount(['기업', '실적', '분석']) || 12;
@@ -63,8 +63,16 @@ function formatDateShort(dateStr) {
 // KST(UTC+9) 기준 오늘 날짜 — GitHub Actions는 UTC 22:00 실행 → 빌드 시 UTC 날짜는 KST보다 하루 뒤처짐
 const today = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
 const weekdaysEn = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-const weatherIcons = ['☀️', '⛅', '🌧️', '🌩️'];
+const weatherIcons = ['weather-sunny', 'weather-cloudy', 'weather-rain', 'weather-storm'];
 const weatherLabels = ['맑음', '흐림', '비', '폭풍'];
+
+const emojiToIcon = {
+  '☀️': 'weather-sunny',
+  '⛅': 'weather-cloudy',
+  '🌧️': 'weather-rain',
+  '🌩️': 'weather-storm',
+  '☁️': 'weather-cloudy'
+};
 
 let pastWeekData = [];
 let nextWeekData = [];
@@ -83,13 +91,13 @@ function generateWeekData(offsetDays, sourceData, forceCssClass) {
     d.setDate(today.getDate() + offsetDays + i);
     const dateStr = d.toISOString().split('T')[0];
     
-    let icon = '☀️';
+    let icon = 'weather-sunny';
     let label = '맑음';
     let event = '';
     
     const matched = sourceData.find(x => x.date === dateStr);
     if (matched) {
-      icon = matched.emoji;
+      icon = emojiToIcon[matched.emoji] || (matched.weather ? `weather-${matched.weather}` : 'weather-sunny');
       label = matched.label;
       event = matched.event || '';
     } else {
@@ -120,26 +128,26 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
   const isPast = i < 5;
   const dateStr = d.toISOString().split('T')[0];
   
-  let icon = '☀️';
+  let icon = 'weather-sunny';
   let label = '맑음';
   let event = '';
   
   if (isToday) {
-    icon = w.emoji || '☀️';
+    icon = w.weather ? `weather-${w.weather}` : (emojiToIcon[w.emoji] || 'weather-sunny');
     label = w.label || '맑음';
   } else if (isTomorrow) {
     const matched = nextWeekData.find(x => x.date === dateStr);
     if (matched) {
-      icon = matched.emoji;
+      icon = emojiToIcon[matched.emoji] || (matched.weather ? `weather-${matched.weather}` : 'weather-sunny');
       label = `예보: ${matched.label}`;
       event = matched.event || '';
     } else {
-      icon = '⛅'; label = '예보: 흐림';
+      icon = 'weather-cloudy'; label = '예보: 흐림';
     }
   } else {
     const matched = pastWeekData.find(x => x.date === dateStr);
     if (matched) {
-      icon = matched.emoji;
+      icon = emojiToIcon[matched.emoji] || (matched.weather ? `weather-${matched.weather}` : 'weather-sunny');
       label = matched.label;
       event = matched.event || '';
     } else {
@@ -213,22 +221,44 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
           <div class="b">다음 주 예보</div>
         </div>
       </div>
-      <div class="i7-week" id="weather-week-container">
+      <div id="week-this" class="i7-week">
         {thisWeek.map((d) => (
           <div class={`i7-day ${d.cssClass}`}>
             <div class="dow">{d.dow}</div>
             <div class="dt">{d.dt}</div>
-            <div class="icon">{d.icon}</div>
+            <div class="icon"><Icon name={d.icon} size={24} /></div>
+            <div class="lbl">{d.label}</div>
+            {d.event && <div style="font-size:0.6rem; color:var(--color-accent-danger); margin-top:2px; font-weight:700; line-height:1.2; letter-spacing:-0.05em; word-break:keep-all;">{d.event}</div>}
+          </div>
+        ))}
+      </div>
+      <div id="week-past" class="i7-week" style="display:none;">
+        {pastWeek.map((d) => (
+          <div class={`i7-day ${d.cssClass}`}>
+            <div class="dow">{d.dow}</div>
+            <div class="dt">{d.dt}</div>
+            <div class="icon"><Icon name={d.icon} size={24} /></div>
+            <div class="lbl">{d.label}</div>
+            {d.event && <div style="font-size:0.6rem; color:var(--color-accent-danger); margin-top:2px; font-weight:700; line-height:1.2; letter-spacing:-0.05em; word-break:keep-all;">{d.event}</div>}
+          </div>
+        ))}
+      </div>
+      <div id="week-next" class="i7-week" style="display:none;">
+        {nextWeek.map((d) => (
+          <div class={`i7-day ${d.cssClass}`}>
+            <div class="dow">{d.dow}</div>
+            <div class="dt">{d.dt}</div>
+            <div class="icon"><Icon name={d.icon} size={24} /></div>
             <div class="lbl">{d.label}</div>
             {d.event && <div style="font-size:0.6rem; color:var(--color-accent-danger); margin-top:2px; font-weight:700; line-height:1.2; letter-spacing:-0.05em; word-break:keep-all;">{d.event}</div>}
           </div>
         ))}
       </div>
       <div class="i7-legend">
-        <span>☀️ <b>맑음</b> · 주요 이벤트 없음</span>
-        <span>⛅ <b>흐림</b> · 지표 발표</span>
-        <span>🌧️ <b>비</b> · 변동성 큼</span>
-        <span>🌩️ <b>폭풍</b> · 위기 경보</span>
+        <span><Icon name="weather-sunny" size={16} /> <b>맑음</b> · 주요 이벤트 없음</span>
+        <span><Icon name="weather-cloudy" size={16} /> <b>흐림</b> · 지표 발표</span>
+        <span><Icon name="weather-rain" size={16} /> <b>비</b> · 변동성 큼</span>
+        <span><Icon name="weather-storm" size={16} /> <b>폭풍</b> · 위기 경보</span>
         <span style="margin-left:auto;color:var(--color-accent-primary);font-weight:700">매주 금요일, 다음 주 예보가 올라와요 →</span>
       </div>
     </div>
@@ -314,9 +344,9 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
         <a href="/whale" class="cta-demo" style="text-decoration:none">데모 자세히 보기</a>
       </div>
       <div class="i3-foot">
-        <span>🔒 읽기 전용 연결 · OAuth</span>
-        <span>✓ 오픈뱅킹 인증</span>
-        <span>✓ <span id="stat-portfolio-users">{Number(siteStats.portfolio_users).toLocaleString()}</span>명이 이미 연결</span>
+        <span>읽기 전용 연결 · OAuth</span>
+        <span>오픈뱅킹 인증</span>
+        <span><span id="stat-portfolio-users">{Number(siteStats.portfolio_users).toLocaleString()}</span>명이 이미 연결</span>
       </div>
     </div>
 
@@ -334,7 +364,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       <div class="i4-grid">
         {categories.map((cat) => (
           <a href={cat.href} class="i4-card" style="text-decoration:none">
-            <div class="ico">{cat.icon}</div>
+            <div class="ico"><Icon name={cat.icon} size={32} /></div>
             <div class="t">{cat.title}</div>
             <div class="d">{cat.desc}</div>
             <div class="c"><span>{cat.count}</span><span>→</span></div>
@@ -401,7 +431,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
     <div class="section-wrap" id="newsletter-block">
       <div class="i6-grid">
         <div class="i6-left">
-          <div class="kick">📬 매일 아침 7시, 당신의 받은편지함으로</div>
+          <div class="kick">매일 아침 7시, 당신의 받은편지함으로</div>
           <h4>커피 내리는 3분, 경제 한 편이 끝나요.</h4>
           <div class="d">이코노가 직접 쓴 브리핑을 매일 아침 보내드려요. <b>읽는 데 3분</b>, 이해하는 데 30초. 원할 때 한 번에 해지할 수 있어요.</div>
           <div class="i6-proof">
@@ -414,7 +444,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
             <button type="submit" id="subscribe-btn-new">무료 구독</button>
           </form>
           <div id="subscribe-feedback-new" style="display:none; font-size:0.8rem; margin-top:8px; font-weight:600;"></div>
-          <div class="priv" style="margin-top:12px;">✓ 스팸 발송 금지 · ✓ 한 번에 해지 가능 · ✓ 정보 판매 금지</div>
+          <div class="priv" style="margin-top:12px;">스팸 발송 금지 · 한 번에 해지 가능 · 정보 판매 금지</div>
           <div style="margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--color-border); font-size: 0.82rem;">
             실시간 시황 알림만 빠르게 받고 싶다면? 
             <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" style="color: var(--color-accent-primary); font-weight: 700; text-decoration: none; margin-left: 4px;">
@@ -493,45 +523,36 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
 
   <script is:inline>
     (function () {
-      const weatherContainer = document.getElementById('weather-week-container');
       const weatherTabs = document.querySelectorAll('.i7-top .actions .b');
       const weatherTitle = document.getElementById('weather-title');
       const weatherHeadline = document.getElementById('weather-headline');
+      const weekThis = document.getElementById('week-this');
+      const weekPast = document.getElementById('week-past');
+      const weekNext = document.getElementById('week-next');
       
-      if (weatherContainer && weatherTabs.length === 3 && window.weatherTabsData) {
+      if (weatherTabs.length === 3 && window.weatherTabsData && weekThis && weekPast && weekNext) {
         weatherTabs.forEach((tab, idx) => {
           tab.addEventListener('click', () => {
             weatherTabs.forEach(t => t.classList.remove('on'));
             tab.classList.add('on');
             
-            let data = [];
+            weekThis.style.display = 'none';
+            weekPast.style.display = 'none';
+            weekNext.style.display = 'none';
+
             if (idx === 0) {
-              data = window.weatherTabsData.thisWeek;
+              weekThis.style.display = 'flex';
               weatherTitle.textContent = window.weatherTabsData.summary.thisWeek.title;
               weatherHeadline.innerHTML = window.weatherTabsData.summary.thisWeek.headline;
             } else if (idx === 1) {
-              data = window.weatherTabsData.pastWeek;
+              weekPast.style.display = 'flex';
               weatherTitle.textContent = window.weatherTabsData.summary.pastWeek.title;
               weatherHeadline.innerHTML = window.weatherTabsData.summary.pastWeek.headline;
             } else {
-              data = window.weatherTabsData.nextWeek;
+              weekNext.style.display = 'flex';
               weatherTitle.textContent = window.weatherTabsData.summary.nextWeek.title;
               weatherHeadline.innerHTML = window.weatherTabsData.summary.nextWeek.headline;
             }
-            
-            weatherContainer.innerHTML = data.map(d => {
-              const cssClass = d.cssClass || '';
-              const evHtml = d.event ? `<div style="font-size:0.6rem; color:var(--color-accent-danger); margin-top:2px; font-weight:700; line-height:1.2; letter-spacing:-0.05em; word-break:keep-all;">${d.event}</div>` : '';
-              return `
-                <div class="i7-day ${cssClass}">
-                  <div class="dow">${d.dow}</div>
-                  <div class="dt">${d.dt}</div>
-                  <div class="icon">${d.icon}</div>
-                  <div class="lbl">${d.label}</div>
-                  ${evHtml}
-                </div>
-              `;
-            }).join('');
           });
         });
       }
