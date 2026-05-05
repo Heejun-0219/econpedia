@@ -179,13 +179,15 @@ const { questionId, question, optionA, optionB } = Astro.props;
       const resultInfo = poll.querySelector('.poll-result-info');
       const totalVotesSpan = poll.querySelector('.poll-total-votes');
       
-      // Mock data
-      let votesA = Math.floor(Math.random() * 50) + 10;
-      let votesB = Math.floor(Math.random() * 50) + 10;
+      // Init data (MVP: Starts from 0 until DB is connected)
+      let votesA = 0;
+      let votesB = 0;
 
       // Check if already voted
       const votedOption = localStorage.getItem(`voted_${pollId}`);
       if (votedOption) {
+        if (votedOption === 'A') votesA = 1;
+        if (votedOption === 'B') votesB = 1;
         showResults(votedOption);
       }
 
