@@ -209,6 +209,7 @@ async function saveArticle(content) {
   // Generate Astro file with BaseLayout and proper design system classes
   const astroComponent = `---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "${safeTitle}";
 const date = "${dateString}";
@@ -218,7 +219,7 @@ const description = "${safeDescription}";
 <BaseLayout title={title} description={description} article={true}>
   <div class="article-layout">
     <div class="article-header">
-      <a href="/daily" class="article-header__category">📰 데일리 브리핑</a>
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
       <h1 class="article-header__title">{title}</h1>
       <div class="article-header__meta">
         <time datetime={date}>{date}</time>
@@ -231,6 +232,13 @@ const description = "${safeDescription}";
 
     <div class="article-content">
       ${htmlContent}
+
+      <PollWidget 
+        questionId={\`daily-\${date}\`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>

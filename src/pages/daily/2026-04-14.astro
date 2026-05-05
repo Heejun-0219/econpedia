@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "미국은 축제인데 코스피만 우울한 이유: 1,400원대 환율이 만든 '코리아 디스카운트'";
 const date = "2026-04-14";
@@ -85,6 +86,14 @@ const description = "> 오늘 하루를 한 문장으로 정의한다면:";
 </ul>
 <p>오늘도 똑똑한 하루 보내세요! 💪</p>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-14"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

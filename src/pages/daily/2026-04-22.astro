@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "환율 1,480원 돌파! 당분간 해외 직구는 멈추고, 붉은불 켜진 국내 주식 계좌를 열어보세요";
 const date = "2026-04-22";
@@ -38,6 +39,14 @@ const description = "달러가 정말 비싸졌습니다. 1달러를 사려면 �
 <p>달러가 비싸져서 수입 물가가 오를까 걱정이지만, 내 주식 계좌가 든든하게 방어해 준 &#39;단짠단짠&#39;한 하루였습니다. 복잡한 매크로 뉴스는 제가 다 읽고 번역해 드릴 테니, 독자님은 오늘 저녁 맛있는 식사 챙겨 드세요!</p>
 <p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-22"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

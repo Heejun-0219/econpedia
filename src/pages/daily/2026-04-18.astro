@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "기름값 걱정 덜고 주말 나들이 다녀오세요 🚗";
 const date = "2026-04-18";
@@ -46,6 +47,14 @@ const description = "안녕하세요! 복잡한 경제 뉴스를 내 지갑 속 
 <li><strong>가벼운 마음으로 주말 즐기기:</strong> 물가가 아주 살짝 올랐지만 기름값이 방어해줬고, 대출 이자도 그대로입니다. 오늘은 경제 걱정은 제게 맡겨두시고, 맛있는 밥 챙겨 드시며 푹 쉬는 하루 보내세요!</li>
 </ol>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-18"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

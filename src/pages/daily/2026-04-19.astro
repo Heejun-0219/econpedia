@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "국제 기름값이 크게 출렁였습니다. 이번 주말엔 주유소를 꼭 들르세요!";
 const date = "2026-04-19";
@@ -39,6 +40,14 @@ const description = "밤사이 국제 기름값이 하루 만에 푹 주저앉�
 가장 걱정하시는 영끌 대출, 전세자금 대출 이자는 다행히 어제와 똑같습니다. 매달 나가는 고정비에는 타격이 없으니 한시름 놓으셔도 좋습니다.</p>
 <p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-19"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

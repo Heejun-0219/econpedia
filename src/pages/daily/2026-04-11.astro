@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "환율 1,480원의 역설: 달러가 비싸졌는데 코스피가 웃은 이유";
 const date = "2026-04-11";
@@ -97,6 +98,14 @@ const description = "> 오늘 하루를 한 문장으로 정의한다면:";
 <p>환율이라는 숫자는 단순히 &#39;달러의 가격&#39;이 아니라, 누군가에게는 날카로운 창이 되고 누군가에게는 튼튼한 방패가 되는 양날의 검입니다. 내 자산은 지금 창을 쥐고 있는지, 방패를 들고 있는지 한 번쯤 점검해 보는 저녁이 되시길 바랍니다.</p>
 <p>오늘도 똑똑한 하루 보내세요! 💪</p>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-11"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

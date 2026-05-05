@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "코스피 6000 돌파의 역설, 환율이 올라도 외국인이 장바구니를 채운 이유 🛒";
 const date = "2026-04-15";
@@ -106,6 +107,14 @@ const description = "> 오늘 하루를 한 문장으로 정의한다면:";
 <p>오늘도 똑똑한 하루 보내세요! 💪</p>
 </blockquote>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-15"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

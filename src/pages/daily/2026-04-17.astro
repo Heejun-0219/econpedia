@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "오늘은 평화로운 날이에요 ☀️";
 const date = "2026-04-17";
@@ -49,6 +50,14 @@ const description = "안녕하세요! 이코노입니다. 오늘(2026년 4월 17
 </ol>
 <p>오늘도 당신의 지갑을 지키기 위해 이코노가 함께합니다. 평온한 하루 보내세요!</p>
 
+
+      <PollWidget 
+        questionId="daily-2026-04-17"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+

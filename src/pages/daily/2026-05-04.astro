@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
 
 const title = "1천만 원 묻어뒀다면 오늘 하루만 13만 원이 증발했어요. 국내 주식 계좌에 비가 내린 날입니다 ☔️";
 const date = "2026-05-04";
@@ -37,6 +38,14 @@ const description = "밤사이 미국 시장은 기분 좋게 올랐는데, 유�
 다행히 대출 이자를 결정하는 금리에는 아무런 변화가 없었습니다. 내 통장에서 추가로 빠져나갈 이자는 없으니 안심하세요. 미국 주식과 비트코인 역시 큰 변동 없이 잔잔하게 흘러가고 있으니, 이쪽은 오늘 신경 끄고 푹 쉬셔도 좋습니다.</p>
 <p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
 
+
+      <PollWidget 
+        questionId="daily-2026-05-04"
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
     </div>
   </div>
 </BaseLayout>
+
