@@ -596,10 +596,25 @@ const getGuideLink = (category) => {
         const shareBtn = document.getElementById('btn-share-story');
         if (shareBtn) {
           shareBtn.addEventListener('click', async () => {
+            // 현재 상태 가져오기
+            const currentGainStr = document.getElementById('wallet-weather-desc').textContent;
+            let currentGain = 0;
+            if (currentGainStr.includes('상승') || currentGainStr.includes('절약')) {
+              currentGain = parseInt(currentGainStr.replace(/[^0-9]/g, ''), 10);
+            } else if (currentGainStr.includes('타격')) {
+              currentGain = -parseInt(currentGainStr.replace(/[^0-9]/g, ''), 10);
+            }
+            
+            const marketLabel = document.querySelector('.wallet-weather-share-card').innerHTML.includes('weather-rain') || document.querySelector('.wallet-weather-share-card').innerHTML.includes('weather-storm') ? 'storm' : 'sunny';
+            const isUmbrella = currentGain > 0 && marketLabel === 'storm';
+            const weatherParam = isUmbrella ? 'umbrella' : (currentGain > 0 ? 'sunny' : 'cloudy');
+
+            const shareUrl = `https://econpedia.dedyn.io/api/share/wallet?gain=${currentGain}&weather=${weatherParam}&market=${marketLabel}`;
+
             const shareData = {
               title: 'EconPedia 내 지갑 방어율 리포트',
               text: document.getElementById('wallet-viral-msg').innerText + '\\n\\n시장은 흔들려도, 내 지갑 날씨는 어떨까?\\n지갑을 연동하고 방어율을 확인하세요!',
-              url: 'https://econpedia.dedyn.io/wallet',
+              url: shareUrl,
             };
             try {
               if (navigator.share) {

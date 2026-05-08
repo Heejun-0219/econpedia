@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import yahooFinance from 'yahoo-finance2';
+import puppeteer from 'puppeteer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -341,6 +342,139 @@ const server = createServer(async (req, res) => {
     polls[pollId][option] = (polls[pollId][option] || 0) + 1;
     
     return sendJSON(res, 200, { success: true, results: polls[pollId] });
+  }
+
+  // ── GET /api/share/wallet (소셜 공유용 동적 OG HTML 반환) ────────
+  if (req.method === 'GET' && path.startsWith('/api/share/wallet')) {
+    const urlObj = new URL(req.url, `http://${req.headers.host}`);
+    const gain = urlObj.searchParams.get('gain') || '0';
+    const weather = urlObj.searchParams.get('weather') || 'cloudy';
+    const market = urlObj.searchParams.get('market') || 'cloudy';
+
+    const ogImageUrl = `${ALLOWED_ORIGIN}/api/og/wallet?gain=${encodeURIComponent(gain)}&weather=${encodeURIComponent(weather)}&market=${encodeURIComponent(market)}`;
+    
+    const html = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>EconPedia 내 지갑 방어율 리포트</title>
+  <meta property="og:title" content="EconPedia 내 지갑 방어율 리포트" />
+  <meta property="og:description" content="시장은 흔들려도, 내 지갑 날씨는 어떨까? 지금 방어율을 확인하세요!" />
+  <meta property="og:image" content="${ogImageUrl}" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="${ogImageUrl}" />
+  <meta http-equiv="refresh" content="0; url=/wallet" />
+</head>
+<body>
+  <p>EconPedia 지갑으로 이동 중입니다...</p>
+  <script>window.location.href="/wallet";</script>
+</body>
+</html>
+    `;
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end(html.trim());
+    return;
+  }
+
+  // ── GET /api/og/wallet (Puppeteer를 이용한 동적 OG 이미지 생성) ────
+  if (req.method === 'GET' && path.startsWith('/api/og/wallet')) {
+    const urlObj = new URL(req.url, `http://${req.headers.host}`);
+    const gainStr = urlObj.searchParams.get('gain') || '0';
+    const gain = parseInt(gainStr, 10) || 0;
+    const weather = urlObj.searchParams.get('weather') || 'cloudy';
+    const market = urlObj.searchParams.get('market') || 'cloudy';
+
+    // Generate HTML for the OG image
+    let weatherLabel = '흐림';
+    let weatherDesc = `${gain.toLocaleString()}원 타격`;
+    let bgColor = '#f59e0b';
+    let msg = '약간의 손실, 아직 시장 방어가 가능한 수준입니다.';
+    let iconSvg = '<svg viewBox="0 0 24 24" fill="none"><path d="M17.5 19H9a7 7 0 116.71-4.9A5.5 5.5 0 0117.5 19z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    if (gain > 0) {
+      bgColor = '#10b981';
+      weatherLabel = '맑음 (수익)';
+      weatherDesc = `+${gain.toLocaleString()}원 상승`;
+      msg = '바람을 타고, 내 자산이 순항하고 있습니다.';
+      if (weather === 'umbrella') {
+        weatherLabel = '우산 (선방)';
+        msg = '시장은 폭우가 쏟아져도, 내 지갑은 안전합니다.';
+        iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 12a11.05 11.05 0 0 0-22 0zm-5 7a3 3 0 0 1-6 0v-7"/></svg>';
+      } else {
+        iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/></svg>';
+      }
+    } else if (gain <= -10000) {
+      bgColor = '#ef4444';
+      weatherLabel = '폭풍';
+      msg = '거센 폭풍우! 내 지갑에 비상경보가 켜졌습니다.';
+      iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 13H9a7 7 0 116.71-4.9A5.5 5.5 0 0117.5 13z"/><path d="M13 14l-3.5 5h4.5l-4 5"/></svg>';
+    }
+
+    const templateHtml = `
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body {
+          margin: 0; padding: 0; width: 1200px; height: 630px; font-family: 'Pretendard', sans-serif;
+          background: linear-gradient(145deg, #1e293b, #0f172a);
+          display: flex; justify-content: center; align-items: center; color: white;
+        }
+        .card {
+          width: 1050px; height: 500px; background: rgba(30,41,59,0.8);
+          border: 2px solid rgba(255,255,255,0.1); border-radius: 32px;
+          display: flex; flex-direction: column; justify-content: center; align-items: center;
+          position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .glow {
+          position: absolute; width: 600px; height: 600px; background: ${bgColor};
+          filter: blur(150px); opacity: 0.15; border-radius: 50%;
+        }
+        .icon { width: 120px; height: 120px; color: ${bgColor}; margin-bottom: 24px; z-index: 1; }
+        .label { font-size: 56px; font-weight: 800; color: ${bgColor}; margin-bottom: 12px; z-index: 1; }
+        .desc { font-size: 32px; font-weight: 700; color: #94a3b8; margin-bottom: 40px; z-index: 1; }
+        .msg { font-size: 40px; font-weight: 700; color: #f8fafc; z-index: 1; text-align: center; }
+        .logo { position: absolute; bottom: 40px; right: 50px; font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.3); z-index: 1; }
+        .badge { position: absolute; top: 40px; left: 50px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 10px 24px; border-radius: 99px; font-size: 24px; font-weight: 700; border: 2px solid rgba(56, 189, 248, 0.3); z-index: 1; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <div class="glow"></div>
+        <div class="badge">Econ-Sync Data</div>
+        <div class="icon">${iconSvg}</div>
+        <div class="label">${weatherLabel}</div>
+        <div class="desc">${weatherDesc}</div>
+        <div class="msg">${msg}</div>
+        <div class="logo">EconPedia</div>
+      </div>
+    </body>
+    </html>
+    `;
+
+    try {
+      const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1200, height: 630 });
+      await page.setContent(templateHtml, { waitUntil: 'networkidle0' });
+      const buffer = await page.screenshot({ type: 'png' });
+      await browser.close();
+
+      res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=31536000, immutable'
+      });
+      res.end(buffer);
+    } catch (err) {
+      console.error("Puppeteer OG Generate Error:", err);
+      res.writeHead(500);
+      res.end("Internal Server Error");
+    }
+    return;
   }
 
   // ── POST /api/wallet-subscribe (지갑 알림 구독) ───────────────────
