@@ -265,11 +265,12 @@ const { questionId, question, optionA, optionB } = Astro.props;
 </style>
 
 <script>
-  // Phase 1 MVP Client Logic
+  import { supabase } from '../lib/supabase.js';
+
   document.addEventListener('DOMContentLoaded', () => {
     const polls = document.querySelectorAll('.poll-widget');
     
-    polls.forEach(poll => {
+    polls.forEach(async (poll) => {
       const pollId = poll.getAttribute('data-poll-id');
       const interactionArea = poll.querySelector('.poll-interaction-area');
       const resultsArea = poll.querySelector('.poll-results-area');
@@ -287,6 +288,8 @@ const { questionId, question, optionA, optionB } = Astro.props;
 
       let votesA = 0;
       let votesB = 0;
+      let votesA_Shareholder = 0;
+      let votesB_Shareholder = 0;
 
       // Tab switching logic
       tabs.forEach(tab => {
@@ -297,51 +300,145 @@ const { questionId, question, optionA, optionB } = Astro.props;
           tab.classList.add('active');
           const targetId = tab.getAttribute('data-target');
           poll.querySelector(`#${targetId}`).classList.add('active');
+          renderBars(); // 탭 바뀔 때 바 크기 재계산
         });
       });
 
-      // Check if already voted
-      const votedOption = localStorage.getItem(`voted_${pollId}`);
-      if (votedOption) {
-        if (votedOption === 'A') votesA = 1;
-        if (votedOption === 'B') votesB = 1;
-        showResults(votedOption);
+      // Load data from Supabase
+      async function loadPollData() {
+        const { data: votes, error } = await supabase
+          .from('poll_votes')
+          .select('user_id, option_selected, is_shareholder')
+          .eq('poll_id', pollId);
+
+        if (error) {
+          console.error("Poll data load error:", error);
+          return;
+        }
+
+        votesA = 0; votesB = 0;
+        votesA_Shareholder = 0; votesB_Shareholder = 0;
+        let currentUserVoted = false;
+        let myOption = null;
+
+        const user = window.currentUser;
+
+        votes.forEach(v => {
+          if (v.option_selected === 'A') {
+            votesA++;
+            if (v.is_shareholder) votesA_Shareholder++;
+          } else {
+            votesB++;
+            if (v.is_shareholder) votesB_Shareholder++;
+          }
+          if (user && v.user_id === user.id) {
+            currentUserVoted = true;
+            myOption = v.option_selected;
+          }
+        });
+
+        if (currentUserVoted) {
+          showResults(myOption);
+        }
+      }
+
+      await loadPollData();
+
+      // Ensure poll exists in DB before voting (lazy creation)
+      async function ensurePollExists() {
+        const question = poll.querySelector('.poll-question').textContent;
+        const optionA = poll.querySelector('.poll-btn--a .poll-btn-label').textContent;
+        const optionB = poll.querySelector('.poll-btn--b .poll-btn-label').textContent;
+        
+        await supabase.from('polls').upsert({
+          poll_id: pollId,
+          question: question,
+          option_a: optionA,
+          option_b: optionB
+        }, { onConflict: 'poll_id' });
       }
 
       btns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', async (e) => {
           if (poll.classList.contains('is-voted')) return;
           
+          const user = window.currentUser;
+          if (!user) {
+            alert('구글 로그인이 필요합니다. 우측 상단의 버튼을 클릭하세요.');
+            return;
+          }
+          
           const option = btn.getAttribute('data-option');
-          if (option === 'A') votesA++;
-          else votesB++;
+          
+          // Phase 1 MVP: 지갑 연동된 유저의 경우 주주로 간주 (여기서는 임시로 true/false 랜덤 또는 설정 기반 가능)
+          // 향후 Wallet 스냅샷 로직에 따라 고도화
+          const isShareholder = localStorage.getItem('econpedia_wallet_settings') ? true : false;
+          
+          btn.style.opacity = '0.5'; // 로딩 상태
 
-          localStorage.setItem(`voted_${pollId}`, option);
-          showResults(option);
+          await ensurePollExists();
+
+          const { error } = await supabase.from('poll_votes').insert({
+            poll_id: pollId,
+            user_id: user.id,
+            option_selected: option,
+            is_shareholder: isShareholder
+          });
+
+          if (error) {
+            console.error("Vote insert error:", error);
+            alert("투표 중 오류가 발생했습니다.");
+            btn.style.opacity = '1';
+            return;
+          }
+
+          await loadPollData();
         });
       });
 
-      function showResults(selectedOption) {
-        poll.classList.add('is-voted');
+      function renderBars() {
+        const isShareholderTab = poll.querySelector('.poll-tab[data-target="tab-shareholder"]').classList.contains('active');
         
-        // Hide interaction (buttons), show results (tabs)
-        interactionArea.style.display = 'none';
-        resultsArea.style.display = 'block';
-        loginPrompt.style.display = 'none';
+        let vA = isShareholderTab ? votesA_Shareholder : votesA;
+        let vB = isShareholderTab ? votesB_Shareholder : votesB;
         
-        const total = votesA + votesB;
-        totalVotesSpan.textContent = total;
-
-        const percentA = total === 0 ? 0 : Math.round((votesA / total) * 100);
+        const total = vA + vB;
+        const percentA = total === 0 ? 0 : Math.round((vA / total) * 100);
         const percentB = total === 0 ? 0 : 100 - percentA;
 
-        // Update result bars (Tab 1)
         setTimeout(() => {
           if (resA_pct) resA_pct.textContent = `${percentA}%`;
           if (resA_bar) resA_bar.style.width = `${percentA}%`;
           if (resB_pct) resB_pct.textContent = `${percentB}%`;
           if (resB_bar) resB_bar.style.width = `${percentB}%`;
-        }, 50); // slight delay for CSS transition
+        }, 50);
+      }
+
+      function showResults(selectedOption) {
+        poll.classList.add('is-voted');
+        
+        interactionArea.style.display = 'none';
+        resultsArea.style.display = 'block';
+        loginPrompt.style.display = 'none';
+        
+        totalVotesSpan.textContent = votesA + votesB;
+
+        // Check if user is shareholder (for unlocking the second tab)
+        const isShareholder = localStorage.getItem('econpedia_wallet_settings') ? true : false;
+        if (isShareholder) {
+          const blurOverlay = poll.querySelector('.poll-blur-overlay');
+          const blurContent = poll.querySelector('.poll-blur-content');
+          const resultOptions = blurOverlay.querySelector('.poll-options--result');
+          
+          if (blurContent) blurContent.style.display = 'none';
+          if (resultOptions) {
+            resultOptions.style.filter = 'none';
+            resultOptions.style.opacity = '1';
+            resultOptions.style.pointerEvents = 'auto';
+          }
+        }
+
+        renderBars();
       }
     });
   });
