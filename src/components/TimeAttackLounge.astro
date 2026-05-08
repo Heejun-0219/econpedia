@@ -50,22 +50,7 @@ const { signalId, isBuy } = Astro.props;
       </div>
       
       <div class="comment-list">
-        <!-- Mock Comments -->
-        <div class="comment-item">
-          <div class="comment-meta">
-            <span class="comment-auth-badge"><Icon name="document" size={12} /> 주주</span>
-            <span class="comment-author">익명의 고수</span>
-            <span class="comment-time">방금 전</span>
-          </div>
-          <div class="comment-text">이 가격이면 무조건 들어가야죠. 고래가 바보도 아니고.</div>
-        </div>
-        <div class="comment-item">
-          <div class="comment-meta">
-            <span class="comment-author">관망하는 개미</span>
-            <span class="comment-time">3분 전</span>
-          </div>
-          <div class="comment-text">조금 더 지켜보고 들어갈 생각입니다. 환율 변동이 너무 커서요.</div>
-        </div>
+        <!-- Comments will be loaded dynamically here -->
       </div>
 
       <div class="comment-input-wrap">
