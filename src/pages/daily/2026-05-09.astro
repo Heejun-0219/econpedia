@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "[EconPedia] 2026-05-09 데일리 브리핑";
+const date = "2026-05-09";
+const description = "현재 API 사용량 초과(Quota Exceeded)로 임시 생성된 브리핑입니다. 시스템 관리자에게 문의하여 API 한도를 늘리거나 키를 교체해주세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>현재 API 사용량 초과(Quota Exceeded)로 임시 생성된 브리핑입니다. 시스템 관리자에게 문의하여 API 한도를 늘리거나 키를 교체해주세요.</p>
+<p>[Global Market Data]</p>
+<ul>
+<li>S&amp;P 500: 7398.93 (+0.84%)</li>
+<li>NASDAQ: 26247.08 (+1.71%)</li>
+<li>KOSPI: 7498.00 (+0.11%)</li>
+<li>USD/KRW: 1461.48 (+0.46%)</li>
+<li>Bitcoin (USD): $80405.00 (+0.62%)</li>
+<li>Crude Oil (WTI): $94.68 (-0.14%)</li>
+<li>KR Base Rate: 2.50% (0.00%p)</li>
+<li>KR CPI Index: 114.2 (+0.26%)</li>
+</ul>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

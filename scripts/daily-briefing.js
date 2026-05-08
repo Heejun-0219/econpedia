@@ -137,7 +137,7 @@ async function generateArticle(marketDataString, weatherData) {
   } catch (error) {
     if (error.status === 429 || (error.message && error.message.includes('spending cap'))) {
       console.log('⚠️ API quota exceeded. Falling back to mock article generation.');
-      return \`# [EconPedia] \${today} 데일리 브리핑\n\n현재 API 사용량 초과(Quota Exceeded)로 임시 생성된 브리핑입니다. 시스템 관리자에게 문의하여 API 한도를 늘리거나 키를 교체해주세요.\n\n\${marketDataString}\`;
+      return `# [EconPedia] ${today} 데일리 브리핑\n\n현재 API 사용량 초과(Quota Exceeded)로 임시 생성된 브리핑입니다. 시스템 관리자에게 문의하여 API 한도를 늘리거나 키를 교체해주세요.\n\n${marketDataString}`;
     }
     console.error('Error generating article:', error);
     throw error;
