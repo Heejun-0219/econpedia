@@ -235,7 +235,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           </button>
           <div id="auth-container" style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
             <button id="auth-login-btn" style="padding: 6px 12px; background: var(--color-bg-elevated); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all var(--transition-fast);">Google 로그인</button>
-            <button id="auth-logout-btn" style="display: none; padding: 6px 12px; background: transparent; border: 1px solid transparent; color: var(--color-text-muted); font-size: 13px; cursor: pointer;">로그아웃</button>
+            <div id="auth-profile" style="display: none; align-items: center; gap: 10px;">
+              <img id="auth-avatar" src="" alt="Profile" style="width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-border); background: var(--color-bg-secondary); object-fit: cover;" />
+              <span id="auth-name" style="font-size: 13px; font-weight: 600; color: var(--color-text-primary); display: none;"></span>
+              <button id="auth-logout-btn" style="padding: 4px 8px; background: transparent; border: 1px solid transparent; color: var(--color-text-muted); font-size: 12px; cursor: pointer;">로그아웃</button>
+            </div>
           </div>
         </div>
       </div>
@@ -246,16 +250,29 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       import { supabase } from '../lib/supabase.js';
       
       const loginBtn = document.getElementById('auth-login-btn');
+      const authProfile = document.getElementById('auth-profile');
+      const authAvatar = document.getElementById('auth-avatar');
+      const authName = document.getElementById('auth-name');
       const logoutBtn = document.getElementById('auth-logout-btn');
       
       async function checkUser() {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           if (loginBtn) loginBtn.style.display = 'none';
-          if (logoutBtn) logoutBtn.style.display = 'block';
+          if (authProfile) authProfile.style.display = 'flex';
+          if (authAvatar) authAvatar.src = user.user_metadata?.avatar_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="%23ddd"><circle cx="24" cy="24" r="24"/></svg>';
+          if (authName) {
+            authName.textContent = user.user_metadata?.full_name || '회원';
+            // 모바일이 아닐 때만 이름 표시 (원하면 해제)
+            if (window.innerWidth > 768) authName.style.display = 'inline-block';
+          }
+          
+          // 전역 window 객체에 유저 정보를 심어, PollWidget이나 TimeAttackLounge에서 쉽게 접근하게 함
+          window.currentUser = user;
         } else {
           if (loginBtn) loginBtn.style.display = 'block';
-          if (logoutBtn) logoutBtn.style.display = 'none';
+          if (authProfile) authProfile.style.display = 'none';
+          window.currentUser = null;
         }
       }
       
@@ -264,7 +281,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           try {
             await supabase.auth.signInWithOAuth({
               provider: 'google',
-              options: { redirectTo: window.location.origin + '/wallet' }
+              options: { redirectTo: window.location.origin + window.location.pathname }
             });
           } catch (error) {
             console.error('Login error:', error);
@@ -280,6 +297,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
       
       checkUser();
+
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+          checkUser();
+        }
+      });
     </script>
 
     <!-- Main Content -->
