@@ -338,7 +338,7 @@ const { questionId, question, optionA, optionB } = Astro.props;
         });
 
         if (currentUserVoted) {
-          showResults(myOption);
+          await showResults(myOption);
         }
       }
 
@@ -350,12 +350,39 @@ const { questionId, question, optionA, optionB } = Astro.props;
         const optionA = poll.querySelector('.poll-btn--a .poll-btn-label').textContent;
         const optionB = poll.querySelector('.poll-btn--b .poll-btn-label').textContent;
         
-        await supabase.from('polls').upsert({
+        // upsert 대신 insert를 사용하여 기존 질문이 덮어씌워지는 취약점 방어
+        const { error } = await supabase.from('polls').insert({
           poll_id: pollId,
           question: question,
           option_a: optionA,
           option_b: optionB
-        }, { onConflict: 'poll_id' });
+        });
+        
+        // 이미 생성된 방(23505 Unique Violation) 에러는 정상적인 흐름이므로 무시
+        if (error && error.code !== '23505') {
+          console.error("Poll creation error:", error);
+        }
+      }
+
+      // Check real shareholder status from DB
+      async function checkRealShareholderStatus(userId) {
+        try {
+          const { data, error } = await supabase
+            .from('user_settings')
+            .select('investment, us_stock, crypto')
+            .eq('user_id', userId)
+            .single();
+            
+          if (data && !error) {
+            // 국내주식, 미국주식, 코인 중 하나라도 자산이 1원 이상 등록되어 있으면 주주로 인정
+            if ((data.investment > 0) || (data.us_stock > 0) || (data.crypto > 0)) {
+              return true;
+            }
+          }
+        } catch (e) {
+          console.warn("Failed to check shareholder status:", e);
+        }
+        return false;
       }
 
       btns.forEach(btn => {
@@ -369,15 +396,15 @@ const { questionId, question, optionA, optionB } = Astro.props;
           }
           
           const option = btn.getAttribute('data-option');
-          
-          // Phase 1 MVP: 지갑 연동된 유저의 경우 주주로 간주 (여기서는 임시로 true/false 랜덤 또는 설정 기반 가능)
-          // 향후 Wallet 스냅샷 로직에 따라 고도화
-          const isShareholder = localStorage.getItem('econpedia_wallet_settings') ? true : false;
-          
           btn.style.opacity = '0.5'; // 로딩 상태
 
+          // 1. 방이 존재하는지 안전하게 확인 및 생성
           await ensurePollExists();
 
+          // 2. 로컬 스토리지가 아닌 실제 DB 기반 주주(지갑) 연동 검증 (위변조 방어)
+          const isShareholder = await checkRealShareholderStatus(user.id);
+
+          // 3. 투표 기록
           const { error } = await supabase.from('poll_votes').insert({
             poll_id: pollId,
             user_id: user.id,
@@ -414,7 +441,7 @@ const { questionId, question, optionA, optionB } = Astro.props;
         }, 50);
       }
 
-      function showResults(selectedOption) {
+      async function showResults(selectedOption) {
         poll.classList.add('is-voted');
         
         interactionArea.style.display = 'none';
@@ -423,8 +450,12 @@ const { questionId, question, optionA, optionB } = Astro.props;
         
         totalVotesSpan.textContent = votesA + votesB;
 
-        // Check if user is shareholder (for unlocking the second tab)
-        const isShareholder = localStorage.getItem('econpedia_wallet_settings') ? true : false;
+        // Check if user is shareholder (Real DB Check)
+        let isShareholder = false;
+        if (window.currentUser) {
+          isShareholder = await checkRealShareholderStatus(window.currentUser.id);
+        }
+
         if (isShareholder) {
           const blurOverlay = poll.querySelector('.poll-blur-overlay');
           const blurContent = poll.querySelector('.poll-blur-content');
