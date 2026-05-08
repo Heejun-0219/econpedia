@@ -380,6 +380,14 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/og/wallet (Puppeteer를 이용한 동적 OG 이미지 생성) ────
   if (req.method === 'GET' && path.startsWith('/api/og/wallet')) {
+    // Puppeteer DoS Attack Prevention
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    if (isRateLimited(ip)) {
+      res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('너무 많은 요청입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+
     const urlObj = new URL(req.url, `http://${req.headers.host}`);
     const gainStr = urlObj.searchParams.get('gain') || '0';
     const gain = parseInt(gainStr, 10) || 0;

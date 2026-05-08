@@ -253,7 +253,7 @@ const { signalId, isBuy } = Astro.props;
               <span class="comment-author">${c.user_profiles?.full_name || '익명의 투자자'}</span>
               <span class="comment-time">${timeAgo(c.created_at)}</span>
             </div>
-            <div class="comment-text">${c.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+            <div class="comment-text">${c.content.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;")}</div>
           </div>
         `).join('');
 
