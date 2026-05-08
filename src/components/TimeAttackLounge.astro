@@ -193,6 +193,8 @@ const { signalId, isBuy } = Astro.props;
       }, 1000);
 
       let currentPosition = null;
+      let lastCommentTime = 0;
+      let realtimeSubscription = null;
 
       async function checkRealShareholderStatus(userId) {
         try {
@@ -258,6 +260,27 @@ const { signalId, isBuy } = Astro.props;
         commentList.innerHTML = html;
       }
 
+      function setupRealtime(position) {
+        if (realtimeSubscription) {
+          supabase.removeChannel(realtimeSubscription);
+        }
+        
+        realtimeSubscription = supabase
+          .channel(`public:time_attack_comments:signal_id=eq.${signalId}`)
+          .on('postgres_changes', { 
+            event: 'INSERT', 
+            schema: 'public', 
+            table: 'time_attack_comments',
+            filter: `signal_id=eq.${signalId}`
+          }, payload => {
+            // 새 코멘트가 추가되면, 현재 탭(포지션)과 일치할 때만 재로딩하여 UI 업데이트
+            if (payload.new.position === position) {
+              loadComments(position);
+            }
+          })
+          .subscribe();
+      }
+
       // Position selection logic
       btns.forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -282,6 +305,7 @@ const { signalId, isBuy } = Astro.props;
           commentInput.placeholder = "이 포지션을 선택한 이유를 남겨보세요...";
           
           await loadComments(currentPosition);
+          setupRealtime(currentPosition);
         });
       });
 
@@ -289,6 +313,13 @@ const { signalId, isBuy } = Astro.props;
       commentBtn.addEventListener('click', async () => {
         const user = window.currentUser;
         if (!user || !currentPosition) return;
+        
+        // 30초 쿨타임 체크 (프론트엔드 방어)
+        const now = Date.now();
+        if (now - lastCommentTime < 30000) {
+          alert('도배 방지를 위해 30초 후에 다시 작성할 수 있습니다.');
+          return;
+        }
         
         const content = commentInput.value.trim();
         if (!content) return;
@@ -311,7 +342,9 @@ const { signalId, isBuy } = Astro.props;
           console.error("Comment submit error:", error);
           alert("의견 등록 중 오류가 발생했습니다.");
         } else {
+          lastCommentTime = Date.now();
           commentInput.value = '';
+          // Realtime 채널이 자동 갱신해주므로 여기서 loadComments는 생략해도 무방하나, 빠른 피드백을 위해 둔다.
           await loadComments(currentPosition);
         }
 
