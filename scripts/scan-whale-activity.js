@@ -25,7 +25,7 @@ async function getIsinWithAI(companyName, ticker) {
   try {
     const prompt = `Find the ISIN (International Securities Identification Number) for "${companyName}" (ticker: ${ticker}). Return ONLY the 12-character ISIN code. If unknown, return "unknown".`;
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-preview-04-17',
+      model: 'gemini-3.1-pro-preview',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: { temperature: 0.1, maxOutputTokens: 100 }
     });
