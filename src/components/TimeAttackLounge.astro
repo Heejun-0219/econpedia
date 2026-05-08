@@ -182,15 +182,19 @@ const { signalId, isBuy } = Astro.props;
 </style>
 
 <script>
+  import { supabase } from '../lib/supabase.js';
+
   document.addEventListener('DOMContentLoaded', () => {
     const lounges = document.querySelectorAll('.time-attack-lounge');
 
     lounges.forEach(lounge => {
+      const signalId = lounge.getAttribute('data-signal-id');
       const btns = lounge.querySelectorAll('.position-btn');
       const commentsArea = lounge.querySelector('.lounge-comments-area');
       const commentInput = lounge.querySelector('.comment-input');
       const commentBtn = lounge.querySelector('.comment-submit-btn');
       const timerText = lounge.querySelector('.timer-text');
+      const commentList = lounge.querySelector('.comment-list');
       
       // Timer logic
       let hours = 23, minutes = 59, seconds = 59;
@@ -203,23 +207,142 @@ const { signalId, isBuy } = Astro.props;
         timerText.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
       }, 1000);
 
+      let currentPosition = null;
+
+      async function checkRealShareholderStatus(userId) {
+        try {
+          const { data, error } = await supabase
+            .from('user_settings')
+            .select('investment, us_stock, crypto')
+            .eq('user_id', userId)
+            .single();
+            
+          if (data && !error) {
+            if ((data.investment > 0) || (data.us_stock > 0) || (data.crypto > 0)) return true;
+          }
+        } catch (e) {
+          console.warn("Failed to check shareholder status:", e);
+        }
+        return false;
+      }
+
+      function timeAgo(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+        if (diffInSeconds < 60) return '방금 전';
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) return `${diffInHours}시간 전`;
+        return `${Math.floor(diffInHours / 24)}일 전`;
+      }
+
+      async function loadComments(position) {
+        commentList.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--color-text-muted);">코멘트 불러오는 중...</div>';
+        
+        const { data: comments, error } = await supabase
+          .from('time_attack_comments')
+          .select('content, created_at, is_shareholder, user_profiles(full_name)')
+          .eq('signal_id', signalId)
+          .eq('position', position)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error("Comments load error:", error);
+          commentList.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--color-accent-danger);">데이터를 불러오지 못했습니다.</div>';
+          return;
+        }
+
+        if (!comments || comments.length === 0) {
+          commentList.innerHTML = '<div style="text-align:center; padding: 2rem; color: var(--color-text-muted);">아직 작성된 의견이 없습니다. 첫 의견을 남겨보세요!</div>';
+          return;
+        }
+
+        const html = comments.map(c => `
+          <div class="comment-item">
+            <div class="comment-meta">
+              ${c.is_shareholder ? '<span class="comment-auth-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:2px"><rect x="4" y="2" width="12" height="16" rx="2"/><line x1="11" y1="10" x2="20" y2="10"/><line x1="11" y1="13.5" x2="20" y2="13.5"/></svg> 주주</span>' : ''}
+              <span class="comment-author">${c.user_profiles?.full_name || '익명의 투자자'}</span>
+              <span class="comment-time">${timeAgo(c.created_at)}</span>
+            </div>
+            <div class="comment-text">${c.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+          </div>
+        `).join('');
+
+        commentList.innerHTML = html;
+      }
+
       // Position selection logic
       btns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
+          const user = window.currentUser;
+          if (!user) {
+            alert('구글 로그인이 필요합니다. 우측 상단의 버튼을 클릭하세요.');
+            return;
+          }
+
           btns.forEach(b => {
             b.classList.remove('selected');
-            if(b !== btn) b.classList.add('disabled');
+            b.classList.add('disabled');
           });
           btn.classList.add('selected');
           btn.classList.remove('disabled');
           
+          currentPosition = btn.getAttribute('data-position');
           commentsArea.style.display = 'block';
           
-          // Phase 3 MVP: Simulate Auth block
-          commentInput.placeholder = "구글 로그인 후 코멘트를 남겨보세요";
-          // In real implementation, check Supabase auth here and enable input if logged in
+          commentInput.disabled = false;
+          commentBtn.disabled = false;
+          commentInput.placeholder = "이 포지션을 선택한 이유를 남겨보세요...";
+          
+          await loadComments(currentPosition);
         });
       });
+
+      // Submit comment
+      commentBtn.addEventListener('click', async () => {
+        const user = window.currentUser;
+        if (!user || !currentPosition) return;
+        
+        const content = commentInput.value.trim();
+        if (!content) return;
+
+        commentInput.disabled = true;
+        commentBtn.disabled = true;
+        commentBtn.style.opacity = '0.5';
+
+        const isShareholder = await checkRealShareholderStatus(user.id);
+
+        const { error } = await supabase.from('time_attack_comments').insert({
+          signal_id: signalId,
+          user_id: user.id,
+          position: currentPosition,
+          content: content,
+          is_shareholder: isShareholder
+        });
+
+        if (error) {
+          console.error("Comment submit error:", error);
+          alert("의견 등록 중 오류가 발생했습니다.");
+        } else {
+          commentInput.value = '';
+          await loadComments(currentPosition);
+        }
+
+        commentInput.disabled = false;
+        commentBtn.disabled = false;
+        commentBtn.style.opacity = '1';
+      });
+
+      // Allow Enter key to submit
+      commentInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          commentBtn.click();
+        }
+      });
+
     });
   });
 </script>
