@@ -75,6 +75,7 @@ async function saveAnalysisPage(signal, markdownContent, metadata, isin) {
   const astroComponent = `---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
 
 const title = "${safeTitle}";
 const date = "${signal.date}";
@@ -117,6 +118,8 @@ const description = "${safeDescription}";
         isPositive={${isBuy}}
         isin="${isin || ''}"
       />
+
+      <TimeAttackLounge signalId="${slug}" isBuy={${isBuy}} />
 
       <div class="ai-disclaimer">
         <strong>⚠️ 투자 주의사항</strong>

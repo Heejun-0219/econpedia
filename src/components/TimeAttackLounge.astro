@@ -1,0 +1,225 @@
+---
+// src/components/TimeAttackLounge.astro
+import Icon from './Icon.astro';
+
+export interface Props {
+  signalId: string;
+  isBuy: boolean;
+}
+
+const { signalId, isBuy } = Astro.props;
+---
+
+<div class="time-attack-lounge" data-signal-id={signalId}>
+  <div class="lounge-header">
+    <div class="lounge-title-wrap">
+      <span class="lounge-live-badge">
+        <span class="pulse-dot"></span> LIVE
+      </span>
+      <h3 class="lounge-title">고래 타임어택 라운지</h3>
+    </div>
+    <div class="countdown-timer">
+      <Icon name="clock" size={16} />
+      <span class="timer-text">23:59:59</span> 남음
+    </div>
+  </div>
+
+  <div class="lounge-body">
+    <p class="lounge-desc">
+      고래의 움직임이 포착되었습니다.<br/>
+      <strong>당신의 포지션을 선언</strong>하고 다른 주주들의 실시간 전략을 확인하세요.
+    </p>
+
+    <!-- Position Selector -->
+    <div class="position-selector">
+      <button class="position-btn position-btn--follow" data-position="follow">
+        {isBuy ? '나도 줍는다 🛒' : '나도 판다 🏃'}
+      </button>
+      <button class="position-btn position-btn--hold" data-position="hold">
+        관망한다 🧐
+      </button>
+      <button class="position-btn position-btn--opposite" data-position="opposite">
+        {isBuy ? '오히려 판다 🏃' : '오히려 줍는다 🛒'}
+      </button>
+    </div>
+
+    <!-- Comments Area (Hidden until position is selected) -->
+    <div class="lounge-comments-area" style="display: none;">
+      <div class="comments-filter">
+        <span class="filter-label">같은 포지션 유저들의 의견</span>
+      </div>
+      
+      <div class="comment-list">
+        <!-- Mock Comments -->
+        <div class="comment-item">
+          <div class="comment-meta">
+            <span class="comment-auth-badge"><Icon name="document" size={12} /> 주주</span>
+            <span class="comment-author">익명의 고수</span>
+            <span class="comment-time">방금 전</span>
+          </div>
+          <div class="comment-text">이 가격이면 무조건 들어가야죠. 고래가 바보도 아니고.</div>
+        </div>
+        <div class="comment-item">
+          <div class="comment-meta">
+            <span class="comment-author">관망하는 개미</span>
+            <span class="comment-time">3분 전</span>
+          </div>
+          <div class="comment-text">조금 더 지켜보고 들어갈 생각입니다. 환율 변동이 너무 커서요.</div>
+        </div>
+      </div>
+
+      <div class="comment-input-wrap">
+        <input type="text" class="comment-input" placeholder="의견을 남기려면 먼저 포지션을 선택하세요" disabled />
+        <button class="comment-submit-btn" disabled>전송</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lounge-footer">
+    <a href="#" class="lounge-login-link">구글 로그인</a> 후 내 지갑을 연동하면 <strong>인증 뱃지</strong>가 부여됩니다.
+  </div>
+</div>
+
+<style>
+  .time-attack-lounge {
+    background: var(--color-surface);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: 16px;
+    margin: 3rem 0;
+    overflow: hidden;
+    box-shadow: 0 12px 24px -4px rgba(16, 185, 129, 0.15);
+    position: relative;
+  }
+
+  /* Red glow for sell signals could be added dynamically, but we'll use a generic accent for now */
+  .time-attack-lounge::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--color-accent-primary), #34d399);
+  }
+
+  .lounge-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+  }
+
+  .lounge-title-wrap { display: flex; align-items: center; gap: 0.75rem; }
+  
+  .lounge-live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(239, 68, 68, 0.1); color: #ef4444;
+    padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;
+  }
+  
+  .pulse-dot {
+    width: 6px; height: 6px; background: #ef4444; border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  }
+
+  .lounge-title { font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--color-text-primary); }
+
+  .countdown-timer {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-weight: 700; color: var(--color-accent-primary);
+    font-size: 1.05rem; background: rgba(22, 163, 74, 0.1); padding: 6px 10px; border-radius: 8px;
+  }
+
+  .lounge-body { padding: 1.5rem; }
+
+  .lounge-desc { text-align: center; margin: 0 0 1.5rem; font-size: 1rem; color: var(--color-text-secondary); line-height: 1.5; }
+  .lounge-desc strong { color: var(--color-text-primary); }
+
+  .position-selector {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem;
+  }
+
+  .position-btn {
+    padding: 1rem 0.5rem; background: var(--color-bg); border: 1px solid var(--color-border);
+    border-radius: 12px; font-weight: 700; font-size: 0.95rem; color: var(--color-text-primary);
+    cursor: pointer; transition: all 0.2s ease;
+  }
+
+  .position-btn:hover { border-color: var(--color-accent-primary); transform: translateY(-2px); }
+  .position-btn.selected { background: var(--color-accent-primary); color: var(--color-bg); border-color: var(--color-accent-primary); }
+  .position-btn.disabled { opacity: 0.5; pointer-events: none; }
+
+  .lounge-comments-area {
+    margin-top: 1.5rem; border-top: 1px dashed var(--color-border); padding-top: 1.5rem;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .comments-filter { margin-bottom: 1rem; font-size: 0.85rem; font-weight: 700; color: var(--color-text-muted); }
+
+  .comment-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto; }
+  
+  .comment-item { background: var(--color-bg); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); }
+  .comment-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; font-size: 0.8rem; }
+  .comment-auth-badge { display: inline-flex; align-items: center; gap: 3px; background: rgba(56, 189, 248, 0.1); color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+  .comment-author { font-weight: 700; color: var(--color-text-primary); }
+  .comment-time { color: var(--color-text-muted); margin-left: auto; }
+  .comment-text { font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.4; }
+
+  .comment-input-wrap { display: flex; gap: 10px; }
+  .comment-input { flex: 1; padding: 0.8rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text); font-size: 0.95rem; }
+  .comment-input:focus { outline: none; border-color: var(--color-accent-primary); }
+  .comment-submit-btn { padding: 0 1.25rem; background: var(--color-text-primary); color: var(--color-bg); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.2s; }
+  .comment-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .lounge-footer {
+    text-align: center; padding: 1rem; background: var(--color-bg-secondary); border-top: 1px solid var(--color-border);
+    font-size: 0.85rem; color: var(--color-text-muted);
+  }
+  .lounge-login-link { color: var(--color-text-primary); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const lounges = document.querySelectorAll('.time-attack-lounge');
+
+    lounges.forEach(lounge => {
+      const btns = lounge.querySelectorAll('.position-btn');
+      const commentsArea = lounge.querySelector('.lounge-comments-area');
+      const commentInput = lounge.querySelector('.comment-input');
+      const commentBtn = lounge.querySelector('.comment-submit-btn');
+      const timerText = lounge.querySelector('.timer-text');
+      
+      // Timer logic
+      let hours = 23, minutes = 59, seconds = 59;
+      setInterval(() => {
+        seconds--;
+        if(seconds < 0) { seconds = 59; minutes--; }
+        if(minutes < 0) { minutes = 59; hours--; }
+        if(hours < 0) { hours = 0; minutes = 0; seconds = 0; }
+        
+        timerText.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }, 1000);
+
+      // Position selection logic
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => {
+            b.classList.remove('selected');
+            if(b !== btn) b.classList.add('disabled');
+          });
+          btn.classList.add('selected');
+          btn.classList.remove('disabled');
+          
+          commentsArea.style.display = 'block';
+          
+          // Phase 3 MVP: Simulate Auth block
+          commentInput.placeholder = "구글 로그인 후 코멘트를 남겨보세요";
+          // In real implementation, check Supabase auth here and enable input if logged in
+        });
+      });
+    });
+  });
+</script>
