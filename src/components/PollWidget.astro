@@ -1,6 +1,8 @@
 ---
 // src/components/PollWidget.astro
-// Phase 1: Micro-Reaction 기초 컴포넌트
+// Phase 1: Micro-Reaction 기초 컴포넌트 (Econ-Sync Data-Backed Faction Debate)
+import Icon from './Icon.astro';
+
 export interface Props {
   questionId: string;
   question: string;
@@ -13,29 +15,78 @@ const { questionId, question, optionA, optionB } = Astro.props;
 
 <div class="poll-widget" data-poll-id={questionId}>
   <div class="poll-header">
-    <span class="poll-badge">EconPedia 커뮤니티 폴</span>
+    <span class="poll-badge">Econ-Sync 실시간 여론</span>
     <h3 class="poll-question">{question}</h3>
   </div>
 
-  <div class="poll-options">
-    <button class="poll-btn poll-btn--a" data-option="A">
-      <span class="poll-btn-label">{optionA}</span>
-      <div class="poll-btn-bg"></div>
-      <span class="poll-btn-percent">0%</span>
-    </button>
-    <button class="poll-btn poll-btn--b" data-option="B">
-      <span class="poll-btn-label">{optionB}</span>
-      <div class="poll-btn-bg"></div>
-      <span class="poll-btn-percent">0%</span>
-    </button>
+  <!-- 투표 영역 -->
+  <div class="poll-interaction-area">
+    <div class="poll-options">
+      <button class="poll-btn poll-btn--a" data-option="A">
+        <span class="poll-btn-label">{optionA}</span>
+        <div class="poll-btn-bg"></div>
+        <span class="poll-btn-percent">0%</span>
+      </button>
+      <button class="poll-btn poll-btn--b" data-option="B">
+        <span class="poll-btn-label">{optionB}</span>
+        <div class="poll-btn-bg"></div>
+        <span class="poll-btn-percent">0%</span>
+      </button>
+    </div>
   </div>
 
-  <div class="poll-footer">
-    <p class="poll-login-prompt">
-      <a href="#" class="poll-login-link">구글 로그인</a>하고 다른 투자자들의 생각을 확인하세요.
-    </p>
-    <p class="poll-result-info" style="display: none;">
-      총 <span class="poll-total-votes">0</span>명 참여 중
+  <!-- 결과 탭 영역 (투표 후에만 보임) -->
+  <div class="poll-results-area" style="display: none;">
+    <div class="poll-tabs">
+      <button class="poll-tab active" data-target="tab-all">전체 여론</button>
+      <button class="poll-tab" data-target="tab-shareholder">
+        주주 여론 <span class="poll-tab-lock"><Icon name="document" size={14} /></span>
+      </button>
+    </div>
+
+    <!-- 전체 여론 탭 -->
+    <div class="poll-tab-content active" id="tab-all">
+      <div class="poll-options poll-options--result">
+        <div class="poll-res poll-res--a">
+          <div class="poll-res-top"><span class="lbl">{optionA}</span><span class="pct">0%</span></div>
+          <div class="poll-res-bar-wrap"><div class="poll-res-bar"></div></div>
+        </div>
+        <div class="poll-res poll-res--b">
+          <div class="poll-res-top"><span class="lbl">{optionB}</span><span class="pct">0%</span></div>
+          <div class="poll-res-bar-wrap"><div class="poll-res-bar"></div></div>
+        </div>
+      </div>
+      <p class="poll-result-info">총 <span class="poll-total-votes">0</span>명 참여 중</p>
+    </div>
+
+    <!-- 주주 여론 탭 (Wallet 미연동 블러 상태) -->
+    <div class="poll-tab-content" id="tab-shareholder">
+      <div class="poll-blur-overlay">
+        <div class="poll-blur-content">
+          <div class="poll-blur-icon"><Icon name="home" size={32} /></div>
+          <h4>진짜 주주들은 어떻게 생각할까요?</h4>
+          <p>내 포트폴리오를 연동하고, 이 자산을 실제로<br/>보유한 사람들의 진짜 여론을 확인하세요.</p>
+          <a href="/wallet" class="poll-connect-btn">내 지갑 3초 만에 연동하기</a>
+        </div>
+        
+        <!-- 블러된 가짜 데이터 배경 -->
+        <div class="poll-options poll-options--result" style="filter: blur(8px); opacity: 0.4; pointer-events: none;">
+          <div class="poll-res poll-res--a">
+            <div class="poll-res-top"><span class="lbl">{optionA}</span><span class="pct">85%</span></div>
+            <div class="poll-res-bar-wrap"><div class="poll-res-bar" style="width: 85%;"></div></div>
+          </div>
+          <div class="poll-res poll-res--b">
+            <div class="poll-res-top"><span class="lbl">{optionB}</span><span class="pct">15%</span></div>
+            <div class="poll-res-bar-wrap"><div class="poll-res-bar" style="width: 15%; background: rgba(239, 68, 68, 0.5);"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="poll-footer poll-login-prompt">
+    <p>
+      <a href="#" class="poll-login-link">구글 로그인</a>하고 내 의견을 남겨보세요.
     </p>
   </div>
 </div>
@@ -44,10 +95,11 @@ const { questionId, question, optionA, optionB } = Astro.props;
   .poll-widget {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 1.5rem;
-    margin: 2rem 0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    margin: 2.5rem 0;
+    box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
   }
 
   .poll-header {
@@ -58,11 +110,12 @@ const { questionId, question, optionA, optionB } = Astro.props;
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--color-accent-primary);
-    background: rgba(22, 163, 74, 0.1);
+    color: var(--color-bg);
+    background: var(--color-text);
     padding: 0.25rem 0.75rem;
     border-radius: 99px;
     margin-bottom: 0.75rem;
+    letter-spacing: 0.5px;
   }
 
   .poll-question {
@@ -71,8 +124,10 @@ const { questionId, question, optionA, optionB } = Astro.props;
     color: var(--color-text);
     margin: 0;
     line-height: 1.4;
+    word-break: keep-all;
   }
 
+  /* Interaction Area (Buttons) */
   .poll-options {
     display: flex;
     flex-direction: column;
@@ -86,10 +141,10 @@ const { questionId, question, optionA, optionB } = Astro.props;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 1rem 1.25rem;
+    padding: 1.1rem 1.25rem;
     background: var(--color-bg);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: 12px;
     color: var(--color-text);
     font-weight: 600;
     font-size: 1rem;
@@ -101,87 +156,149 @@ const { questionId, question, optionA, optionB } = Astro.props;
   .poll-btn:hover {
     border-color: var(--color-accent-primary);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.1);
   }
 
-  .poll-btn-label {
-    position: relative;
-    z-index: 1;
-  }
-
-  .poll-btn-percent {
-    position: relative;
-    z-index: 1;
-    font-size: 0.9rem;
-    opacity: 0.7;
-    display: none; /* 투표 전에 숨김 */
-  }
-
+  .poll-btn-label { position: relative; z-index: 1; }
+  .poll-btn-percent { position: relative; z-index: 1; font-size: 0.95rem; display: none; font-weight: 700; }
   .poll-btn-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0%; /* 기본 0, JS로 업데이트 */
-    background: rgba(22, 163, 74, 0.15);
-    transition: width 0.5s ease-out;
+    position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+    background: rgba(22, 163, 74, 0.1); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  .poll-btn--b .poll-btn-bg {
-    background: rgba(239, 68, 68, 0.15);
+  .poll-btn--b .poll-btn-bg { background: rgba(239, 68, 68, 0.1); }
+
+  /* Results Area (Tabs) */
+  .poll-tabs {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 1.5rem;
   }
 
-  /* 투표 완료 상태 클래스 */
-  .poll-widget.is-voted .poll-btn {
-    cursor: default;
-    transform: none;
-  }
-  
-  .poll-widget.is-voted .poll-btn:hover {
-    border-color: var(--color-border);
-  }
-
-  .poll-widget.is-voted .poll-btn-percent {
-    display: block;
-  }
-
-  .poll-widget.is-voted .poll-btn.selected {
-    border-color: var(--color-accent-primary);
-    box-shadow: 0 0 0 1px var(--color-accent-primary);
-  }
-
-  .poll-footer {
-    font-size: 0.85rem;
+  .poll-tab {
+    background: none;
+    border: none;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--color-text-muted);
-    text-align: center;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px dashed var(--color-border);
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 
-  .poll-login-link {
-    color: var(--color-accent-primary);
-    font-weight: 700;
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 2px;
+  .poll-tab.active {
+    color: var(--color-text);
   }
+
+  .poll-tab.active::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px;
+    background: var(--color-text); border-radius: 2px 2px 0 0;
+  }
+
+  .poll-tab-lock {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-muted);
+  }
+
+  .poll-tab-content { display: none; }
+  .poll-tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Result Bars */
+  .poll-res { margin-bottom: 1rem; }
+  .poll-res-top { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.95rem; font-weight: 600; }
+  .poll-res-bar-wrap { height: 10px; background: var(--color-bg-elevated); border-radius: 99px; overflow: hidden; }
+  .poll-res-bar { height: 100%; background: var(--color-accent-primary); width: 0%; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+  .poll-res--b .poll-res-bar { background: #ef4444; }
+
+  .poll-result-info {
+    font-size: 0.85rem; color: var(--color-text-muted); text-align: right; margin-top: 1rem;
+  }
+
+  /* Wallet Connect Blur Overlay */
+  .poll-blur-overlay {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+  }
+
+  .poll-blur-content {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(var(--color-surface-rgb), 0.7);
+    backdrop-filter: blur(2px);
+  }
+
+  .poll-blur-icon { color: var(--color-text); margin-bottom: 0.5rem; opacity: 0.8; }
+  .poll-blur-content h4 { margin: 0 0 0.5rem; font-size: 1.1rem; color: var(--color-text); }
+  .poll-blur-content p { margin: 0 0 1.25rem; font-size: 0.9rem; color: var(--color-text-secondary); line-height: 1.4; word-break: keep-all;}
+  
+  .poll-connect-btn {
+    background: var(--color-text);
+    color: var(--color-bg);
+    padding: 0.6rem 1.25rem;
+    border-radius: 99px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+  
+  .poll-connect-btn:hover { transform: translateY(-2px); }
+
+  /* Footer */
+  .poll-footer {
+    font-size: 0.85rem; color: var(--color-text-muted); text-align: center;
+    margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--color-border);
+  }
+  .poll-login-link { color: var(--color-text); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
 </style>
 
 <script>
-  // Phase 1 MVP Client Logic (No DB connection yet, LocalStorage Mock)
+  // Phase 1 MVP Client Logic
   document.addEventListener('DOMContentLoaded', () => {
     const polls = document.querySelectorAll('.poll-widget');
     
     polls.forEach(poll => {
       const pollId = poll.getAttribute('data-poll-id');
+      const interactionArea = poll.querySelector('.poll-interaction-area');
+      const resultsArea = poll.querySelector('.poll-results-area');
       const btns = poll.querySelectorAll('.poll-btn');
       const loginPrompt = poll.querySelector('.poll-login-prompt');
-      const resultInfo = poll.querySelector('.poll-result-info');
       const totalVotesSpan = poll.querySelector('.poll-total-votes');
       
-      // Init data (MVP: Starts from 0 until DB is connected)
+      const resA_pct = poll.querySelector('.poll-res--a .pct');
+      const resA_bar = poll.querySelector('.poll-res--a .poll-res-bar');
+      const resB_pct = poll.querySelector('.poll-res--b .pct');
+      const resB_bar = poll.querySelector('.poll-res--b .poll-res-bar');
+
+      const tabs = poll.querySelectorAll('.poll-tab');
+      const tabContents = poll.querySelectorAll('.poll-tab-content');
+
       let votesA = 0;
       let votesB = 0;
+
+      // Tab switching logic
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          tab.classList.add('active');
+          const targetId = tab.getAttribute('data-target');
+          poll.querySelector(`#${targetId}`).classList.add('active');
+        });
+      });
 
       // Check if already voted
       const votedOption = localStorage.getItem(`voted_${pollId}`);
@@ -193,7 +310,6 @@ const { questionId, question, optionA, optionB } = Astro.props;
 
       btns.forEach(btn => {
         btn.addEventListener('click', (e) => {
-          // TODO: 실제 구글 로그인 세션 체크로 변경 (현재는 클릭하면 바로 결과 보여주는 MVP)
           if (poll.classList.contains('is-voted')) return;
           
           const option = btn.getAttribute('data-option');
@@ -207,26 +323,25 @@ const { questionId, question, optionA, optionB } = Astro.props;
 
       function showResults(selectedOption) {
         poll.classList.add('is-voted');
+        
+        // Hide interaction (buttons), show results (tabs)
+        interactionArea.style.display = 'none';
+        resultsArea.style.display = 'block';
         loginPrompt.style.display = 'none';
-        resultInfo.style.display = 'block';
         
         const total = votesA + votesB;
         totalVotesSpan.textContent = total;
 
-        const percentA = Math.round((votesA / total) * 100);
-        const percentB = 100 - percentA;
+        const percentA = total === 0 ? 0 : Math.round((votesA / total) * 100);
+        const percentB = total === 0 ? 0 : 100 - percentA;
 
-        const btnA = poll.querySelector('.poll-btn--a');
-        const btnB = poll.querySelector('.poll-btn--b');
-
-        btnA.querySelector('.poll-btn-percent').textContent = `${percentA}%`;
-        btnA.querySelector('.poll-btn-bg').style.width = `${percentA}%`;
-        
-        btnB.querySelector('.poll-btn-percent').textContent = `${percentB}%`;
-        btnB.querySelector('.poll-btn-bg').style.width = `${percentB}%`;
-
-        if (selectedOption === 'A') btnA.classList.add('selected');
-        if (selectedOption === 'B') btnB.classList.add('selected');
+        // Update result bars (Tab 1)
+        setTimeout(() => {
+          if (resA_pct) resA_pct.textContent = `${percentA}%`;
+          if (resA_bar) resA_bar.style.width = `${percentA}%`;
+          if (resB_pct) resB_pct.textContent = `${percentB}%`;
+          if (resB_bar) resB_bar.style.width = `${percentB}%`;
+        }, 50); // slight delay for CSS transition
       }
     });
   });
