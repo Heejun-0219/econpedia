@@ -395,7 +395,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
             <span class="badge">★ 이번 주 가장 많이 읽힌</span>
             <h4>{latestBriefings[0].title}</h4>
             <div class="ex">{latestBriefings[0].excerpt}</div>
-            <div class="meta"><span>{formatDateShort(latestBriefings[0].date).m} {formatDateShort(latestBriefings[0].date).d}일</span><span>•</span><span>3분 읽기</span><span>•</span><span><b>2,481명</b> 읽음</span></div>
+            <div class="meta"><span>{formatDateShort(latestBriefings[0].date).m} {formatDateShort(latestBriefings[0].date).d}일</span><span>•</span><span>3분 읽기</span><span>•</span><span class="view-count-display" data-slug={latestBriefings[0].href}><b>--명</b> 읽음</span></div>
           </a>
         )}
         <div class="i5-small-stack">

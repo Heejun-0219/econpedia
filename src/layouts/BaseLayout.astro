@@ -729,5 +729,54 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         });
       })();
     </script>
+    <!-- Pageview Tracking & Rendering Script -->
+    <script>
+      import { supabase } from '../lib/supabase.js';
+
+      document.addEventListener('DOMContentLoaded', async () => {
+        const isArticle = document.querySelector('meta[property="og:type"]')?.content === 'article' || document.querySelector('article') !== null;
+        let slug = window.location.pathname.replace(/^\/|\/$/g, '');
+        
+        // 1. 기사 페이지인 경우 조회수 1 증가 (RPC 호출)
+        if (isArticle && slug) {
+          try {
+            await supabase.rpc('increment_pageview', { article_slug: slug });
+          } catch (e) {
+            console.error('Pageview increment failed:', e);
+          }
+        }
+
+        // 2. 화면에 .view-count-display 요소가 있으면 조회수 불러와서 렌더링
+        const viewEls = document.querySelectorAll('.view-count-display');
+        if (viewEls.length > 0) {
+          const slugs = Array.from(viewEls).map(el => {
+            const dataSlug = el.getAttribute('data-slug');
+            return dataSlug ? dataSlug.replace(/^\/|\/$/g, '') : null;
+          }).filter(Boolean);
+
+          if (slugs.length > 0) {
+            try {
+              const { data, error } = await supabase
+                .from('pageviews')
+                .select('slug, view_count')
+                .in('slug', slugs);
+
+              if (data && !error) {
+                const viewsMap = {};
+                data.forEach(row => viewsMap[row.slug] = row.view_count);
+
+                viewEls.forEach(el => {
+                  const dataSlug = el.getAttribute('data-slug').replace(/^\/|\/$/g, '');
+                  const count = viewsMap[dataSlug] || 0;
+                  el.innerHTML = `<b>${count.toLocaleString()}명</b> 읽음`;
+                });
+              }
+            } catch (e) {
+              console.error('Pageview fetch failed:', e);
+            }
+          }
+        }
+      });
+    </script>
   </body>
 </html>
