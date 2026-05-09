@@ -222,7 +222,10 @@ const realHoldings = baselinePortfolio.map(item => {
 const totalRealPercent = (totalRealImpact / 10000000) * 100;
 const totalRealImpactStr = `${totalRealImpact > 0 ? '+' : (totalRealImpact < 0 ? '−' : '')}₩${Math.abs(totalRealImpact).toLocaleString()}`;
 const totalRealPercentStr = `${totalRealPercent > 0 ? '+' : ''}${totalRealPercent.toFixed(2)}%`;
-const realSummary = `지금 시장에 <b>1천만 원을 분산 투자</b>했다면 오늘 내 지갑은 이렇게 변했습니다.`;
+
+const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+const marketImpactLabel = isWeekend ? '전영업일(금) 종가 영향' : '오늘 시장 영향';
+const realSummary = `지금 시장에 <b>1천만 원을 분산 투자</b>했다면 ${isWeekend ? '전영업일 종가 기준' : '오늘'} 내 지갑은 이렇게 변했습니다.`;
 
 // 가장 변동성이 심한 4가지 지표 계산
 const rawItems = [
@@ -362,7 +365,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       <div class="i3-top">
         <div>
           <div class="l">Econ-Sync 시뮬레이션: 국민 표준 포트폴리오</div>
-          <div class="h">오늘 시장 영향 · <span style={totalRealImpact > 0 ? 'color:#6ee7b7' : 'color:#f87171'}>{totalRealImpactStr}</span> ({totalRealPercentStr})</div>
+          <div class="h">{marketImpactLabel} · <span style={totalRealImpact > 0 ? 'color:#6ee7b7' : 'color:#f87171'}>{totalRealImpactStr}</span> ({totalRealPercentStr})</div>
           <div class="s" set:html={realSummary}></div>
         </div>
       </div>

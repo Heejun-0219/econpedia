@@ -42,6 +42,11 @@ const getGuideLink = (category) => {
   };
   return map[category] || '/economy/basics';
 };
+
+const today = new Date(new Date().getTime() + 9 * 60 * 60 * 1000);
+const isWeekend = today.getDay() === 0 || today.getDay() === 6;
+const reportDateLabel = isWeekend ? '전영업일(금) 종가 기준' : '오늘 기준';
+const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장';
 ---
 
 <BaseLayout
@@ -99,14 +104,14 @@ const getGuideLink = (category) => {
             <h2 style="font-size: 22px; font-weight: 800; margin: 0; color: var(--color-text-primary);">내 지갑 방어율 리포트</h2>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 12px; font-weight: 600; color: var(--color-text-muted);" id="report-date">오늘 기준</div>
+            <div style="font-size: 12px; font-weight: 600; color: var(--color-text-muted);" id="report-date">{reportDateLabel}</div>
           </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; position: relative; z-index: 1;">
           <!-- Market Weather -->
           <div style={`background: ${w.color}10; border: 1px solid ${w.color}20; border-radius: 16px; padding: 20px; text-align: center;`}>
-            <div style={`color: ${w.color}; font-size: 13px; font-weight: 700; margin-bottom: 12px; opacity: 0.9;`}>오늘의 시장</div>
+            <div style={`color: ${w.color}; font-size: 13px; font-weight: 700; margin-bottom: 12px; opacity: 0.9;`}>{marketWeatherLabel}</div>
             <div style={`color: ${w.color}; margin-bottom: 12px; display: flex; justify-content: center;`}>
               <Icon name={`weather-${w.weather || 'cloudy'}`} size={48} />
             </div>
