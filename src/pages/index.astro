@@ -4,7 +4,6 @@ import Icon from '../components/Icon.astro';
 import dailyArticles from '../data/daily-articles.json';
 import blogArticles from '../data/blog-articles.json';
 import weatherSummaryData from '../data/weather-summary.json';
-import demoPortfolioData from '../data/demo-portfolio.json';
 import ctaCardsData from '../data/cta-cards.json';
 import fs from 'fs';
 import path from 'path';
@@ -188,6 +187,43 @@ try {
   console.warn('⚠️ 빌드 중 사이트 통계 로드 실패:', err.message);
 }
 
+// ─── 1천만 원 표준 포트폴리오 시뮬레이션 (Real Market Data) ───
+const baselinePortfolio = [
+  { name: '국내 주식 (코스피)', weightStr: '50% · ₩5,000,000', amount: 5000000, change: r.kospi?.changePercent || 0, isUs: false },
+  { name: '미국 주식 (S&P 500)', weightStr: '30% · ₩3,000,000', amount: 3000000, change: (r.sp500?.changePercent || 0) + (r.krw?.changePercent || 0), isUs: true },
+  { name: '가상자산 (비트코인)', weightStr: '20% · ₩2,000,000', amount: 2000000, change: r.bitcoin?.changePercent || 0, isUs: false }
+];
+
+let totalRealImpact = 0;
+const realHoldings = baselinePortfolio.map(item => {
+  const impactValue = Math.round(item.amount * (item.change / 100));
+  totalRealImpact += impactValue;
+  
+  const isUp = impactValue > 0;
+  const isDn = impactValue < 0;
+  
+  let barWidthNum = Math.abs(item.change) * 10;
+  if (barWidthNum > 100) barWidthNum = 100;
+  if (barWidthNum < 5 && item.change !== 0) barWidthNum = 5;
+
+  return {
+    name: item.name,
+    signalLabel: isUp ? '수익' : (isDn ? '손실' : '보합'),
+    signalClass: isDn ? 'dn' : '',
+    weight: item.weightStr,
+    barWidth: `${barWidthNum}%`,
+    barClass: isDn ? 'dn' : '',
+    impactValue: `${impactValue > 0 ? '+' : (impactValue < 0 ? '−' : '')}₩${Math.abs(impactValue).toLocaleString()} · ${item.change > 0 ? '+' : ''}${item.change.toFixed(2)}%`,
+    impactClass: isDn ? 'dn' : 'up',
+    reason: item.isUs ? '환율 변동 포함 실제 타격감' : '시장 수익률 반영'
+  };
+});
+
+const totalRealPercent = (totalRealImpact / 10000000) * 100;
+const totalRealImpactStr = `${totalRealImpact > 0 ? '+' : (totalRealImpact < 0 ? '−' : '')}₩${Math.abs(totalRealImpact).toLocaleString()}`;
+const totalRealPercentStr = `${totalRealPercent > 0 ? '+' : ''}${totalRealPercent.toFixed(2)}%`;
+const realSummary = `지금 시장에 <b>1천만 원을 분산 투자</b>했다면 오늘 내 지갑은 이렇게 변했습니다.`;
+
 // 가장 변동성이 심한 4가지 지표 계산
 const rawItems = [
   { id: 'kospi', title: '코스피', prefix: '', suffix: '', data: r.kospi },
@@ -320,19 +356,18 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
     </div>
 
     <!-- ============================================================
-      ISSUE 03 — PORTFOLIO SAMPLE
+      ISSUE 03 — PORTFOLIO SAMPLE (REAL DATA SIMULATION)
     ============================================================ -->
     <div class="i3-frame">
       <div class="i3-top">
         <div>
-          <div class="l">만약 당신의 포트폴리오가 이렇다면 — 데모 미리보기</div>
-          <div class="h">오늘 뉴스 영향 · <span style="color:#6ee7b7">{demoPortfolioData.totalImpact}</span> ({demoPortfolioData.totalChangePercent})</div>
-          <div class="s" set:html={demoPortfolioData.summary}></div>
+          <div class="l">Econ-Sync 시뮬레이션: 국민 표준 포트폴리오</div>
+          <div class="h">오늘 시장 영향 · <span style={totalRealImpact > 0 ? 'color:#6ee7b7' : 'color:#f87171'}>{totalRealImpactStr}</span> ({totalRealPercentStr})</div>
+          <div class="s" set:html={realSummary}></div>
         </div>
-        <span class="i3-preview-tag">DEMO · NOT YOUR DATA</span>
       </div>
       <div class="i3-holdings">
-        {demoPortfolioData.holdings.map(holding => (
+        {realHoldings.map(holding => (
           <div class="i3-hold">
             <div class="n"><span>{holding.name}</span><span class={`t ${holding.signalClass}`}>{holding.signalLabel}</span></div>
             <div class="w">{holding.weight}</div>
@@ -343,13 +378,12 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
         ))}
       </div>
       <div class="i3-ctas">
-        <a href="/wallet" class="cta-connect" style="text-decoration:none">내 포트폴리오 연결하기 (30초) →</a>
-        <a href="/whale" class="cta-demo" style="text-decoration:none">데모 자세히 보기</a>
+        <a href="/wallet" class="cta-connect" style="text-decoration:none">내 지갑 연결하고 실제 타격감 확인하기 →</a>
       </div>
       <div class="i3-foot">
-        <span>읽기 전용 연결 · OAuth</span>
+        <span><Icon name="document" size={14} style="margin-right:2px; vertical-align:-2px" /> 읽기 전용 연결</span>
         <span>오픈뱅킹 인증</span>
-        <span><span id="stat-portfolio-users">{Number(siteStats.portfolio_users).toLocaleString()}</span>명이 이미 연결</span>
+        <span><b><span id="stat-portfolio-users">{Number(siteStats.portfolio_users).toLocaleString()}</span>명</b>이 이미 연결</span>
       </div>
     </div>
 
