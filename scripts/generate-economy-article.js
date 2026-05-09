@@ -218,6 +218,7 @@ async function main() {
           }),
         }).catch(() => {});
       }
+      process.exit(1); // API 한도 초과 등 치명적 에러 발생 시 CI 파이프라인 실패(Fail)를 강제하기 위함
     }
   }
 

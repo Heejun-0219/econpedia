@@ -49,7 +49,6 @@ export const CATEGORIES = {
         readingTime: '12분',
         date: '2026.04.01',
         href: '/economy/investment/etf-guide',
-        comingSoon: true,
       },
       {
         title: '주식 투자의 기초 — PER, PBR, ROE 이 3가지만 알면 된다',
@@ -57,7 +56,6 @@ export const CATEGORIES = {
         readingTime: '10분',
         date: '2026.04.01',
         href: '/economy/investment/stock-basics',
-        comingSoon: true,
       },
       {
         title: '채권이란? — 내가 국가에 돈을 빌려주면 어떻게 될까',
