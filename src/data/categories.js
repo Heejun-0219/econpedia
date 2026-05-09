@@ -63,7 +63,6 @@ export const CATEGORIES = {
         readingTime: '8분',
         date: '2026.04.01',
         href: '/economy/investment/bonds-explained',
-        comingSoon: true,
       },
     ],
   },

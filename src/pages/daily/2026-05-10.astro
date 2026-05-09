@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "미국 주식이 효자 노릇 하는 날, 하지만 직구 결제는 잠시 참으세요";
+const date = "2026-05-10";
+const description = "밤사이 미국 시장에서 기분 좋은 소식이 들려왔습니다. 기술주를 중심으로 주가가 시원하게 오르면서 미국 주식에 투자하신 분들의 계좌가 두둑해졌을 거예요. 하지만 동시에 달러 값(환율)도 함께 오르고 있어, 해외 여행을 계획 중이거나 직구를 고민하던 분들에게는 조금 부담스...";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>밤사이 미국 시장에서 기분 좋은 소식이 들려왔습니다. 기술주를 중심으로 주가가 시원하게 오르면서 미국 주식에 투자하신 분들의 계좌가 두둑해졌을 거예요. 하지만 동시에 달러 값(환율)도 함께 오르고 있어, 해외 여행을 계획 중이거나 직구를 고민하던 분들에게는 조금 부담스러운 아침입니다.</p>
+<h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>미국 기업들이 돈을 잘 벌고 있다는 소식에 투자자들이 몰리면서 미국 주식 시장이 활짝 웃었습니다. 문제는 달러의 인기도 같이 높아졌다는 점이에요. &quot;미국 경제가 제일 튼튼하네!&quot;라는 생각에 전 세계 돈이 달러로 몰리면서, 우리 원화 가치가 상대적으로 떨어지고 환율이 1,460원대까지 올라갔습니다.</p>
+<h2>💰 내 지갑 가이드</h2>
+<p><strong>1. 미국 주식 투자자라면? &quot;오늘은 계좌를 보며 웃으셔도 좋아요&quot;</strong></p>
+<ul>
+<li>500만 원 정도 미국 주식을 가지고 있다면, 자고 일어난 사이 약 <strong>65,000원</strong> 정도 수익이 불어났을 거예요. 주가도 오르고 환율도 올라서 &#39;환차익&#39;까지 덤으로 얻은 셈이죠. 지금 당장 팔 게 아니라면 흐뭇하게 지켜보셔도 좋습니다.</li>
+</ul>
+<p><strong>2. 해외 직구·여행 계획 중이라면? &quot;장바구니 결제는 내일로 미룰까요?&quot;</strong></p>
+<ul>
+<li>환율이 1,461원을 넘어섰습니다. 100만 원을 환전할 때 어제보다 돈이 더 드는 건 물론이고, 예전보다 훨씬 비싼 값을 치러야 해요. 급한 물건이 아니라면 환율이 진정될 때까지 결제를 잠시 미루는 것이 현명합니다.</li>
+</ul>
+<p><strong>3. 오늘 저녁 장 보러 가신다면? &quot;2,000원의 마법을 부려보세요&quot;</strong></p>
+<ul>
+<li>물가가 조금씩 야금야금 오르고 있습니다. 한 달 식비로 80만 원 정도 쓰신다면, 체감상 예전보다 <strong>2,000원</strong> 정도 더 지출하게 되는 수준이에요. 마트 타임 세일이나 1+1 행사를 챙겨서 이 2,000원을 방어해 보는 건 어떨까요?</li>
+</ul>
+<p><strong>4. 기름 넣으러 가신다면? &quot;큰 차이는 없지만, 미리 채워두면 좋아요&quot;</strong></p>
+<ul>
+<li>기름값이 아주 살짝 올랐습니다. 5만 원어치 주유할 때 약 <strong>160원</strong> 정도 차이라 당장 생활에 큰 타격은 없어요. 하지만 국제 유가가 계속 오름세이니, 주유 경고등이 들어오기 전에 미리 채워두는 편이 좋습니다.</li>
+</ul>
+<p><strong>5. 국내 주식과 대출은? &quot;오늘은 평화롭습니다&quot;</strong></p>
+<ul>
+<li>국내 주식 시장은 큰 움직임 없이 조용한 편이고, 다행히 대출 금리에도 변화가 없습니다. 이 부분은 걱정 내려놓으시고 본업에 집중하셔도 되겠네요.</li>
+</ul>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
