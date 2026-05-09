@@ -90,9 +90,6 @@ async function getMarketData() {
       results.baseRate = { price: 3.50, change: 0, changePercent: 0 };
     }
 
-    // Mock API for Korea CPI (Phase 3 Data Source Integration pending)
-    results.cpi = { price: 114.2, change: 0.3, changePercent: 0.26 }; // e.g., inflation up 0.3%
-
     return results;
   } catch (error) {
     console.error('Error fetching market data:', error);
@@ -109,8 +106,7 @@ function formatMarketDataForPrompt(data) {
 - USD/KRW: ${data.krw.price.toFixed(2)} (${data.krw.changePercent > 0 ? '+' : ''}${data.krw.changePercent.toFixed(2)}%)
 - Bitcoin (USD): $${data.bitcoin.price.toFixed(2)} (${data.bitcoin.changePercent > 0 ? '+' : ''}${data.bitcoin.changePercent.toFixed(2)}%)
 - Crude Oil (WTI): $${data.oil.price.toFixed(2)} (${data.oil.changePercent > 0 ? '+' : ''}${data.oil.changePercent.toFixed(2)}%)
-- KR Base Rate: ${data.baseRate.price.toFixed(2)}% (${data.baseRate.change > 0 ? '+' : ''}${data.baseRate.change.toFixed(2)}%p)
-- KR CPI Index: ${data.cpi.price.toFixed(1)} (${data.cpi.changePercent > 0 ? '+' : ''}${data.cpi.changePercent.toFixed(2)}%)
+- KR Base Rate: ${data.baseRate?.price ? data.baseRate.price.toFixed(2) + '%' : 'N/A'}
 `;
 }
 
@@ -136,8 +132,8 @@ async function generateArticle(marketDataString, weatherData) {
     return response.text;
   } catch (error) {
     if (error.status === 429 || (error.message && error.message.includes('spending cap'))) {
-      console.log('⚠️ API quota exceeded. Falling back to mock article generation.');
-      return `# [EconPedia] ${today} 데일리 브리핑\n\n현재 API 사용량 초과(Quota Exceeded)로 임시 생성된 브리핑입니다. 시스템 관리자에게 문의하여 API 한도를 늘리거나 키를 교체해주세요.\n\n${marketDataString}`;
+      console.error('⚠️ API quota exceeded. Failing the pipeline.');
+      process.exit(1);
     }
     console.error('Error generating article:', error);
     throw error;
