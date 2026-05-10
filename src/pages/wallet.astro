@@ -4,11 +4,15 @@ import Icon from '../components/Icon.astro';
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load market data
 let marketData = { weatherData: { weather: 'sunny', emoji: '☀️', label: '맑음', headline: '오늘은 평화로운 날이에요', color: '#34d399', walletImpacts: [] }, raw: {} };
 try {
-  const mdPath = path.resolve(process.cwd(), '.market-data.json');
+  const mdPath = path.resolve(__dirname, '../../.market-data.json');
   if (fs.existsSync(mdPath)) {
     marketData = JSON.parse(fs.readFileSync(mdPath, 'utf8'));
     if (!marketData.weatherData) marketData.weatherData = { weather: 'cloudy', emoji: '☁️', label: '흐림', headline: '위젯 데이터를 로딩중입니다...', color: '#94a3b8', walletImpacts: [] };
@@ -485,48 +489,47 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
         // Recalculation logic
         function recalculate() {
           let netGain = 0;
-          let hasData = false;
 
           if (raw.baseRate) {
             const change = Math.round((settings.housing * (raw.baseRate.change / 100)) / 12);
             updateCard('housing', `내 대출금 기준 이번 달 이자가 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '늘었어요', '줄었어요')}`, change);
-            netGain -= change; hasData = true;
+            netGain -= change;
           }
           if (raw.cpi) {
             const change = Math.round(settings.grocery * (raw.cpi.changePercent / 100));
             updateCard('grocery', `내 식비 체감 물가가 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '내렸어요')}`, change);
-            netGain -= change; hasData = true;
+            netGain -= change;
           }
           if (raw.oil) {
             const change = Math.round(settings.gasoline * (raw.oil.changePercent / 100) * 0.5);
             updateCard('gasoline', `1회 주유 시 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '내렸어요')}`, change);
-            netGain -= change; hasData = true;
+            netGain -= change;
           }
           if (raw.kospi) {
             const change = Math.round(settings.investment * (raw.kospi.changePercent / 100));
             updateCard('investment', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`, change);
-            netGain += change; hasData = true;
+            netGain += change;
           }
           if (raw.sp500 && raw.krw) {
             const change = Math.round(settings.us_stock * ((raw.sp500.changePercent + raw.krw.changePercent) / 100));
             updateCard('us_stock', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`, change);
-            netGain += change; hasData = true;
+            netGain += change;
           }
           if (raw.krw) {
             const change = Math.round(settings.travel * (raw.krw.changePercent / 100));
             updateCard('travel', `환전 시 ${Math.abs(change).toLocaleString()}원 더 ${formatChange(change, '비싸졌어요', '아꼈어요')}`, change);
-            netGain -= change; hasData = true;
+            netGain -= change;
           }
           if (raw.bitcoin) {
             const change = Math.round(settings.crypto * (raw.bitcoin.changePercent / 100));
             updateCard('crypto', `내 투자금 기준 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '빠졌어요')}`, change);
-            netGain += change; hasData = true;
+            netGain += change;
           }
 
-          updateWalletWeatherCard(netGain, hasData);
+          updateWalletWeatherCard(netGain);
         }
 
-        function updateWalletWeatherCard(netGain, hasData) {
+        function updateWalletWeatherCard(netGain) {
           const iconContainer = document.getElementById('wallet-weather-icon-container');
           const labelEl = document.getElementById('wallet-weather-label');
           const descEl = document.getElementById('wallet-weather-desc');
@@ -537,7 +540,7 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
           const totalAssets = settings.investment + settings.us_stock + settings.crypto;
           const totalDebtCost = settings.housing + settings.grocery + settings.gasoline + settings.travel;
 
-          if (!hasData || (totalAssets === 0 && totalDebtCost === 0)) {
+          if (totalAssets === 0 && totalDebtCost === 0) {
             iconContainer.style.color = 'var(--color-text-secondary)';
             labelEl.style.color = 'var(--color-text-secondary)';
             document.getElementById('wallet-weather-box').style.background = 'rgba(148, 163, 184, 0.1)';
