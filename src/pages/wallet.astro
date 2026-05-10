@@ -120,18 +120,18 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
           </div>
 
           <!-- Wallet Weather (Client updated) -->
-          <div id="wallet-weather-box" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 20px; text-align: center; transition: all 0.3s ease;">
-            <div style="color: #38bdf8; font-size: 13px; font-weight: 700; margin-bottom: 12px; opacity: 0.9;">내 지갑</div>
-            <div id="wallet-weather-icon-container" style="color: #38bdf8; margin-bottom: 12px; display: flex; justify-content: center;">
-              <Icon name="weather-sunny" size={48} />
+          <div id="wallet-weather-box" style="background: rgba(148, 163, 184, 0.1); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 16px; padding: 20px; text-align: center; transition: all 0.3s ease;">
+            <div style="color: var(--color-text-muted); font-size: 13px; font-weight: 700; margin-bottom: 12px; opacity: 0.9;">내 지갑</div>
+            <div id="wallet-weather-icon-container" style="color: var(--color-text-muted); margin-bottom: 12px; display: flex; justify-content: center;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>
             </div>
-            <div id="wallet-weather-label" style="font-size: 18px; font-weight: 800; color: #38bdf8; margin-bottom: 4px;">분석 중...</div>
+            <div id="wallet-weather-label" style="font-size: 18px; font-weight: 800; color: var(--color-text-muted); margin-bottom: 4px;">확인 중...</div>
             <div id="wallet-weather-desc" style="font-size: 13px; color: var(--color-text-muted); font-weight: 600;">데이터 연동 중</div>
           </div>
         </div>
 
         <div id="wallet-viral-msg" style="text-align: center; font-size: 15px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 24px; position: relative; z-index: 1; word-break: keep-all; line-height: 1.4;">
-          포트폴리오 데이터를 불러오고 있습니다.
+          자산을 입력하고 <b>내 지갑의 진짜 타격감</b>을 확인하세요.
         </div>
 
         <button id="btn-share-story" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #fff; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; position: relative; z-index: 1; box-shadow: 0 4px 12px rgba(220, 39, 67, 0.3);">
@@ -538,14 +538,21 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
           const totalDebtCost = settings.housing + settings.grocery + settings.gasoline + settings.travel;
 
           if (!hasData || (totalAssets === 0 && totalDebtCost === 0)) {
+            iconContainer.style.color = 'var(--color-text-secondary)';
+            labelEl.style.color = 'var(--color-text-secondary)';
+            document.getElementById('wallet-weather-box').style.background = 'rgba(148, 163, 184, 0.1)';
+            document.getElementById('wallet-weather-box').style.borderColor = 'rgba(148, 163, 184, 0.2)';
+            
             iconContainer.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg>';
             labelEl.textContent = '데이터 없음';
-            labelEl.style.color = 'var(--color-text-secondary)';
-            iconContainer.style.color = 'var(--color-text-secondary)';
             descEl.textContent = '내 자산을 입력해주세요';
             msgEl.innerHTML = '자산을 입력하고 <b>내 지갑의 진짜 타격감</b>을 확인하세요.';
             return;
           }
+
+          // 스타일 초기화 (데이터가 있을 때)
+          document.getElementById('wallet-weather-box').style.background = 'rgba(56, 189, 248, 0.1)';
+          document.getElementById('wallet-weather-box').style.borderColor = 'rgba(56, 189, 248, 0.2)';
 
           let iconHtml = '';
           let labelText = '';
