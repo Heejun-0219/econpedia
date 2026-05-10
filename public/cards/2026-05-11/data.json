@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "미국 주식 계좌 열어보세요! 500만원 넣었다면 6만 4천원 올랐어요 🍗",
+      "badge": "2026-05-11 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "미국 주식",
+          "impact": "500만원 기준 약 64,846원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 약 161원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "해외여행·직구",
+          "impact": "100만원 환전 시 45원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "대출이자",
+          "impact": "변화 없이 평화로움",
+          "trend": "flat"
+        },
+        {
+          "label": "국내 주식",
+          "impact": "변동 없이 조용함",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}

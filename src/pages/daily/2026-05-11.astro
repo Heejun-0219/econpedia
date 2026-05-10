@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "미국 주식으로 6만원 벌었지만, 여행 환전은 잠시 멈춤! 오늘 내 지갑 리포트";
+const date = "2026-05-11";
+const description = "미국 테크 기업들이 힘을 내면서 우리 미국 주식 계좌가 꽤 든든해졌어요. 나스닥 지수가 1.7% 넘게 오르면서 밤사이 잠든 사이 내 자산이 불어난 셈이죠.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>미국 테크 기업들이 힘을 내면서 우리 미국 주식 계좌가 꽤 든든해졌어요. 나스닥 지수가 1.7% 넘게 오르면서 밤사이 잠든 사이 내 자산이 불어난 셈이죠. </p>
+<p>하지만 달러 가격(환율)이 여전히 1,460원대를 기록하며 높은 수준이에요. 주식 수익은 기쁘지만, 해외 직구를 하거나 여행을 앞둔 분들에게는 &#39;비싼 달러&#39;가 여전히 숙제로 남아있는 하루입니다.</p>
+<h2>💰 내 지갑 가이드</h2>
+<p><strong>🇺🇸 미국 주식·ETF: &quot;자고 일어났더니 치킨 3마리 값이 생겼어요&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 영향:</strong> 미국 주식에 500만 원 정도 넣어두셨다면, 어제보다 <strong>약 64,846원</strong> 정도 자산이 늘어났을 거예요. 주가도 오르고 환율도 살짝 오르면서 시너지 효과가 났네요. 오늘은 수익률 화면을 보며 기분 좋게 커피 한 잔 하셔도 좋습니다.</li>
+</ul>
+<p><strong>✈️ 해외여행·직구: &quot;환전은 조금만 더 참아볼까요?&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 영향:</strong> 100만 원을 달러로 바꿀 때 어제보다 <strong>45원</strong> 더 비싸졌어요. 금액 차이는 작지만, 현재 환율 자체가 1,461원으로 매우 높은 편이에요. 당장 내일 출국하는 게 아니라면, 지금 몽땅 환전하기보다는 환율이 조금 가라앉기를 기다려보는 것을 추천해요. 장바구니에 담아둔 해외 직구 물건도 결제는 잠시 미뤄두세요.</li>
+</ul>
+<p><strong>⛽ 주유비·기름값: &quot;기름 넣을 때 큰 차이 없어요&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 영향:</strong> 5만 원어치 기름을 넣을 때 어제보다 <strong>약 161원</strong> 정도 더 듭니다. 껌 한 통 값도 안 되는 차이라서, 기름 떨어지셨다면 미루지 말고 평소처럼 주유하셔도 괜찮습니다.</li>
+</ul>
+<p><strong>🇰🇷 국내 주식·주거비: &quot;오늘은 아주 평화롭습니다&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 영향:</strong> 국내 시장과 대출 금리는 큰 움직임 없이 조용합니다. 내 통장에서 빠져나가는 이자나 국내 주식 계좌는 어제와 비슷하니 마음 편히 본업에 집중하셔도 되는 날이에요.</li>
+</ul>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
