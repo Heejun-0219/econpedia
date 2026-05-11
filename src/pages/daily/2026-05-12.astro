@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "국내 주식 계좌에 '43만 원'이 깜짝 입금된 날, 해외 직구는 잠시 장바구니에 담아두세요";
+const date = "2026-05-12";
+const description = "오늘 국내 주식 시장에 보기 드문 '대축제'가 열렸습니다. 코스피 지수가 눈에 띄게 오르면서, 주식 계좌를 가진 분들이라면 오랜만에 앱을 켜고 미소 지으셨을 것 같아요. 정확한 원인은 복잡하지만, 우리 지갑 입장에서는 '한국 기업들의 가치가 하루 만에 껑충 뛰었다'고 ...";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>오늘 국내 주식 시장에 보기 드문 &#39;대축제&#39;가 열렸습니다. 코스피 지수가 눈에 띄게 오르면서, 주식 계좌를 가진 분들이라면 오랜만에 앱을 켜고 미소 지으셨을 것 같아요. 정확한 원인은 복잡하지만, 우리 지갑 입장에서는 <strong>&quot;한국 기업들의 가치가 하루 만에 껑충 뛰었다&quot;</strong>고 이해하시면 됩니다.</p>
+<p>다만, 달러 환율도 함께 오르며 1,475원을 넘어섰습니다. 주식으로 번 돈은 기쁘지만, 해외 여행을 계획 중이거나 직구를 즐기는 분들에게는 조금 부담스러운 소식입니다.</p>
+<h2>💰 내 지갑 가이드</h2>
+<p><strong>1. 국내 주식 투자자라면? &quot;보너스 받은 기분을 즐기세요&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 변화:</strong> 오늘 코스피 종목에 <strong>1,000만 원을 넣어두셨다면, 어제보다 자산이 약 432,436원 늘어났을 거예요.</strong> </li>
+<li><strong>행동 가이드:</strong> 갑작스러운 급등에 무리하게 추격 매수를 하기보다는, 내 계좌가 얼마나 불어났는지 확인하며 차분하게 시장을 지켜보는 것이 좋습니다.</li>
+</ul>
+<p><strong>2. 미국 주식 투자자라면? &quot;환율 덕분에 수익이 더 커졌어요&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 변화:</strong> 미국 주식에 <strong>500만 원 정도 투자하고 있다면, 주가 상승분과 환율 상승분이 합쳐져 약 57,173원의 이득</strong>을 보고 계실 겁니다.</li>
+<li><strong>행동 가이드:</strong> 달러 가치가 높을 때 주식을 팔면 환전 이득까지 챙길 수 있지만, 새로 달러를 사서 투자하기에는 환율이 다소 부담스러운 구간입니다.</li>
+</ul>
+<p><strong>3. 해외 여행이나 직구를 준비 중이라면? &quot;조금만 참아보세요&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 변화:</strong> 현재 환율로 <strong>100만 원을 환전하면 어제보다 96원 정도 더 비싸게</strong> 사야 합니다. 금액 자체는 작아 보이지만, 환율이 1,470원대를 돌파했다는 것 자체가 심리적으로 매우 높은 수준이에요.</li>
+<li><strong>행동 가이드:</strong> 당장 급한 결제가 아니라면 환율이 안정될 때까지 직구 결제는 미루는 것을 추천드려요.</li>
+</ul>
+<p><strong>4. 대출이 있거나 장을 봐야 한다면? &quot;평소와 같아요&quot;</strong></p>
+<ul>
+<li><strong>내 지갑 변화:</strong> 다행히 대출 금리나 기름값, 장바구니 물가에는 큰 변화가 없습니다. </li>
+<li><strong>행동 가이드:</strong> 오늘은 주식 시장의 훈풍을 즐기며 평소처럼 일상을 보내셔도 좋습니다. 😌</li>
+</ul>
+<p>오늘처럼 변동성이 큰 날은 숫자에 일희일비하기보다, 내 자산의 전체적인 흐름을 한 번 점검해보는 기회로 삼으시길 바랍니다.</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

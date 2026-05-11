@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "오늘 내 국내 주식 계좌, 1천만원 당 43만원 올랐어요 🚀",
+      "badge": "2026-05-12 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 투자 시 약 43만원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "미국 주식",
+          "impact": "500만원 투자 시 약 5.7만원 상승 (환율 포함)",
+          "trend": "up"
+        },
+        {
+          "label": "해외 여행·직구",
+          "impact": "환율 상승으로 환전 비용 소폭 증가",
+          "trend": "up"
+        },
+        {
+          "label": "대출 이자·물가",
+          "impact": "변동 없이 평화로워요 😌",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
