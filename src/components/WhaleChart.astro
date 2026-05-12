@@ -1,0 +1,169 @@
+---
+export interface Props {
+  chartData: string;
+  transactionDate: string;
+  isBuy: boolean;
+  ticker: string;
+}
+
+const { chartData, transactionDate, isBuy, ticker } = Astro.props;
+---
+
+{chartData !== 'null' && (
+  <div class="whale-chart-container">
+    <div class="chart-header">
+      <h4>{ticker} 최근 6개월 추이 및 고래 타점</h4>
+    </div>
+    <div id="whale-chart"></div>
+    <p class="chart-caption">
+      ※ 차트 상의 <span class={`marker-badge ${isBuy ? 'marker-buy' : 'marker-sell'}`}>{isBuy ? 'B' : 'S'}</span> 마커는 이번 공시된 내부자 거래 발생 지점입니다.
+    </p>
+
+    <!-- Pass data to client script securely -->
+    <script type="application/json" id="whale-chart-data" set:html={chartData}></script>
+    <script type="application/json" id="whale-chart-meta" set:html={JSON.stringify({ txDate: transactionDate, isBuy: isBuy })}></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const dataEl = document.getElementById('whale-chart-data');
+        const metaEl = document.getElementById('whale-chart-meta');
+        
+        if (!dataEl || !metaEl) return;
+        
+        const seriesData = JSON.parse(dataEl.textContent);
+        const meta = JSON.parse(metaEl.textContent);
+        
+        if (!seriesData || seriesData.length === 0) return;
+
+        // Find the closest data point for the transaction
+        const targetDate = new Date(meta.txDate).getTime();
+        let closestPoint = seriesData[0];
+        let minDiff = Infinity;
+        
+        seriesData.forEach(d => {
+          const t = new Date(d.x).getTime();
+          const diff = Math.abs(t - targetDate);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestPoint = d;
+          }
+        });
+
+        const colorAccent = meta.isBuy ? '#10b981' : '#ef4444'; // Green for Buy, Red for Sell
+
+        const options = {
+          series: [{
+            name: '종가 (Close)',
+            data: seriesData
+          }],
+          chart: {
+            type: 'area',
+            height: 280,
+            fontFamily: 'var(--font-sans)',
+            toolbar: { show: false },
+            zoom: { enabled: false }
+          },
+          colors: ['#3b82f6'],
+          fill: {
+            type: 'gradient',
+            gradient: {
+              shadeIntensity: 1,
+              opacityFrom: 0.4,
+              opacityTo: 0.05,
+              stops: [0, 90, 100]
+            }
+          },
+          dataLabels: { enabled: false },
+          stroke: { curve: 'smooth', width: 2 },
+          xaxis: {
+            type: 'datetime',
+            labels: {
+              style: { colors: '#64748b' },
+              datetimeUTC: false,
+              format: 'MM.dd'
+            },
+            axisBorder: { show: false },
+            axisTicks: { show: false }
+          },
+          yaxis: {
+            labels: {
+              style: { colors: '#64748b' },
+              formatter: (val) => '$' + val.toFixed(1)
+            }
+          },
+          grid: {
+            borderColor: 'var(--color-border)',
+            strokeDashArray: 4,
+            yaxis: { lines: { show: true } },
+            xaxis: { lines: { show: false } }
+          },
+          annotations: {
+            points: [{
+              x: new Date(closestPoint.x).getTime(),
+              y: closestPoint.y,
+              marker: {
+                size: 8,
+                fillColor: '#fff',
+                strokeColor: colorAccent,
+                radius: 2,
+                strokeWidth: 3
+              },
+              label: {
+                borderColor: colorAccent,
+                offsetY: 0,
+                style: {
+                  color: '#fff',
+                  background: colorAccent,
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  padding: { left: 6, right: 6, top: 3, bottom: 3 }
+                },
+                text: meta.isBuy ? 'BUY' : 'SELL'
+              }
+            }]
+          },
+          tooltip: {
+            theme: document.documentElement.getAttribute('data-theme') || 'light',
+            x: { format: 'yyyy년 MM월 dd일' }
+          }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#whale-chart"), options);
+        chart.render();
+      });
+    </script>
+  </div>
+)}
+
+<style>
+  .whale-chart-container {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  }
+  .chart-header h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+  }
+  .chart-caption {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: 0.5rem 0 0 0;
+  }
+  .marker-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    font-size: 0.8rem;
+  }
+  .marker-buy { background-color: #10b981; }
+  .marker-sell { background-color: #ef4444; }
+</style>

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import dotenv from 'dotenv';
+import YahooFinance from 'yahoo-finance2';
 import { buildWhaleAnalysisPrompt } from '../src/data/prompts.js';
 
 dotenv.config();
@@ -20,6 +21,7 @@ const WHALE_PAGES_DIR = path.join(ROOT, 'src', 'pages', 'whale');
 const MAX_ANALYSES_PER_RUN = 3;
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const yahooFinance = new YahooFinance();
 
 async function getIsinWithAI(companyName, ticker) {
   try {
@@ -53,7 +55,7 @@ function extractJsonBlock(content) {
   return null;
 }
 
-async function saveAnalysisPage(signal, markdownContent, metadata, isin) {
+async function saveAnalysisPage(signal, markdownContent, metadata, isin, chartData) {
   const cleanMarkdown = markdownContent.replace(/\`\`\`json\n[\s\S]*?\n\`\`\`/g, '').trim();
   let title = metadata.seoTitle;
   const titleMatch = cleanMarkdown.match(/^#\s+(.+)$/m);
@@ -72,10 +74,13 @@ async function saveAnalysisPage(signal, markdownContent, metadata, isin) {
     : 'background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);';
   const marketFlag = signal.market === 'us' ? '🇺🇸' : '🇰🇷';
 
+  const chartDataStr = chartData ? JSON.stringify(chartData).replace(/'/g, "\\'") : 'null';
+
   const astroComponent = `---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TradeCTA from '../../components/TradeCTA.astro';
 import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
 
 const title = "${safeTitle}";
 const date = "${signal.date}";
@@ -109,6 +114,8 @@ const description = "${safeDescription}";
         <p><strong>거래 규모:</strong> ${signal.amount}</p>
         <p><strong>출처:</strong> ${signal.source}</p>
       </div>
+
+      <WhaleChart chartData='${chartDataStr}' transactionDate='${signal.date}' isBuy={${isBuy}} ticker='${signal.ticker}' />
 
       ${htmlContent}
 
@@ -244,7 +251,43 @@ ${rawOutput}
       seoDescription: "Whale Alert 분석 결과입니다."
     };
 
-    const resultMeta = await saveAnalysisPage(signal, finalOutput, metadata, isin);
+    // ── 고래 차트 데이터(Historical) 조회 ──
+    let chartData = null;
+    try {
+      const now = new Date();
+      const sixMonthsAgo = new Date();
+      sixMonthsAgo.setMonth(now.getMonth() - 6);
+      
+      const queryOptions = { 
+        period1: sixMonthsAgo.toISOString().split('T')[0], 
+        period2: now.toISOString().split('T')[0], 
+        interval: '1d' 
+      };
+
+      let hData;
+      let symbolToSearch = signal.ticker;
+      
+      if (signal.market === 'kr') {
+        try {
+          hData = await yahooFinance.chart(`${signal.ticker}.KS`, queryOptions);
+        } catch {
+          hData = await yahooFinance.chart(`${signal.ticker}.KQ`, queryOptions);
+        }
+      } else {
+        hData = await yahooFinance.chart(symbolToSearch, queryOptions);
+      }
+      
+      if (hData && hData.quotes && hData.quotes.length > 0) {
+        chartData = hData.quotes.filter(d => d.close).map(d => ({
+          x: d.date.toISOString().split('T')[0],
+          y: parseFloat(d.close.toFixed(2))
+        }));
+      }
+    } catch (e) {
+      console.warn(`  ⚠️ 차트 데이터 조회 실패 (${signal.ticker}):`, e.message);
+    }
+
+    const resultMeta = await saveAnalysisPage(signal, finalOutput, metadata, isin, chartData);
     await updateManifest(resultMeta);
 
     // 텔레그램 Push 알림
