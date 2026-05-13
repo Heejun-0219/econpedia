@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "미국 주식 통장은 웃었지만, 식비는 2천 원 더 들겠어요",
+      "badge": "2026-05-09 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "🇺🇸 미국 주식",
+          "impact": "500만원 투자 시 약 65,000원 수익",
+          "trend": "up"
+        },
+        {
+          "label": "🛒 장바구니",
+          "impact": "월 식비 80만원 기준 2,080원 증가",
+          "trend": "up"
+        },
+        {
+          "label": "✈️ 해외직구·여행",
+          "impact": "100만원 환전 시 46원 더 비싸짐",
+          "trend": "up"
+        },
+        {
+          "label": "🏠 대출이자·주거비",
+          "impact": "금리 변화 없이 평화로움",
+          "trend": "flat"
+        },
+        {
+          "label": "📊 국내주식·코인",
+          "impact": "오늘은 변동 없이 얌전한 하루",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
