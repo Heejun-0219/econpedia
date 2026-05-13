@@ -79,7 +79,6 @@ export const CATEGORIES = {
         readingTime: '6분',
         date: '2026.04.01',
         href: '/economy/finance/credit-score-tips',
-        comingSoon: true,
       },
       {
         title: '전월세 계약 전 꼭 알아야 할 것들 — 보증금을 지키는 법',
