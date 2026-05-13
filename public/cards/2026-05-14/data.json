@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "국내 주식에 1천만원 넣어뒀다면, 오늘 26만원 벌었어요 🍗",
+      "badge": "2026-05-14 시장 분석",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원당 26만 2천원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "코인 투자",
+          "impact": "100만원당 1만 5천원 하락",
+          "trend": "down"
+        },
+        {
+          "label": "해외 직구·환전",
+          "impact": "100만원 환전 시 19원 절약",
+          "trend": "down"
+        },
+        {
+          "label": "대출이자·기름값",
+          "impact": "변동 없이 평화로워요 😌",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
