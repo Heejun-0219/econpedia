@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
+import YahooFinance from 'yahoo-finance2';
 
 dotenv.config();
 
@@ -18,7 +19,46 @@ const SIGNALS_PATH = path.join(ROOT, '.whale-signals.json');
 const SEC_HEADERS = { 'User-Agent': 'EconPedia econpedia@dedyn.io', 'Accept': 'application/json' };
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+// 환율 — 디스플레이용 근사 (정확한 환산이 필요한 경우 추후 외부 fetch로 대체 가능)
+const USD_TO_KRW = 1450;
+
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const yahooFinance = new YahooFinance({ suppressNotices: ['yahooSurvey'] });
+
+// SEC submissions API 결과 캐시 (CIK → { sicCode, sicDescription })
+const sicCache = new Map();
+async function fetchSecSic(cik) {
+  if (!cik) return null;
+  const padded = String(cik).padStart(10, '0');
+  if (sicCache.has(padded)) return sicCache.get(padded);
+  try {
+    const res = await fetch(`https://data.sec.gov/submissions/CIK${padded}.json`, { headers: SEC_HEADERS });
+    if (!res.ok) { sicCache.set(padded, null); return null; }
+    const j = await res.json();
+    const out = { sicCode: j.sic || null, sicDescription: j.sicDescription || null };
+    sicCache.set(padded, out);
+    return out;
+  } catch {
+    sicCache.set(padded, null);
+    return null;
+  }
+}
+
+// 한국 종목의 공시일 기준 종가 조회 (.KS → .KQ 폴백, 비영업일이면 가장 가까운 다음 영업일 종가)
+async function getKrCloseOnDate(stockCode, ymdDash) {
+  const period1 = new Date(ymdDash);
+  if (Number.isNaN(period1.getTime())) return null;
+  const period2 = new Date(period1.getTime() + 10 * 24 * 60 * 60 * 1000);
+  const opts = { period1, period2, interval: '1d' };
+  for (const suffix of ['.KS', '.KQ']) {
+    try {
+      const data = await yahooFinance.chart(`${stockCode}${suffix}`, opts);
+      const quote = data?.quotes?.find(q => q.close);
+      if (quote?.close) return quote.close;
+    } catch { /* try next suffix */ }
+  }
+  return null;
+}
 
 // ── AI 유틸리티 ──────────────────────────────────────────
 async function getIsinWithAI(companyName, ticker) {
@@ -84,25 +124,43 @@ function parseSecForm4Xml(xml) {
 
   if (!openMarket.length) return null;
 
-  const buyVal = openMarket.filter(t => t.isBuy).reduce((s, t) => s + t.value, 0);
-  const sellVal = openMarket.filter(t => !t.isBuy).reduce((s, t) => s + t.value, 0);
+  const buyTx = openMarket.filter(t => t.isBuy);
+  const sellTx = openMarket.filter(t => !t.isBuy);
+  const buyVal = buyTx.reduce((s, t) => s + t.value, 0);
+  const sellVal = sellTx.reduce((s, t) => s + t.value, 0);
   const isBuy = buyVal >= sellVal;
-  const totalVal = isBuy ? buyVal : sellVal;
+  const totalUsd = isBuy ? buyVal : sellVal;
+  const sideTx = isBuy ? buyTx : sellTx;
+  const totalShares = sideTx.reduce((s, t) => s + t.shares, 0);
+  const avgPrice = totalShares > 0 ? totalUsd / totalShares : null;
 
   return {
     direction: isBuy ? 'buy' : 'sell',
     person: [reporterName, role].filter(Boolean).join(' / '),
-    amount: formatUsd(totalVal),
-    totalValue: totalVal
+    shares: totalShares,
+    pricePerShare: avgPrice,
+    totalUsd
   };
 }
 
-function formatUsd(val) {
-  const KRW = 1450;
-  if (val >= 1e9) return `$${(val / 1e9).toFixed(2)}B (약 ${Math.round(val * KRW / 1e8)}억 원)`;
-  if (val >= 1e6) return `$${(val / 1e6).toFixed(1)}M (약 ${Math.round(val * KRW / 1e8)}억 원)`;
-  if (val >= 1e3) return `$${Math.round(val / 1e3)}K (약 ${Math.round(val * KRW / 1e4)}만 원)`;
-  return `$${Math.round(val)}`;
+// 한·미 통합 표시 — totalUsd 기준
+function formatTotal(totalUsd) {
+  const krw = totalUsd * USD_TO_KRW;
+  const usdStr = totalUsd >= 1e9
+    ? `$${(totalUsd / 1e9).toFixed(2)}B`
+    : totalUsd >= 1e6
+      ? `$${(totalUsd / 1e6).toFixed(2)}M`
+      : totalUsd >= 1e3
+        ? `$${Math.round(totalUsd / 1e3)}K`
+        : `$${Math.round(totalUsd)}`;
+  const krwStr = krw >= 1e12
+    ? `${(krw / 1e12).toFixed(2)}조 원`
+    : krw >= 1e8
+      ? `${Math.round(krw / 1e8).toLocaleString('ko-KR')}억 원`
+      : krw >= 1e4
+        ? `${Math.round(krw / 1e4).toLocaleString('ko-KR')}만 원`
+        : `${Math.round(krw).toLocaleString('ko-KR')} 원`;
+  return { usdStr, krwStr, display: `${usdStr} (약 ${krwStr})` };
 }
 
 // ── SEC: 전체 시장 RSS 스캔 ──────────────────────────────
@@ -161,11 +219,11 @@ async function scanSecForm4(majorCiks) {
       const xml = txtContent.split('<XML>')[1].split('</XML>')[0];
       const parsed = parseSecForm4Xml(xml);
       if (!parsed) continue;
-      
+
       // 노이즈 필터: $500,000 미만이고 C-Level이 아니면 스킵
       const personLower = parsed.person.toLowerCase();
       const isCLevel = personLower.includes('ceo') || personLower.includes('cfo') || personLower.includes('chief');
-      if (parsed.totalValue < 500000 && !isCLevel) continue;
+      if (parsed.totalUsd < 500000 && !isCLevel) continue;
 
       const isMajor = Object.keys(majorCiks).includes(item.cik.padStart(10, '0'));
       const tickerTag = extractTag(xml, 'issuerTradingSymbol') || item.companyName;
@@ -173,9 +231,11 @@ async function scanSecForm4(majorCiks) {
       // ETF/Fund 제외
       if (['ARKK', 'RENTEC', 'SCION'].includes(tickerTag.toUpperCase())) continue;
 
-      let sigScore = calculateSignificance(parsed.totalValue, parsed.direction, parsed.person);
+      let sigScore = calculateSignificance(parsed.totalUsd, parsed.direction, parsed.person);
       if (isMajor) sigScore += 20; // 메이저 기업 가산점
 
+      const sic = await fetchSecSic(item.cik);
+      const totals = formatTotal(parsed.totalUsd);
       signals.push({
         id: `form4-${tickerTag.toLowerCase()}-${item.fileDate}-${item.accession}`,
         type: 'insider',
@@ -186,12 +246,20 @@ async function scanSecForm4(majorCiks) {
         cik: item.cik,
         person: parsed.person,
         direction: parsed.direction,
-        amount: parsed.amount,
-        totalValue: parsed.totalValue,
+        shares: parsed.shares,
+        pricePerShare: parsed.pricePerShare,
+        currency: 'USD',
+        totalUsd: parsed.totalUsd,
+        totalKrw: parsed.totalUsd * USD_TO_KRW,
+        amount: totals.display,
+        amountUsd: totals.usdStr,
+        amountKrw: totals.krwStr,
+        sicCode: sic?.sicCode || null,
+        sector: sic?.sicDescription || null,
         date: item.fileDate,
         significance: Math.min(sigScore, 100)
       });
-      console.log(`  ✅ ${tickerTag} | ${parsed.person} | ${parsed.direction.toUpperCase()} | ${parsed.amount} ${isMajor ? '(🌟 MAJOR BONUS)' : ''}`);
+      console.log(`  ✅ ${tickerTag} | ${parsed.person} | ${parsed.direction.toUpperCase()} | ${totals.display} ${isMajor ? '(🌟 MAJOR BONUS)' : ''}`);
       
     } catch (e) {
       // skip
@@ -255,19 +323,27 @@ async function scanDartInsider(majorCorpCodes) {
 
         const isBuy = changeCount > 0;
         const person = [rep.repror, rep.isu_exctv_ofcps].filter(v => v && v !== '-').join(' / ');
-        
-        // 노이즈 필터 적용 (주식 수 * 대략적 단가 5만원 가정 -> 7억 원 미만이고 C레벨 아니면 스킵)
+        const shares = Math.abs(changeCount);
+
+        // 공시일 종가로 정확한 KRW 거래 금액 산출 (실패 시 보수적 fallback)
+        const dateDash = rep.rcept_dt.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+        const closeKrw = await getKrCloseOnDate(item.stock_code, dateDash);
+        const pricePerShareKrw = closeKrw || 50_000; // fallback: 평균치 가정
+        const totalKrw = shares * pricePerShareKrw;
+        const totalUsd = totalKrw / USD_TO_KRW;
+
+        // 노이즈 필터: 5억 원 미만이고 C레벨 아니면 스킵 (정확한 KRW 기준)
         const personLower = person.toLowerCase();
         const isCLevel = personLower.includes('대표이사') || personLower.includes('회장') || personLower.includes('사장');
-        const estimatedValue = Math.abs(changeCount) * 50000;
-        if (estimatedValue < 500_000_000 && !isCLevel) continue;
+        if (totalKrw < 500_000_000 && !isCLevel) continue;
 
         const isMajor = majorByTicker[item.stock_code];
-        const absStr = Math.abs(changeCount).toLocaleString('ko-KR');
-        const amount = `${absStr}주 ${isBuy ? '취득' : '처분'}`;
+        const totals = formatTotal(totalUsd);
+        const amount = `${totals.display} · ${shares.toLocaleString('ko-KR')}주 ${isBuy ? '취득' : '처분'}${closeKrw ? '' : ' (단가 추정)'}`;
 
-        let sigScore = calculateSignificance(estimatedValue, isBuy ? 'buy' : 'sell', person);
-        if (isMajor) sigScore += 20; // 메이저 기업 가산점
+        // significance는 USD 기준으로 한·미 통일
+        let sigScore = calculateSignificance(totalUsd, isBuy ? 'buy' : 'sell', person);
+        if (isMajor) sigScore += 20;
 
         signals.push({
           id: `dart-${item.stock_code}-${rep.rcept_dt}`,
@@ -279,9 +355,18 @@ async function scanDartInsider(majorCorpCodes) {
           corpCode: item.corp_code,
           person: person || '임원',
           direction: isBuy ? 'buy' : 'sell',
+          shares,
+          pricePerShare: pricePerShareKrw,
+          priceSource: closeKrw ? 'yahoo_close' : 'estimate_50000_krw',
+          currency: 'KRW',
+          totalKrw,
+          totalUsd,
           amount,
-          totalValue: Math.abs(changeCount),
-          date: rep.rcept_dt.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
+          amountUsd: totals.usdStr,
+          amountKrw: totals.krwStr,
+          sicCode: null,
+          sector: isMajor?.sector || null,
+          date: dateDash,
           significance: Math.min(sigScore, 100)
         });
         console.log(`  ✅ ${item.corp_name} | ${person} | ${isBuy ? 'BUY' : 'SELL'} | ${amount} ${isMajor ? '(🌟 MAJOR BONUS)' : ''}`);

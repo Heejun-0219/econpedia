@@ -452,44 +452,69 @@ ${marketContext}
 }
 
 // ── 🐋 Whale Alert 통합 프롬프트 ─────────────────────────────
-export function buildWhaleAnalysisPrompt(signal, marketContext) {
+export function buildWhaleAnalysisPrompt(signal, marketContext, extra = {}) {
   const system = buildSystemBase(new Date().toISOString().split('T')[0]);
   const isBuy = signal.direction === 'buy';
   const marketFlag = signal.market === 'us' ? '🇺🇸' : '🇰🇷';
+  const { followUp = null, similarCases = [] } = extra;
+
+  // 거래 총액 (한·미 통합)
+  const totalDisplay = signal.amount || `${signal.amountUsd || ''} (약 ${signal.amountKrw || ''})`;
+
+  // 후행 가격 컨텍스트 문자열
+  const fu = followUp?.horizons;
+  const followUpBlock = fu
+    ? `[이번 거래의 후행 주가 — Yahoo Finance 종가, 단순 raw 변동률, 시장 평균 미보정]
+- 기준일 종가: ${followUp.basePrice} (${followUp.baseDate})
+- D+30: ${fu.d30 ? `${fu.d30.pct > 0 ? '+' : ''}${fu.d30.pct}% (${fu.d30.date})` : '미도래'}
+- D+90: ${fu.d90 ? `${fu.d90.pct > 0 ? '+' : ''}${fu.d90.pct}% (${fu.d90.date})` : '미도래'}
+- D+180: ${fu.d180 ? `${fu.d180.pct > 0 ? '+' : ''}${fu.d180.pct}% (${fu.d180.date})` : '미도래'}
+- D+365: ${fu.d365 ? `${fu.d365.pct > 0 ? '+' : ''}${fu.d365.pct}% (${fu.d365.date})` : '미도래'}`
+    : `[후행 주가] 거래일이 충분히 과거가 아니거나 데이터 미확보 — 후행 가격 미언급.`;
+
+  // 유사 사례 컨텍스트
+  const similarBlock = similarCases.length
+    ? `[큐레이션된 유사 업종·방향 과거 사례 — 이 목록 외의 사례는 절대 인용 금지]
+${similarCases.map((c, i) => `(${i + 1}) ${c.company} (${c.ticker}, ${c.market.toUpperCase()}) | ${c.person} | ${c.direction === 'buy' ? '매수' : '매도'} | ${c.date} | 약 $${(c.valueUsd / 1e6).toFixed(1)}M
+    · 단순 변동률: D+30 ${c.outcomePct30d}%, D+90 ${c.outcomePct90d}%, D+180 ${c.outcomePct180d}%, D+365 ${c.outcomePct365d}%
+    · 회사 후속: ${c.companyOutcome}
+    · 내러티브: ${c.narrative}
+    · 출처: ${c.source}`).join('\n')}`
+    : `[유사 사례] 매칭된 케이스 없음 — '비슷한 사례' 섹션은 "유의미한 매칭 사례를 찾지 못했습니다. 보조 지표 없이 본 거래 자체의 맥락만 분석합니다."로 1단락 처리.`;
 
   const instructions = `
-[당신의 임무: 🐋 Whale Alert 전문 애널리스트]
-당신은 ${marketFlag} 시장에서 발생한 거대 자금 흐름(내부자 거래, 기관 포트폴리오 변동)을 분석하여, 그 거래에 담긴 진짜 의미를 발굴하는 펀드 매니저입니다.
+[당신의 임무: 🐋 Whale Alert 전문 애널리스트 — 냉철한 후행 분석가]
+당신은 ${marketFlag} 시장에서 발생한 거대 자금 흐름을 분석하는 펀드 매니저입니다. 이 분석의 핵심은 "현재 거래가 비슷한 과거 사례와 비교해 어떻게 끝났을 가능성이 높은가"를 **숫자로** 보여주는 것입니다.
 
-[분석 대상 거래 정보 — 이것은 SEC/DART 공시에서 직접 파싱된 팩트 데이터입니다]
+[분석 대상 거래 정보 — SEC/DART 공시 기반 팩트]
 기업명: ${signal.companyName} (${signal.ticker})
+섹터: ${signal.sector || '미확인'}
 매매자: ${signal.person}
 매매 방향: ${isBuy ? '자발적 장내 매수 (Buy)' : '장내 매도 (Sell)'}
-거래 규모: ${signal.amount}
+거래 총액: ${totalDisplay}
+수량 · 단가: ${(signal.shares || 0).toLocaleString('en-US')}주 · ${signal.currency === 'KRW' ? `₩${Math.round(signal.pricePerShare || 0).toLocaleString('ko-KR')}/주` : `$${(signal.pricePerShare || 0).toFixed(2)}/주`}
 데이터 출처: ${signal.source}
 공시 날짜: ${signal.date}
 
-[주의사항]
-- 이 콘텐츠의 목적은 "역사적/시그널 교육"입니다.
-- 단순 사실 전달이 아닌, "왜 이 타이밍에 지갑을 열었는가/닫았는가?"를 입체적으로 분석하세요.
-- **절대적 금지**: 데이터 환각(hallucination). 위 팩트 데이터에 없는 종목이나 인물을 지어내지 마세요.
-- **표현 제한**: "강력 매수하세요", "무조건 사야 합니다"와 같은 확정적 투자 권유 표현을 금지합니다.
+${followUpBlock}
+
+${similarBlock}
+
+[절대 규칙 — 위반 시 기사 전체 폐기]
+1. **환각 금지**: 위 [큐레이션된 유사 사례] 블록에 없는 종목·인물·수치는 절대 인용하지 마세요. 외부 지식으로 사례를 지어내는 것은 금지입니다.
+2. **숫자는 그대로**: 거래 총액, 후행 변동률, 유사 사례 변동률은 위 데이터를 한 자리 수 단위까지 그대로 인용하세요. 반올림·과장 금지.
+3. **냉철한 톤**: 매수 시그널이라고 무조건 호의적, 매도라고 무조건 비관적으로 쓰지 마세요. 유사 사례의 평균 D+365가 음수라면 매수라도 "역사적 평균은 부정적"이라고 명시.
+4. **확정적 권유 금지**: "매수하세요", "강력 추천" 같은 표현은 금지. 항상 "통계적으로 ~한 경향이 있었습니다"로 표현.
+5. **단순 raw 변동률 단서**: 후행 변동률은 시장 평균(S&P500/KOSPI)을 제거하지 않은 raw 값임을 본문에 최소 1회 명시.
 
 [출력 형식: 순수 마크다운 — frontmatter 제외]
 
 [구조 가이드]
-1. 헤드라인 (H1)
-   - 이 거래의 성격을 단번에 보여주는 자극적이고 직관적인 한 문장
-
-2. 오늘의 거래 브리핑 (H2: 📋 Whale의 장바구니)
-   - 누가, 얼마나, 언제 샀는지/팔았는지 서술. 금액의 체감 크기를 비유로 설명.
-
-3. 심층 분석 (H2: 🔍 왜 지금?)
-   - 최근 기업의 주가/실적 흐름, 매크로 환경을 바탕으로 추론.
-   - 역사적 선례가 있다면 비교.
-
-4. 독자의 관점 (H2: 💰 내 지갑에 주는 시그널)
-   - 맹목적 추종 경고 + 보조 지표로서 활용하는 방법.
+1. 헤드라인 (H1) — 거래의 성격을 한 문장으로
+2. 📋 거래 브리핑 (H2) — 누가, 얼마나(${totalDisplay}), 왜 지금인지 핵심 1~2단락
+3. 🔍 왜 지금? (H2) — 최근 기업 주가/실적/매크로 기반 추론. **이번 거래의 D+N 후행 가격이 있으면 그 숫자를 그대로 인용해 "이미 N% 변동" 명시**
+4. 📊 비슷한 사례, 그 후 어떻게 됐나 (H2) — 큐레이션된 유사 사례 ${similarCases.length}건의 D+30/90/180/365를 표가 아닌 산문으로 풀고, **D+365 평균 변동률을 계산해 1줄로 결론** (단순 산술평균이라는 단서 포함). 매칭 사례가 없으면 1단락으로 "유의미한 매칭 없음"만 기술.
+5. 💰 내 지갑에 주는 시그널 (H2) — 보조 지표로서의 활용법 + 맹목적 추종 경고
 
 [추가 출력 — JSON 블록]
 \\\`\\\`\\\`json
@@ -504,13 +529,13 @@ export function buildWhaleAnalysisPrompt(signal, marketContext) {
 `;
 
   const userMessage = `
-[Whale Signal 데이터 (공시 기반 팩트)]
+[Whale Signal 원본 페이로드]
 ${JSON.stringify(signal, null, 2)}
 
 [당시 시장/업황 컨텍스트]
 ${marketContext}
 
-위 정보를 바탕으로 독자가 스크롤을 멈출 수밖에 없는 Whale Alert 분석 리포트를 작성하세요.
+위 정보와 시스템 프롬프트의 [후행 주가]·[유사 사례] 블록 — 그리고 오직 그것만 — 을 근거로 사용해 냉철한 Whale Alert 분석 리포트를 작성하세요.
 `;
 
   return { system: system + instructions, user: userMessage };
