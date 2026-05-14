@@ -1,0 +1,392 @@
+#!/usr/bin/env node
+// scripts/improvement-loop.mjs
+// EconPedia self-improvement loop orchestrator.
+//
+// Phases:
+//   snapshot   — gather production state (KPIs, code stats, git log, recent issues)
+//   critique   — run each persona (musk, mckinsey, munger) over the snapshot
+//   synthesize — fold the 3 critiques into one McKinsey-grade plan
+//   actionize  — break the plan into GitHub issues (JSON output; piped to gh CLI in CI)
+//   all        — snapshot → critique × 3 → synthesize (default)
+//
+// Usage:
+//   node scripts/improvement-loop.mjs                          # full cycle, writes to ops/improvement-loop/state/history/
+//   node scripts/improvement-loop.mjs --phase critique --persona musk
+//   node scripts/improvement-loop.mjs --phase synthesize
+//   node scripts/improvement-loop.mjs --phase actionize        # emits JSON on stdout
+//
+// Models:
+//   - Default: claude-opus-4-7 with adaptive thinking + effort=high (critique) / xhigh (synthesize)
+//   - Fallback: Gemini via @google/genai if ANTHROPIC_API_KEY not set but GEMINI_API_KEY is
+//
+// Prompt caching:
+//   - The production snapshot is the largest stable block per cycle → 5-min ephemeral cache breakpoint
+//   - Persona prompt is the second-most stable (per persona) → second breakpoint
+//   - The phase-specific instruction is the volatile suffix (uncached)
+
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT = path.join(__dirname, '..');
+const LOOP_DIR = path.join(ROOT, 'ops', 'improvement-loop');
+const STATE_DIR = path.join(LOOP_DIR, 'state');
+const HISTORY_DIR = path.join(STATE_DIR, 'history');
+const PERSONAS_DIR = path.join(LOOP_DIR, 'personas');
+const PROMPTS_DIR = path.join(LOOP_DIR, 'prompts');
+
+const PERSONAS = ['musk', 'mckinsey', 'munger'];
+
+// Filename-safe timestamp: YYYY-MM-DD_HH-MM (UTC). Same date supports many runs/day.
+function stamp() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}_${pad(d.getUTCHours())}-${pad(d.getUTCMinutes())}`;
+}
+
+// Find the most recent file in HISTORY_DIR matching a suffix (e.g. '-plan.md', '-musk.md').
+// Used so phase=synthesize/actionize picks up the latest artifacts regardless of which run produced them.
+async function latestHistoryFile(suffix) {
+  try {
+    const files = (await fs.readdir(HISTORY_DIR))
+      .filter(f => f.endsWith(suffix))
+      .sort();
+    return files.length ? path.join(HISTORY_DIR, files[files.length - 1]) : null;
+  } catch { return null; }
+}
+
+// ─── CLI args ───────────────────────────────────────────────
+function parseArgs(argv) {
+  const out = { phase: 'all', persona: null, dryRun: false, cycle: null };
+  for (let i = 2; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--phase') out.phase = argv[++i];
+    else if (a === '--persona') out.persona = argv[++i];
+    else if (a === '--cycle') out.cycle = argv[++i];
+    else if (a === '--dry-run') out.dryRun = true;
+    else if (a === '--help' || a === '-h') {
+      console.log(`Usage: improvement-loop.mjs [--phase all|snapshot|critique|synthesize|actionize] [--persona musk|mckinsey|munger] [--cycle N] [--dry-run]`);
+      process.exit(0);
+    }
+  }
+  return out;
+}
+
+// ─── LLM wrapper (Anthropic preferred, Gemini fallback) ─────
+async function callLLM({ system, user, effort = 'high', maxTokens = 8000, cachePoints = [] }) {
+  if (process.env.ANTHROPIC_API_KEY) return callAnthropic({ system, user, effort, maxTokens, cachePoints });
+  if (process.env.GEMINI_API_KEY) return callGemini({ system, user, maxTokens });
+  throw new Error('Neither ANTHROPIC_API_KEY nor GEMINI_API_KEY set.');
+}
+
+async function callAnthropic({ system, user, effort, maxTokens, cachePoints }) {
+  const { default: Anthropic } = await import('@anthropic-ai/sdk');
+  const client = new Anthropic();
+
+  // Build system as an array of cacheable text blocks. cachePoints is an array of indices
+  // after which a cache_control breakpoint is placed (max 4 total in the request).
+  const systemBlocks = system.map((text, i) => {
+    const block = { type: 'text', text };
+    if (cachePoints.includes(i)) block.cache_control = { type: 'ephemeral' };
+    return block;
+  });
+
+  const stream = client.messages.stream({
+    model: 'claude-opus-4-7',
+    max_tokens: maxTokens,
+    thinking: { type: 'adaptive' },
+    output_config: { effort },
+    system: systemBlocks,
+    messages: [{ role: 'user', content: user }],
+  });
+
+  const message = await stream.finalMessage();
+  const text = message.content
+    .filter(b => b.type === 'text')
+    .map(b => b.text)
+    .join('\n');
+  const usage = message.usage;
+  return {
+    text,
+    provider: 'anthropic',
+    model: message.model,
+    usage: {
+      input: usage.input_tokens,
+      output: usage.output_tokens,
+      cache_read: usage.cache_read_input_tokens ?? 0,
+      cache_write: usage.cache_creation_input_tokens ?? 0,
+    },
+  };
+}
+
+async function callGemini({ system, user, maxTokens }) {
+  const { GoogleGenAI } = await import('@google/genai');
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const sys = Array.isArray(system) ? system.join('\n\n') : system;
+  const response = await ai.models.generateContent({
+    model: 'gemini-3.1-pro-preview',
+    contents: [{ role: 'user', parts: [{ text: `${sys}\n\n${user}` }] }],
+    config: { temperature: 0.7, maxOutputTokens: maxTokens },
+  });
+  return {
+    text: response.text || '',
+    provider: 'gemini',
+    model: 'gemini-3.1-pro-preview',
+    usage: { input: null, output: null, cache_read: 0, cache_write: 0 },
+  };
+}
+
+// ─── Snapshot collection ─────────────────────────────────────
+function safeExec(cmd) {
+  try { return execSync(cmd, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); }
+  catch { return ''; }
+}
+
+async function buildSnapshot() {
+  const kpis = JSON.parse(await fs.readFile(path.join(STATE_DIR, 'kpis.json'), 'utf8'));
+  const goals = JSON.parse(await fs.readFile(path.join(STATE_DIR, 'goals.json'), 'utf8'));
+
+  // Code stats
+  const totalFiles = parseInt(safeExec(`find src api scripts -type f \\( -name "*.js" -o -name "*.mjs" -o -name "*.astro" -o -name "*.ts" \\) | wc -l`) || '0', 10);
+  const astroPages = parseInt(safeExec(`find src/pages -name "*.astro" | wc -l`) || '0', 10);
+  const whalePages = parseInt(safeExec(`find src/pages/whale -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+  const dailyPages = parseInt(safeExec(`find src/pages/daily -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+  const blogPages = parseInt(safeExec(`find src/pages/blog -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+
+  // Git
+  const branch = safeExec('git rev-parse --abbrev-ref HEAD');
+  const last20Commits = safeExec('git log -20 --pretty=format:"%h %ad %s" --date=short');
+  const commitCount30d = parseInt(safeExec('git log --since=30.days --oneline | wc -l') || '0', 10);
+  const lastCommitDate = safeExec('git log -1 --pretty=format:"%ad" --date=short');
+
+  // Build size if dist exists
+  const distSize = safeExec(`du -sk dist 2>/dev/null | cut -f1`) || null;
+
+  // Open PRs / recent issues (best-effort via gh)
+  const ghIssues = safeExec('gh issue list --state open --limit 20 --json number,title,labels 2>/dev/null') || '[]';
+  const ghPrs = safeExec('gh pr list --state open --limit 10 --json number,title,isDraft 2>/dev/null') || '[]';
+
+  // Past synthesis plan (if any) — pick the most recent across all dates
+  let latestPlan = null;
+  const planPath = await latestHistoryFile('-plan.md');
+  if (planPath) latestPlan = await fs.readFile(planPath, 'utf8');
+
+  const snapshot = {
+    timestamp: new Date().toISOString(),
+    branch,
+    code: {
+      totalSourceFiles: totalFiles,
+      astroPages,
+      whalePages,
+      dailyBriefingPages: dailyPages,
+      blogPages,
+      distSizeKb: distSize ? parseInt(distSize, 10) : null,
+    },
+    git: {
+      commitCount30d,
+      lastCommitDate,
+      recentCommits: last20Commits.split('\n'),
+    },
+    github: {
+      openIssues: JSON.parse(ghIssues),
+      openPRs: JSON.parse(ghPrs),
+    },
+    kpis,
+    goals,
+    latestPlanExists: Boolean(latestPlan),
+  };
+
+  return { snapshot, latestPlan };
+}
+
+function snapshotToMarkdown(snapshot) {
+  const lines = [];
+  lines.push(`# EconPedia Production Snapshot — ${snapshot.timestamp}`);
+  lines.push(`\nBranch: ${snapshot.branch}`);
+  lines.push(`\n## Codebase`);
+  lines.push(`- Source files: ${snapshot.code.totalSourceFiles}`);
+  lines.push(`- Astro pages (total): ${snapshot.code.astroPages}`);
+  lines.push(`  - whale: ${snapshot.code.whalePages}, daily: ${snapshot.code.dailyBriefingPages}, blog: ${snapshot.code.blogPages}`);
+  lines.push(`- Last build dist size: ${snapshot.code.distSizeKb ? snapshot.code.distSizeKb + ' KB' : 'not built'}`);
+
+  lines.push(`\n## Git`);
+  lines.push(`- Commits in last 30d: ${snapshot.git.commitCount30d}`);
+  lines.push(`- Last commit: ${snapshot.git.lastCommitDate}`);
+  lines.push(`- Recent 20 commits:`);
+  for (const c of snapshot.git.recentCommits) lines.push(`  - ${c}`);
+
+  lines.push(`\n## GitHub`);
+  lines.push(`- Open issues: ${snapshot.github.openIssues.length}`);
+  for (const i of snapshot.github.openIssues.slice(0, 10)) lines.push(`  - #${i.number}: ${i.title}`);
+  lines.push(`- Open PRs: ${snapshot.github.openPRs.length}`);
+  for (const p of snapshot.github.openPRs.slice(0, 5)) lines.push(`  - #${p.number}: ${p.title}${p.isDraft ? ' (draft)' : ''}`);
+
+  lines.push(`\n## KPIs (current)`);
+  lines.push('```json');
+  lines.push(JSON.stringify(snapshot.kpis, null, 2));
+  lines.push('```');
+
+  lines.push(`\n## Goals / OKRs`);
+  lines.push('```json');
+  lines.push(JSON.stringify(snapshot.goals, null, 2));
+  lines.push('```');
+
+  return lines.join('\n');
+}
+
+// ─── Phases ─────────────────────────────────────────────────
+async function runSnapshot({ writeFile = true } = {}) {
+  console.error('[snapshot] gathering production state…');
+  const { snapshot, latestPlan } = await buildSnapshot();
+  const md = snapshotToMarkdown(snapshot);
+  if (writeFile) {
+    const ts = stamp();
+    await fs.writeFile(path.join(HISTORY_DIR, `${ts}-snapshot.md`), md, 'utf8');
+    console.error(`[snapshot] wrote history/${ts}-snapshot.md`);
+  }
+  return { snapshot, snapshotMd: md, latestPlan };
+}
+
+async function runCritique({ persona, snapshotMd, latestPlan }) {
+  if (!PERSONAS.includes(persona)) throw new Error(`Unknown persona: ${persona}`);
+  console.error(`[critique:${persona}] running…`);
+
+  const personaPrompt = await fs.readFile(path.join(PERSONAS_DIR, `${persona}.md`), 'utf8');
+  const critiquePrompt = await fs.readFile(path.join(PROMPTS_DIR, 'critique.md'), 'utf8');
+
+  // system: persona (cached) then critique-phase template (cached after snapshot)
+  // user: snapshot + (optional) prior-plan retrospective
+  const system = [personaPrompt, critiquePrompt];
+  const user = [
+    `[Production Snapshot]\n${snapshotMd}`,
+    latestPlan ? `\n[Previous Cycle's Plan — evaluate fairly which promises were kept]\n${latestPlan}` : '',
+    `\n[당신의 임무]\n위 [Persona] 섹션에 정의된 인물의 시선과 출력 형식으로 EconPedia를 평가하라.`,
+  ].join('\n');
+
+  const result = await callLLM({
+    system,
+    user,
+    effort: 'high',
+    maxTokens: 6000,
+    cachePoints: [0, 1], // cache persona + critique template
+  });
+
+  const ts = stamp();
+  const file = path.join(HISTORY_DIR, `${ts}-${persona}.md`);
+  await fs.writeFile(file, `# ${persona} critique — ${ts}\n\n_provider: ${result.provider} (${result.model}) · cache_read: ${result.usage.cache_read} tokens_\n\n---\n\n${result.text}\n`, 'utf8');
+  console.error(`[critique:${persona}] wrote ${path.basename(file)} (in=${result.usage.input}, out=${result.usage.output}, cache_read=${result.usage.cache_read})`);
+  return result.text;
+}
+
+async function runSynthesize({ snapshotMd, critiques, latestPlan }) {
+  console.error('[synthesize] folding 3 critiques into McKinsey plan…');
+  const mckinseyPersona = await fs.readFile(path.join(PERSONAS_DIR, 'mckinsey.md'), 'utf8');
+  const synthPrompt = await fs.readFile(path.join(PROMPTS_DIR, 'synthesize.md'), 'utf8');
+
+  const system = [mckinseyPersona, synthPrompt];
+  const critiquesBlock = Object.entries(critiques)
+    .map(([k, v]) => `\n### ${k} critique\n${v}`)
+    .join('\n');
+  const user = [
+    `[Production Snapshot]\n${snapshotMd}`,
+    `\n[Critiques]\n${critiquesBlock}`,
+    latestPlan ? `\n[Previous Cycle Plan]\n${latestPlan}` : '\n[Previous Cycle Plan]\n(none — this is cycle #1)',
+    `\n위 합성 지침을 따라 매킨지급 합성 플랜을 작성하라.`,
+  ].join('\n');
+
+  const result = await callLLM({
+    system,
+    user,
+    effort: 'xhigh',
+    maxTokens: 10000,
+    cachePoints: [0, 1],
+  });
+
+  const ts = stamp();
+  const file = path.join(HISTORY_DIR, `${ts}-plan.md`);
+  await fs.writeFile(file, `# Synthesis plan — ${ts}\n\n_provider: ${result.provider} (${result.model}) · cache_read: ${result.usage.cache_read} tokens_\n\n---\n\n${result.text}\n`, 'utf8');
+  console.error(`[synthesize] wrote ${path.basename(file)} (in=${result.usage.input}, out=${result.usage.output}, cache_read=${result.usage.cache_read})`);
+  return result.text;
+}
+
+async function runActionize({ plan }) {
+  console.error('[actionize] decomposing plan into GitHub issues…');
+  const actPrompt = await fs.readFile(path.join(PROMPTS_DIR, 'actionize.md'), 'utf8');
+  const result = await callLLM({
+    system: [actPrompt],
+    user: `[Synthesis Plan]\n${plan}\n\n위 지침을 따라 sprint를 GitHub issues로 분해한 JSON 배열만 출력하라. 다른 텍스트 금지.`,
+    effort: 'high',
+    maxTokens: 6000,
+    cachePoints: [0],
+  });
+  // Extract JSON block
+  const m = result.text.match(/```json\s*([\s\S]+?)\s*```/) || result.text.match(/(\[[\s\S]+\])/);
+  const json = m ? m[1] : result.text;
+  let parsed;
+  try { parsed = JSON.parse(json); }
+  catch (e) {
+    console.error('[actionize] WARNING: model output did not parse as JSON. Raw text follows.');
+    process.stdout.write(result.text);
+    return null;
+  }
+  process.stdout.write(JSON.stringify(parsed, null, 2));
+  console.error(`[actionize] emitted ${parsed.length} issues (in=${result.usage.input}, out=${result.usage.output})`);
+  return parsed;
+}
+
+// ─── main ───────────────────────────────────────────────────
+async function main() {
+  const args = parseArgs(process.argv);
+
+  if (args.phase === 'snapshot') {
+    await runSnapshot();
+    return;
+  }
+
+  const { snapshotMd, latestPlan } = await runSnapshot();
+
+  if (args.phase === 'critique') {
+    if (!args.persona) throw new Error('--persona required for --phase critique');
+    await runCritique({ persona: args.persona, snapshotMd, latestPlan });
+    return;
+  }
+
+  if (args.phase === 'synthesize') {
+    const critiques = {};
+    for (const p of PERSONAS) {
+      const f = await latestHistoryFile(`-${p}.md`);
+      if (!f) { console.error(`[synthesize] no ${p} critique in history — run --phase critique --persona ${p} first`); process.exit(1); }
+      critiques[p] = await fs.readFile(f, 'utf8');
+    }
+    await runSynthesize({ snapshotMd, critiques, latestPlan });
+    return;
+  }
+
+  if (args.phase === 'actionize') {
+    const planPath = await latestHistoryFile('-plan.md');
+    if (!planPath) { console.error('[actionize] no plan in history — run --phase synthesize first'); process.exit(1); }
+    const plan = await fs.readFile(planPath, 'utf8');
+    await runActionize({ plan });
+    return;
+  }
+
+  // phase === 'all' (default): snapshot → 3 critiques (parallel) → synthesize
+  const critiques = {};
+  await Promise.all(PERSONAS.map(async p => {
+    critiques[p] = await runCritique({ persona: p, snapshotMd, latestPlan });
+  }));
+  await runSynthesize({ snapshotMd, critiques, latestPlan });
+  console.error('\n[loop] cycle complete. See ops/improvement-loop/state/history/ for outputs.');
+}
+
+main().catch(err => {
+  console.error('[loop] FATAL:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+});

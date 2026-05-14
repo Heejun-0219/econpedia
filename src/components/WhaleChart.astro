@@ -4,9 +4,10 @@ export interface Props {
   transactionDate: string;
   isBuy: boolean;
   ticker: string;
+  currency?: 'USD' | 'KRW';
 }
 
-const { chartData, transactionDate, isBuy, ticker } = Astro.props;
+const { chartData, transactionDate, isBuy, ticker, currency = 'USD' } = Astro.props;
 ---
 
 {chartData !== 'null' && (
@@ -21,7 +22,7 @@ const { chartData, transactionDate, isBuy, ticker } = Astro.props;
 
     <!-- Pass data to client script securely -->
     <script type="application/json" id="whale-chart-data" set:html={chartData}></script>
-    <script type="application/json" id="whale-chart-meta" set:html={JSON.stringify({ txDate: transactionDate, isBuy: isBuy })}></script>
+    <script type="application/json" id="whale-chart-meta" set:html={JSON.stringify({ txDate: transactionDate, isBuy: isBuy, currency })}></script>
     
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script is:inline>
@@ -89,7 +90,9 @@ const { chartData, transactionDate, isBuy, ticker } = Astro.props;
           yaxis: {
             labels: {
               style: { colors: '#64748b' },
-              formatter: (val) => '$' + val.toFixed(1)
+              formatter: (val) => meta.currency === 'KRW'
+                ? '₩' + Math.round(val).toLocaleString('ko-KR')
+                : '$' + val.toFixed(1)
             }
           },
           grid: {

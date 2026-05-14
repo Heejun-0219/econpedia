@@ -1,0 +1,46 @@
+{
+  "_description": "improvement loop가 매 사이클 시작 시 채워 넣는 KPI 스냅샷. 값을 모르면 null. snapshot.js가 가능한 만큼 자동 수집하고, 나머지는 사람이 채운다.",
+  "_lastUpdated": "2026-05-14",
+  "_schemaVersion": 1,
+  "infra": {
+    "build_success_last_30d": null,
+    "deploy_count_last_30d": null,
+    "p0_open_bugs": null,
+    "container_restarts_last_7d": null
+  },
+  "code": {
+    "total_files": null,
+    "total_loc": null,
+    "test_count": 0,
+    "dependencies": null,
+    "outdated_dependencies": null,
+    "build_size_kb": null
+  },
+  "content": {
+    "total_pages": null,
+    "ai_generated_pages": null,
+    "monthly_ai_pages_published": null,
+    "whale_alert_pages": null
+  },
+  "traffic": {
+    "daily_visitors_7d_avg": null,
+    "organic_search_clicks_28d": null,
+    "whale_daily_visitors": null,
+    "avg_session_duration_sec": null,
+    "bounce_rate": null
+  },
+  "engagement": {
+    "newsletter_subscribers": null,
+    "newsletter_open_rate": null,
+    "wallet_authenticated_users": null,
+    "poll_votes_last_7d": null,
+    "time_attack_comments_last_7d": null
+  },
+  "telegram": {
+    "subscribers": null,
+    "whale_pushes_sent_7d": null,
+    "whale_telegram_ctr": null
+  },
+  "fake_metrics_count": 3,
+  "p0_data_loss_bugs": 1
+}

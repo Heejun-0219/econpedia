@@ -1,0 +1,79 @@
+{
+  "_description": "EconPedia OKR — improvement loop가 매 사이클마다 이 목표 대비 진척도를 평가하고, 합성 플랜은 이 목표 달성을 우선한다.",
+  "_lastUpdated": "2026-05-14",
+  "north_star": {
+    "metric": "wallet_authenticated_users",
+    "current": 0,
+    "target_90d": 200,
+    "rationale": "Whale Alert + 지갑 연동(Supabase Auth) 사용자가 EconPedia의 진짜 product-market fit 신호. 페이지뷰·구독자보다 깊은 engagement."
+  },
+  "q2_2026_okrs": [
+    {
+      "objective": "허위 지표를 모두 제거하고 신뢰할 수 있는 분석 기반을 만든다",
+      "key_results": [
+        {
+          "kr": "api/server.js의 가짜 openRate / course_completions / rating 제거",
+          "metric": "fake_metrics_count",
+          "current": 3,
+          "target": 0,
+          "deadline": "2026-05-31"
+        },
+        {
+          "kr": "POLLS_FILE/WALLETS_FILE ReferenceError 픽스",
+          "metric": "p0_data_loss_bugs",
+          "current": 1,
+          "target": 0,
+          "deadline": "2026-05-20"
+        }
+      ]
+    },
+    {
+      "objective": "Whale Alert를 EconPedia 주력 기능으로 키운다",
+      "key_results": [
+        {
+          "kr": "Whale Alert 페이지의 일평균 방문자",
+          "metric": "whale_daily_visitors",
+          "current": null,
+          "target": 50,
+          "deadline": "2026-06-30"
+        },
+        {
+          "kr": "Whale Alert Telegram 푸시 클릭율(CTR)",
+          "metric": "whale_telegram_ctr",
+          "current": null,
+          "target": 0.15,
+          "deadline": "2026-06-30"
+        },
+        {
+          "kr": "Whale Alert에서 지갑 연동(/wallet)으로 funnel conversion",
+          "metric": "whale_to_wallet_conversion",
+          "current": null,
+          "target": 0.05,
+          "deadline": "2026-07-31"
+        }
+      ]
+    },
+    {
+      "objective": "콘텐츠 quantity → quality 전환",
+      "key_results": [
+        {
+          "kr": "월간 AI 자동생성 페이지 수 (현재 110+ 페이지 누적)",
+          "metric": "monthly_ai_pages_published",
+          "current": null,
+          "target_direction": "down",
+          "target": 20,
+          "deadline": "2026-06-30",
+          "rationale": "양에서 질로 — 1편 deep dive가 10편 generic blog보다 가치 있음"
+        },
+        {
+          "kr": "오가닉 검색 트래픽 (Search Console)",
+          "metric": "organic_search_clicks_28d",
+          "current": null,
+          "target_direction": "up",
+          "target": 1000,
+          "deadline": "2026-07-31"
+        }
+      ]
+    }
+  ]
+}
