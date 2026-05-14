@@ -43,6 +43,24 @@ const PROMPTS_DIR = path.join(LOOP_DIR, 'prompts');
 
 const PERSONAS = ['musk', 'mckinsey', 'munger'];
 
+// Filename-safe timestamp: YYYY-MM-DD_HH-MM (UTC). Same date supports many runs/day.
+function stamp() {
+  const d = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}_${pad(d.getUTCHours())}-${pad(d.getUTCMinutes())}`;
+}
+
+// Find the most recent file in HISTORY_DIR matching a suffix (e.g. '-plan.md', '-musk.md').
+// Used so phase=synthesize/actionize picks up the latest artifacts regardless of which run produced them.
+async function latestHistoryFile(suffix) {
+  try {
+    const files = (await fs.readdir(HISTORY_DIR))
+      .filter(f => f.endsWith(suffix))
+      .sort();
+    return files.length ? path.join(HISTORY_DIR, files[files.length - 1]) : null;
+  } catch { return null; }
+}
+
 // ─── CLI args ───────────────────────────────────────────────
 function parseArgs(argv) {
   const out = { phase: 'all', persona: null, dryRun: false, cycle: null };
@@ -154,14 +172,10 @@ async function buildSnapshot() {
   const ghIssues = safeExec('gh issue list --state open --limit 20 --json number,title,labels 2>/dev/null') || '[]';
   const ghPrs = safeExec('gh pr list --state open --limit 10 --json number,title,isDraft 2>/dev/null') || '[]';
 
-  // Past synthesis plan (if any)
+  // Past synthesis plan (if any) — pick the most recent across all dates
   let latestPlan = null;
-  try {
-    const files = (await fs.readdir(HISTORY_DIR)).filter(f => f.endsWith('-plan.md')).sort();
-    if (files.length) {
-      latestPlan = await fs.readFile(path.join(HISTORY_DIR, files[files.length - 1]), 'utf8');
-    }
-  } catch {}
+  const planPath = await latestHistoryFile('-plan.md');
+  if (planPath) latestPlan = await fs.readFile(planPath, 'utf8');
 
   const snapshot = {
     timestamp: new Date().toISOString(),
@@ -232,7 +246,7 @@ async function runSnapshot({ writeFile = true } = {}) {
   const { snapshot, latestPlan } = await buildSnapshot();
   const md = snapshotToMarkdown(snapshot);
   if (writeFile) {
-    const ts = new Date().toISOString().split('T')[0];
+    const ts = stamp();
     await fs.writeFile(path.join(HISTORY_DIR, `${ts}-snapshot.md`), md, 'utf8');
     console.error(`[snapshot] wrote history/${ts}-snapshot.md`);
   }
@@ -263,7 +277,7 @@ async function runCritique({ persona, snapshotMd, latestPlan }) {
     cachePoints: [0, 1], // cache persona + critique template
   });
 
-  const ts = new Date().toISOString().split('T')[0];
+  const ts = stamp();
   const file = path.join(HISTORY_DIR, `${ts}-${persona}.md`);
   await fs.writeFile(file, `# ${persona} critique — ${ts}\n\n_provider: ${result.provider} (${result.model}) · cache_read: ${result.usage.cache_read} tokens_\n\n---\n\n${result.text}\n`, 'utf8');
   console.error(`[critique:${persona}] wrote ${path.basename(file)} (in=${result.usage.input}, out=${result.usage.output}, cache_read=${result.usage.cache_read})`);
@@ -294,7 +308,7 @@ async function runSynthesize({ snapshotMd, critiques, latestPlan }) {
     cachePoints: [0, 1],
   });
 
-  const ts = new Date().toISOString().split('T')[0];
+  const ts = stamp();
   const file = path.join(HISTORY_DIR, `${ts}-plan.md`);
   await fs.writeFile(file, `# Synthesis plan — ${ts}\n\n_provider: ${result.provider} (${result.model}) · cache_read: ${result.usage.cache_read} tokens_\n\n---\n\n${result.text}\n`, 'utf8');
   console.error(`[synthesize] wrote ${path.basename(file)} (in=${result.usage.input}, out=${result.usage.output}, cache_read=${result.usage.cache_read})`);
@@ -344,21 +358,19 @@ async function main() {
   }
 
   if (args.phase === 'synthesize') {
-    // Load latest critiques from history
-    const ts = new Date().toISOString().split('T')[0];
     const critiques = {};
     for (const p of PERSONAS) {
-      const f = path.join(HISTORY_DIR, `${ts}-${p}.md`);
-      try { critiques[p] = await fs.readFile(f, 'utf8'); }
-      catch { console.error(`[synthesize] missing ${p} critique for today — run --phase critique --persona ${p} first`); process.exit(1); }
+      const f = await latestHistoryFile(`-${p}.md`);
+      if (!f) { console.error(`[synthesize] no ${p} critique in history — run --phase critique --persona ${p} first`); process.exit(1); }
+      critiques[p] = await fs.readFile(f, 'utf8');
     }
     await runSynthesize({ snapshotMd, critiques, latestPlan });
     return;
   }
 
   if (args.phase === 'actionize') {
-    const ts = new Date().toISOString().split('T')[0];
-    const planPath = path.join(HISTORY_DIR, `${ts}-plan.md`);
+    const planPath = await latestHistoryFile('-plan.md');
+    if (!planPath) { console.error('[actionize] no plan in history — run --phase synthesize first'); process.exit(1); }
     const plan = await fs.readFile(planPath, 'utf8');
     await runActionize({ plan });
     return;
