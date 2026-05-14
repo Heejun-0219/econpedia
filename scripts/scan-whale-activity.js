@@ -234,6 +234,8 @@ async function scanSecForm4(majorCiks) {
       let sigScore = calculateSignificance(parsed.totalUsd, parsed.direction, parsed.person);
       if (isMajor) sigScore += 20; // 메이저 기업 가산점
 
+      // SEC 10 req/s 제한 보호 — 같은 루프 내 2회 호출 사이 간격
+      await sleep(120);
       const sic = await fetchSecSic(item.cik);
       const totals = formatTotal(parsed.totalUsd);
       signals.push({

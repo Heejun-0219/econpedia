@@ -239,7 +239,7 @@ function renderSimilarCasesBlock(similar) {
   }).join('');
   return `
     <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
-    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률이며, 시장 평균 대비 초과수익이 아닙니다.</strong></p>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
     <div class="similar-cases">${items}</div>`;
 }
 
@@ -299,8 +299,10 @@ const description = "${safeDescription}";
             ${isBuy ? '🟢 장내 매수 (Buy)' : '🔴 장내 매도 (Sell)'}
           </span>
         </p>
-        <p><strong>거래 총액:</strong> ${signal.amountUsd || ''} <span style="opacity:.85">(약 ${signal.amountKrw || ''})</span></p>
-        <p><strong>수량 · 단가:</strong> ${(signal.shares || 0).toLocaleString('en-US')}주 · ${signal.currency === 'KRW' ? `₩${Math.round(signal.pricePerShare || 0).toLocaleString('ko-KR')}` : `$${(signal.pricePerShare || 0).toFixed(2)}`}${signal.priceSource === 'estimate_50000_krw' ? ' <span style="opacity:.6">(단가 추정)</span>' : ''}</p>
+        <p><strong>거래 총액:</strong> ${(signal.amountUsd || signal.amountKrw)
+          ? `${signal.amountUsd || ''}${signal.amountKrw ? ` <span style="opacity:.85">(약 ${signal.amountKrw})</span>` : ''}`
+          : (signal.amount || '집계 불가')}</p>
+        ${signal.shares ? `<p><strong>수량 · 단가:</strong> ${signal.shares.toLocaleString('en-US')}주 · ${signal.currency === 'KRW' ? `₩${Math.round(signal.pricePerShare || 0).toLocaleString('ko-KR')}` : `$${(signal.pricePerShare || 0).toFixed(2)}`}${signal.priceSource === 'estimate_50000_krw' ? ' <span style="opacity:.6">(단가 추정)</span>' : ''}</p>` : ''}
         <p><strong>출처:</strong> ${signal.source}${signal.sector ? ` · ${signal.sector}` : ''}</p>
       </div>
 
@@ -540,8 +542,9 @@ ${rawOutput}
 }
 
 // ─── 텔레그램 Whale Alert Push ───────────────────────────
+// Telegram legacy Markdown (parse_mode: 'Markdown') escape — _ * ` [ ] 만 처리
 function escapeMd(s) {
-  return String(s ?? '').replace(/([_*`\[\]()~>#+=|{}.!\\-])/g, '\\$1');
+  return String(s ?? '').replace(/([_*`\[\]])/g, '\\$1');
 }
 
 async function sendWhaleTelegram(signal, meta, ctx = {}) {
@@ -553,8 +556,10 @@ async function sendWhaleTelegram(signal, meta, ctx = {}) {
   const dir = signal.direction === 'buy' ? '🟢 매수' : '🔴 매도';
   const url = `https://econpedia.dedyn.io/whale/${meta.slug}/?utm_source=telegram&utm_medium=push&utm_campaign=whale`;
 
-  // 총액 라인 — KRW + USD 한 줄에 통일
-  const totalLine = `💵 ${signal.amountUsd || ''} (약 ${signal.amountKrw || ''}) · ${(signal.shares || 0).toLocaleString('en-US')}주`;
+  // 총액 라인 — 새 필드 없으면 legacy `amount` 로 fallback
+  const totalLine = (signal.amountUsd || signal.amountKrw)
+    ? `💵 ${signal.amountUsd || ''}${signal.amountKrw ? ` (약 ${signal.amountKrw})` : ''}${signal.shares ? ` · ${signal.shares.toLocaleString('en-US')}주` : ''}`
+    : `💵 ${signal.amount || ''}`;
 
   // 후행 가격 한 줄 (있을 때만)
   const fu = ctx.followUp?.horizons;
@@ -568,19 +573,19 @@ async function sendWhaleTelegram(signal, meta, ctx = {}) {
   // 비슷한 사례 한 줄 (Top 1)
   const top = ctx.similarCases?.[0];
   const similarLine = top
-    ? `🔁 유사 사례: ${top.market === 'us' ? '🇺🇸' : '🇰🇷'} ${top.company} (${top.date}, ${top.direction === 'buy' ? '매수' : '매도'}) → D+365 ${top.outcomePct365d > 0 ? '+' : ''}${top.outcomePct365d}%`
+    ? `🔁 유사 사례: ${top.market === 'us' ? '🇺🇸' : '🇰🇷'} ${escapeMd(top.company)} (${top.date}, ${top.direction === 'buy' ? '매수' : '매도'}) → D+365 ${top.outcomePct365d > 0 ? '+' : ''}${top.outcomePct365d}%`
     : null;
 
   const lines = [
     `🐋 *Whale Alert — 내부자 거래 포착*`,
     ``,
-    `${flag} *${signal.companyName}* (${signal.ticker})`,
-    `${dir} · ${signal.person}`,
+    `${flag} *${escapeMd(signal.companyName)}* (${escapeMd(signal.ticker)})`,
+    `${dir} · ${escapeMd(signal.person)}`,
     totalLine,
   ];
   if (followLine) lines.push(`📈 ${followLine}`);
   if (similarLine) lines.push(similarLine);
-  lines.push(``, `📰 *${meta.title}*`, ``, `👉 [냉철한 AI 분석 읽기](${url})`);
+  lines.push(``, `📰 *${escapeMd(meta.title)}*`, ``, `👉 [냉철한 AI 분석 읽기](${url})`);
   const text = lines.join('\n');
 
   try {
