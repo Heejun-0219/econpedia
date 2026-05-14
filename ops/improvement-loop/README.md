@@ -103,17 +103,24 @@ npm run loop:actionize                         # 플랜을 GitHub 이슈 JSON으
 
 ## Claude Code 루틴(`/loop` 스킬)으로 자동화
 
-Claude Code의 built-in `/loop`은 슬래시 커맨드를 일정 주기로 반복 호출합니다. 이 저장소는 두 개의 커맨드를 제공:
+Claude Code의 built-in `/loop`은 슬래시 커맨드를 일정 주기로 반복 호출합니다. 이 저장소는 4개 커맨드를 제공:
 
-- `/snapshot` — 무료, LLM 호출 없음. KPI 추이 체크용
-- `/improvement-cycle` — LLM 호출 있는 풀 사이클 (snapshot + critique × 3 + synthesize)
+| 커맨드 | 목적 | 소요·비용 |
+|---|---|---|
+| `/snapshot` | 프로덕션 상태만 캡처 (KPI·git·이슈) | ~30초, $0 |
+| `/improvement-cycle` | snapshot + critique × 3 + synthesize | ~5분, ~$1.5-3 |
+| `/daily` | 상태 점검 → P0/P1 픽스 1개 → draft PR + auto-merge | 5-15분, ~$0.1-0.3 |
+| `/weekly` | improvement-cycle + 보안 회고 + 기술 도입 후보 Slack 알림 | 30-60분, ~$2-5 |
 
 권장 조합:
 
 ```text
 /loop 1h /snapshot                # 활성 sprint 동안 KPI 변화 모니터링
-/loop 7d /improvement-cycle       # 매주 풀 사이클 (GitHub Actions와 중복 가능)
+/loop 24h /daily                  # 매일 P0/P1 1건 자동 픽스 (draft PR + auto-merge)
+/loop 7d /weekly                  # 매주 sprint 회고 + 기술 레이더 (GitHub Actions와 중복 가능)
 ```
+
+`/daily`·`/weekly`의 세부 규약은 각각 `.claude/commands/daily.md`, `.claude/commands/weekly.md` 참조.
 
 ⚠️ `/loop`은 Claude Code 세션이 열려있는 동안만 동작합니다. 세션이 꺼져도 자동으로 계속 돌게 하려면 `.github/workflows/improvement-loop.yml`(GitHub Actions cron)에 의존하세요. 둘은 보완 관계입니다.
 
