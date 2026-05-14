@@ -31,6 +31,17 @@ ops/improvement-loop/
 └── README.md             # 이 파일
 ```
 
+## Phase 종류
+
+| Phase | 빈도 권장 | 비용 | 시간 | 용도 |
+|---|---|---|---|---|
+| `snapshot` | 시간/일 단위 | $0 | 1초 | 프로덕션 상태 캡처만. LLM 호출 없음. |
+| `daily` | **매일** | ~$0.05 (Sonnet 4.6) | 30-60초 | Chief of staff가 어제→오늘 delta + 오늘의 1-action |
+| `critique` × 3 | 주 1회 | ~$0.5-1.5 | 1-2분 × 3 | 머스크·매킨지·멍거 페르소나 평가 |
+| `synthesize` | 주 1회 | ~$0.8-1.5 | 1-2분 | 매킨지급 합성 플랜 + 2주 sprint |
+| `actionize` | 주 1회 | ~$0.3 | 30초 | 플랜 → GitHub Issues JSON |
+| `all` (default) | 주 1회 | ~$1.5-3.0 | 4-7분 | snapshot + critique × 3 (병렬) + synthesize |
+
 ## 실행 방법
 
 ### 0. 사전 준비
@@ -106,13 +117,15 @@ npm run loop:actionize                         # 플랜을 GitHub 이슈 JSON으
 Claude Code의 built-in `/loop`은 슬래시 커맨드를 일정 주기로 반복 호출합니다. 이 저장소는 두 개의 커맨드를 제공:
 
 - `/snapshot` — 무료, LLM 호출 없음. KPI 추이 체크용
-- `/improvement-cycle` — LLM 호출 있는 풀 사이클 (snapshot + critique × 3 + synthesize)
+- `/daily` — 매일용. Sonnet 4.6으로 어제→오늘 delta + 오늘의 1-action ($0.05/회)
+- `/improvement-cycle` — 주간 풀 사이클 (snapshot + critique × 3 + synthesize)
 
 권장 조합:
 
 ```text
-/loop 1h /snapshot                # 활성 sprint 동안 KPI 변화 모니터링
-/loop 7d /improvement-cycle       # 매주 풀 사이클 (GitHub Actions와 중복 가능)
+/loop 1h /snapshot                # 활성 sprint 동안 KPI 변화 모니터링 (무료)
+/loop 1d /daily                   # 매일 09:00 KST chief of staff 점검 (~$0.05/일)
+/loop 7d /improvement-cycle       # 주간 풀 합성 (~$1.5-3.0/주, GitHub Actions와 중복 가능)
 ```
 
 ⚠️ `/loop`은 Claude Code 세션이 열려있는 동안만 동작합니다. 세션이 꺼져도 자동으로 계속 돌게 하려면 `.github/workflows/improvement-loop.yml`(GitHub Actions cron)에 의존하세요. 둘은 보완 관계입니다.

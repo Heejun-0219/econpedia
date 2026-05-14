@@ -79,13 +79,13 @@ function parseArgs(argv) {
 }
 
 // ─── LLM wrapper (Anthropic preferred, Gemini fallback) ─────
-async function callLLM({ system, user, effort = 'high', maxTokens = 8000, cachePoints = [] }) {
-  if (process.env.ANTHROPIC_API_KEY) return callAnthropic({ system, user, effort, maxTokens, cachePoints });
+async function callLLM({ system, user, effort = 'high', maxTokens = 8000, cachePoints = [], model = 'claude-opus-4-7' }) {
+  if (process.env.ANTHROPIC_API_KEY) return callAnthropic({ system, user, effort, maxTokens, cachePoints, model });
   if (process.env.GEMINI_API_KEY) return callGemini({ system, user, maxTokens });
   throw new Error('Neither ANTHROPIC_API_KEY nor GEMINI_API_KEY set.');
 }
 
-async function callAnthropic({ system, user, effort, maxTokens, cachePoints }) {
+async function callAnthropic({ system, user, effort, maxTokens, cachePoints, model }) {
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const client = new Anthropic();
 
@@ -97,14 +97,19 @@ async function callAnthropic({ system, user, effort, maxTokens, cachePoints }) {
     return block;
   });
 
-  const stream = client.messages.stream({
-    model: 'claude-opus-4-7',
+  // Sonnet 4.6 supports adaptive thinking + effort; Haiku 4.5 errors on effort/max.
+  const isSonnetOrOpus = /^(claude-opus|claude-sonnet)-/.test(model);
+  const requestParams = {
+    model,
     max_tokens: maxTokens,
-    thinking: { type: 'adaptive' },
-    output_config: { effort },
     system: systemBlocks,
     messages: [{ role: 'user', content: user }],
-  });
+  };
+  if (isSonnetOrOpus) {
+    requestParams.thinking = { type: 'adaptive' };
+    requestParams.output_config = { effort };
+  }
+  const stream = client.messages.stream(requestParams);
 
   const message = await stream.finalMessage();
   const text = message.content
@@ -315,6 +320,62 @@ async function runSynthesize({ snapshotMd, critiques, latestPlan }) {
   return result.text;
 }
 
+// ─── Daily phase — chief of staff routine ─────────────────────
+async function runDaily({ snapshotMd, latestPlan }) {
+  console.error('[daily] picking today\'s 1-action…');
+  const personaPrompt = await fs.readFile(path.join(PERSONAS_DIR, 'daily-partner.md'), 'utf8');
+  const dailyPrompt = await fs.readFile(path.join(PROMPTS_DIR, 'daily.md'), 'utf8');
+
+  // Pull yesterday's snapshot for delta comparison
+  let yesterdaySnapshot = null;
+  try {
+    const all = (await fs.readdir(HISTORY_DIR)).filter(f => f.endsWith('-snapshot.md')).sort();
+    // Pick the snapshot from at least 12h ago — ignore today's earlier snapshots
+    const cutoff = Date.now() - 12 * 60 * 60 * 1000;
+    for (const f of all.reverse()) {
+      const m = f.match(/^(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})-snapshot\.md$/);
+      if (!m) continue;
+      const [date, hm] = m[1].split('_');
+      const t = new Date(`${date}T${hm.replace('-', ':')}:00Z`).getTime();
+      if (t < cutoff) {
+        yesterdaySnapshot = await fs.readFile(path.join(HISTORY_DIR, f), 'utf8');
+        break;
+      }
+    }
+  } catch {}
+
+  // Last 24h git log + recently closed PRs/issues
+  const last24hCommits = safeExec('git log --since=24.hours --pretty=format:"%h %ad %s" --date=short') || '(none in last 24h)';
+  const recentlyClosedPRs = safeExec('gh pr list --state closed --limit 5 --search "closed:>=' + new Date(Date.now() - 24 * 3600 * 1000).toISOString().split('T')[0] + '" --json number,title 2>/dev/null') || '[]';
+
+  const system = [personaPrompt, dailyPrompt];
+  const user = [
+    `[오늘 스냅샷]\n${snapshotMd}`,
+    yesterdaySnapshot ? `\n[어제(또는 직전) 스냅샷 — delta 계산용]\n${yesterdaySnapshot}` : `\n[어제 스냅샷 없음 — 첫 daily 실행이거나 12h 내 직전 스냅샷 부재]`,
+    `\n[최근 24h 커밋]\n${last24hCommits}`,
+    `\n[최근 24h 닫힌 PR]\n${recentlyClosedPRs}`,
+    latestPlan ? `\n[가장 최근 합성 플랜 — 이번 sprint의 약속]\n${latestPlan}` : '\n[합성 플랜 없음 — 먼저 `/improvement-cycle` 1회 실행 권장]',
+    `\n위 자료만 사용해 페르소나 출력 형식대로 오늘의 1-action을 출력하라.`,
+  ].join('\n');
+
+  const result = await callLLM({
+    system,
+    user,
+    effort: 'medium',
+    maxTokens: 2500,
+    cachePoints: [0, 1],
+    model: 'claude-sonnet-4-6', // cheaper for daily cadence
+  });
+
+  const ts = stamp();
+  const file = path.join(HISTORY_DIR, `${ts}-daily.md`);
+  await fs.writeFile(file, `# Daily — ${ts}\n\n_provider: ${result.provider} (${result.model}) · cache_read: ${result.usage.cache_read} tokens_\n\n---\n\n${result.text}\n`, 'utf8');
+  console.error(`[daily] wrote ${path.basename(file)} (in=${result.usage.input}, out=${result.usage.output}, cache_read=${result.usage.cache_read})`);
+  // Echo to stdout so a Claude Code slash command can render it immediately
+  console.log(result.text);
+  return result.text;
+}
+
 async function runActionize({ plan }) {
   console.error('[actionize] decomposing plan into GitHub issues…');
   const actPrompt = await fs.readFile(path.join(PROMPTS_DIR, 'actionize.md'), 'utf8');
@@ -350,6 +411,11 @@ async function main() {
   }
 
   const { snapshotMd, latestPlan } = await runSnapshot();
+
+  if (args.phase === 'daily') {
+    await runDaily({ snapshotMd, latestPlan });
+    return;
+  }
 
   if (args.phase === 'critique') {
     if (!args.persona) throw new Error('--persona required for --phase critique');
