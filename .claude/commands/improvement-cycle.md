@@ -1,5 +1,5 @@
 ---
-description: Run one EconPedia self-improvement cycle (snapshot → 3 expert critiques → McKinsey synthesis)
+description: Run one full EconPedia self-improvement cycle (snapshot → 3 expert critiques → McKinsey synthesis). Combine with Claude Code's built-in /loop, e.g. `/loop 7d /improvement-cycle`.
 ---
 
 EconPedia self-improvement loop를 한 사이클 실행합니다.

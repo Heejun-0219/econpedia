@@ -101,6 +101,22 @@ npm run loop:actionize                         # 플랜을 GitHub 이슈 JSON으
 
 캐시 히트율 확인: 각 critique 산출물 헤더에 `cache_read: NNN tokens`가 기록됨. 0이면 silent invalidator 의심.
 
+## Claude Code 루틴(`/loop` 스킬)으로 자동화
+
+Claude Code의 built-in `/loop`은 슬래시 커맨드를 일정 주기로 반복 호출합니다. 이 저장소는 두 개의 커맨드를 제공:
+
+- `/snapshot` — 무료, LLM 호출 없음. KPI 추이 체크용
+- `/improvement-cycle` — LLM 호출 있는 풀 사이클 (snapshot + critique × 3 + synthesize)
+
+권장 조합:
+
+```text
+/loop 1h /snapshot                # 활성 sprint 동안 KPI 변화 모니터링
+/loop 7d /improvement-cycle       # 매주 풀 사이클 (GitHub Actions와 중복 가능)
+```
+
+⚠️ `/loop`은 Claude Code 세션이 열려있는 동안만 동작합니다. 세션이 꺼져도 자동으로 계속 돌게 하려면 `.github/workflows/improvement-loop.yml`(GitHub Actions cron)에 의존하세요. 둘은 보완 관계입니다.
+
 ## 사이클 종료 후 사람이 할 일
 
 1. `state/history/YYYY-MM-DD-plan.md`의 **"## Decision: This Cycle's Focus"** 가 합당한가 검토.
