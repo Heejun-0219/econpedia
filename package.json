@@ -9,9 +9,15 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "loop": "node scripts/improvement-loop.mjs",
+    "loop:snapshot": "node scripts/improvement-loop.mjs --phase snapshot",
+    "loop:critique": "node scripts/improvement-loop.mjs --phase critique",
+    "loop:synthesize": "node scripts/improvement-loop.mjs --phase synthesize",
+    "loop:actionize": "node scripts/improvement-loop.mjs --phase actionize"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
     "@astrojs/check": "^0.9.8",
     "@astrojs/react": "^5.0.3",
     "@astrojs/sitemap": "^3.7.2",

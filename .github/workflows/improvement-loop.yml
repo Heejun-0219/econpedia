@@ -1,0 +1,108 @@
+name: 🔁 Self-Improvement Loop
+
+on:
+  schedule:
+    # Every Monday 22:00 UTC = 07:00 KST Tuesday (after weekend, before workweek starts)
+    - cron: '0 22 * * 1'
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: 'Which phase to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - snapshot
+          - critique
+          - synthesize
+      open_issues:
+        description: 'After synthesizing, open GitHub issues for the sprint?'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: improvement-loop
+  cancel-in-progress: false
+
+jobs:
+  run-loop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🟢 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: 🔁 Run improvement loop
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PHASE="${{ github.event.inputs.phase || 'all' }}"
+          echo "▶ phase=$PHASE"
+          node scripts/improvement-loop.mjs --phase "$PHASE"
+
+      - name: 🎫 Actionize → Open GitHub issues (optional)
+        if: ${{ github.event.inputs.open_issues == 'true' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          ISSUES_JSON=$(node scripts/improvement-loop.mjs --phase actionize)
+          echo "$ISSUES_JSON" > /tmp/issues.json
+          node -e '
+            const fs = require("fs");
+            const { execFileSync } = require("child_process");
+            const issues = JSON.parse(fs.readFileSync("/tmp/issues.json", "utf8"));
+            for (const i of issues) {
+              const args = ["issue", "create", "--title", i.title, "--body", i.body];
+              for (const l of i.labels || []) args.push("--label", l);
+              try { execFileSync("gh", args, { stdio: "inherit" }); }
+              catch (e) { console.error("Failed to create:", i.title); }
+            }
+          '
+
+      - name: 💾 Commit loop artifacts
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ops/improvement-loop/state/history/
+          if git diff --cached --quiet; then
+            echo "ℹ️ No new loop artifacts to commit."
+          else
+            git commit -m "chore(loop): weekly improvement-loop cycle"
+            git push
+          fi
+
+      - name: 📨 Notify Slack (optional)
+        if: env.SLACK_WEBHOOK != ''
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          PLAN_PATH="ops/improvement-loop/state/history/${DATE}-plan.md"
+          if [ -f "$PLAN_PATH" ]; then
+            SUMMARY=$(head -40 "$PLAN_PATH" | jq -Rs .)
+            curl -X POST -H 'Content-Type: application/json' \
+              -d "{\"text\": \"🔁 *Improvement loop cycle ${DATE}*\\n\\n${SUMMARY}\"}" \
+              "$SLACK_WEBHOOK"
+          fi
