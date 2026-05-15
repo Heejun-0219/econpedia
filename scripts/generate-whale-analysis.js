@@ -251,7 +251,14 @@ async function saveAnalysisPage(signal, markdownContent, metadata, isin, chartDa
   const bodyMarkdown = cleanMarkdown.replace(/^#\s+(.+)$/m, '').trim();
   // Pre-process **bold** text manually since marked struggles with Korean particles attached to it
   const preProcessedMarkdown = bodyMarkdown.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  const htmlContent = marked.parse(preProcessedMarkdown);
+  let htmlContent = marked.parse(preProcessedMarkdown);
+  // 빈 H2 가드: 헤더만 있고 본문이 비어있는 섹션은 제거 (생성 LLM 응답 누락 대응)
+  const emptyH2Re = /<h2[^>]*>[^<]*<\/h2>\s*(?=<h2|$)/g;
+  const removed = (htmlContent.match(emptyH2Re) || []).length;
+  if (removed > 0) {
+    htmlContent = htmlContent.replace(emptyH2Re, '');
+    console.warn(`  ⚠️  빈 H2 ${removed}개 제거됨 (생성 LLM 응답에서 본문 누락)`);
+  }
 
   const slug = metadata.slug || `whale-${signal.ticker.toLowerCase()}-${signal.date}`;
   const safeTitle = title.replace(/"/g, "'");
