@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "국내 주식 1천만 원 투자했다면 오늘 61만 원이 사라졌습니다. 당분간 무리한 투자는 멈추고 지갑을 지켜야 할 때예요.";
+const date = "2026-05-16";
+const description = "오늘 우리 주식 시장에 큰 비바람이 불었습니다. 미국 주식 시장이 좋지 않았던 영향에 더해, 우리나라 주식 시장(코스피)은 훨씬 더 큰 충격을 받았어요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>오늘 우리 주식 시장에 큰 비바람이 불었습니다. 미국 주식 시장이 좋지 않았던 영향에 더해, 우리나라 주식 시장(코스피)은 훨씬 더 큰 충격을 받았어요. </p>
+<p>여기에 기름값까지 들썩이고 있습니다. 전 세계적으로 기름값이 오르면서 우리 생활비 부담도 커질 조짐을 보이고 있어요. 주가는 떨어지고 물가는 오르는, 직장인에게는 참 고단한 하루입니다.</p>
+<h2>💰 내 지갑 가이드</h2>
+<p>오늘 시장 데이터가 내 지갑에 주는 신호는 명확합니다. <strong>&quot;일단 멈추고, 현금을 지키세요.&quot;</strong></p>
+<ul>
+<li><strong>📊 국내 주식: &quot;오늘은 주식 앱을 지우고 싶은 날&quot;</strong><ul>
+<li>1,000만 원을 국내 주식에 넣어두셨다면, 어제보다 <strong>약 61만 원</strong>이 줄어들었을 거예요. 하락 폭이 매우 큽니다. 지금 당장 &#39;물타기&#39;를 하기보다는 시장이 진정될 때까지 차분히 기다리는 것이 상책입니다.</li>
+</ul>
+</li>
+<li><strong>🇺🇸 미국 주식: &quot;환율 덕분에 그나마 버텼어요&quot;</strong><ul>
+<li>미국 주식에 500만 원 정도 투자 중이라면 <strong>약 4만 5천 원</strong> 정도 손실이 났을 거예요. 주가는 더 많이 빠졌지만, 달러 가치가 오르면서 손실을 어느 정도 메워줬습니다. 국내 주식보다는 상황이 낫지만, 여전히 조심해야 합니다.</li>
+</ul>
+</li>
+<li><strong>⛽ 주유비: &quot;가득 채우려면 1,100원 더 필요해요&quot;</strong><ul>
+<li>기름값이 꽤 올랐습니다. 5만 원어치 기름을 넣을 때마다 <strong>약 1,100원</strong>을 더 내야 하는 꼴이에요. 이번 주말 장거리 운전 계획이 있다면 미리 기름을 채워두는 게 조금이라도 이득입니다.</li>
+</ul>
+</li>
+<li><strong>✈️ 해외여행·직구: &quot;환율 1,500원 시대, 장바구니를 비우세요&quot;</strong><ul>
+<li>환율이 1,497원까지 치솟았습니다. 100만 원을 환전할 때 어제보다 34원 더 드는 수준이라 변동 폭은 작아 보이지만, <strong>절대적인 환율 자체가 너무 높습니다.</strong> 일본 여행이나 해외 직구를 계획했다면 잠시 미루는 것을 권합니다.</li>
+</ul>
+</li>
+<li><strong>🏠 대출 이자: &quot;이건 다행히 그대로예요&quot;</strong><ul>
+<li>다행히 한국은행 기준금리는 변동이 없습니다. 당장 내야 할 대출 이자가 갑자기 늘어날 걱정은 안 하셔도 됩니다.</li>
+</ul>
+</li>
+</ul>
+<p><strong>오늘의 행동 요령:</strong></p>
+<ol>
+<li>주식 계좌 수익률을 보며 괴로워하기보다, 오늘은 맛있는 저녁 한 끼로 스트레스를 푸세요.</li>
+<li>기름값이 더 오르기 전에 미리 주유해 두세요.</li>
+<li>환율이 너무 높으니 해외 결제는 당분간 참아주세요.</li>
+</ol>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
