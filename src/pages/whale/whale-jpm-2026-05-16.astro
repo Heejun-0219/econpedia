@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "JP모건 자산운용 CEO의 29억 원 매도, 투자 관점에서의 의미";
+const date = "2026-05-16";
+const description = "JP모건 자산운용 CEO의 29억 원 매도. 과거 유사 사례의 1년 뒤 평균 주가 변동률과 내 지갑을 지키는 현실적인 대응 가이드를 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 JPMORGAN CHASE &amp; CO</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 JPMORGAN CHASE &amp; CO (JPM)</h3>
+        <p><strong>매매자:</strong> Erdoes Mary E. / CEO Asset &amp; Wealth Management</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $1.98M <span style="opacity:.85">(약 29억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 6,648주 · $298.36</p>
+        <p><strong>출처:</strong> SEC Form 4 · National Commercial Banks</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-17","y":300.37},{"x":"2025-11-18","y":299.41},{"x":"2025-11-19","y":303.27},{"x":"2025-11-20","y":298.38},{"x":"2025-11-21","y":298.02},{"x":"2025-11-24","y":298},{"x":"2025-11-25","y":303},{"x":"2025-11-26","y":307.64},{"x":"2025-11-28","y":313.08},{"x":"2025-12-01","y":308.92},{"x":"2025-12-02","y":307.88},{"x":"2025-12-03","y":312.13},{"x":"2025-12-04","y":316.1},{"x":"2025-12-05","y":315.04},{"x":"2025-12-08","y":315.21},{"x":"2025-12-09","y":300.51},{"x":"2025-12-10","y":310.11},{"x":"2025-12-11","y":317.38},{"x":"2025-12-12","y":318.52},{"x":"2025-12-15","y":320.02},{"x":"2025-12-16","y":315.55},{"x":"2025-12-17","y":314.98},{"x":"2025-12-18","y":313},{"x":"2025-12-19","y":317.21},{"x":"2025-12-22","y":323.09},{"x":"2025-12-23","y":325.93},{"x":"2025-12-24","y":329.17},{"x":"2025-12-26","y":327.91},{"x":"2025-12-29","y":323.75},{"x":"2025-12-30","y":323.42},{"x":"2025-12-31","y":322.22},{"x":"2026-01-02","y":325.48},{"x":"2026-01-05","y":334.04},{"x":"2026-01-06","y":334.61},{"x":"2026-01-07","y":326.99},{"x":"2026-01-08","y":329.79},{"x":"2026-01-09","y":329.19},{"x":"2026-01-12","y":324.49},{"x":"2026-01-13","y":310.9},{"x":"2026-01-14","y":307.87},{"x":"2026-01-15","y":309.26},{"x":"2026-01-16","y":312.47},{"x":"2026-01-20","y":302.74},{"x":"2026-01-21","y":302.04},{"x":"2026-01-22","y":303.63},{"x":"2026-01-23","y":297.72},{"x":"2026-01-26","y":301.04},{"x":"2026-01-27","y":300.31},{"x":"2026-01-28","y":300.77},{"x":"2026-01-29","y":306.42},{"x":"2026-01-30","y":305.89},{"x":"2026-02-02","y":308.14},{"x":"2026-02-03","y":314.85},{"x":"2026-02-04","y":317.27},{"x":"2026-02-05","y":310.16},{"x":"2026-02-06","y":322.4},{"x":"2026-02-09","y":322.1},{"x":"2026-02-10","y":318.28},{"x":"2026-02-11","y":310.82},{"x":"2026-02-12","y":302.64},{"x":"2026-02-13","y":302.55},{"x":"2026-02-17","y":307.13},{"x":"2026-02-18","y":308.78},{"x":"2026-02-19","y":308.05},{"x":"2026-02-20","y":310.79},{"x":"2026-02-23","y":297.67},{"x":"2026-02-24","y":297.3},{"x":"2026-02-25","y":303.3},{"x":"2026-02-26","y":306.13},{"x":"2026-02-27","y":300.3},{"x":"2026-03-02","y":297.56},{"x":"2026-03-03","y":300.26},{"x":"2026-03-04","y":299.39},{"x":"2026-03-05","y":293.55},{"x":"2026-03-06","y":289.48},{"x":"2026-03-09","y":289.92},{"x":"2026-03-10","y":288.73},{"x":"2026-03-11","y":287.52},{"x":"2026-03-12","y":282.89},{"x":"2026-03-13","y":283.44},{"x":"2026-03-16","y":286.16},{"x":"2026-03-17","y":286.89},{"x":"2026-03-18","y":287.74},{"x":"2026-03-19","y":287.97},{"x":"2026-03-20","y":286.56},{"x":"2026-03-23","y":289.91},{"x":"2026-03-24","y":292.4},{"x":"2026-03-25","y":295.42},{"x":"2026-03-26","y":291.66},{"x":"2026-03-27","y":282.84},{"x":"2026-03-30","y":283.77},{"x":"2026-03-31","y":294.16},{"x":"2026-04-01","y":295.38},{"x":"2026-04-02","y":294.6},{"x":"2026-04-06","y":295.45},{"x":"2026-04-07","y":297.4},{"x":"2026-04-08","y":307.97},{"x":"2026-04-09","y":310.33},{"x":"2026-04-10","y":309.87},{"x":"2026-04-13","y":313.68},{"x":"2026-04-14","y":311.12},{"x":"2026-04-15","y":305.93},{"x":"2026-04-16","y":309.95},{"x":"2026-04-17","y":310.29},{"x":"2026-04-20","y":316.99},{"x":"2026-04-21","y":313},{"x":"2026-04-22","y":313.02},{"x":"2026-04-23","y":311.69},{"x":"2026-04-24","y":308.28},{"x":"2026-04-27","y":311.63},{"x":"2026-04-28","y":311.45},{"x":"2026-04-29","y":309.25},{"x":"2026-04-30","y":313.23},{"x":"2026-05-01","y":312.47},{"x":"2026-05-04","y":307.65},{"x":"2026-05-05","y":309.4},{"x":"2026-05-06","y":314.9},{"x":"2026-05-07","y":306.27},{"x":"2026-05-08","y":302.1},{"x":"2026-05-11","y":300},{"x":"2026-05-12","y":304.88},{"x":"2026-05-13","y":300.25},{"x":"2026-05-14","y":299.91},{"x":"2026-05-15","y":297.81}]' transactionDate='2026-05-16' isBuy={false} ticker='JPM' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 297.81 (2026-05-15) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>미국 최대 은행 JP모건 체이스(JPM)의 자산관리 부문을 총괄하는 메리 E. 에르도스(Mary E. Erdoes) CEO가 자사주를 매도했습니다. </p>
+<p>공시된 매도 규모는 <strong>198만 달러</strong>, 한화로 약 <strong>29억 원</strong>입니다. 매도 수량은 <strong>6,648주</strong>이며, 1주당 매도 단가는 <strong>298.36달러</strong>입니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>글로벌 은행의 핵심 임원이 <strong>29억 원</strong> 규모의 주식을 현금화했다는 점은 시장에서 눈여겨볼 만한 대목입니다. </p>
+<p>이번 거래는 최근 발생하여(기준일 5월 15일 종가 <strong>297.80달러</strong>), 아직 후행 데이터(D+30, D+365 등)는 미도래 상태입니다. 향후 시장의 반응을 지속적으로 모니터링해야 합니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거 고위 임원의 대규모 매도 사례와 이후 주가 변동을 살펴봅니다.</p>
+<ul>
+<li><p><strong>사례 1: 엔론 (2001년)</strong></p>
+<ul>
+<li>CEO와 회장이 약 <strong>7,000만 달러</strong>를 매도했습니다. 내부자 매도가 회사 위기의 선행지표가 된 대표적 사례입니다.</li>
+<li>주가 변동: D+30 <strong>-27%</strong>, D+90 <strong>-85%</strong>, D+180 <strong>-100%</strong>, D+365 <strong>-100%</strong> (파산)</li>
+</ul>
+</li>
+<li><p><strong>사례 2: 스노우플레이크 (2021년)</strong></p>
+<ul>
+<li>락업 해제 직후 복수 임원이 약 <strong>8억 달러</strong>를 일괄 매도했습니다. 이후 장기 횡보를 겪었습니다.</li>
+<li>주가 변동: D+30 <strong>-10%</strong>, D+90 <strong>-35%</strong>, D+180 <strong>-55%</strong>, D+365 <strong>-65%</strong></li>
+</ul>
+</li>
+<li><p><strong>사례 3: 펠로톤 (2021년)</strong></p>
+<ul>
+<li>팬데믹 수혜 정점에서 CEO 등 임원진이 약 <strong>5억 달러</strong>를 매도했습니다. 펀더멘털 정점의 시그널로 작용했습니다.</li>
+<li>주가 변동: D+30 <strong>-25%</strong>, D+90 <strong>-50%</strong>, D+180 <strong>-60%</strong>, D+365 <strong>-83%</strong></li>
+</ul>
+</li>
+</ul>
+<p>위 세 가지 과거 유사 사례들의 <strong>D+365 단순 산술평균 변동률은 -82.6%</strong>입니다. 고점에서의 대규모 내부자 매도는 역사적 평균으로 볼 때 주가에 부정적인 경향이 관찰됩니다.</p>
+<h2>💰 투자 관점에서의 시사점</h2>
+<p>JP모건 임원의 매도가 반드시 기업의 펀더멘털 훼손을 의미하는 것은 아닙니다. 임원 개인의 세금 납부나 자산 배분 목적일 가능성도 존재합니다. </p>
+<p>하지만 통계적으로 핵심 임원의 대규모 매도는 주의 깊게 살펴볼 필요가 있는 시그널입니다. </p>
+<p>현재 시점에서 맹목적인 매수나 매도보다는, 전반적인 시장 상황을 고려하여 포트폴리오의 리스크 관리에 유의할 필요가 있습니다. 이 지표를 단기적인 투자 판단의 유일한 근거로 삼기보다는, 보수적인 관점에서 리스크를 점검하는 참고 자료로 활용하시길 권장합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Snowflake (SNOW)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">복수 임원 / 락업 해제 후 일괄 매도 · 2021-12-15 · 약 $800.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-10.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-35.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-65.0%</span></span>
+        </div>
+        <p class="case-narrative">IPO 락업 해제 직후 다수 임원이 매도하면 통상 6~12개월 -30% 이상 디레이팅이 동반.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-12) · 회사 후속: 고밸류에이션 SaaS 디레이팅, 영업 유지되나 주가는 장기 횡보</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Peloton Interactive (PTON)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">John Foley (CEO) / 복수 임원 · 2021-02-05 · 약 $500.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-25.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-50.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-60.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-83.0%</span></span>
+        </div>
+        <p class="case-narrative">팬데믹 수혜 정점에서 임원 대규모 매도. 펀더멘털 정점 시그널로 작용.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-02) · 회사 후속: 리콜·구독자 감소·CEO 교체, 시총 95% 증발</p>
+      </div></div>
+
+      <TradeCTA
+        ticker="JPM"
+        name="JPMORGAN CHASE &amp; CO"
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-jpm-2026-05-16" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
