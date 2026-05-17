@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "주식 계좌는 파랗고, 기름값은 오르는 날이에요",
+      "badge": "2026-05-18 시장 분석",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 기준 약 61만원 하락",
+          "trend": "down"
+        },
+        {
+          "label": "미국 주식",
+          "impact": "500만원 기준 약 4.4만원 하락",
+          "trend": "down"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 1,058원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "대출 이자",
+          "impact": "변동 없이 평화로워요",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
