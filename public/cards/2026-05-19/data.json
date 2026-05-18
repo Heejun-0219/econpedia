@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "국내 주식은 커피 한 잔 벌고, 미국 주식은 치킨 한 마리 빠진 날 🍗",
+      "badge": "2026-05-19 시장 분석",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 기준 약 3만원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "미국 주식",
+          "impact": "500만원 기준 약 3.5만원 빠졌어요",
+          "trend": "down"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 약 450원 아꼈어요",
+          "trend": "down"
+        },
+        {
+          "label": "대출이자",
+          "impact": "변동 없이 평화로워요 😌",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "치솟던 달러가 아주 살짝 숨을 골랐어요. 오늘 주유소 가시는 분들은 기분 좋은 소식이 있네요.";
+const date = "2026-05-19";
+const description = "그동안 무섭게 오르기만 하던 달러 값이 오늘은 아주 살짝 내려앉았습니다. 미국 주식 시장이 잠시 쉬어가는 모습을 보이자, 덩달아 우리 주식 시장은 조금 기운을 차린 모습이에요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>그동안 무섭게 오르기만 하던 달러 값이 오늘은 아주 살짝 내려앉았습니다. 미국 주식 시장이 잠시 쉬어가는 모습을 보이자, 덩달아 우리 주식 시장은 조금 기운을 차린 모습이에요.</p>
+<p>가장 반가운 건 기름값입니다. 국제 유가가 꽤 큰 폭으로 떨어지면서, 고물가에 지친 우리 지갑에 아주 작은 여유가 생겼거든요. 비트코인이나 미국 주식에 투자하신 분들에게는 조금 아쉬운 하루겠지만, 전체적으로는 큰 폭풍 없이 잔잔하게 흘러가는 날입니다.</p>
+<h2>💰 내 지갑 가이드</h2>
+<p>오늘의 데이터를 바탕으로, 지금 당장 체크해야 할 지갑 포인트들입니다.</p>
+<p><strong>1. 해외여행 &amp; 직구: &quot;환전은 조금 더 지켜봐도 좋아요&quot;</strong> ✈️
+달러 값이 어제보다 조금 내리긴 했지만, 여전히 1,480원대로 높은 편입니다. 오늘 <strong>100만 원을 환전한다면 어제보다 딱 63원 정도 아끼는 셈</strong>이라 체감되는 차이는 거의 없어요. 급한 여행이 아니라면 당분간은 장바구니를 비워두고 추이를 지켜보는 것을 추천합니다.</p>
+<p><strong>2. 주식 &amp; 코인 투자: &quot;국내 주식은 방긋, 해외 주식은 움찔&quot;</strong> 📊</p>
+<ul>
+<li><strong>국내 주식:</strong> 내 계좌에 <strong>1,000만 원어치 주식이 있다면 오늘 약 3만 원 정도 수익</strong>이 붙었을 거예요. 오랜만에 들려온 기분 좋은 소식이네요.</li>
+<li><strong>미국 주식 &amp; 코인:</strong> 미국 주식에 <strong>500만 원을 넣어두셨다면 약 3만 5천 원 정도</strong>, 비트코인에 <strong>100만 원을 투자 중이라면 약 1만 2천 원 정도</strong> 자산이 줄어들었을 것으로 보여요. 자산 가치가 조금 깎였으니 오늘은 앱을 자주 열어보기보다 본업에 집중하는 게 정신 건강에 이롭습니다.</li>
+</ul>
+<p><strong>3. 생활비 &amp; 대출: &quot;주유소 가기 딱 좋은 날&quot;</strong> ⛽
+오늘 퇴근길에 기름이 떨어졌다면 망설이지 말고 주유소에 들르세요. <strong>5만 원어치 기름을 넣을 때 어제보다 약 453원 정도 저렴</strong>해졌거든요. 대출 금리는 다행히 변동 없이 평온한 상태를 유지하고 있어, 이자 걱정은 잠시 내려놓으셔도 좋습니다.</p>
+<hr>
+<p>오늘 하루는 큰 걱정 없이 보내셔도 괜찮을 것 같아요. 급격한 변화보다는 소소한 절약이 눈에 띄는 날이니까요.</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
