@@ -1,6 +1,6 @@
 {
   "_description": "improvement loop가 매 사이클 시작 시 채워 넣는 KPI 스냅샷. 값을 모르면 null. snapshot.js가 가능한 만큼 자동 수집하고, 나머지는 사람이 채운다.",
-  "_lastUpdated": "2026-05-14",
+  "_lastUpdated": "2026-05-19",
   "_schemaVersion": 1,
   "infra": {
     "build_success_last_30d": null,
@@ -41,6 +41,6 @@
     "whale_pushes_sent_7d": null,
     "whale_telegram_ctr": null
   },
-  "fake_metrics_count": 3,
-  "p0_data_loss_bugs": 1
+  "fake_metrics_count": 0,
+  "p0_data_loss_bugs": 0
 }

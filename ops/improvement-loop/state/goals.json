@@ -1,6 +1,6 @@
 {
   "_description": "EconPedia OKR — improvement loop가 매 사이클마다 이 목표 대비 진척도를 평가하고, 합성 플랜은 이 목표 달성을 우선한다.",
-  "_lastUpdated": "2026-05-14",
+  "_lastUpdated": "2026-05-19",
   "north_star": {
     "metric": "wallet_authenticated_users",
     "current": 0,
@@ -14,16 +14,18 @@
         {
           "kr": "api/server.js의 가짜 openRate / course_completions / rating 제거",
           "metric": "fake_metrics_count",
-          "current": 3,
+          "current": 0,
           "target": 0,
-          "deadline": "2026-05-31"
+          "deadline": "2026-05-31",
+          "_resolvedBy": "PR #21 (a61cfdf)"
         },
         {
           "kr": "POLLS_FILE/WALLETS_FILE ReferenceError 픽스",
           "metric": "p0_data_loss_bugs",
-          "current": 1,
+          "current": 0,
           "target": 0,
-          "deadline": "2026-05-20"
+          "deadline": "2026-05-20",
+          "_resolvedBy": "PR #18 (d4da182)"
         }
       ]
     },

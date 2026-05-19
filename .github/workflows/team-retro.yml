@@ -12,9 +12,12 @@ name: 🔁 Team Retro (biweekly)
 # 3. 첫 실행은 workflow_dispatch 로 수동 검증.
 
 on:
-  schedule:
-    # 매주 토 08 UTC = 17 KST (격주 가드는 아래 jobs.if 에서)
-    - cron: '0 8 * * 6'
+  # cron 비활성화 — 로컬 Claude Code 에서 `/loop 14d /team-retro` 로 대체.
+  # 격주 가드(ISO week 홀수)는 schedule 트리거 시에만 의미가 있어, schedule 을 끄면
+  # workflow_dispatch 의 force=true 경로만 활성. 로컬 /loop 가 빈도를 책임짐.
+  # schedule:
+  #   # 매주 토 08 UTC = 17 KST (격주 가드는 아래 jobs.if 에서)
+  #   - cron: '0 8 * * 6'
   workflow_dispatch:
     inputs:
       force:

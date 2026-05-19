@@ -11,9 +11,11 @@ name: 🌅 Daily Cycle (3x/day)
 # 4. 첫 실행은 수동 (workflow_dispatch) 으로 검증 후 cron 활성.
 
 on:
-  schedule:
-    # 0 UTC = 09 KST | 8 UTC = 17 KST | 16 UTC = 01 KST (다음날)
-    - cron: '0 0,8,16 * * *'
+  # cron 비활성화 — 로컬 Claude Code 에서 `/loop 8h /daily` 로 대체.
+  # 복원하려면 아래 schedule 블록 주석을 풀고 workflow_dispatch 와 같이 사용.
+  # schedule:
+  #   # 0 UTC = 09 KST | 8 UTC = 17 KST | 16 UTC = 01 KST (다음날)
+  #   - cron: '0 0,8,16 * * *'
   workflow_dispatch:
     inputs:
       slot:
