@@ -356,8 +356,10 @@ const server = createServer(async (req, res) => {
     return sendJSON(res, 200, { success: true, results });
   }
 
-  // ── POST /api/poll (투표 제출) ────────────────────────────────
+  // ── POST /api/poll (투표 제출) — IP당 분당 5회 제한 ──────────────
   if (req.method === 'POST' && path.startsWith('/api/poll/')) {
+    if (isRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
+
     const pollId = path.replace('/api/poll/', '').split('?')[0];
     if (!pollId) return sendJSON(res, 400, { error: 'Invalid poll id' });
 
@@ -370,7 +372,7 @@ const server = createServer(async (req, res) => {
 
     if (!polls[pollId]) polls[pollId] = {};
     polls[pollId][option] = (polls[pollId][option] || 0) + 1;
-    
+
     return sendJSON(res, 200, { success: true, results: polls[pollId] });
   }
 
