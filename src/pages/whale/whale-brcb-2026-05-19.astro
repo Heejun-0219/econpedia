@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "1,058억 원의 커피값 베팅, 큰손은 왜 지금 지갑을 열었을까?";
+const date = "2026-05-19";
+const description = "1,058억 원 규모의 BRCB 장내 매수. 이 거대 자금 흐름에 담긴 핵심 시그널과 내 지갑에 미칠 영향을 숫자로 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 Black Rock Coffee Bar, Inc.</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 Black Rock Coffee Bar, Inc. (BRCB)</h3>
+        <p><strong>매매자:</strong> Cynosure Group, LLC</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $72.99M <span style="opacity:.85">(약 1,058억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 13,642,712주 · $5.35</p>
+        <p><strong>출처:</strong> SEC Form 4 · Retail-Eating & Drinking Places</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-19","y":19.55},{"x":"2025-11-20","y":19.55},{"x":"2025-11-21","y":19.91},{"x":"2025-11-24","y":20.27},{"x":"2025-11-25","y":20.79},{"x":"2025-11-26","y":22.16},{"x":"2025-11-28","y":22.75},{"x":"2025-12-01","y":21.62},{"x":"2025-12-02","y":24.13},{"x":"2025-12-03","y":24.68},{"x":"2025-12-04","y":24.3},{"x":"2025-12-05","y":24.27},{"x":"2025-12-08","y":23.1},{"x":"2025-12-09","y":23.49},{"x":"2025-12-10","y":24.2},{"x":"2025-12-11","y":24.02},{"x":"2025-12-12","y":23.35},{"x":"2025-12-15","y":22.35},{"x":"2025-12-16","y":21.18},{"x":"2025-12-17","y":21.45},{"x":"2025-12-18","y":22.34},{"x":"2025-12-19","y":22.69},{"x":"2025-12-22","y":23.64},{"x":"2025-12-23","y":23.03},{"x":"2025-12-24","y":23.34},{"x":"2025-12-26","y":23.5},{"x":"2025-12-29","y":23.15},{"x":"2025-12-30","y":22.97},{"x":"2025-12-31","y":22.25},{"x":"2026-01-02","y":22.31},{"x":"2026-01-05","y":22.1},{"x":"2026-01-06","y":23.01},{"x":"2026-01-07","y":22.01},{"x":"2026-01-08","y":22.04},{"x":"2026-01-09","y":21.49},{"x":"2026-01-12","y":21.44},{"x":"2026-01-13","y":20.45},{"x":"2026-01-14","y":20.62},{"x":"2026-01-15","y":21.01},{"x":"2026-01-16","y":19.58},{"x":"2026-01-20","y":18.21},{"x":"2026-01-21","y":17.81},{"x":"2026-01-22","y":18},{"x":"2026-01-23","y":17.67},{"x":"2026-01-26","y":17.35},{"x":"2026-01-27","y":16.78},{"x":"2026-01-28","y":15.8},{"x":"2026-01-29","y":15.39},{"x":"2026-01-30","y":14.91},{"x":"2026-02-02","y":15.49},{"x":"2026-02-03","y":14.35},{"x":"2026-02-04","y":15.36},{"x":"2026-02-05","y":14.46},{"x":"2026-02-06","y":15.82},{"x":"2026-02-09","y":15.62},{"x":"2026-02-10","y":15.36},{"x":"2026-02-11","y":14.62},{"x":"2026-02-12","y":14.28},{"x":"2026-02-13","y":14.42},{"x":"2026-02-17","y":13.71},{"x":"2026-02-18","y":13.31},{"x":"2026-02-19","y":12.68},{"x":"2026-02-20","y":12.99},{"x":"2026-02-23","y":12.05},{"x":"2026-02-24","y":11.61},{"x":"2026-02-25","y":12.61},{"x":"2026-02-26","y":13.35},{"x":"2026-02-27","y":13.34},{"x":"2026-03-02","y":13.79},{"x":"2026-03-03","y":14.8},{"x":"2026-03-04","y":16.22},{"x":"2026-03-05","y":16.45},{"x":"2026-03-06","y":16.63},{"x":"2026-03-09","y":15.76},{"x":"2026-03-10","y":16.03},{"x":"2026-03-11","y":16.71},{"x":"2026-03-12","y":16.23},{"x":"2026-03-13","y":16.11},{"x":"2026-03-16","y":16.2},{"x":"2026-03-17","y":17.16},{"x":"2026-03-18","y":16.42},{"x":"2026-03-19","y":16.32},{"x":"2026-03-20","y":14.98},{"x":"2026-03-23","y":14.86},{"x":"2026-03-24","y":14.69},{"x":"2026-03-25","y":14.85},{"x":"2026-03-26","y":13.54},{"x":"2026-03-27","y":12.27},{"x":"2026-03-30","y":12.26},{"x":"2026-03-31","y":12.92},{"x":"2026-04-01","y":13.14},{"x":"2026-04-02","y":13.18},{"x":"2026-04-06","y":13.72},{"x":"2026-04-07","y":13.65},{"x":"2026-04-08","y":14.46},{"x":"2026-04-09","y":14.84},{"x":"2026-04-10","y":14.14},{"x":"2026-04-13","y":13.35},{"x":"2026-04-14","y":14.12},{"x":"2026-04-15","y":14.36},{"x":"2026-04-16","y":14.26},{"x":"2026-04-17","y":14.94},{"x":"2026-04-20","y":14.48},{"x":"2026-04-21","y":14.05},{"x":"2026-04-22","y":13.45},{"x":"2026-04-23","y":12.7},{"x":"2026-04-24","y":13.06},{"x":"2026-04-27","y":12.75},{"x":"2026-04-28","y":12.23},{"x":"2026-04-29","y":12.24},{"x":"2026-04-30","y":12.28},{"x":"2026-05-01","y":12.08},{"x":"2026-05-04","y":11.38},{"x":"2026-05-05","y":12.05},{"x":"2026-05-06","y":12.1},{"x":"2026-05-07","y":11.46},{"x":"2026-05-08","y":11.48},{"x":"2026-05-11","y":10.99},{"x":"2026-05-12","y":10.97},{"x":"2026-05-13","y":7.65},{"x":"2026-05-14","y":7.16},{"x":"2026-05-15","y":7.01},{"x":"2026-05-18","y":6.91}]' transactionDate='2026-05-19' isBuy={true} ticker='BRCB' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 6.68 (2026-05-19) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>미국의 커피 브랜드 <strong>&#39;블랙 록 커피 바(Black Rock Coffee Bar, BRCB)&#39;</strong>에 <strong>1,058억 원($72.99M)</strong> 규모의 막대한 자금이 유입되었습니다. </p>
+<p>매수자는 대형 투자사인 <strong>&#39;사이노슈어 그룹(Cynosure Group, LLC)&#39;</strong>입니다. 이들은 BRCB 주식 <strong>13,642,712주</strong>를 주당 <strong>$5.35</strong>에 단번에 사들였습니다. 대규모 자금이 유입된 배경에 시장의 이목이 쏠리고 있습니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>가장 눈에 띄는 부분은 매수 단가와 현재 주가의 차이입니다. 사이노슈어 그룹의 매수 단가는 <strong>$5.35</strong>이나, 2026년 5월 19일 공시 기준일 종가는 <strong>$6.68</strong>를 기록했습니다. </p>
+<p>다만, 이 거래 이후 한 달(D+30)이나 1년(D+365)이 지나지 않아 장기적인 결과는 아직 <strong>&#39;미도래&#39;</strong> 상태입니다. 현재의 주가 흐름이 장기적으로 이어질지는 과거 유사 사례를 통해 유추해 볼 수 있습니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>기업의 핵심 관계자나 대형 투자자가 주식을 대거 사들인 3가지 과거 사례를 살펴봤습니다. </p>
+<p>첫 번째는 2016년 2월 11일, <strong>JP모건 체이스(JPM, US)</strong>의 제이미 다이먼 CEO가 약 <strong>$26.6M</strong>을 매수한 사례입니다. 시장 패닉기에 이루어진 이 거래 이후 주가는 <strong>D+30에 12.5%</strong>, <strong>D+90에 21%</strong>, <strong>D+180에 25%</strong>, 그리고 <strong>D+365에는 75%</strong> 상승했습니다. </p>
+<p>두 번째는 2008년 4월 15일, <strong>리먼 브라더스(LEH, US)</strong>의 딕 풀드 CEO가 약 <strong>$3.0M</strong>을 매수한 사례입니다. 주가는 <strong>D+30에 -8%</strong>, <strong>D+90에 -45%</strong>로 하락했으며, <strong>D+180과 D+365에는 -100%</strong>를 기록했습니다. 대규모 매수가 항상 긍정적인 결과로 이어지지는 않는다는 것을 보여주는 대표적인 반례입니다.</p>
+<p>세 번째는 2022년 9월 30일, 한국의 <strong>두산에너빌리티(034020, KR)</strong> 오너 일가가 약 <strong>$15.0M</strong>을 매수한 경우입니다. 주가는 <strong>D+30에 5%</strong>, <strong>D+90에 18%</strong>, <strong>D+180에 35%</strong>, <strong>D+365에는 70%</strong> 상승했습니다. </p>
+<p>이 3가지 사례의 1년 뒤(D+365) 단순 산술평균 변동률은 <strong>약 15% 상승</strong>입니다. 역사적인 평균은 긍정적이지만, 리먼 브라더스의 사례처럼 투자금이 손실될 위험도 분명히 존재합니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>유명 투자사가 대규모 자금을 집행했다고 해서 맹목적으로 추종하는 것은 위험합니다. 앞서 살펴본 바와 같이, 대형 투자자의 매수가 잘못된 베팅으로 끝난 사례도 존재합니다.</p>
+<p>다만, 대규모 자금이 실생활과 밀접한 소비재 기업에 유입되었다는 점은 긍정적인 시그널로 해석될 수 있습니다. 이번 거래 공시는 확정적인 미래 예측이 아니라, 과거 유사한 상황에서 통계적으로 1년 뒤 <strong>약 15% 상승</strong>하는 경향이 있었다는 보조 지표로 활용하시길 바랍니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Lehman Brothers (LEH)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Dick Fuld (CEO) · 2008-04-15 · 약 $3.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-45.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 자사주 매수가 항상 '바닥 시그널'은 아님을 보여주는 가장 유명한 반례.</p>
+        <p class="case-source">📎 SEC Form 4 / 공공 파산 기록 · 회사 후속: 2008-09 챕터 11 파산보호 신청. 보통주 가치 사실상 0.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 두산에너빌리티 (034020)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">박정원 회장 외 친족 / 그룹 오너 일가 · 2022-09-30 · 약 $15.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+5.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+18.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+70.0%</span></span>
+        </div>
+        <p class="case-narrative">사업구조 턴어라운드 국면에서 오너 일가 매수. 원전 수주 기대와 맞물려 24개월 상승 추세.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2022-09) · 회사 후속: 원전 수주 확대, 영업이익 흑전, 그룹 재무구조 개선</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 Black Rock Coffee Bar, Inc. 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=BRCB">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="BRCB"
+        name="Black Rock Coffee Bar, Inc."
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-brcb-2026-05-19" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

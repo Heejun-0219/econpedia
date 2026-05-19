@@ -1,5 +1,47 @@
 [
   {
+    "slug": "whale-frpt-2026-05-19",
+    "title": "프레시펫(FRPT) CEO의 6억 원 규모 주식 매도 분석",
+    "excerpt": "프레시펫 CEO의 6억 원 규모 자사주 매도. 과거 엔론, 펠로톤 사례와 비교해 내 주식 계좌에 미칠 영향을 숫자로 명확히 분석합니다.",
+    "date": "2026-05-19",
+    "ticker": "FRPT",
+    "companyName": "Freshpet, Inc.",
+    "category": "insider",
+    "market": "us",
+    "isBuy": false,
+    "person": "Cyr William B. / Chief Executive Officer",
+    "amount": "$445K (약 6억 원)",
+    "significance": 50
+  },
+  {
+    "slug": "whale-pcsa-2026-05-19",
+    "title": "제약사 CEO의 794만 원 주식 쇼핑, 내 지갑엔 어떤 의미일까?",
+    "excerpt": "PCSA CEO의 794만 원 자사주 매수, 과연 바닥 시그널일까요? 과거 유사 사례를 통해 내 지갑에 미칠 영향을 숫자로 분석해 드립니다.",
+    "date": "2026-05-19",
+    "ticker": "PCSA",
+    "companyName": "Processa Pharmaceuticals, Inc.",
+    "category": "insider",
+    "market": "us",
+    "isBuy": true,
+    "person": "Ng George K / Chief Executive Officer",
+    "amount": "$5K (약 794만 원)",
+    "significance": 60
+  },
+  {
+    "slug": "whale-brcb-2026-05-19",
+    "title": "1,058억 원의 커피값 베팅, 큰손은 왜 지금 지갑을 열었을까?",
+    "excerpt": "1,058억 원 규모의 BRCB 장내 매수. 이 거대 자금 흐름에 담긴 핵심 시그널과 내 지갑에 미칠 영향을 숫자로 확인하세요.",
+    "date": "2026-05-19",
+    "ticker": "BRCB",
+    "companyName": "Black Rock Coffee Bar, Inc.",
+    "category": "insider",
+    "market": "us",
+    "isBuy": true,
+    "person": "Cynosure Group, LLC",
+    "amount": "$72.99M (약 1,058억 원)",
+    "significance": 70
+  },
+  {
     "slug": "whale-226330-2026-05-18",
     "title": "신테카바이오 대표이사, 자사주 2억 원 매수 분석",
     "excerpt": "신테카바이오 대표이사가 2억 원 규모의 자사주를 매수했습니다. 내 지갑을 열어도 될 신호인지 과거 유사 사례를 통해 냉철하게 분석합니다.",

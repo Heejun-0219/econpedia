@@ -1,0 +1,258 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "제약사 CEO의 794만 원 주식 쇼핑, 내 지갑엔 어떤 의미일까?";
+const date = "2026-05-19";
+const description = "PCSA CEO의 794만 원 자사주 매수, 과연 바닥 시그널일까요? 과거 유사 사례를 통해 내 지갑에 미칠 영향을 숫자로 분석해 드립니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 Processa Pharmaceuticals, Inc.</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 Processa Pharmaceuticals, Inc. (PCSA)</h3>
+        <p><strong>매매자:</strong> Ng George K / Chief Executive Officer</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $5K <span style="opacity:.85">(약 794만 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 1,843주 · $2.97</p>
+        <p><strong>출처:</strong> SEC Form 4 · Pharmaceutical Preparations</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-19","y":6.97},{"x":"2025-11-20","y":6.82},{"x":"2025-11-21","y":6.32},{"x":"2025-11-24","y":6.57},{"x":"2025-11-25","y":6.05},{"x":"2025-11-26","y":6.28},{"x":"2025-11-28","y":6.47},{"x":"2025-12-01","y":6.68},{"x":"2025-12-02","y":6.55},{"x":"2025-12-03","y":6.68},{"x":"2025-12-04","y":6.78},{"x":"2025-12-05","y":6.95},{"x":"2025-12-08","y":7.1},{"x":"2025-12-09","y":7.63},{"x":"2025-12-10","y":6.93},{"x":"2025-12-11","y":6.8},{"x":"2025-12-12","y":6.75},{"x":"2025-12-15","y":3.55},{"x":"2025-12-16","y":3},{"x":"2025-12-17","y":6.68},{"x":"2025-12-18","y":3.9},{"x":"2025-12-19","y":3.78},{"x":"2025-12-22","y":3.6},{"x":"2025-12-23","y":3.36},{"x":"2025-12-24","y":3.51},{"x":"2025-12-26","y":3.92},{"x":"2025-12-29","y":3.41},{"x":"2025-12-30","y":2.93},{"x":"2025-12-31","y":2.88},{"x":"2026-01-02","y":2.93},{"x":"2026-01-05","y":3.23},{"x":"2026-01-06","y":3.38},{"x":"2026-01-07","y":3.43},{"x":"2026-01-08","y":3.46},{"x":"2026-01-09","y":3.36},{"x":"2026-01-12","y":3.14},{"x":"2026-01-13","y":3.22},{"x":"2026-01-14","y":3.46},{"x":"2026-01-15","y":3.71},{"x":"2026-01-16","y":3.54},{"x":"2026-01-20","y":3.24},{"x":"2026-01-21","y":3.13},{"x":"2026-01-22","y":3.17},{"x":"2026-01-23","y":3.26},{"x":"2026-01-26","y":3.13},{"x":"2026-01-27","y":3.19},{"x":"2026-01-28","y":3.14},{"x":"2026-01-29","y":3.14},{"x":"2026-01-30","y":3},{"x":"2026-02-02","y":2.63},{"x":"2026-02-03","y":2.44},{"x":"2026-02-04","y":2.38},{"x":"2026-02-05","y":2.17},{"x":"2026-02-06","y":2.38},{"x":"2026-02-09","y":2.26},{"x":"2026-02-10","y":2.33},{"x":"2026-02-11","y":2.45},{"x":"2026-02-12","y":2.29},{"x":"2026-02-13","y":2.22},{"x":"2026-02-17","y":2.18},{"x":"2026-02-18","y":2.31},{"x":"2026-02-19","y":2.28},{"x":"2026-02-20","y":2.1},{"x":"2026-02-23","y":1.85},{"x":"2026-02-24","y":1.94},{"x":"2026-02-25","y":2.1},{"x":"2026-02-26","y":2.23},{"x":"2026-02-27","y":2.17},{"x":"2026-03-02","y":2.28},{"x":"2026-03-03","y":2.54},{"x":"2026-03-04","y":2.8},{"x":"2026-03-05","y":2.85},{"x":"2026-03-06","y":2.83},{"x":"2026-03-09","y":2.8},{"x":"2026-03-10","y":2.92},{"x":"2026-03-11","y":2.88},{"x":"2026-03-12","y":2.76},{"x":"2026-03-13","y":2.95},{"x":"2026-03-16","y":3.12},{"x":"2026-03-17","y":3.16},{"x":"2026-03-18","y":3.16},{"x":"2026-03-19","y":2.33},{"x":"2026-03-20","y":2.32},{"x":"2026-03-23","y":2.35},{"x":"2026-03-24","y":2.33},{"x":"2026-03-25","y":2.3},{"x":"2026-03-26","y":2.24},{"x":"2026-03-27","y":2.43},{"x":"2026-03-30","y":2.72},{"x":"2026-03-31","y":2.53},{"x":"2026-04-01","y":2.6},{"x":"2026-04-02","y":2.77},{"x":"2026-04-06","y":2.8},{"x":"2026-04-07","y":2.87},{"x":"2026-04-08","y":3.02},{"x":"2026-04-09","y":2.97},{"x":"2026-04-10","y":2.77},{"x":"2026-04-13","y":2.87},{"x":"2026-04-14","y":2.87},{"x":"2026-04-15","y":2.96},{"x":"2026-04-16","y":3.18},{"x":"2026-04-17","y":3.1},{"x":"2026-04-20","y":2.71},{"x":"2026-04-21","y":2.77},{"x":"2026-04-22","y":3.07},{"x":"2026-04-23","y":2.99},{"x":"2026-04-24","y":2.98},{"x":"2026-04-27","y":2.98},{"x":"2026-04-28","y":2.85},{"x":"2026-04-29","y":2.65},{"x":"2026-04-30","y":2.7},{"x":"2026-05-01","y":2.55},{"x":"2026-05-04","y":2.68},{"x":"2026-05-05","y":2.66},{"x":"2026-05-06","y":2.75},{"x":"2026-05-07","y":2.87},{"x":"2026-05-08","y":2.73},{"x":"2026-05-11","y":2.69},{"x":"2026-05-12","y":2.56},{"x":"2026-05-13","y":2.55},{"x":"2026-05-14","y":3.07},{"x":"2026-05-15","y":2.96},{"x":"2026-05-18","y":2.75}]' transactionDate='2026-05-19' isBuy={true} ticker='PCSA' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 2.61 (2026-05-19) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>미국의 제약 회사인 <strong>Processa Pharmaceuticals, Inc. (PCSA)</strong>의 최고경영자(CEO) Ng George K가 자사주를 장내 매수했습니다. </p>
+<p>매수 수량은 <strong>1,843주</strong>, 주당 단가는 <strong>$2.97</strong>입니다. 거래 총액은 <strong>$5K</strong>, 우리 돈으로 <strong>약 794만 원</strong> 규모입니다. </p>
+<p>거대 기업의 CEO가 움직인 자금 치고는 비교적 소박한 규모입니다. 하지만 회사의 내부 사정을 가장 잘 아는 수장이 직접 회사 주식을 매수했다는 점은 흥미로운 이벤트로 해석할 수 있습니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>CEO의 매수 단가는 <strong>$2.97</strong>였지만, 공시가 발표된 2026년 5월 19일 기준 종가는 <strong>$2.61</strong>(2.609999895095825달러)로 마감했습니다. 즉, CEO가 주식을 산 이후 현재 시점까지 주가는 오히려 하락한 상태입니다. </p>
+<p>(현재 D+30, 90, 180, 365일 후행 주가 데이터는 아직 도래하지 않았습니다.)</p>
+<p>이런 상황에서 이 주식을 따라 사는 것이 매력적인 타이밍인지, 과거의 비슷한 사례를 통해 냉정하게 따져보겠습니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거 금융 시장에서 기업의 핵심 인물이 대규모 자금을 투입해 주식을 매수했던 유사 사례 3건을 살펴보겠습니다. 
+<em>(주의: 아래 언급되는 수익률은 시장 평균 변동을 제거하지 않은 <strong>단순 raw 변동률</strong>입니다.)</em></p>
+<ul>
+<li><p><strong>리먼 브라더스 (LEH) - 딕 풀드 CEO (2008년 4월)</strong>
+CEO가 약 <strong>$3.0M</strong>을 들여 자사주를 매수했습니다. 하지만 주가는 <strong>D+30일에 -8%, D+90일에 -45%, D+180일과 D+365일에는 -100%</strong>를 기록했습니다. CEO의 매수가 항상 &#39;바닥&#39;을 의미하지 않는다는 반례입니다.</p>
+</li>
+<li><p><strong>JP모건 체이스 (JPM) - 제이미 다이먼 CEO (2016년 2월)</strong>
+시장 패닉기에 CEO가 약 <strong>$26.6M</strong>을 투입해 주식을 매수했습니다. 이후 주가는 <strong>D+30일 12.5%, D+90일 21%, D+180일 25%, D+365일 75%</strong> 상승했습니다. 단기 시장 바닥을 짚어낸 성공 사례입니다.</p>
+</li>
+<li><p><strong>뱅크오브아메리카 (BAC) - 워런 버핏 (2011년 8월)</strong>
+버크셔 해서웨이가 약 <strong>$5000.0M</strong>을 투입했습니다. 단기적으로는 <strong>D+30일 6%, D+90일 -3%</strong>로 주춤했지만, <strong>D+180일 17%, D+365일 24%</strong> 상승하며 장기적으로 회복하는 모습을 보여주었습니다.</p>
+</li>
+</ul>
+<p>위 3가지 유사 사례의 <strong>D+365 단순 산술평균 변동률은 -0.33%</strong>입니다. 매수 신호임에도 불구하고 유사 사례의 1년 뒤 평균 수익률이 음수라는 점은 주의가 필요합니다. 내부자의 대규모 매수가 무조건적인 주가 상승을 보장하지 않으며, 통계적으로 부정적인 결과로 이어진 경우도 존재합니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>&quot;CEO가 샀으니까 무조건 오르겠지?&quot;라는 맹신은 위험할 수 있습니다. </p>
+<p>JP모건의 사례처럼 긍정적인 결과를 얻을 수도 있지만, 리먼 브라더스의 사례처럼 큰 손실을 볼 가능성도 존재합니다.</p>
+<p>더욱이 이번 PCSA CEO의 매수 규모인 <strong>794만 원</strong>은 기업의 운명을 건 배팅이라기보다는, 주주들을 안심시키기 위한 상징적인 제스처일 확률이 높습니다. </p>
+<p>따라서 이 뉴스는 확정적인 매수 추천이 아닙니다. 내부자가 회사를 긍정적으로 보고 있다는 <strong>하나의 보조 지표</strong>로만 참고하시는 것을 권장합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Lehman Brothers (LEH)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Dick Fuld (CEO) · 2008-04-15 · 약 $3.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-45.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 자사주 매수가 항상 '바닥 시그널'은 아님을 보여주는 가장 유명한 반례.</p>
+        <p class="case-source">📎 SEC Form 4 / 공공 파산 기록 · 회사 후속: 2008-09 챕터 11 파산보호 신청. 보통주 가치 사실상 0.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Bank of America (BAC)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Warren Buffett / Berkshire Hathaway (10%+ Holder) · 2011-08-25 · 약 $5000.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+6.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-3.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+17.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+24.0%</span></span>
+        </div>
+        <p class="case-narrative">대규모 자본확충성 매입. 단기에는 정체, 12개월 후부터 의미 있는 반등.</p>
+        <p class="case-source">📎 Berkshire 공식 보도자료 / SEC 13G · 회사 후속: 유럽 재정위기 우려를 넘어 영업이익 정상화</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 Processa Pharmaceuticals, Inc. 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=PCSA">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="PCSA"
+        name="Processa Pharmaceuticals, Inc."
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-pcsa-2026-05-19" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "환율이 1,500원을 넘어섰습니다. 오늘 국내 주식에 1천만 원이 있다면 약 32만 원이 빠져나갔습니다";
+const date = "2026-05-20";
+const description = "오늘 시장에 제법 큰 바람이 불었습니다. 평소보다 파란불이 짙어진 계좌와 부쩍 오른 환율 때문에 놀라셨을 것 같아요. 오늘 내 지갑에 어떤 변화가 생겼는지, 우리는 지금 무엇을 해야 하는지 핵심만 콕 짚어 드릴게요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>오늘 시장에 제법 큰 바람이 불었습니다. 평소보다 파란불이 짙어진 계좌와 부쩍 오른 환율 때문에 놀라셨을 것 같아요. 오늘 내 지갑에 어떤 변화가 생겼는지, 우리는 지금 무엇을 해야 하는지 핵심만 콕 짚어 드릴게요.</p>
+<br>
+
+<h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>오늘 우리 시장이 크게 흔들린 가장 큰 이유는 <strong>&#39;달러의 힘&#39;이 너무 강해졌기 때문</strong>이에요. </p>
+<p>원화 대비 달러 환율이 1,500원을 돌파하면서, 외국인 투자자들이 한국 주식을 팔고 안전한 달러로 돈을 옮기기 시작했습니다. 외국인들이 주식을 대거 팔다 보니 국내 주식 시장도 함께 힘을 잃고 내려앉은 것이죠. </p>
+<p>미국 주식 시장도 조금 주춤했지만, 우리는 달러 가치가 올라간 덕분에 오히려 손실을 방어할 수 있었습니다.</p>
+<br>
+
+<h2>💰 내 지갑 가이드</h2>
+<p>오늘의 시장 변화가 내 지갑에 미친 영향과 행동 요령입니다.</p>
+<ul>
+<li><strong>📊 국내 주식 투자자라면: &quot;일단은 차분하게 지켜보세요&quot;</strong><ul>
+<li><strong>내 지갑 영향:</strong> 1천만 원을 투자하고 계신다면, 오늘 하루 동안 계좌에서 <strong>약 325,144원</strong>이 빠져나갔습니다.</li>
+<li><strong>행동 가이드:</strong> 파란불이 켜진 계좌를 보면 가슴이 아프시겠지만, 지금처럼 시장이 흥분해 있을 때 섣불리 주식을 팔면 손해가 확정됩니다. 지금은 추가 매수나 매도 모두 멈추고, 시장이 진정될 때까지 잠시 계좌 앱을 닫아두는 것을 권합니다.</li>
+</ul>
+</li>
+<li><strong>🇺🇸 미국 주식 투자자라면: &quot;환율 덕분에 보너스를 받았어요&quot;</strong><ul>
+<li><strong>내 지갑 영향:</strong> 500만 원 투자 기준, 미국 주가 자체는 조금 내렸지만 달러 가치가 오른 덕분에 내 자산은 오히려 <strong>약 28,522원</strong> 늘어났습니다.</li>
+<li><strong>행동 가이드:</strong> 환율이 많이 오른 상태입니다. 지금 달러를 새로 사서 미국 주식을 추가로 매수하는 것은 다소 비쌀 수 있으니, 이미 가지고 있는 주식을 보유하며 느긋하게 지켜보세요.</li>
+</ul>
+</li>
+<li><strong>✈️ 해외여행이나 직구를 준비 중이라면: &quot;급하지 않다면 결제는 잠시 미루세요&quot;</strong><ul>
+<li><strong>내 지갑 영향:</strong> 환율이 올라 100만 원을 환전할 때 이전보다 <strong>124원</strong>을 더 내야 합니다.</li>
+<li><strong>행동 가이드:</strong> 금액 자체는 크지 않지만, 환율 변동성이 무척 커진 상황입니다. 당장 필요한 직구 아이템이 아니라면 장바구니에 잠시 담아두고 환율이 잠잠해질 때를 기다리는 것이 좋습니다.</li>
+</ul>
+</li>
+<li><strong>🏠 대출 이자와 일상 생활비는: &quot;걱정 없이 평소처럼 보내세요 😌&quot;</strong><ul>
+<li><strong>내 지갑 영향:</strong> 다행히 한국은행 기준금리(2.50%)와 우리 대출 금리에는 아무런 변화가 없습니다. 기름값과 마트 장바구니 물가도 안정적인 흐름을 유지하고 있어요.</li>
+<li><strong>행동 가이드:</strong> 시장은 시끄럽지만 내 일상 비용에는 타격이 없습니다. 오늘 저녁 찬거리나 주유비 걱정은 내려놓으셔도 좋습니다.</li>
+</ul>
+</li>
+<li><strong>₿ 코인 투자자라면: &quot;움직임이 없으니 평화롭습니다&quot;</strong><ul>
+<li><strong>내 지갑 영향:</strong> 비트코인을 비롯한 가상자산 시장은 큰 변동 없이 횡보하고 있습니다. </li>
+<li><strong>행동 가이드:</strong> 무리하게 거래를 시도하기보다 평소처럼 유지하시면 됩니다.</li>
+</ul>
+</li>
+</ul>
+<br>
+
+<p>시장이 갑자기 흔들리면 누구나 불안해지기 마련입니다. 하지만 내 일상의 대출 이자나 물가는 든든하게 버텨주고 있으니 너무 걱정하지 마세요. 소나기는 곧 지나갑니다.</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

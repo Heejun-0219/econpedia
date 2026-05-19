@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "프레시펫(FRPT) CEO의 6억 원 규모 주식 매도 분석";
+const date = "2026-05-19";
+const description = "프레시펫 CEO의 6억 원 규모 자사주 매도. 과거 엔론, 펠로톤 사례와 비교해 내 주식 계좌에 미칠 영향을 숫자로 명확히 분석합니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 Freshpet, Inc.</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 Freshpet, Inc. (FRPT)</h3>
+        <p><strong>매매자:</strong> Cyr William B. / Chief Executive Officer</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $445K <span style="opacity:.85">(약 6억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 8,979주 · $49.56</p>
+        <p><strong>출처:</strong> SEC Form 4 · Grain Mill Products</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-19","y":53.22},{"x":"2025-11-20","y":52.8},{"x":"2025-11-21","y":54},{"x":"2025-11-24","y":53.62},{"x":"2025-11-25","y":55.79},{"x":"2025-11-26","y":56.26},{"x":"2025-11-28","y":57.16},{"x":"2025-12-01","y":57.3},{"x":"2025-12-02","y":58.16},{"x":"2025-12-03","y":62.18},{"x":"2025-12-04","y":61.99},{"x":"2025-12-05","y":62.05},{"x":"2025-12-08","y":63.17},{"x":"2025-12-09","y":64.65},{"x":"2025-12-10","y":63.84},{"x":"2025-12-11","y":62.89},{"x":"2025-12-12","y":63.42},{"x":"2025-12-15","y":63.56},{"x":"2025-12-16","y":63.97},{"x":"2025-12-17","y":64.88},{"x":"2025-12-18","y":65.63},{"x":"2025-12-19","y":62.61},{"x":"2025-12-22","y":63.97},{"x":"2025-12-23","y":64.51},{"x":"2025-12-24","y":64.02},{"x":"2025-12-26","y":64.17},{"x":"2025-12-29","y":63.04},{"x":"2025-12-30","y":60.13},{"x":"2025-12-31","y":60.93},{"x":"2026-01-02","y":60.15},{"x":"2026-01-05","y":60.14},{"x":"2026-01-06","y":62.29},{"x":"2026-01-07","y":62.07},{"x":"2026-01-08","y":61.93},{"x":"2026-01-09","y":64.06},{"x":"2026-01-12","y":64.15},{"x":"2026-01-13","y":63.75},{"x":"2026-01-14","y":63.2},{"x":"2026-01-15","y":63.26},{"x":"2026-01-16","y":64.25},{"x":"2026-01-20","y":67.67},{"x":"2026-01-21","y":69.86},{"x":"2026-01-22","y":72.6},{"x":"2026-01-23","y":71.55},{"x":"2026-01-26","y":72.11},{"x":"2026-01-27","y":72},{"x":"2026-01-28","y":71.5},{"x":"2026-01-29","y":70.39},{"x":"2026-01-30","y":69.7},{"x":"2026-02-02","y":70.01},{"x":"2026-02-03","y":69.89},{"x":"2026-02-04","y":69.2},{"x":"2026-02-05","y":67.37},{"x":"2026-02-06","y":69.9},{"x":"2026-02-09","y":69.92},{"x":"2026-02-10","y":69.38},{"x":"2026-02-11","y":68.52},{"x":"2026-02-12","y":67.89},{"x":"2026-02-13","y":67.72},{"x":"2026-02-17","y":71.69},{"x":"2026-02-18","y":72.97},{"x":"2026-02-19","y":74.67},{"x":"2026-02-20","y":74.51},{"x":"2026-02-23","y":78.58},{"x":"2026-02-24","y":80.89},{"x":"2026-02-25","y":79.63},{"x":"2026-02-26","y":81.26},{"x":"2026-02-27","y":84.45},{"x":"2026-03-02","y":84.36},{"x":"2026-03-03","y":84.11},{"x":"2026-03-04","y":85.5},{"x":"2026-03-05","y":85.19},{"x":"2026-03-06","y":82.64},{"x":"2026-03-09","y":82.83},{"x":"2026-03-10","y":81.79},{"x":"2026-03-11","y":80.33},{"x":"2026-03-12","y":78.04},{"x":"2026-03-13","y":76.6},{"x":"2026-03-16","y":75.37},{"x":"2026-03-17","y":67.42},{"x":"2026-03-18","y":65.1},{"x":"2026-03-19","y":63.17},{"x":"2026-03-20","y":64.54},{"x":"2026-03-23","y":64.68},{"x":"2026-03-24","y":58.93},{"x":"2026-03-25","y":60.1},{"x":"2026-03-26","y":58.79},{"x":"2026-03-27","y":55.93},{"x":"2026-03-30","y":56.6},{"x":"2026-03-31","y":58.96},{"x":"2026-04-01","y":60.08},{"x":"2026-04-02","y":59.4},{"x":"2026-04-06","y":59.01},{"x":"2026-04-07","y":63.04},{"x":"2026-04-08","y":65.03},{"x":"2026-04-09","y":66.63},{"x":"2026-04-10","y":64.8},{"x":"2026-04-13","y":68.25},{"x":"2026-04-14","y":69.11},{"x":"2026-04-15","y":68.79},{"x":"2026-04-16","y":67.34},{"x":"2026-04-17","y":69.5},{"x":"2026-04-20","y":68.12},{"x":"2026-04-21","y":64.83},{"x":"2026-04-22","y":65.96},{"x":"2026-04-23","y":65.56},{"x":"2026-04-24","y":66.15},{"x":"2026-04-27","y":65.45},{"x":"2026-04-28","y":65.65},{"x":"2026-04-29","y":66.14},{"x":"2026-04-30","y":67.38},{"x":"2026-05-01","y":65.15},{"x":"2026-05-04","y":63.56},{"x":"2026-05-05","y":60.17},{"x":"2026-05-06","y":54.92},{"x":"2026-05-07","y":55.87},{"x":"2026-05-08","y":53.08},{"x":"2026-05-11","y":49.64},{"x":"2026-05-12","y":51.27},{"x":"2026-05-13","y":48.63},{"x":"2026-05-14","y":49.34},{"x":"2026-05-15","y":49.35},{"x":"2026-05-18","y":48.45}]' transactionDate='2026-05-19' isBuy={false} ticker='FRPT' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 47.39 (2026-05-19) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>2026년 5월 19일, 미국의 프리미엄 펫푸드 기업 &#39;프레시펫(Freshpet, Inc.)&#39;의 최고경영자(CEO) 윌리엄 B. 시어(William B. Cyr)가 자사주 <strong>8,979주</strong>를 장내 매도했습니다. </p>
+<p>매도 단가는 <strong>49.56달러</strong>이며, 거래 총액은 <strong>44만 5천 달러</strong>, 우리 돈으로 약 <strong>6억 원</strong>에 달합니다. </p>
+<p>회사의 현재와 미래를 가장 투명하게 들여다보는 CEO가 대규모 현금화를 진행했다는 점에서 주의 깊게 살펴볼 필요가 있습니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>공시일(5월 19일) 기준 프레시펫의 종가는 <strong>47.38달러</strong>입니다. </p>
+<p>CEO가 매도한 단가(<strong>49.56달러</strong>)와 비교하면 주가는 직후에 이미 소폭 하락한 상태입니다. </p>
+<p>아직 매도일로부터 한 달이 채 지나지 않아 D+30, D+90 등의 장기 후행 변동률은 미도래 상태입니다. 하지만 경영진의 <strong>6억 원</strong> 규모 매도는 향후 주가 흐름에 영향을 미칠 수 있는 시그널로 해석될 수 있습니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거 미국 시장에서 기업의 핵심 임원이나 CEO가 대규모로 주식을 팔았던 3가지 굵직한 사례를 찾아봤습니다. (주의: 아래 수치들은 S&amp;P500 등 시장 평균 변동을 보정하지 않은 단순 원본 변동률입니다.)</p>
+<ul>
+<li><strong>엔론 (Enron, 2001년 8월):</strong> CEO 등 핵심 임원진이 약 <strong>7천만 달러</strong>를 매도했습니다. 이후 주가는 D+30일에 <strong>-27%</strong>, D+90일에 <strong>-85%</strong>, D+180일과 D+365일에는 <strong>-100%</strong>를 기록하며 회사가 파산했습니다. </li>
+<li><strong>스노우플레이크 (Snowflake, 2021년 12월):</strong> 락업(보호예수) 해제 직후 임원진이 약 <strong>8억 달러</strong>를 일괄 매도했습니다. 이후 주가는 D+30 <strong>-10%</strong>, D+90 <strong>-35%</strong>, D+180 <strong>-55%</strong>, D+365 <strong>-65%</strong>를 기록하며 장기 횡보했습니다.</li>
+<li><strong>펠로톤 (Peloton, 2021년 2월):</strong> 팬데믹 수혜의 정점에서 CEO와 임원들이 약 <strong>5억 달러</strong>를 팔아치웠습니다. 주가는 D+30 <strong>-25%</strong>, D+90 <strong>-50%</strong>, D+180 <strong>-60%</strong>, D+365 <strong>-83%</strong>를 기록했습니다.</li>
+</ul>
+<p>위 세 가지 유사 사례의 <strong>D+365 단순 산술평균 변동률은 -82.6%</strong>입니다. </p>
+<p>통계적으로 볼 때, 펀더멘털 정점이나 고평가 논란 시기에 나온 임원의 대규모 매도는 1년 뒤 부정적인 결과로 이어지는 경향이 있었습니다.</p>
+<h2>💰 투자 시그널 분석</h2>
+<p>CEO가 주식을 팔았다고 해서 기업의 펀더멘털이 즉각적으로 훼손된다는 확정적 예측은 아닙니다. 개인적인 세금 납부나 자산 포트폴리오 다변화를 위해 단순히 현금이 필요했을 수도 있습니다. </p>
+<p>하지만 내부자가 <strong>6억 원</strong>을 현금화했다는 것은 투자 심리에 영향을 줄 수 있는 요인입니다. </p>
+<p>이 지표 하나만 보고 맹목적으로 보유 주식을 전량 매도할 필요는 없지만, 신규 투자를 고민 중이거나 비중을 늘리려 했다면 리스크 관리 차원에서 신중하게 접근하시기를 권장합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Snowflake (SNOW)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">복수 임원 / 락업 해제 후 일괄 매도 · 2021-12-15 · 약 $800.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-10.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-35.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-65.0%</span></span>
+        </div>
+        <p class="case-narrative">IPO 락업 해제 직후 다수 임원이 매도하면 통상 6~12개월 -30% 이상 디레이팅이 동반.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-12) · 회사 후속: 고밸류에이션 SaaS 디레이팅, 영업 유지되나 주가는 장기 횡보</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Peloton Interactive (PTON)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">John Foley (CEO) / 복수 임원 · 2021-02-05 · 약 $500.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-25.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-50.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-60.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-83.0%</span></span>
+        </div>
+        <p class="case-narrative">팬데믹 수혜 정점에서 임원 대규모 매도. 펀더멘털 정점 시그널로 작용.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-02) · 회사 후속: 리콜·구독자 감소·CEO 교체, 시총 95% 증발</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 Freshpet, Inc. 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=FRPT">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="FRPT"
+        name="Freshpet, Inc."
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-frpt-2026-05-19" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
