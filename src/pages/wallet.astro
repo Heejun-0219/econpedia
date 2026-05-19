@@ -58,7 +58,10 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
   description="오늘의 거시경제 변화가 내 생활비에 미치는 영향을 확인하세요."
 >
   <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
-    
+
+    <!-- Whale Alert 유입 시 컨텍스트 배너 (?ticker= 쿼리) — 클라이언트에서 검증 후 삽입 -->
+    <div id="whale-ticker-banner-mount"></div>
+
     <!-- 로딩 스플래시 -->
     <div id="wallet-loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; color: var(--color-text-muted);">
       <Icon name="clock" size={48} style="animation: spin 2s linear infinite; opacity: 0.5; margin-bottom: 16px;" />
@@ -715,4 +718,35 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
   .wallet-input:focus {
     outline: none; border-color: var(--color-accent-primary); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
   }
+  /* Whale Alert 유입 컨텍스트 배너 */
+  .whale-ticker-banner {
+    background: linear-gradient(135deg, rgba(16,185,129,.15), rgba(56,189,248,.12));
+    border: 1px solid rgba(16,185,129,.4); border-radius: 12px;
+    padding: .85rem 1.25rem; margin-bottom: 1.5rem;
+    text-align: center; font-size: .95rem; color: var(--color-text-primary);
+  }
+  .whale-ticker-banner strong { color: #10b981; margin-right: .35rem; }
+  @media (max-width: 640px) {
+    .whale-ticker-banner { font-size: .9rem; padding: .75rem 1rem; }
+  }
 </style>
+
+<script is:inline>
+  // Whale Alert 유입(?ticker=) 컨텍스트 배너 — strict whitelist + textContent로 XSS 방지
+  (() => {
+    const raw = new URLSearchParams(location.search).get('ticker');
+    if (!raw) return;
+    const ticker = raw.toUpperCase();
+    if (!/^[A-Z0-9.\-]{1,10}$/.test(ticker)) return;
+    const mount = document.getElementById('whale-ticker-banner-mount');
+    if (!mount) return;
+    const banner = document.createElement('div');
+    banner.className = 'whale-ticker-banner';
+    banner.setAttribute('role', 'status');
+    const strong = document.createElement('strong');
+    strong.textContent = `📲 ${ticker}`;
+    banner.appendChild(strong);
+    banner.appendChild(document.createTextNode(' 신호 알림을 받으려면 아래에서 지갑을 연동하세요.'));
+    mount.appendChild(banner);
+  })();
+</script>
