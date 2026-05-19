@@ -1,5 +1,5 @@
 ---
-description: 주 3회 EconPedia sprint 사이클 — /improvement-cycle 실행, growth bet 1개 결정·실행, /simplify·/security-review, 기술 도입 후보 Slack 알림. /goal과 함께 사용 시 growth+defensive 머지까지 자가 지속.
+description: 주 3회 EconPedia sprint 사이클 — 분석·기획·개발·보완·테스트·배포 6단계 게이트로 growth bet 1개 + defensive 1개를 완결. /goal과 함께 사용 시 6단계 transcript 증거가 모두 surface 될 때까지 자가 지속.
 ---
 
 주 3회 (월·수·금 권장) EconPedia를 *방향성 있게* 발전시키는 routine. Sprint cadence.
@@ -7,13 +7,28 @@ description: 주 3회 EconPedia sprint 사이클 — /improvement-cycle 실행, 
 > **핵심 원칙**: 매 weekly 사이클은 반드시 **growth bet 1개 + defensive 1개**를 모두 가진다. fix만 나오면 weekly는 실패다.
 > 북극성: `wallet_authenticated_users` (현재 0, 90일 target 200). 사이클마다 이 숫자를 1mm라도 움직이는 실험이 1개는 있어야 함.
 
-> **자동화 핵심**: `/goal` (Claude Code v2.1.139+)과 결합하면 사이클이 완결(Growth bet PR 머지 + Defensive deliverable 결과 보고)될 때까지 사용자 입력 없이 자가 진행. 권장 호출:
+> **자동화 핵심**: `/goal` (Claude Code v2.1.139+) 과 결합. 평가자는 transcript에 6단계 게이트의 각 증거를 모두 봐야 통과. 권장 호출:
 >
 > ```text
-> /goal "이번 /weekly 사이클을 완결한다 — 1.5단계 Growth bet 옵션이 사용자에게 제시·선택·구현되어 PR이 머지됐고, Defensive deliverable 1개 결과(PR 머지 또는 보고)가 보고됐으며, 다음 /weekly 권장 시점이 명시됨."
+> /goal "이번 /weekly 사이클을 완결한다 — Growth bet과 Defensive 양쪽에 대해 transcript에 [분석][기획][개발][보완][테스트][배포] 6단계 증거가 각각 1줄 이상 surface 되고, growth bet PR과 defensive deliverable PR(또는 결과 보고)이 모두 머지되며, 다음 /weekly 권장 시점이 명시됨."
 > ```
 >
 > 호출 빈도: **`/loop 56h /weekly`** (주 3회 — 약 2.33일 간격, 월·수·금).
+>
+> **최소 소요 시간**: 사이클 1개에 **최소 60분 이상**. 분석·기획·개발·보완·테스트·배포 × 2개 deliverable (growth + defensive) 를 정성적으로 하는 데 60분 미만이라면 거의 항상 단계 스킵의 결과. 10-15분 만에 끝났다면 사용자에게 보고하고 멈춰서 다시 시작.
+
+## 필수 6단계 게이트 (스킵 금지) — growth bet + defensive 각각 적용
+
+각 deliverable(growth bet 1개, defensive 1개) 마다 다음 6단계가 transcript에 증거로 남아야 사이클 완결로 인정.
+
+| 단계 | 의미 | Transcript 증거 예시 |
+|---|---|---|
+| **[분석]** | 지표·후보 식별·우선순위 | 스냅샷 1줄 + 후보 5개 표 + 채택 근거 |
+| **[기획]** | 가설·측정·위험·롤백 | 가설 1문장, KPI + 임계값, 위험·롤백 1줄 |
+| **[개발]** | 코드 변경 | git diff 요약 + 변경 LOC |
+| **[보완]** | 셀프 리뷰 체크리스트 (`/daily` 와 동일 7항목) | 항목별 ✓/N-A 보고 |
+| **[테스트]** | 로컬 실제 검증 | `npm run dev` + curl/브라우저 + 핵심 시나리오 출력. `npm run build` 만으로 불충분. |
+| **[배포]** | PR + CI + 머지 + 머지 후 sanity | PR URL + CI 결과 + merge sha + main에서 빌드 OK |
 
 ## 우선순위 (재확인)
 
@@ -24,7 +39,7 @@ description: 주 3회 EconPedia sprint 사이클 — /improvement-cycle 실행, 
 
 ## 절차
 
-### 1단계. Self-Improvement Cycle 실행
+### 1단계. Self-Improvement Cycle 실행 + Sprint Focus 확인 (~10-15분)
 
 ```bash
 npm run loop
@@ -33,6 +48,8 @@ npm run loop
 소요 ~4-7분, 비용 ~$1.5-3 (Claude Opus 4.7). 산출물:
 - `ops/improvement-loop/state/history/YYYY-MM-DD-{musk,mckinsey,munger}.md`
 - `ops/improvement-loop/state/history/YYYY-MM-DD-plan.md`
+
+**동일 날짜의 plan.md 이미 존재** → loop을 다시 돌리지 말고 그것 사용 (비용 절감). 단, 24시간 이상 지난 plan은 새로 돌릴 것.
 
 플랜의 다음 섹션을 사용자에게 *그대로 인용*하여 보여준다 (요약·각색 금지):
 - "## Decision: This Cycle's Focus"
@@ -45,11 +62,9 @@ npm run loop
 
 동의하지 않으면 여기서 멈추고 사용자 입력 대기.
 
-### 1.5단계. Growth Bet 결정·실행 (필수, 스킵 금지)
+### 1.5단계. Growth Bet 6단계 게이트 통과 (필수, ~25-35분)
 
-이 단계는 **항상** 수행한다. 1단계 plan에 이미 growth deliverable이 있으면 그것을 실행, 없으면 새로 결정.
-
-**(a) 후보 3-5개 제시** — 다음 영역에서 *이번 주 안에 머지 가능한* (≤ 3 파일, ≤ 100 LOC) 후보를 사용자에게 제시:
+**[분석]** — 1단계 plan의 growth deliverable, 또는 plan에 없으면 새로 후보 3-5개 제시:
 
 | 영역 | 가설 예시 |
 |---|---|
@@ -59,62 +74,64 @@ npm run loop
 | 데이터 가치 | "6개월 follow-up 자동 업데이트로 재방문 N% ↑" |
 | 외부 distribution | "공개 read-only API 또는 RSS feed가 백링크 N개 만든다" |
 
-각 후보에는 (i) 1주 안 가능 여부, (ii) 검증 가능한 KPI 1개, (iii) 변경 범위 추정을 명시.
+각 후보에는 (i) 1주 안 가능 여부, (ii) 검증 가능한 KPI 1개, (iii) 변경 범위 추정.
 
-**(b) 사용자가 1개 선택** — 사용자가 옵션 1개를 고르거나 직접 제안.
+사용자가 1개 선택 (제시 후 답이 없으면 가장 측정 명확하고 LOC 작은 옵션을 디폴트로 채택, 이유를 transcript에 보고).
 
-**(c) 즉시 구현 → draft PR → ready 전환 → auto-merge 활성화** — 사용자가 골랐으면 그 자리에서 구현 시작. PR 생성(draft) 직후 `mcp__github__update_pull_request(draft: false)` 로 ready 전환 → `mcp__github__enable_pr_auto_merge(SQUASH)` 호출. 이미 CI clean이면 `mcp__github__merge_pull_request(squash)` 직접.
+**[기획]** — PR 본문에 들어갈 가설·측정·위험·롤백을 transcript에 1번 출력.
 
-**금지**: "후보만 제시하고 다음 주로 미루기" — growth는 *조사*가 아니라 *실행*이다. 적어도 측정 인프라(UTM, console.log, KPI 필드 추가)라도 머지한다.
+**[개발]** — 작업 브랜치 `claude/growth/<YYYY-MM-DD>-<slug>` 생성 → 구현. 최대 3 파일, 100 LOC.
 
-### 2단계. 지난 주 회고 (보안 + 단순화)
+**[보완]** — 셀프 리뷰 7항목 체크리스트(접근성·모바일·에러상태·엣지케이스·i18n·보안·로그) 항목별 ✓/N-A 보고.
 
-```bash
-git log --since="7 days ago" --pretty=format:"%h %s" --no-merges
-git diff --stat HEAD~7..HEAD -- 'src/**' 'api/**' 'scripts/**'
-```
+**[테스트]** — `npm run dev` 띄우고 변경 페이지/엔드포인트에 실제 접근. UI 변경이면 curl 또는 dev server 로그로 새 요소 노출 확인. 데이터/API 변경이면 변경 핸들러에 curl. **`npm run build` 만으로는 통과 인정 안 함.**
+
+**[배포]** — draft PR 생성 → `update_pull_request(draft: false)` → `enable_pr_auto_merge(SQUASH)` → CI 통과 후 자동 머지(또는 이미 clean이면 `merge_pull_request` 직접). 머지 후 main fetch + `npm run build` 1회 → 빌드 OK 1줄 보고.
+
+**금지**:
+- "후보만 제시하고 다음 주로 미루기" — growth는 *조사*가 아니라 *실행*이다.
+- 6단계 중 하나라도 transcript 증거 없이 스킵.
+- 10분 이내 growth bet 완료 보고 — 거의 항상 [테스트]/[보완] 스킵.
+
+### 2단계. Defensive 1개 6단계 게이트 통과 (~15-20분)
+
+기본 후보: 1단계 plan의 defensive deliverable. 없으면 다음 중:
 
 **(a) 보안 회고**
-- 지난 주 변경된 파일 중 `api/server.js`, `src/pages/api/*`, `src/components/*.astro`, `scripts/scan-*.js`, `scripts/generate-whale-*.js` 가 포함되어 있으면 `/security-review` 슬래시 호출 또는 동등한 검토 수행.
-- 발견된 신규 결함 → `CLAUDE.md`의 P0/P1 목록 *업데이트* PR 생성 (이건 1 파일 작은 변경이므로 daily 규칙 적용 — draft PR → `update_pull_request(draft: false)` → `enable_pr_auto_merge(SQUASH)` 호출).
+- 지난 사이클 변경된 파일 중 `api/server.js`, `src/pages/api/*`, `src/components/*.astro`, `scripts/scan-*.js`, `scripts/generate-whale-*.js` 가 포함되어 있으면 `/security-review` 또는 동등한 OWASP top10 셀프 리뷰 수행.
+- 발견된 신규 결함 → 1 파일 픽스 (daily 규칙 적용).
 
 **(b) `/simplify` 적용 후보 1개**
-- 지난 주 머지된 PR 중 중복 코드·과도한 추상화·죽은 코드가 들어간 곳 1개를 찾는다.
-- 정리 PR 1개 생성. 영향 범위는 daily보다 클 수 있음 (≤ 3 파일, ≤ 100 LOC). draft → `update_pull_request(draft: false)` → `enable_pr_auto_merge(SQUASH)` 호출 → CI 통과 시 자동 머지.
+- 지난 사이클 머지된 PR 중 중복 코드·과도한 추상화·죽은 코드가 들어간 곳 1개.
+- 정리 PR (≤ 3 파일, ≤ 100 LOC).
 
-### 3단계. 기술 도입 후보 조사 (1-2개)
+**(c) CLAUDE.md P0/P1 잔여 항목 1개** — daily에서 못 잡은 P0/P1 1건.
+
+선택한 항목에 대해 **6단계 게이트 동일 적용** (분석·기획·개발·보완·테스트·배포). PR 본문에도 6단계 결과 명시.
+
+**완료 인정 조건**: 머지된 PR URL 또는 "결함 0건 확인 + 리뷰 결과 transcript 보고" 둘 중 하나.
+
+### 3단계. 기술 도입 후보 조사 (1-2개, ~5-10분)
 
 다음 영역 중 *현재 sprint의 Focus와 직접 연결되는* 1-2개에 한해 조사:
 
 | 영역 | 트리거 |
 |---|---|
-| **공시 데이터 정확도** | Whale Alert에서 false positive가 의심되거나, 새 데이터 소스(예: 한국 거래소, 미국 OTC) 누락 의심 |
+| **공시 데이터 정확도** | Whale Alert false positive 의심, 새 데이터 소스 누락 의심 |
 | **LLM 비용·품질** | 모델 가격·신규 기능 변동, 환각 케이스 증가 |
-| **데이터 시각화** | Whale Alert 페이지 engagement (체류 시간·CTR) 하락, 또는 단순 표·텍스트 한계 |
-| **사용자 engagement** | poll·comment·newsletter 지표 정체, 신규 UX 패턴 적용 가능성 |
+| **데이터 시각화** | Whale Alert engagement 하락, 표·텍스트 한계 |
+| **사용자 engagement** | poll·comment·newsletter 정체 |
 | **운영 안정성** | container 재시작·OOM·build 실패 증가 |
 
-**조사 방법**: 웹 검색으로 최근 4주 내 발표·릴리즈 위주. 각 후보에 대해:
-- **무엇** (이름·링크)
-- **왜 지금** (현재 sprint Focus 또는 알려진 결함과의 연결)
-- **도입 비용** (개발 시간·런타임 비용·인프라 영향)
-- **위험** (lock-in, 의존성 추가, 보안 면적 증가)
+각 후보: 무엇 (이름·링크), 왜 지금, 도입 비용, 위험.
 
-**산출물**: `ops/improvement-loop/state/history/YYYY-MM-DD-tech-radar.md`로 저장.
+**산출물**: `ops/improvement-loop/state/history/YYYY-MM-DD-tech-radar.md`. **커밋 필수** (untracked 상태로 두지 말 것).
 
-### 4단계. Slack 알림 (기술 도입 후보 한정)
+### 4단계. Slack 알림 (~2분)
 
-3단계의 산출물을 요약하여 Slack으로 보낸다. **환경 변수 `SLACK_WEBHOOK_URL` 필수.**
+3단계 산출물을 요약하여 Slack으로. 환경변수 `SLACK_WEBHOOK_URL` 없으면 "미설정 — 알림 생략" 1줄 보고하고 통과.
 
-```bash
-test -n "$SLACK_WEBHOOK_URL" || { echo "SLACK_WEBHOOK_URL 미설정 — 알림 생략"; exit 0; }
-
-curl -fsS -X POST -H 'Content-Type: application/json' \
-  --data "$(jq -n --arg text "$NOTIFY_TEXT" '{text:$text}')" \
-  "$SLACK_WEBHOOK_URL"
-```
-
-`NOTIFY_TEXT` 권장 포맷 (한국어):
+`NOTIFY_TEXT` 권장 포맷:
 ```
 🛠️ EconPedia 주간 기술 도입 후보 (YYYY-MM-DD)
 
@@ -122,33 +139,24 @@ curl -fsS -X POST -H 'Content-Type: application/json' \
 - 왜: <한 줄>
 - 비용/위험: <한 줄>
 - 결정 필요 시점: <YYYY-MM-DD 또는 N/A>
-
-후보 2: ...
-
-전체 노트: ops/improvement-loop/state/history/YYYY-MM-DD-tech-radar.md
 ```
 
-**금지 사항**:
-- 후보 0개면 알림 발송 금지 (노이즈).
-- 후보 3개 이상이면 가장 중요한 2개만. 나머지는 노트에만 남김.
-- "이거 도입하세요" 같은 단정 금지 — 항상 사용자 결정으로 위임.
+**금지**: 후보 0개면 발송 금지. 후보 ≥3개면 가장 중요한 2개만. 단정 금지.
 
-### 5단계. Daily backlog 동기화
+### 5단계. Daily backlog 동기화 (~5분)
 
-오늘의 plan.md "Two-week Sprint Plan"에서 다음 7일 내 1-3일짜리 deliverable이 있으면, *각각을 `/daily`가 1주일 안에 픽업할 수 있도록* CLAUDE.md의 P0/P1 섹션 또는 GitHub Issues에 반영.
+오늘의 plan.md "Two-week Sprint Plan"에서 다음 7일 내 deliverable이 있으면 CLAUDE.md의 P0/P1 섹션 또는 GitHub Issues에 반영. 1 파일 변경 PR (daily 규칙).
 
-- 작은 backlog 1개 추가 = 1 파일 변경 PR (daily 규칙 적용).
+### 6단계. 보고 (~3분)
 
-### 6단계. 보고
-
-사용자에게 다음을 보고하고 종료:
+사용자에게 다음을 명시적으로 보고하고 종료:
+- 사이클 소요 시간 (분 단위) — **최소 60분 권장**, 미달이면 스킵 의심 표시
 - This cycle's Focus (1줄)
-- **Growth bet 실행 결과** — 어떤 가설을 어떻게 측정 가능하게 머지했는지 (1줄)
-- Defensive deliverable 결과 (1줄)
+- **Growth bet 6단계 통과 표시** ([분석] ✓ [기획] ✓ [개발] ✓ [보완] ✓ [테스트] ✓ [배포] ✓) + PR URL + 머지 sha
+- **Defensive 6단계 통과 표시** + PR URL or 결과 보고
 - Sprint 1주차 deliverable 진행 현황
-- 머지된/생성된 PR URL + **auto-merge 활성화 여부**
-- 기술 도입 후보 슬랙 알림 결과 (발송됨 / 후보 없음 / SLACK_WEBHOOK_URL 미설정)
-- 다음 `/weekly` 권장 시점
+- 기술 도입 후보 Slack 알림 결과
+- 다음 `/weekly` 권장 시점 (56h 후)
 
 ## 자동화 권장
 
@@ -156,8 +164,8 @@ curl -fsS -X POST -H 'Content-Type: application/json' \
 # 옵션 A — 56시간마다 사이클 (주 3회). 세션 살아 있을 때.
 /loop 56h /weekly
 
-# 옵션 B — /goal과 결합. 사이클이 growth bet PR 머지 + defensive 결과 보고까지 자가 지속.
-/goal "이번 /weekly 사이클을 완결한다 — 1.5단계 Growth bet 옵션이 사용자에게 제시·선택·구현되어 PR이 머지됐고, Defensive deliverable 1개 결과(PR 머지 또는 보고)가 보고됐으며, 다음 /weekly 권장 시점이 명시됨."
+# 옵션 B — /goal과 결합. 6단계 × 2 deliverable transcript 증거까지 자가 지속.
+/goal "이번 /weekly 사이클을 완결한다 — Growth bet과 Defensive 양쪽에 대해 transcript에 [분석][기획][개발][보완][테스트][배포] 6단계 증거가 각각 1줄 이상 surface 되고, growth bet PR과 defensive deliverable PR(또는 결과 보고)이 모두 머지되며, 다음 /weekly 권장 시점이 명시됨."
 
 # 옵션 C — 두 가지 결합 (권장)
 /loop 56h /weekly
@@ -167,13 +175,15 @@ curl -fsS -X POST -H 'Content-Type: application/json' \
 
 ## 금지 사항
 
+- **6단계 게이트 중 하나라도 transcript 증거 없이 스킵** — 즉시 사용자에게 보고하고 멈춘다.
+- **60분 미만 사이클** — 거의 항상 단계 스킵. 10-15분에 완결됐다면 다시 시작.
 - **Growth bet 스킵** — 1.5단계는 fix-only weekly를 만들지 않기 위해 강제. 사용자가 명시적으로 "이번 주는 growth 없이 fix만" 동의했을 때만 생략.
 - 큰 리팩토링 (≥ 3 파일 / 100 LOC) — sprint 1주차 deliverable로 분해 후 daily가 처리
 - 인프라 변경 (`docker-compose.yml`, `Dockerfile`, `nginx*`, `.github/workflows/*`) — 항상 사용자 합의 후 수동
 - 의존성 메이저 업그레이드 — 별도 PR + 사용자 검토
 - 기술 도입 *결정* — Claude는 후보를 제안만. 사용자가 결정.
-- **PR을 draft로 두고 auto-merge 미활성** — weekly가 만드는 모든 PR은 CI 시작 직후 `enable_pr_auto_merge(squash)` 호출이 기본. 사용자가 명시적으로 "수동 검토 필요" 표시 시에만 보류.
+- **PR을 draft로 두고 auto-merge 미활성** — weekly가 만드는 모든 PR은 draft → ready 전환 → `enable_pr_auto_merge(SQUASH)` 호출이 기본.
 
 ## 비용
 
-LLM 합계 약 $2-5 (improvement-cycle $1.5-3 + simplify·security-review·tech-radar $0.5-2).
+LLM 합계 약 $3-7 (improvement-cycle $1.5-3 + 6단계 × 2 deliverable + simplify·security-review·tech-radar $1.5-4).
