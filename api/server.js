@@ -150,6 +150,10 @@ process.on('SIGINT', shutdown);
 
 // ─── 간단한 인메모리 Rate Limiter ────────────────────────
 const rateLimitMap = new Map(); // ip → { count, resetAt }
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of rateLimitMap) if (v.resetAt < now) rateLimitMap.delete(k);
+}, 120_000).unref();
 function isRateLimited(ip) {
   const now = Date.now();
   const entry = rateLimitMap.get(ip) || { count: 0, resetAt: now + 60_000 };
@@ -234,7 +238,8 @@ function isValidEmail(email) {
 const server = createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const path = url.pathname;
-  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+  const xffList = req.headers['x-forwarded-for']?.split(',').map(s => s.trim()) ?? [];
+  const ip = xffList.at(-1) || req.socket.remoteAddress;
 
   // CORS Preflight
   if (req.method === 'OPTIONS') {
