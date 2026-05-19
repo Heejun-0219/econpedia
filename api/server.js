@@ -18,6 +18,8 @@ const __dirname = path.dirname(__filename);
 // data 폴더를 루트 디렉토리에 마운트된 영역으로 지정 (로컬에서는 api/../data)
 const DATA_DIR = path.join(__dirname, '..', 'data');
 const STATS_FILE = path.join(DATA_DIR, 'stats.json');
+const POLLS_FILE = path.join(DATA_DIR, 'polls.json');
+const WALLETS_FILE = path.join(DATA_DIR, 'wallets.json');
 
 const PORT = process.env.API_PORT || 3001;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
