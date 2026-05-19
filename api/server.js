@@ -293,18 +293,13 @@ const server = createServer(async (req, res) => {
       walletUserCount = Object.keys(wallets).length; // fallback
     }
 
-    // 이메일 열람률 & 독자 만족도는 아직 DB로 관리되지 않으므로 임시로 실측치와 유사한 로직으로 가공 (이후 업데이트 가능)
-    const openRate = subscriberCount > 0 ? (42 + (subscriberCount % 10) / 10).toFixed(1) : 42.8;
-    const rating = 4.8;
+    // openRate / rating / course_completions 는 실측 데이터가 없어 제거됨 (CLAUDE.md 원칙: 가짜 지표 절대 금지)
 
     return sendJSON(res, 200, {
       total_visitors: stats.total || 0,
       daily_visitors: todayCount,
       subscribers: subscriberCount,
       portfolio_users: walletUserCount,
-      openRate: Number(openRate),
-      rating: rating,
-      course_completions: Math.floor(subscriberCount * 0.2) + 120, // 임시 추산치
       ts: new Date().toISOString(),
     });
   }
