@@ -1,8 +1,16 @@
 ---
-description: 매일 5-15분 EconPedia 발전 루틴 — 상태 점검 → 픽스 1개 또는 ≤30 LOC growth 실험 1개 → draft PR + auto-merge.
+description: 하루 3회 EconPedia 발전 사이클 — 상태 점검 → 픽스 1개 또는 ≤30 LOC growth 실험 1개 → ready PR + auto-merge. /goal과 함께 사용 시 PR 머지 또는 PASS까지 자가 지속.
 ---
 
-EconPedia를 매일 *조금씩* 발전시키는 루틴. 한 번에 하나만, 무리하지 말 것.
+EconPedia를 *조금씩 자주* 발전시키는 루틴. 한 사이클에 단 1개 액션, 무리하지 말 것.
+
+> **자동화 핵심**: `/goal` (Claude Code v2.1.139+)과 결합하면 사이클이 완결(PR 머지 또는 PASS)될 때까지 사용자 입력 없이 자가 진행. 권장 호출:
+>
+> ```text
+> /goal "오늘의 /daily 사이클 1개를 완결한다 — 액션 1개에 대한 PR이 머지됐거나, (e) PASS 결정을 보고했거나, CI 실패 진단을 사용자에게 1줄로 보고함."
+> ```
+>
+> 호출 빈도: **`/loop 8h /daily`** (하루 3회 — 09·17·01 KST 기준).
 
 ## 우선순위
 
@@ -65,16 +73,18 @@ npm run loop:snapshot
 - 변경 → `npm run build` 통과 확인
 - 커밋 컨벤션 준수: `fix(scope): ...` 또는 `chore(security): ...`
 
-### 4단계. Draft PR + auto-merge 활성화
+### 4단계. PR 생성 + ready 전환 + auto-merge 활성화
 
-1. `mcp__github__create_pull_request` 로 **draft PR** 생성. 본문에 다음 명시:
+1. `mcp__github__create_pull_request` 로 **draft PR** 생성 (work-in-progress 신호). 본문에 다음 명시:
    - 어떤 P0/P1을 픽스했는지 (CLAUDE.md 인용)
    - 영향 범위 (변경 파일 수 + LOC)
    - 검증 방법 (`npm run build`, 수동 점검 항목)
 2. PR 본문에 `<!-- AUTOMERGE: squash -->` 마커 포함.
-3. CI 시작 후 `mcp__github__enable_pr_auto_merge` 호출 — `merge_method: "squash"`.
-4. CI 통과 시 GitHub이 자동으로 ready 전환 + 머지 → main = prod 배포.
-5. **CI가 통과하지 않은 상태로 무리하게 강제 머지 금지.** CI 실패 시 auto-merge가 해제되고 draft로 남는다.
+3. **즉시** `mcp__github__update_pull_request(draft: false)` 호출 — MCP의 `enable_pr_auto_merge` 는 draft PR을 거부하므로 ready 전환 필수.
+4. `mcp__github__enable_pr_auto_merge` 호출 — `mergeMethod: "SQUASH"`.
+   - CI 진행 중이면 활성화 성공 → CI 통과 시 자동 머지.
+   - 이미 clean 상태면 즉시 `mcp__github__merge_pull_request(merge_method: "squash")` 직접 호출.
+5. **CI 실패 시** auto-merge 해제됨 → 실패 원인 진단을 1줄로 보고. 명백한 회귀면 같은 사이클 안에서 fix 후 추가 커밋. 모호하면 사용자에게 위임.
 
 ### 5단계. 보고
 
@@ -97,10 +107,18 @@ npm run loop:snapshot
 ## 자동화 권장
 
 ```text
-/loop 24h /daily   # 매일 자동 실행 (Claude Code 세션이 열려있을 때만)
+# 옵션 A — 8시간마다 사이클 (하루 3회). 세션 살아 있을 때.
+/loop 8h /daily
+
+# 옵션 B — /goal과 결합. 사이클이 PR 머지 또는 PASS에 도달할 때까지 자가 지속.
+/goal "오늘의 /daily 사이클 1개를 완결한다 — 액션 PR이 머지됐거나, (e) PASS 결정을 보고했거나, CI 실패 진단을 사용자에게 1줄로 보고함."
+
+# 옵션 C — 두 가지 결합 (권장)
+/loop 8h /daily   # 8시간 주기 호출
+# 각 호출 안에서 위 /goal 조건이 자동으로 적용되어 사이클이 stuck 되지 않음
 ```
 
-세션이 꺼져도 동작해야 하면 GitHub Actions cron으로 옮기되 그건 별개 작업. 지금은 사용자가 매일 클로드 코드 세션에서 `/daily`를 직접 호출하거나 `/loop 24h /daily` 사용.
+세션이 꺼져도 동작해야 하면 GitHub Actions cron으로 옮기되 그건 별개 작업.
 
 ## 비용
 

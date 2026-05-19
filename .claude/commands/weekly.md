@@ -1,11 +1,19 @@
 ---
-description: 매주 30-60분 EconPedia sprint 회고·합성 → /improvement-cycle 실행, growth bet 1개 결정·실행, /simplify·/security-review, 기술 도입 후보 Slack 알림. PR auto-merge 활성화.
+description: 주 3회 EconPedia sprint 사이클 — /improvement-cycle 실행, growth bet 1개 결정·실행, /simplify·/security-review, 기술 도입 후보 Slack 알림. /goal과 함께 사용 시 growth+defensive 머지까지 자가 지속.
 ---
 
-매주 한 번. EconPedia를 *방향성 있게* 발전시키는 routine. Sprint cadence.
+주 3회 (월·수·금 권장) EconPedia를 *방향성 있게* 발전시키는 routine. Sprint cadence.
 
-> **핵심 원칙**: 매 weekly는 반드시 **growth bet 1개 + defensive 1개**를 모두 가진다. fix만 나오면 weekly는 실패다.
-> 북극성: `wallet_authenticated_users` (현재 0, 90일 target 200). 매주 이 숫자를 1mm라도 움직이는 실험이 1개는 있어야 함.
+> **핵심 원칙**: 매 weekly 사이클은 반드시 **growth bet 1개 + defensive 1개**를 모두 가진다. fix만 나오면 weekly는 실패다.
+> 북극성: `wallet_authenticated_users` (현재 0, 90일 target 200). 사이클마다 이 숫자를 1mm라도 움직이는 실험이 1개는 있어야 함.
+
+> **자동화 핵심**: `/goal` (Claude Code v2.1.139+)과 결합하면 사이클이 완결(Growth bet PR 머지 + Defensive deliverable 결과 보고)될 때까지 사용자 입력 없이 자가 진행. 권장 호출:
+>
+> ```text
+> /goal "이번 /weekly 사이클을 완결한다 — 1.5단계 Growth bet 옵션이 사용자에게 제시·선택·구현되어 PR이 머지됐고, Defensive deliverable 1개 결과(PR 머지 또는 보고)가 보고됐으며, 다음 /weekly 권장 시점이 명시됨."
+> ```
+>
+> 호출 빈도: **`/loop 56h /weekly`** (주 3회 — 약 2.33일 간격, 월·수·금).
 
 ## 우선순위 (재확인)
 
@@ -55,7 +63,7 @@ npm run loop
 
 **(b) 사용자가 1개 선택** — 사용자가 옵션 1개를 고르거나 직접 제안.
 
-**(c) 즉시 구현 → draft PR → auto-merge 활성화** — 사용자가 골랐으면 그 자리에서 구현 시작. CI 통과 시 자동 머지.
+**(c) 즉시 구현 → draft PR → ready 전환 → auto-merge 활성화** — 사용자가 골랐으면 그 자리에서 구현 시작. PR 생성(draft) 직후 `mcp__github__update_pull_request(draft: false)` 로 ready 전환 → `mcp__github__enable_pr_auto_merge(SQUASH)` 호출. 이미 CI clean이면 `mcp__github__merge_pull_request(squash)` 직접.
 
 **금지**: "후보만 제시하고 다음 주로 미루기" — growth는 *조사*가 아니라 *실행*이다. 적어도 측정 인프라(UTM, console.log, KPI 필드 추가)라도 머지한다.
 
@@ -68,11 +76,11 @@ git diff --stat HEAD~7..HEAD -- 'src/**' 'api/**' 'scripts/**'
 
 **(a) 보안 회고**
 - 지난 주 변경된 파일 중 `api/server.js`, `src/pages/api/*`, `src/components/*.astro`, `scripts/scan-*.js`, `scripts/generate-whale-*.js` 가 포함되어 있으면 `/security-review` 슬래시 호출 또는 동등한 검토 수행.
-- 발견된 신규 결함 → `CLAUDE.md`의 P0/P1 목록 *업데이트* PR 생성 (이건 1 파일 작은 변경이므로 daily 규칙 적용 — draft PR + **`enable_pr_auto_merge(squash)` 호출**).
+- 발견된 신규 결함 → `CLAUDE.md`의 P0/P1 목록 *업데이트* PR 생성 (이건 1 파일 작은 변경이므로 daily 규칙 적용 — draft PR → `update_pull_request(draft: false)` → `enable_pr_auto_merge(SQUASH)` 호출).
 
 **(b) `/simplify` 적용 후보 1개**
 - 지난 주 머지된 PR 중 중복 코드·과도한 추상화·죽은 코드가 들어간 곳 1개를 찾는다.
-- 정리 PR 1개 생성. 영향 범위는 daily보다 클 수 있음 (≤ 3 파일, ≤ 100 LOC). draft → CI 시작 후 **`enable_pr_auto_merge(squash)` 호출** → CI 통과 시 자동 머지.
+- 정리 PR 1개 생성. 영향 범위는 daily보다 클 수 있음 (≤ 3 파일, ≤ 100 LOC). draft → `update_pull_request(draft: false)` → `enable_pr_auto_merge(SQUASH)` 호출 → CI 통과 시 자동 머지.
 
 ### 3단계. 기술 도입 후보 조사 (1-2개)
 
@@ -145,10 +153,17 @@ curl -fsS -X POST -H 'Content-Type: application/json' \
 ## 자동화 권장
 
 ```text
-/loop 7d /weekly
+# 옵션 A — 56시간마다 사이클 (주 3회). 세션 살아 있을 때.
+/loop 56h /weekly
+
+# 옵션 B — /goal과 결합. 사이클이 growth bet PR 머지 + defensive 결과 보고까지 자가 지속.
+/goal "이번 /weekly 사이클을 완결한다 — 1.5단계 Growth bet 옵션이 사용자에게 제시·선택·구현되어 PR이 머지됐고, Defensive deliverable 1개 결과(PR 머지 또는 보고)가 보고됐으며, 다음 /weekly 권장 시점이 명시됨."
+
+# 옵션 C — 두 가지 결합 (권장)
+/loop 56h /weekly
 ```
 
-병행: `.github/workflows/improvement-loop.yml` 도 매주 월요일 22:00 UTC에 `npm run loop`을 실행한다. 둘 중 하나가 cycle을 돌리면 나머지는 *그날* 스킵해야 함 — 동일 날짜의 plan.md가 이미 있으면 1단계를 생략하고 그 plan을 그대로 사용.
+병행: `.github/workflows/improvement-loop.yml` 도 매주 월요일 22:00 UTC에 `npm run loop`을 실행한다. 동일 날짜의 plan.md가 이미 있으면 1단계를 생략하고 그 plan을 그대로 사용 (중복 비용 방지).
 
 ## 금지 사항
 
