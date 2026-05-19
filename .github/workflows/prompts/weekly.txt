@@ -1,0 +1,9 @@
+/weekly
+
+추가 지시:
+이번 /weekly 사이클을 완결한다 — Growth bet 1개 + Defensive 1개 모두 6 hat ([PM][TL][FE][BE][SEC][DA]) 통과 후 머지. 선택적 [Designer][QA] 도 UI/새 기능 시 surface. 다음 /weekly 시점 명시. 60분 미만이면 hat 스킵 → 다시 시작.
+
+사용자 부재(cron 실행) 시 추가 제약:
+- 1단계 plan 동의 질문 자동 응답: 동의(y). 단 plan 의 Focus 가 명백히 잘못된 방향(예: 인프라 변경 강요)이면 멈춤.
+- 1.5단계 growth bet 후보 5개 중 디폴트(측정 명확 + LOC 작은 옵션) 자동 채택. 채택 이유를 transcript 에 명시.
+- [SEC] 또는 [DA] sub-agent BLOCK 이면 즉시 멈추고 사용자 검토 위한 PR draft 만 만들고 종료.

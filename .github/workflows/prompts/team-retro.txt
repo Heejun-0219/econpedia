@@ -1,0 +1,8 @@
+/team-retro
+
+추가 지시:
+이번 /team-retro 사이클을 완결한다 — transcript 에 [RETRO.data] 표 + [RETRO.hats][RETRO.subagents][RETRO.gap][RETRO.time] 4 카테고리 분석 + 1-3개 [RETRO.candidate-N] 후보 + 사용자 confirm + skill .md 변경 PR 머지 + history/team-retro.md 커밋.
+
+사용자 부재(cron 실행) 시 추가 제약:
+- 4단계 사용자 confirm 자동 응답: 1-2개 후보 자동 채택 (가설 명확 + 비용 변화 ≤ +$1/cycle 인 후보만). 채택 이유를 transcript 에 명시.
+- 채택할 후보가 0개면 PR 미생성, history/team-retro.md 에 "이번 retro 채택 없음 + 다음 retro 까지 모니터링 항목 1줄" 만 커밋 후 종료.

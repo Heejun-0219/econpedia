@@ -1,0 +1,89 @@
+name: 🌅 Daily Cycle (3x/day)
+
+# 시니어 팀 1인 시뮬레이션의 /daily 사이클을 자동 실행.
+# 09 KST 아침 스프린트 / 17 KST 오후 점검 / 01 KST 심야 자율 운영
+# = 0 UTC / 8 UTC / 16 UTC.
+#
+# ⚠️ 활성화 전 필수 작업:
+# 1. GitHub Settings → Secrets and variables → Actions 에서 ANTHROPIC_API_KEY 등록.
+# 2. (선택) GH_PAT (or default GITHUB_TOKEN) 권한이 PR 생성·머지 가능한지 확인.
+# 3. 아래 "Run /daily" 스텝에서 Claude 호출 옵션 1개 선택 (A/B/C 중).
+# 4. 첫 실행은 수동 (workflow_dispatch) 으로 검증 후 cron 활성.
+
+on:
+  schedule:
+    # 0 UTC = 09 KST | 8 UTC = 17 KST | 16 UTC = 01 KST (다음날)
+    - cron: '0 0,8,16 * * *'
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: 'Which slot (morning / afternoon / midnight)'
+        required: false
+        default: 'morning'
+        type: choice
+        options: [morning, afternoon, midnight]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: daily-cycle
+  cancel-in-progress: false
+
+jobs:
+  run-daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # /daily 는 보통 20-30분
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🟢 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install deps
+        run: npm ci --no-audit --no-fund
+
+      - name: 🌅 Run /daily (Claude Code Action v1)
+        # 공식 anthropics/claude-code-action@v1 — 사용자가 옵션 A 선택.
+        # 변경하려면: 이 step 을 주석 처리하고 아래 대안 중 하나로 교체.
+        # B) CLI 헤드리스:  npm install -g @anthropic-ai/claude-code && claude -p "$(cat .github/workflows/prompts/daily.txt)" --dangerously-skip-permissions
+        # C) SDK 스크립트:  node scripts/claude-headless.mjs --skill daily
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt_file: .github/workflows/prompts/daily.txt
+          claude_args: '--dangerously-skip-permissions'
+
+      - name: 📊 Slot 변수 (보고용)
+        id: slot
+        run: |
+          SLOT="${{ github.event.inputs.slot }}"
+          if [ -z "$SLOT" ]; then
+            HOUR=$(date -u +%H)
+            case "$HOUR" in
+              00) SLOT="morning" ;;
+              08) SLOT="afternoon" ;;
+              16) SLOT="midnight" ;;
+              *) SLOT="manual" ;;
+            esac
+          fi
+          echo "slot=$SLOT" >> "$GITHUB_OUTPUT"
+
+      - name: 📨 Notify Slack (선택, on failure)
+        if: failure() && env.SLACK_WEBHOOK != ''
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+            -d "{\"text\":\"⚠️ /daily 사이클 실패 (${{ steps.slot.outputs.slot }} slot)\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            "$SLACK_WEBHOOK"

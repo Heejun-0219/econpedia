@@ -1,0 +1,108 @@
+name: 🔁 Team Retro (biweekly)
+
+# 격주 토요일 17 KST = 08 UTC 에 스킬 자가 진화 ritual.
+# 분석한 PR 의 hat 결과·sub-agent 비용·머지 후 결함 패턴으로 1-3 skill 개선.
+#
+# cron 은 매주 토 실행되지만 ISO week 짝수/홀수 로 격주 가드.
+# (GitHub Actions cron 은 격주 직접 지원 안 함 → 워크플로 안에서 체크)
+#
+# ⚠️ 활성화 전 필수 작업:
+# 1. ANTHROPIC_API_KEY 등록.
+# 2. Claude 호출 옵션 1개 선택.
+# 3. 첫 실행은 workflow_dispatch 로 수동 검증.
+
+on:
+  schedule:
+    # 매주 토 08 UTC = 17 KST (격주 가드는 아래 jobs.if 에서)
+    - cron: '0 8 * * 6'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Bypass biweekly guard'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: team-retro
+  cancel-in-progress: false
+
+jobs:
+  run-retro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120  # 60-90분 예상
+    steps:
+      - name: 🗓️ Biweekly guard (ISO week 홀수일 때만 자동 실행)
+        id: guard
+        run: |
+          WEEK=$(date -u +%V)
+          FORCE="${{ github.event.inputs.force }}"
+          IS_SCHEDULE="${{ github.event_name == 'schedule' }}"
+          if [ "$FORCE" = "true" ]; then
+            echo "▶ force=true → 실행"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif [ "$IS_SCHEDULE" = "true" ] && [ $((WEEK % 2)) = 1 ]; then
+            echo "▶ ISO week $WEEK (odd) → 실행"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "⏸ ISO week $WEEK (even) 또는 비-schedule → 스킵"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "week=$WEEK" >> "$GITHUB_OUTPUT"
+
+      - name: 📥 Checkout
+        if: steps.guard.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🟢 Setup Node
+        if: steps.guard.outputs.run == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install deps
+        if: steps.guard.outputs.run == 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: 🔁 Run /team-retro (Claude Code Action v1)
+        if: steps.guard.outputs.run == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt_file: .github/workflows/prompts/team-retro.txt
+          claude_args: '--dangerously-skip-permissions'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 💾 Commit retro history
+        if: steps.guard.outputs.run == 'true' && always()
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          DATE=$(date -u +%Y-%m-%d)
+          git add "ops/improvement-loop/state/history/${DATE}-team-retro.md" 2>/dev/null || true
+          if git diff --cached --quiet 2>/dev/null; then
+            echo "ℹ️ No retro artifacts to commit."
+          else
+            git commit -m "chore(retro): biweekly team-retro ${DATE}" || true
+            git push || true
+          fi
+
+      - name: 📨 Notify Slack (선택)
+        if: steps.guard.outputs.run == 'true' && env.SLACK_WEBHOOK != ''
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+            -d "{\"text\":\"🔁 /team-retro 완료 (week ${{ steps.guard.outputs.week }})\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            "$SLACK_WEBHOOK"

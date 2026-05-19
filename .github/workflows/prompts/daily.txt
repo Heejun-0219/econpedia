@@ -1,0 +1,9 @@
+/daily
+
+추가 지시:
+오늘의 /daily 사이클을 완결한다 — transcript에 [PM][TL][FE][BE] 4 hat + 조건부 [SEC][DA] sub-agent 결과(N/A 명시 포함) + 최종 [VERDICT] 가 surface 되고, PR 머지 또는 (e) PASS 결정 보고. 마지막에 사이클 소요 시간(분) 명시. 20분 미만이면 hat 스킵 의심 → 다시 시작.
+
+심야 자율 운영(01:00 KST) 시 추가 제약:
+- [SEC] 또는 [DA] sub-agent BLOCK 이면 즉시 멈추고 git commit 보존만 + 사용자 검토 위한 noindex PR draft.
+- ambiguous 한 변경은 절대 머지 금지.
+- 새 기능보다 보안 sensitive 변경 회고 또는 Whale Alert 환각 검증 우선.
