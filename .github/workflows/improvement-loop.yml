@@ -1,9 +1,11 @@
 name: 🔁 Self-Improvement Loop
 
 on:
-  schedule:
-    # Every Monday 22:00 UTC = 07:00 KST Tuesday (after weekend, before workweek starts)
-    - cron: '0 22 * * 1'
+  # cron 비활성화 — 로컬 Claude Code 에서 `/loop 7d /improvement-cycle` 로 대체.
+  # 복원하려면 schedule 블록 주석 해제.
+  # schedule:
+  #   # Every Monday 22:00 UTC = 07:00 KST Tuesday (after weekend, before workweek starts)
+  #   - cron: '0 22 * * 1'
   workflow_dispatch:
     inputs:
       phase:
