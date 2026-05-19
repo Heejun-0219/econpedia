@@ -53,35 +53,16 @@ jobs:
       - name: 📦 Install deps
         run: npm ci --no-audit --no-fund
 
-      - name: 🌅 Run /daily (Claude Code headless)
-        # ⚠️ 다음 중 하나 선택 — 사용자가 결정한 후 주석 해제:
-        #
-        # ─── Option A: Anthropic 공식 claude-code-action (권장) ────────
-        # uses: anthropics/claude-code-action@v0
-        # with:
-        #   prompt-file: .github/workflows/prompts/daily.txt
-        #   anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
-        #   allowed-tools: 'Bash,Edit,Write,Read,Grep,Glob'
-        #   mcp-servers: 'github'  # GitHub MCP for PR creation
-        #
-        # ─── Option B: Claude Code CLI 직접 ──────────────────────────
-        # env:
-        #   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        # run: |
-        #   npm install -g @anthropic-ai/claude-code
-        #   claude -p "$(cat .github/workflows/prompts/daily.txt)" \
-        #     --dangerously-skip-permissions
-        #
-        # ─── Option C: Anthropic SDK 스크립트 (커스텀) ────────────────
-        # env:
-        #   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        # run: node scripts/claude-headless.mjs --skill daily --slot ${{ github.event.inputs.slot || 'auto' }}
-        #
-        run: |
-          echo "🚧 Claude invocation 미설정"
-          echo "위 주석에서 Option A/B/C 중 하나를 선택해 활성화하세요."
-          echo "그 전까지는 이 워크플로는 no-op."
-          exit 0
+      - name: 🌅 Run /daily (Claude Code Action v1)
+        # 공식 anthropics/claude-code-action@v1 — 사용자가 옵션 A 선택.
+        # 변경하려면: 이 step 을 주석 처리하고 아래 대안 중 하나로 교체.
+        # B) CLI 헤드리스:  npm install -g @anthropic-ai/claude-code && claude -p "$(cat .github/workflows/prompts/daily.txt)" --dangerously-skip-permissions
+        # C) SDK 스크립트:  node scripts/claude-headless.mjs --skill daily
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt_file: .github/workflows/prompts/daily.txt
+          claude_args: '--dangerously-skip-permissions'
 
       - name: 📊 Slot 변수 (보고용)
         id: slot

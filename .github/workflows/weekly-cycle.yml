@@ -47,19 +47,17 @@ jobs:
       - name: 📦 Install deps
         run: npm ci --no-audit --no-fund
 
-      - name: 📊 Run /weekly (Claude Code headless)
-        # ⚠️ daily-cycle.yml 의 주석 가이드 참조. 같은 옵션 A/B/C 중 1개 선택.
-        # prompt-file: .github/workflows/prompts/weekly.txt
-        #
-        # 주의: weekly 의 1단계는 npm run loop 를 실행하므로 GEMINI_API_KEY 도 필요.
+      - name: 📊 Run /weekly (Claude Code Action v1)
+        # 공식 anthropics/claude-code-action@v1.
+        # weekly 의 1단계는 npm run loop 실행 → GEMINI_API_KEY 도 env 로 전달.
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt_file: .github/workflows/prompts/weekly.txt
+          claude_args: '--dangerously-skip-permissions'
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "🚧 Claude invocation 미설정"
-          echo "daily-cycle.yml 의 주석 가이드 참조하여 Option A/B/C 중 하나 선택."
-          exit 0
 
       - name: 💾 Commit loop artifacts
         if: always()
