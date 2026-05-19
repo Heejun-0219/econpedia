@@ -519,6 +519,7 @@ const server = createServer(async (req, res) => {
 
   // ── POST /api/wallet-subscribe (지갑 알림 구독) ───────────────────
   if (req.method === 'POST' && path === '/api/wallet-subscribe') {
+    if (isRateLimited(ip)) return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
