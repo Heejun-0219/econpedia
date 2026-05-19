@@ -74,9 +74,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Visit Tracker -->
     <script is:inline>
-      // 기존 단순 방문자 카운트
+      // 기존 단순 방문자 카운트 + utm_source 캡처 (Telegram·blogger 등 외부 유입 측정)
       if (!sessionStorage.getItem('visited')) {
-        fetch('/api/track').catch(() => {});
+        const utm = new URLSearchParams(location.search).get('utm_source');
+        const trackUrl = utm ? `/api/track?source=${encodeURIComponent(utm)}` : '/api/track';
+        fetch(trackUrl).catch(() => {});
         sessionStorage.setItem('visited', '1');
       }
     </script>

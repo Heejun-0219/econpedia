@@ -314,6 +314,14 @@ const server = createServer(async (req, res) => {
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     stats.total = (stats.total || 0) + 1;
     stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
+    // utm_source 캡처 — 화이트리스트로 dictionary spam 방지
+    const rawSource = url.searchParams.get('source') || '';
+    const source = /^[a-z0-9_-]{1,20}$/i.test(rawSource) ? rawSource.toLowerCase() : null;
+    if (source) {
+      if (!stats.bySource) stats.bySource = {};
+      if (!stats.bySource[source]) stats.bySource[source] = {};
+      stats.bySource[source][todayStr] = (stats.bySource[source][todayStr] || 0) + 1;
+    }
     // 디스크 I/O 없음 — 5분마다 자동 플러시
     return sendJSON(res, 200, { success: true });
   }
