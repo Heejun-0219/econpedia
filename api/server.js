@@ -417,8 +417,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/og/wallet (Puppeteer를 이용한 동적 OG 이미지 생성) ────
   if (req.method === 'GET' && path.startsWith('/api/og/wallet')) {
-    // Puppeteer DoS Attack Prevention
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    // Puppeteer DoS Attack Prevention — 스코프 상위 ip 변수 재사용 (XFF 수정 적용)
     if (isRateLimited(ip)) {
       res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('너무 많은 요청입니다. 잠시 후 다시 시도해주세요.');
