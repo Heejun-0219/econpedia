@@ -1,16 +1,16 @@
 ---
-description: 매일 5-15분 EconPedia 발전 루틴 — 상태 점검 → P0/P1 픽스 1개 → draft PR + auto-merge 활성화. 새 기능 금지, 픽스만.
+description: 매일 5-15분 EconPedia 발전 루틴 — 상태 점검 → 픽스 1개 또는 ≤30 LOC growth 실험 1개 → draft PR + auto-merge.
 ---
 
 EconPedia를 매일 *조금씩* 발전시키는 루틴. 한 번에 하나만, 무리하지 말 것.
 
 ## 우선순위
 
-1. **발전하는 프로덕션** (최우선) — 알려진 P0/P1 픽스, 빌드 회귀 차단, 빌드 안정성.
+1. **발전하는 프로덕션** — 알려진 P0/P1 픽스, 빌드 회귀 차단.
 2. **보안** — `api/server.js`·`src/components/*.astro`·`/api/*` 라우트 건드린 어제자 변경 회고.
-3. **고객 가치** — Whale Alert 본문의 환각 의심 케이스 1건 검증.
+3. **고객 가치 (growth)** — 북극성(`wallet_authenticated_users`)을 1mm라도 움직이는 **작은 실험 1개**. Whale Alert CTA, 페이지 카피 변경, UTM 트래킹 등 30 LOC 이내.
 
-위 순서로 *위에서 아래로* 살피되, 한 사이클에 **단 1개 액션만** 수행.
+위 순서로 *위에서 아래로* 살피되, 한 사이클에 **단 1개 액션만** 수행. (a)~(c) 중 첫 번째 후보가 나오는 카테고리에서 멈춘다. fix 후보가 없으면 PASS 대신 **growth 실험** 시도.
 
 ## 절차
 
@@ -48,7 +48,16 @@ npm run loop:snapshot
   - `data/insider-case-history.json`에 *없는* 회사를 "유사 사례"로 인용했는지 확인
 - 환각 1건 이상 발견 → 페이지 noindex 또는 본문 수정. 같은 (a) 조건 만족 시 PR.
 
-**(d) 아무것도 없으면 PASS** — 매일 무언가 *반드시* 하려는 강박은 금지. "오늘은 클린"이라고 보고하고 종료.
+**(d) Growth 실험 1개 (≤30 LOC)** — fix 후보가 없을 때 PASS 대신 시도.
+- 북극성(`wallet_authenticated_users`)에 직접 연결되는 작은 변경 1개. 예시:
+  - Whale Alert 페이지 하단에 "이 종목 알림 받기 → /wallet" CTA 추가
+  - Telegram 푸시 링크에 UTM 파라미터 부착 → CTR 측정 가능하게
+  - 페이지 카피 1줄을 가설 기반으로 변경 (A/B 없으니 직관 + 측정 가능성으로 판단)
+  - whale 페이지 메타 description 개선 → CTR ↑ 기대
+- **반드시** PR 본문에 *측정 방법* 1줄 기재 (예: "Search Console CTR 7일 후 재측정", "Telegram UTM click 7일 누적").
+- 검증 가능한 가설이 없으면 (e)로.
+
+**(e) 아무것도 없으면 PASS** — 매일 무언가 *반드시* 하려는 강박은 금지. "오늘은 클린"이라고 보고하고 종료.
 
 ### 3단계. 변경 적용
 
@@ -77,12 +86,13 @@ npm run loop:snapshot
 
 ## 금지 사항
 
-- 새 기능 추가 (CLAUDE.md 원칙 1: "지울 수 있는가 먼저")
 - 1 파일 초과 / 30 LOC 초과 변경 → 그건 `/weekly` 또는 사용자 합의 후
+- 새 페이지 *대량* 자동 생성 (예: 카드뉴스·daily-briefing 신규 카테고리) — 1개 정도의 단발 페이지는 (d)에서 허용
 - `docker-compose.yml`, `Dockerfile`, `.github/workflows/*`, `nginx*` 등 인프라 파일 — 인프라는 항상 사용자 수동 검토
 - 의존성 추가·업그레이드 — 위클리에서만
 - `data/insider-case-history.json` 사람 큐레이션 데이터 — 절대 자동 편집 금지
 - 머지 후 *추가* 작업 — 매일은 한 번만
+- **측정 불가능한 변경** — (d) growth 실험은 PR에 측정 방법이 없으면 채택 금지
 
 ## 자동화 권장
 

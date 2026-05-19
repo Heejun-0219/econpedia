@@ -1,14 +1,18 @@
 ---
-description: 매주 30-60분 EconPedia sprint 회고·합성 → /improvement-cycle 실행, /simplify, /security-review, 기술 도입 후보 Slack 알림.
+description: 매주 30-60분 EconPedia sprint 회고·합성 → /improvement-cycle 실행, growth bet 1개 결정·실행, /simplify·/security-review, 기술 도입 후보 Slack 알림. PR auto-merge 활성화.
 ---
 
 매주 한 번. EconPedia를 *방향성 있게* 발전시키는 routine. Sprint cadence.
 
+> **핵심 원칙**: 매 weekly는 반드시 **growth bet 1개 + defensive 1개**를 모두 가진다. fix만 나오면 weekly는 실패다.
+> 북극성: `wallet_authenticated_users` (현재 0, 90일 target 200). 매주 이 숫자를 1mm라도 움직이는 실험이 1개는 있어야 함.
+
 ## 우선순위 (재확인)
 
-1. **발전하는 프로덕션** — Self-improvement loop synthesis가 결정한 "This Cycle's Focus"가 합당한지 검증, sprint backlog 1개 끝내기.
-2. **보안** — 지난 주 변경에서 OWASP 패턴 점검.
-3. **고객 가치 + 기술 도입** — Whale Alert·분석·UX 강화를 위한 신기술 후보 1-2개 조사 → 결정은 사용자에게 위임. *Slack 알림 발송.*
+1. **고객 가치 (growth)** — 북극성을 움직이는 실험 1개를 *이번 주에 실제로 머지*한다. 조사·검토만 하고 끝내지 않는다.
+2. **발전하는 프로덕션** — Self-improvement loop synthesis가 결정한 sprint deliverable 중 *defensive 1개*를 끝낸다 (P0/P1 픽스, 빌드 안정성 등).
+3. **보안** — 지난 주 변경에서 OWASP 패턴 점검. 신규 결함은 CLAUDE.md에 기록.
+4. **기술 도입 후보** — Whale Alert·분석·UX 강화를 위한 신기술 후보 1-2개 조사 → 결정은 사용자에게 위임. Slack 알림.
 
 ## 절차
 
@@ -27,9 +31,33 @@ npm run loop
 - "## Two-week Sprint Plan"의 1주차 deliverable
 - "## Success criteria"의 KPI 목표
 
+**검증**: Week 1 deliverable에 *growth 항목*이 1개 이상 포함됐는지 확인. 전부 fix뿐이면 1.5단계가 강제 추가됨을 사용자에게 알린다.
+
 사용자에게 1가지 질문: **"이 Focus에 동의하나요? (y/n + 수정 요청)"**
 
 동의하지 않으면 여기서 멈추고 사용자 입력 대기.
+
+### 1.5단계. Growth Bet 결정·실행 (필수, 스킵 금지)
+
+이 단계는 **항상** 수행한다. 1단계 plan에 이미 growth deliverable이 있으면 그것을 실행, 없으면 새로 결정.
+
+**(a) 후보 3-5개 제시** — 다음 영역에서 *이번 주 안에 머지 가능한* (≤ 3 파일, ≤ 100 LOC) 후보를 사용자에게 제시:
+
+| 영역 | 가설 예시 |
+|---|---|
+| Whale → wallet conversion | "whale 페이지 하단 CTA가 wallet auth signup을 N% 만든다" |
+| Whale → Telegram retention | "UTM 부착으로 CTR 측정 가능 → 카피 iteration 기반 마련" |
+| SEO long-tail | "sector aggregation 페이지가 검색 트래픽 N건/주 만든다" |
+| 데이터 가치 | "6개월 follow-up 자동 업데이트로 재방문 N% ↑" |
+| 외부 distribution | "공개 read-only API 또는 RSS feed가 백링크 N개 만든다" |
+
+각 후보에는 (i) 1주 안 가능 여부, (ii) 검증 가능한 KPI 1개, (iii) 변경 범위 추정을 명시.
+
+**(b) 사용자가 1개 선택** — 사용자가 옵션 1개를 고르거나 직접 제안.
+
+**(c) 즉시 구현 → draft PR → auto-merge 활성화** — 사용자가 골랐으면 그 자리에서 구현 시작. CI 통과 시 자동 머지.
+
+**금지**: "후보만 제시하고 다음 주로 미루기" — growth는 *조사*가 아니라 *실행*이다. 적어도 측정 인프라(UTM, console.log, KPI 필드 추가)라도 머지한다.
 
 ### 2단계. 지난 주 회고 (보안 + 단순화)
 
@@ -40,11 +68,11 @@ git diff --stat HEAD~7..HEAD -- 'src/**' 'api/**' 'scripts/**'
 
 **(a) 보안 회고**
 - 지난 주 변경된 파일 중 `api/server.js`, `src/pages/api/*`, `src/components/*.astro`, `scripts/scan-*.js`, `scripts/generate-whale-*.js` 가 포함되어 있으면 `/security-review` 슬래시 호출 또는 동등한 검토 수행.
-- 발견된 신규 결함 → `CLAUDE.md`의 P0/P1 목록 *업데이트* PR 생성 (이건 1 파일 작은 변경이므로 daily 규칙 적용 — draft PR + auto-merge).
+- 발견된 신규 결함 → `CLAUDE.md`의 P0/P1 목록 *업데이트* PR 생성 (이건 1 파일 작은 변경이므로 daily 규칙 적용 — draft PR + **`enable_pr_auto_merge(squash)` 호출**).
 
 **(b) `/simplify` 적용 후보 1개**
 - 지난 주 머지된 PR 중 중복 코드·과도한 추상화·죽은 코드가 들어간 곳 1개를 찾는다.
-- 정리 PR 1개 생성. 영향 범위는 daily보다 클 수 있음 (≤ 3 파일, ≤ 100 LOC). draft → CI 통과 후 auto-merge.
+- 정리 PR 1개 생성. 영향 범위는 daily보다 클 수 있음 (≤ 3 파일, ≤ 100 LOC). draft → CI 시작 후 **`enable_pr_auto_merge(squash)` 호출** → CI 통과 시 자동 머지.
 
 ### 3단계. 기술 도입 후보 조사 (1-2개)
 
@@ -107,8 +135,10 @@ curl -fsS -X POST -H 'Content-Type: application/json' \
 
 사용자에게 다음을 보고하고 종료:
 - This cycle's Focus (1줄)
-- Sprint 1주차 deliverable 목록
-- 머지된/생성된 PR URL
+- **Growth bet 실행 결과** — 어떤 가설을 어떻게 측정 가능하게 머지했는지 (1줄)
+- Defensive deliverable 결과 (1줄)
+- Sprint 1주차 deliverable 진행 현황
+- 머지된/생성된 PR URL + **auto-merge 활성화 여부**
 - 기술 도입 후보 슬랙 알림 결과 (발송됨 / 후보 없음 / SLACK_WEBHOOK_URL 미설정)
 - 다음 `/weekly` 권장 시점
 
@@ -122,10 +152,12 @@ curl -fsS -X POST -H 'Content-Type: application/json' \
 
 ## 금지 사항
 
+- **Growth bet 스킵** — 1.5단계는 fix-only weekly를 만들지 않기 위해 강제. 사용자가 명시적으로 "이번 주는 growth 없이 fix만" 동의했을 때만 생략.
 - 큰 리팩토링 (≥ 3 파일 / 100 LOC) — sprint 1주차 deliverable로 분해 후 daily가 처리
 - 인프라 변경 (`docker-compose.yml`, `Dockerfile`, `nginx*`, `.github/workflows/*`) — 항상 사용자 합의 후 수동
 - 의존성 메이저 업그레이드 — 별도 PR + 사용자 검토
 - 기술 도입 *결정* — Claude는 후보를 제안만. 사용자가 결정.
+- **PR을 draft로 두고 auto-merge 미활성** — weekly가 만드는 모든 PR은 CI 시작 직후 `enable_pr_auto_merge(squash)` 호출이 기본. 사용자가 명시적으로 "수동 검토 필요" 표시 시에만 보류.
 
 ## 비용
 
