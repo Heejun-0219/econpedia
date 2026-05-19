@@ -31,6 +31,17 @@ ops/improvement-loop/
 └── README.md             # 이 파일
 ```
 
+## Phase 종류
+
+| Phase | 빈도 권장 | 비용 | 시간 | 용도 |
+|---|---|---|---|---|
+| `snapshot` | 시간/일 단위 | $0 | 1초 | 프로덕션 상태 캡처만. LLM 호출 없음. |
+| `daily` | **매일** | ~$0.05 (Sonnet 4.6) | 30-60초 | Chief of staff가 어제→오늘 delta + 오늘의 1-action |
+| `critique` × 3 | 주 1회 | ~$0.5-1.5 | 1-2분 × 3 | 머스크·매킨지·멍거 페르소나 평가 |
+| `synthesize` | 주 1회 | ~$0.8-1.5 | 1-2분 | 매킨지급 합성 플랜 + 2주 sprint |
+| `actionize` | 주 1회 | ~$0.3 | 30초 | 플랜 → GitHub Issues JSON |
+| `all` (default) | 주 1회 | ~$1.5-3.0 | 4-7분 | snapshot + critique × 3 (병렬) + synthesize |
+
 ## 실행 방법
 
 ### 0. 사전 준비

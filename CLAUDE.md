@@ -32,11 +32,16 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## Self-Improvement Loop
 
-매주 자동 실행되는 진단·합성 루틴이 `ops/improvement-loop/`에 있음. 로컬에서:
+진단·합성 루틴이 `ops/improvement-loop/`에 있음. 로컬에서:
 ```bash
-npm run loop                  # 한 사이클: snapshot + 3 critique + synthesis
-npm run loop:snapshot         # 무료 — LLM 호출 없음
+npm run loop:snapshot         # 무료 — LLM 호출 없음. 시간/일 단위 가능
+npm run loop:daily            # 매일 — Sonnet 4.6, chief of staff가 오늘의 1-action ($0.05)
+npm run loop                  # 주간 — Opus 4.7로 풀 사이클: snapshot + 3 critique + synthesis (~$1.5-3.0)
 ```
+
+Claude Code routine 권장:
+- `/loop 1d /daily` — 매일 09:00 KST 자동 호출
+- `/loop 7d /improvement-cycle` — 주간 풀 사이클
 
 자세한 사용법: `ops/improvement-loop/README.md`.
 

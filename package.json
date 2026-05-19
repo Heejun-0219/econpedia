@@ -12,6 +12,7 @@
     "astro": "astro",
     "loop": "node scripts/improvement-loop.mjs",
     "loop:snapshot": "node scripts/improvement-loop.mjs --phase snapshot",
+    "loop:daily": "node scripts/improvement-loop.mjs --phase daily",
     "loop:critique": "node scripts/improvement-loop.mjs --phase critique",
     "loop:synthesize": "node scripts/improvement-loop.mjs --phase synthesize",
     "loop:actionize": "node scripts/improvement-loop.mjs --phase actionize"
