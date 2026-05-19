@@ -86,7 +86,6 @@ export const CATEGORIES = {
         readingTime: '9분',
         date: '2026.04.01',
         href: '/economy/finance/rental-contract',
-        comingSoon: true,
       },
       {
         title: '사회초년생을 위한 통장 쪼개기 완전판',

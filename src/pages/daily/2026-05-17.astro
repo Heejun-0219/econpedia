@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "내 주식 계좌에서 하루 만에 60만 원이 사라졌다면? 오늘 같은 '폭풍우' 날씨엔 잠시 멈춤이 필요해요";
+const date = "2026-05-17";
+const description = "🚨 오늘 왜 이러는 걸까?";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>🚨 <strong>오늘 왜 이러는 걸까?</strong>
+오늘 우리 주식 시장에 큰 폭풍이 불었습니다. 평소보다 훨씬 큰 폭으로 시장이 흔들렸는데요. 전 세계적으로 기름값이 갑자기 오르면서 물가 걱정이 다시 커졌고, 그 영향이 우리 시장에 고스란히 전달되었습니다. </p>
+<p>마치 맑은 하늘에 갑자기 소나기가 쏟아지는 것처럼, 기업들의 가치보다는 시장 전체의 불안감이 커지면서 주가가 크게 밀려난 상황입니다. 환율도 1,500원 턱밑까지 차올라 심리적으로 더 춥게 느껴지는 하루입니다.</p>
+<p>💰 <strong>내 지갑 가이드</strong></p>
+<p><strong>1. 국내 주식: &quot;오늘은 주식 앱을 잠시 로그아웃하세요&quot;</strong></p>
+<ul>
+<li><strong>지갑 영향:</strong> 1,000만 원을 국내 주식에 넣어두셨다면, 어제보다 계좌 잔고가 <strong>약 61만 1,700원</strong> 줄어들었을 거예요.</li>
+<li><strong>행동 가이드:</strong> 숫자가 너무 크게 변해서 당황스러우시겠지만, 오늘 같은 날 &#39;홧김에 팔기(투매)&#39;나 &#39;복수하기 위한 추가 매수&#39;는 위험합니다. 폭풍우가 칠 때는 일단 비를 피하는 게 상책이에요. 오늘은 계좌를 자주 들여다보지 말고 일상에 집중하세요.</li>
+</ul>
+<p><strong>2. 주유비: &quot;집 근처 저렴한 주유소가 보인다면 미리 채우세요&quot;</strong></p>
+<ul>
+<li><strong>지갑 영향:</strong> 기름값이 올라서, 5만 원어치 기름을 넣을 때마다 <strong>약 1,058원</strong>을 더 내야 합니다.</li>
+<li><strong>행동 가이드:</strong> 국제 기름값이 4% 넘게 껑충 뛰었습니다. 보통 국제 가격은 1~2주의 시차를 두고 동네 주유소 가격에 반영돼요. 내일이나 모레보다는 오늘 퇴근길에 미리 주유해두는 것이 소소하지만 확실한 절약법입니다.</li>
+</ul>
+<p><strong>3. 해외여행·직구: &quot;장바구니 결제는 잠시 미뤄두세요&quot;</strong></p>
+<ul>
+<li><strong>지갑 영향:</strong> 100만 원을 환전할 때 어제보다 <strong>34원</strong> 정도 더 들지만, 문제는 환율 자체가 이미 1,497원이라는 점입니다.</li>
+<li><strong>행동 가이드:</strong> 1,500원에 육박하는 환율은 직구나 여행객에게 매우 부담스러운 숫자입니다. 꼭 지금 사야 하는 생필품이 아니라면, 환율이 심리적 저항선인 1,500원대에서 어떻게 움직이는지 며칠 더 지켜보고 결제하는 것을 추천합니다.</li>
+</ul>
+<p><strong>4. 미국 주식: &quot;환율 덕분에 그나마 덜 빠졌어요&quot;</strong></p>
+<ul>
+<li><strong>지갑 영향:</strong> 500만 원 투자 기준 <strong>약 44,800원</strong> 정도 하락했습니다.</li>
+<li><strong>행동 가이드:</strong> 미국 시장도 좋지 않았지만, 환율이 오르면서(달러 가치 상승) 주가 하락분을 어느 정도 방어해 줬습니다. 국내 주식보다는 타격이 덜하니 너무 상심하지 마세요.</li>
+</ul>
+<hr>
+<p>시장이 크게 흔들릴 때는 내 마음을 먼저 지키는 것이 가장 좋은 재테크입니다. 오늘은 맛있는 저녁 드시면서 푹 쉬시길 바라요.</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

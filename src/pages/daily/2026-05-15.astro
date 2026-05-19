@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "국내 주식이 활짝 웃었습니다. 1천만 원 투자했다면 오늘 하루에만 17만 원이 불어난 셈이에요";
+const date = "2026-05-15";
+const description = "오늘은 간만에 주식 계좌를 열어보고 기분 좋게 웃으셔도 되는 날입니다. 미국 시장이 기분 좋게 상승 마감하더니, 우리 시장은 그보다 더 뜨겁게 달아올랐거든요. 특별한 악재 없이 전반적인 투자 심리가 살아나면서 내 지갑 속 자산 가치들이 일제히 '우상향' 곡선을 그렸습니...";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>오늘은 간만에 주식 계좌를 열어보고 기분 좋게 웃으셔도 되는 날입니다. 미국 시장이 기분 좋게 상승 마감하더니, 우리 시장은 그보다 더 뜨겁게 달아올랐거든요. 특별한 악재 없이 전반적인 투자 심리가 살아나면서 내 지갑 속 자산 가치들이 일제히 &#39;우상향&#39; 곡선을 그렸습니다.</p>
+<p>다만, 기름값과 환율은 여전히 고공행진 중이라 나가는 돈 관리에는 조금 신경을 써야 하는 하루이기도 합니다.</p>
+<h2>💰 내 지갑 가이드</h2>
+<p>오늘 시장 변화가 여러분의 통장에 미치는 실질적인 영향을 정리해 드릴게요.</p>
+<h3>📈 투자 지갑: &quot;오늘은 파티 타임!&quot;</h3>
+<ul>
+<li><strong>국내 주식:</strong> 1,000만 원 정도 주식을 들고 계신다면, 어제보다 자산이 <strong>약 17만 5천 원</strong> 정도 늘어났을 거예요. 오늘 하루 수익만으로도 근사한 저녁 식사가 가능해진 셈이죠.</li>
+<li><strong>미국 주식:</strong> 500만 원 정도 투자 중이라면 환율 상승분까지 더해져 <strong>약 4만 7천 원</strong> 정도 이득을 보고 계실 겁니다. </li>
+<li><strong>비트코인:</strong> 코인에 100만 원을 넣어두셨다면 자산이 <strong>약 2만 5천 원</strong> 정도 불어났습니다.</li>
+</ul>
+<p><strong>💡 가이드:</strong> 자산이 올랐다고 해서 바로 &#39;추격 매수&#39;를 하기보다는, 일단 불어난 계좌를 보며 여유를 즐기세요. 급하게 뛰어들기엔 환율과 유가가 아직은 부담스러운 수준입니다.</p>
+<h3>✈️ 소비 지갑: &quot;해외 결제는 잠시 멈춤&quot;</h3>
+<ul>
+<li><strong>환전과 직구:</strong> 환율이 1,492원까지 올랐습니다. 100만 원을 환전할 때 어제보다 <strong>19원</strong> 더 비싸졌는데, 문제는 &#39;1,500원&#39;이라는 심리적 마지노선에 바짝 다가섰다는 거예요. </li>
+<li><strong>주유비:</strong> 5만 원어치 기름을 넣을 때 어제보다 <strong>213원</strong> 정도 더 듭니다. 큰 금액은 아니지만, 유가가 계속 오름세라 당분간 주유는 미루지 말고 미리 해두시는 게 이득입니다.</li>
+</ul>
+<p><strong>💡 가이드:</strong> 해외 직구 장바구니에 담아둔 물건이 있다면 결제를 잠시 미루세요. 환율이 1,500원을 넘길지 지켜본 뒤 결정해도 늦지 않습니다. </p>
+<h3>🏠 고정 지출: &quot;여기는 평화롭습니다&quot;</h3>
+<ul>
+<li><strong>대출 이자:</strong> 다행히 한국은행 기준금리에 변화가 없어 대출 이자 부담이 갑자기 늘어나지는 않을 전망입니다. </li>
+<li><strong>장바구니 물가:</strong> 먹거리 물가도 당분간은 큰 변동 없이 안정적인 흐름을 보일 것으로 보입니다.</li>
+</ul>
+<hr>
+<p>주식 계좌가 빨간색으로 물든 기분 좋은 금요일입니다. 불어난 자산만큼 마음 넉넉한 주말 보내시길 바랄게요.</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
