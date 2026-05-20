@@ -15,20 +15,26 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 ## 작업 시 원칙
 
 1. **본질에 집중**: 110+ 자동 생성 페이지 vs Whale Alert 1개 — 후자에 10배 베팅. 새 기능을 추가하기 전에 *지울 수 있는가* 먼저 묻기.
-2. **가짜 지표 절대 금지**: `api/server.js`에 fabricated `openRate`, `course_completions`, `rating` 같은 코드가 있음 → 발견 시 즉시 제거하거나 "예시" 라벨 명시. 사용자에게 노출되는 모든 숫자는 실측치이거나 명백한 disclaimer 필요.
+2. **가짜 지표 절대 금지**: fabricated `openRate`, `course_completions`, `rating` 코드는 모두 제거됨 (2026-05-20). 이후에도 사용자에게 노출되는 모든 숫자는 실측치이거나 명백한 disclaimer 필요.
 3. **환각 방지**: AI가 생성하는 모든 콘텐츠(특히 Whale Alert)는 (a) 외부 공시 데이터, (b) 큐레이션된 화이트리스트(`data/insider-case-history.json`), (c) Yahoo Finance에서 직접 조회한 가격 — 셋 중 하나에 근거해야 함. "내재 지식" 인용 금지.
 4. **인프라 변경은 신중히**: `docker-compose.yml`이 OCI 한 대에 올라가 있고 staging 없음. main 푸시 = prod. 큰 변경은 항상 PR + 수동 검증.
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-- **P0**: `api/server.js:94-121` — `POLLS_FILE`, `WALLETS_FILE` 미정의 → poll/wallet 데이터가 30초마다 디스크 저장 실패. 컨테이너 재시작 시 데이터 손실.
-- **P0**: `src/components/TimeAttackLounge.astro:253` — Supabase `full_name` 저장형 XSS.
-- **P0**: `/api/track`, `/api/analytics`, `/api/poll/*`, `/api/wallet-subscribe` — 인증/레이트리밋 없음.
-- **P0**: `/api/og/wallet` — 요청당 Puppeteer 인스턴스 (DoS·OOM 위험).
-- **P1**: `docker-entrypoint.sh`의 `while true; node…` 루프 + `restart: unless-stopped` 이중 supervisor.
-- **P1**: `api/server.js:295,305` — fabricated `openRate`, `course_completions`.
+### 수정 완료 (2026-05-20 기준)
+- ~~**P0**: `api/server.js:94-121` — `POLLS_FILE`, `WALLETS_FILE` 미정의~~ → PR #29에서 수정 (server.js:33-34)
+- ~~**P0**: `src/components/TimeAttackLounge.astro:253` — XSS~~ → HTML 이스케이프 적용 (253, 256줄)
+- ~~**P0**: `/api/track`, `/api/analytics`, `/api/poll/*`, `/api/wallet-subscribe` — 레이트리밋 없음~~ → PR #24, #30, #36 에서 수정
+- ~~**P0**: `/api/og/wallet` — 요청당 Puppeteer 인스턴스~~ → PR #33에서 싱글턴 패턴 + 페이지 상한 적용
+- ~~**P1**: `api/server.js:295,305` — fabricated `openRate`, `course_completions`~~ → PR #21 + index.astro 에서 제거
+- ~~**P1**: `docker-entrypoint.sh` 이중 supervisor~~ → 지수 백오프 적용, docker-compose에서 CMD 오버라이드로 실질적 비문제
 
-자세한 진단: `claude/production-analysis-QAFfz` 브랜치 PR #5 본문 + `ops/improvement-loop/state/history/`의 머스크/멍거 critique 참조.
+### 잔여 WARN (낮은 우선순위)
+- `scan-whale-activity.js:333` — DART 종목 단가 fallback `50_000 KRW` 하드코딩 (estimate 라벨 있음, significance 계산에 영향)
+- `api/og/wallet` Puppeteer 브라우저 재기동 race condition (극히 드문 시나리오)
+- `data/insider-case-history.json` 일부 `valueUsd` 환율 변환 근거 미명시
+
+자세한 진단: `ops/improvement-loop/state/history/` 참조.
 
 ## Self-Improvement Loop
 
