@@ -323,7 +323,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/track (방문자 수 카운팅 — 인메모리, 논블로킹) ──────
   if (req.method === 'GET' && path === '/api/track') {
-    if (isRateLimited(ip, 60)) return sendJSON(res, 429, { error: 'Too Many Requests' });
+    if (isRateLimited(ip, 10)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     stats.total = (stats.total || 0) + 1;
     stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
