@@ -40,6 +40,22 @@ const categories = [
     </div>
   </section>
 
+  <section class="whale-signup-banner">
+    <div class="container">
+      <div class="signup-banner__inner">
+        <div class="signup-banner__text">
+          <span class="signup-banner__badge">🔔 무료 알림</span>
+          <p class="signup-banner__headline">내부자 거래 시그널, 내 지갑에 즉시 알림받기</p>
+          <p class="signup-banner__sub">Whale이 움직이는 순간 Telegram으로 30초 안에 전달. 지갑 연동만 하면 됩니다.</p>
+        </div>
+        <a
+          href="/wallet?utm_source=whale_index&utm_medium=banner&utm_campaign=wallet_signup"
+          class="signup-banner__cta"
+        >내 지갑 연동하기 →</a>
+      </div>
+    </div>
+  </section>
+
   <section class="whale-content" style="padding: 2rem 0 5rem;">
     <div class="container">
       <div class="whale-tabs">
@@ -87,6 +103,62 @@ const categories = [
 </BaseLayout>
 
 <style>
+.whale-signup-banner {
+  padding: 1.25rem 0;
+  background: linear-gradient(135deg, rgba(16,185,129,.08) 0%, rgba(56,189,248,.08) 100%);
+  border-bottom: 1px solid rgba(16,185,129,.2);
+}
+.signup-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.signup-banner__text { flex: 1; min-width: 200px; }
+.signup-banner__badge {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: rgba(16,185,129,.15);
+  color: #10b981;
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+.signup-banner__headline {
+  margin: 0 0 .25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.signup-banner__sub {
+  margin: 0;
+  font-size: .875rem;
+  opacity: .75;
+}
+.signup-banner__cta {
+  flex-shrink: 0;
+  display: inline-block;
+  padding: .75rem 1.5rem;
+  border-radius: 10px;
+  background: #10b981;
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+  text-decoration: none;
+  transition: transform .15s, box-shadow .15s;
+  white-space: nowrap;
+}
+.signup-banner__cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16,185,129,.35);
+}
+@media (max-width: 600px) {
+  .signup-banner__inner { flex-direction: column; text-align: center; }
+  .signup-banner__cta { width: 100%; text-align: center; }
+}
+
 .whale-tabs {
   display: flex;
   justify-content: center;
@@ -183,13 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
           card.style.display = 'flex';
         } else {
           card.style.display = 'none';
-        }
-      });
-    });
-  });
-});
-</script>
-= 'none';
         }
       });
     });
