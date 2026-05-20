@@ -54,11 +54,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- Schema.org -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
-      "@type": article ? "Article" : "WebSite",
+      "@type": article ? "NewsArticle" : "WebSite",
+      "headline": title,
       "name": `${title} | EconPedia`,
       "description": description,
       "url": canonicalURL.toString(),
-      ...(article ? {} : {
+      "image": new URL(ogImage, Astro.site).toString(),
+      ...(article ? {
+        "author": { "@type": "Organization", "name": "EconPedia", "url": Astro.site?.toString() },
+        "publisher": {
+          "@type": "Organization",
+          "name": "EconPedia",
+          "logo": { "@type": "ImageObject", "url": new URL('/favicon.svg', Astro.site).toString() }
+        }
+      } : {
         "potentialAction": {
           "@type": "SearchAction",
           "target": `${Astro.site}search?q={search_term_string}`,
