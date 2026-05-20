@@ -154,16 +154,17 @@ setInterval(() => {
   const now = Date.now();
   for (const [k, v] of rateLimitMap) if (v.resetAt < now) rateLimitMap.delete(k);
 }, 120_000).unref();
-function isRateLimited(ip) {
+function isRateLimited(ip, limit = 5, scope = 'default') {
   const now = Date.now();
-  const entry = rateLimitMap.get(ip) || { count: 0, resetAt: now + 60_000 };
+  const key = `${ip}:${scope}`;
+  const entry = rateLimitMap.get(key) || { count: 0, resetAt: now + 60_000 };
   if (now > entry.resetAt) {
     entry.count = 0;
     entry.resetAt = now + 60_000;
   }
   entry.count++;
-  rateLimitMap.set(ip, entry);
-  return entry.count > 5; // 분당 5회 제한
+  rateLimitMap.set(key, entry);
+  return entry.count > limit;
 }
 
 // ─── Resend Contacts API 헬퍼 ────────────────────────────
@@ -311,6 +312,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/track (방문자 수 카운팅 — 인메모리, 논블로킹) ──────
   if (req.method === 'GET' && path === '/api/track') {
+    if (isRateLimited(ip, 120, 'track')) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     stats.total = (stats.total || 0) + 1;
     stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
@@ -328,6 +330,7 @@ const server = createServer(async (req, res) => {
 
   // ── POST /api/analytics (체류 시간 / 이탈률 수집) ───────────────
   if (req.method === 'POST' && path === '/api/analytics') {
+    if (isRateLimited(ip, 20, 'analytics')) return sendJSON(res, 429, { error: 'Too Many Requests' });
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
