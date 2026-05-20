@@ -153,6 +153,21 @@ function safeExec(cmd) {
   catch { return ''; }
 }
 
+// Fetch live KPIs from the running API. Tries localhost first (OCI VM), then prod URL.
+async function fetchSiteStats() {
+  const urls = [
+    'http://localhost:3001/api/site-stats',
+    'https://econpedia.dedyn.io/api/site-stats',
+  ];
+  for (const url of urls) {
+    try {
+      const r = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (r.ok) return await r.json();
+    } catch { /* try next */ }
+  }
+  return null;
+}
+
 async function buildSnapshot() {
   const kpis = JSON.parse(await fs.readFile(path.join(STATE_DIR, 'kpis.json'), 'utf8'));
   const goals = JSON.parse(await fs.readFile(path.join(STATE_DIR, 'goals.json'), 'utf8'));
@@ -163,6 +178,8 @@ async function buildSnapshot() {
   const whalePages = parseInt(safeExec(`find src/pages/whale -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
   const dailyPages = parseInt(safeExec(`find src/pages/daily -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
   const blogPages = parseInt(safeExec(`find src/pages/blog -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+  const testCount = parseInt(safeExec(`find . -name "*.test.*" -o -name "*.spec.*" | grep -v node_modules | wc -l`) || '0', 10);
+  const depCount = (() => { try { const p = JSON.parse(safeExec('cat package.json')); return Object.keys(p.dependencies || {}).length; } catch { return null; } })();
 
   // Git
   const branch = safeExec('git rev-parse --abbrev-ref HEAD');
@@ -176,6 +193,31 @@ async function buildSnapshot() {
   // Open PRs / recent issues (best-effort via gh)
   const ghIssues = safeExec('gh issue list --state open --limit 20 --json number,title,labels 2>/dev/null') || '[]';
   const ghPrs = safeExec('gh pr list --state open --limit 10 --json number,title,isDraft 2>/dev/null') || '[]';
+
+  // Live KPIs from running API (wallet users, subscribers, visitors)
+  const siteStats = await fetchSiteStats();
+
+  // Always update code-derived KPIs (no network needed)
+  const today = new Date().toISOString().slice(0, 10);
+  const updatedKpis = {
+    ...kpis,
+    code: { ...kpis.code, total_files: totalFiles, test_count: testCount, dependencies: depCount },
+    // Merge live API stats when available (localhost:3001 on OCI VM, or prod URL fallback)
+    ...(siteStats ? {
+      engagement: {
+        ...kpis.engagement,
+        wallet_authenticated_users: siteStats.portfolio_users ?? kpis.engagement.wallet_authenticated_users,
+        newsletter_subscribers: siteStats.subscribers ?? kpis.engagement.newsletter_subscribers,
+      },
+      traffic: {
+        ...kpis.traffic,
+        daily_visitors_7d_avg: siteStats.daily_visitors ?? kpis.traffic.daily_visitors_7d_avg,
+      },
+    } : {}),
+    _lastUpdated: today,
+  };
+  await fs.writeFile(path.join(STATE_DIR, 'kpis.json'), JSON.stringify(updatedKpis, null, 2), 'utf8');
+  Object.assign(kpis, updatedKpis);
 
   // Past synthesis plan (if any) — pick the most recent across all dates
   let latestPlan = null;
@@ -191,6 +233,8 @@ async function buildSnapshot() {
       whalePages,
       dailyBriefingPages: dailyPages,
       blogPages,
+      testCount,
+      dependencies: depCount,
       distSizeKb: distSize ? parseInt(distSize, 10) : null,
     },
     git: {
@@ -220,6 +264,8 @@ function snapshotToMarkdown(snapshot) {
   lines.push(`\nBranch: ${snapshot.branch}`);
   lines.push(`\n## Codebase`);
   lines.push(`- Source files: ${snapshot.code.totalSourceFiles}`);
+  lines.push(`- Test files: ${snapshot.code.testCount ?? 0}`);
+  lines.push(`- Dependencies: ${snapshot.code.dependencies ?? 'unknown'}`);
   lines.push(`- Astro pages (total): ${snapshot.code.astroPages}`);
   lines.push(`  - whale: ${snapshot.code.whalePages}, daily: ${snapshot.code.dailyBriefingPages}, blog: ${snapshot.code.blogPages}`);
   lines.push(`- Last build dist size: ${snapshot.code.distSizeKb ? snapshot.code.distSizeKb + ' KB' : 'not built'}`);

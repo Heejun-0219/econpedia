@@ -160,32 +160,23 @@ process.on('SIGTERM', shutdown);
 process.on('SIGINT', shutdown);
 
 
-// ─── 간단한 인메모리 Rate Limiter ────────────────────────
-const rateLimitMap = new Map(); // ip → { count, resetAt }
+// ─── 인메모리 Rate Limiter (엔드포인트별 namespace 분리) ─
+const rateLimitMap = new Map(); // key(ip:ns) → { count, resetAt }
 setInterval(() => {
   const now = Date.now();
   for (const [k, v] of rateLimitMap) if (v.resetAt < now) rateLimitMap.delete(k);
 }, 120_000).unref();
-function isRateLimited(ip) {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip) || { count: 0, resetAt: now + 60_000 };
-  if (now > entry.resetAt) {
-    entry.count = 0;
-    entry.resetAt = now + 60_000;
-  }
-  entry.count++;
-  rateLimitMap.set(ip, entry);
-  return entry.count > 5; // 분당 5회 제한
-}
-function isAnalyticsRateLimited(ip) {
-  const key = ip + ':analytics';
+function checkRateLimit(ip, ns, limit) {
+  const key = ip + ':' + ns;
   const now = Date.now();
   const entry = rateLimitMap.get(key) || { count: 0, resetAt: now + 60_000 };
   if (now > entry.resetAt) { entry.count = 0; entry.resetAt = now + 60_000; }
   entry.count++;
   rateLimitMap.set(key, entry);
-  return entry.count > 120; // 분당 120회 (페이지뷰 트래킹용)
+  return entry.count > limit;
 }
+const isRateLimited = (ip, ns = 'default') => checkRateLimit(ip, ns, 5);
+const isAnalyticsRateLimited = (ip) => checkRateLimit(ip, 'analytics', 120);
 
 // ─── Resend Contacts API 헬퍼 ────────────────────────────
 async function addContact(email, firstName = '') {
@@ -228,10 +219,17 @@ async function removeContact(email) {
 }
 
 // ─── 요청 파싱 헬퍼 ─────────────────────────────────────
+const MAX_BODY_BYTES = 10_240; // 10 KB
 function parseBody(req) {
   return new Promise((resolve, reject) => {
     let body = '';
-    req.on('data', chunk => { body += chunk; });
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > MAX_BODY_BYTES) {
+        req.destroy();
+        reject(new Error('Payload too large'));
+      }
+    });
     req.on('end', () => {
       try { resolve(JSON.parse(body || '{}')); }
       catch { reject(new Error('Invalid JSON')); }
@@ -283,6 +281,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/stats (슬랙 리포트용 + 홈페이지 Social Proof) ──────────
   if (req.method === 'GET' && path === '/api/stats') {
+    if (isRateLimited(ip, 'stats')) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     const todayCount = stats.daily[todayStr] || 0;
 
@@ -353,7 +352,7 @@ const server = createServer(async (req, res) => {
     if (isAnalyticsRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     let body;
     try { body = await parseBody(req); }
-    catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
+    catch (e) { return sendJSON(res, e.message === 'Payload too large' ? 413 : 400, { error: e.message }); }
 
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     if (!stats.analytics) stats.analytics = { daily: {} };
@@ -387,14 +386,14 @@ const server = createServer(async (req, res) => {
 
   // ── POST /api/poll (투표 제출) — IP당 분당 5회 제한 ──────────────
   if (req.method === 'POST' && path.startsWith('/api/poll/')) {
-    if (isRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
+    if (isRateLimited(ip, 'poll')) return sendJSON(res, 429, { error: 'Too Many Requests' });
 
     const pollId = path.replace('/api/poll/', '').split('?')[0];
     if (!pollId) return sendJSON(res, 400, { error: 'Invalid poll id' });
 
     let body;
     try { body = await parseBody(req); }
-    catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
+    catch (e) { return sendJSON(res, e.message === 'Payload too large' ? 413 : 400, { error: e.message }); }
 
     const { option } = body;
     if (!option) return sendJSON(res, 400, { error: 'Option required' });
@@ -442,7 +441,7 @@ const server = createServer(async (req, res) => {
   // ── GET /api/og/wallet (Puppeteer를 이용한 동적 OG 이미지 생성) ────
   if (req.method === 'GET' && path.startsWith('/api/og/wallet')) {
     // Puppeteer DoS Attack Prevention — 스코프 상위 ip 변수 재사용 (XFF 수정 적용)
-    if (isRateLimited(ip)) {
+    if (isRateLimited(ip, 'og')) {
       res.writeHead(429, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('너무 많은 요청입니다. 잠시 후 다시 시도해주세요.');
       return;
@@ -557,17 +556,20 @@ const server = createServer(async (req, res) => {
 
   // ── POST /api/wallet-subscribe (지갑 알림 구독) ───────────────────
   if (req.method === 'POST' && path === '/api/wallet-subscribe') {
-    if (isRateLimited(ip)) return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
+    if (isRateLimited(ip, 'wallet-sub')) return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
     let body;
     try { body = await parseBody(req); }
-    catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
+    catch (e) { return sendJSON(res, e.message === 'Payload too large' ? 413 : 400, { error: e.message }); }
 
     const { email, settings } = body;
     if (!email || !isValidEmail(email)) {
       return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
     }
-    if (!settings) {
+    if (!settings || typeof settings !== 'object' || Array.isArray(settings)) {
       return sendJSON(res, 400, { error: '설정값이 필요합니다.' });
+    }
+    if (JSON.stringify(settings).length > 2048) {
+      return sendJSON(res, 400, { error: '설정값이 너무 큽니다.' });
     }
 
     wallets[email] = {
@@ -581,7 +583,7 @@ const server = createServer(async (req, res) => {
   // ── POST /api/subscribe ────────────────────────────────
   if (req.method === 'POST' && path === '/api/subscribe') {
     // Rate limit
-    if (isRateLimited(ip)) {
+    if (isRateLimited(ip, 'subscribe')) {
       return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
     }
 

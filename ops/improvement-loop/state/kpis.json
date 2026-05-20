@@ -9,10 +9,10 @@
     "container_restarts_last_7d": null
   },
   "code": {
-    "total_files": null,
+    "total_files": 158,
     "total_loc": null,
     "test_count": 0,
-    "dependencies": null,
+    "dependencies": 19,
     "outdated_dependencies": null,
     "build_size_kb": null
   },
