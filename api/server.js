@@ -621,6 +621,7 @@ const server = createServer(async (req, res) => {
 
   // ── DELETE /api/subscribe (구독 취소) ─────────────────
   if (req.method === 'DELETE' && path === '/api/subscribe') {
+    if (isRateLimited(ip)) return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: '잘못된 요청 형식입니다.' }); }
