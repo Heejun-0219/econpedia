@@ -86,8 +86,8 @@ const isin = isinProp || ticker;
           return;
         }
         
-        const name = e.currentTarget.getAttribute('data-name');
-        alert(`${name} 종목이 관심 목록에 추가되었습니다!`);
+        const t = (e.currentTarget as HTMLElement).getAttribute('data-ticker') || '';
+        window.location.href = `/wallet?ticker=${encodeURIComponent(t)}`;
       });
     });
   });
