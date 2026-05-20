@@ -1,6 +1,6 @@
 {
   "_description": "improvement loop가 매 사이클 시작 시 채워 넣는 KPI 스냅샷. 값을 모르면 null. snapshot.js가 가능한 만큼 자동 수집하고, 나머지는 사람이 채운다.",
-  "_lastUpdated": "2026-05-19",
+  "_lastUpdated": "2026-05-20",
   "_schemaVersion": 1,
   "infra": {
     "build_success_last_30d": null,
@@ -20,7 +20,7 @@
     "total_pages": null,
     "ai_generated_pages": null,
     "monthly_ai_pages_published": null,
-    "whale_alert_pages": null
+    "whale_alert_pages": 38
   },
   "traffic": {
     "daily_visitors_7d_avg": null,

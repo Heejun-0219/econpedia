@@ -202,7 +202,11 @@ async function buildSnapshot() {
       openIssues: JSON.parse(ghIssues),
       openPRs: JSON.parse(ghPrs),
     },
-    kpis,
+    kpis: {
+      ...kpis,
+      content: { ...kpis.content, whale_alert_pages: whalePages },
+      _lastUpdated: new Date().toISOString().slice(0, 10),
+    },
     goals,
     latestPlanExists: Boolean(latestPlan),
   };
