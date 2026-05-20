@@ -11,6 +11,18 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import yahooFinance from 'yahoo-finance2';
 import puppeteer from 'puppeteer';
+
+let _browser = null;
+let _pageCount = 0;
+const MAX_CONCURRENT_PAGES = 3;
+
+async function getBrowser() {
+  if (_browser) {
+    try { await _browser.pages(); return _browser; } catch { _browser = null; }
+  }
+  _browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  return _browser;
+}
 import { createClient } from '@supabase/supabase-js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -500,13 +512,19 @@ const server = createServer(async (req, res) => {
     </html>
     `;
 
+    if (_pageCount >= MAX_CONCURRENT_PAGES) {
+      res.writeHead(503, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('서버 처리 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+    _pageCount++;
+    let page = null;
     try {
-      const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-      const page = await browser.newPage();
+      const browser = await getBrowser();
+      page = await browser.newPage();
       await page.setViewport({ width: 1200, height: 630 });
-      await page.setContent(templateHtml, { waitUntil: 'networkidle0' });
+      await page.setContent(templateHtml, { waitUntil: 'networkidle0', timeout: 10_000 });
       const buffer = await page.screenshot({ type: 'png' });
-      await browser.close();
 
       res.writeHead(200, {
         'Content-Type': 'image/png',
@@ -515,8 +533,12 @@ const server = createServer(async (req, res) => {
       res.end(buffer);
     } catch (err) {
       console.error("Puppeteer OG Generate Error:", err);
+      _browser = null;
       res.writeHead(500);
       res.end("Internal Server Error");
+    } finally {
+      _pageCount--;
+      if (page) await page.close().catch(() => {});
     }
     return;
   }
