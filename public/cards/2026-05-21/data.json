@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "내 주식은 8만원 빠졌는데, 주유비는 150원 올랐네요 🥲",
+      "badge": "2026-05-21 내 지갑 리포트",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 당 약 8만 6천원 증발",
+          "trend": "down"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 150원 상승",
+          "trend": "up"
+        },
+        {
+          "label": "해외 직구",
+          "impact": "100만원 환전 시 69원 절약",
+          "trend": "down"
+        },
+        {
+          "label": "대출 이자",
+          "impact": "변동 없이 평화로움 😌",
+          "trend": "flat"
+        },
+        {
+          "label": "코인·미국 주식",
+          "impact": "큰 변화 없이 횡보 중",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "내 지갑 지키는 대응법 보기"
+    }
+  ]
+}

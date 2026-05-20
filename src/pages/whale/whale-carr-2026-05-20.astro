@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "에어컨의 대명사 '캐리어', 임원이 1조 원어치 주식을 던진 이유는?";
+const date = "2026-05-20";
+const description = "캐리어(CARR) 임원의 1.09조 원 규모 매도. 과거 유사 사례를 통해 이 거대한 자금 흐름이 내 투자금에 던지는 시그널을 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 CARRIER GLOBAL Corp</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 CARRIER GLOBAL Corp (CARR)</h3>
+        <p><strong>매매자:</strong> Viessmann Maximilian / Director</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $750.00M <span style="opacity:.85">(약 1.09조 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 12,094,823주 · $62.01</p>
+        <p><strong>출처:</strong> SEC Form 4 · Air-Cond & Warm Air Heatg Equip & Comm & Indl Refrig Equip</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-20","y":50.36},{"x":"2025-11-21","y":52.41},{"x":"2025-11-24","y":51.75},{"x":"2025-11-25","y":53.95},{"x":"2025-11-26","y":54.36},{"x":"2025-11-28","y":54.88},{"x":"2025-12-01","y":54.25},{"x":"2025-12-02","y":53.82},{"x":"2025-12-03","y":54.62},{"x":"2025-12-04","y":54.5},{"x":"2025-12-05","y":54.29},{"x":"2025-12-08","y":53.03},{"x":"2025-12-09","y":52.84},{"x":"2025-12-10","y":53.4},{"x":"2025-12-11","y":54.15},{"x":"2025-12-12","y":52.94},{"x":"2025-12-15","y":52.58},{"x":"2025-12-16","y":53.44},{"x":"2025-12-17","y":52.4},{"x":"2025-12-18","y":53.2},{"x":"2025-12-19","y":53.77},{"x":"2025-12-22","y":53.2},{"x":"2025-12-23","y":53.34},{"x":"2025-12-24","y":53.5},{"x":"2025-12-26","y":53.59},{"x":"2025-12-29","y":53.61},{"x":"2025-12-30","y":53.43},{"x":"2025-12-31","y":52.84},{"x":"2026-01-02","y":53.52},{"x":"2026-01-05","y":53.79},{"x":"2026-01-06","y":53.5},{"x":"2026-01-07","y":52.57},{"x":"2026-01-08","y":53.86},{"x":"2026-01-09","y":56.25},{"x":"2026-01-12","y":55.38},{"x":"2026-01-13","y":55.21},{"x":"2026-01-14","y":55.6},{"x":"2026-01-15","y":55.55},{"x":"2026-01-16","y":56.19},{"x":"2026-01-20","y":55.21},{"x":"2026-01-21","y":57.74},{"x":"2026-01-22","y":57.44},{"x":"2026-01-23","y":57.3},{"x":"2026-01-26","y":57.37},{"x":"2026-01-27","y":57.07},{"x":"2026-01-28","y":57.91},{"x":"2026-01-29","y":59.79},{"x":"2026-01-30","y":59.58},{"x":"2026-02-02","y":60.36},{"x":"2026-02-03","y":61.2},{"x":"2026-02-04","y":63.55},{"x":"2026-02-05","y":63.1},{"x":"2026-02-06","y":63.92},{"x":"2026-02-09","y":65.32},{"x":"2026-02-10","y":65.82},{"x":"2026-02-11","y":67.08},{"x":"2026-02-12","y":64.89},{"x":"2026-02-13","y":65.4},{"x":"2026-02-17","y":66.43},{"x":"2026-02-18","y":64.33},{"x":"2026-02-19","y":62.92},{"x":"2026-02-20","y":64.14},{"x":"2026-02-23","y":63.46},{"x":"2026-02-24","y":63.53},{"x":"2026-02-25","y":61.5},{"x":"2026-02-26","y":62.76},{"x":"2026-02-27","y":64.4},{"x":"2026-03-02","y":63.84},{"x":"2026-03-03","y":61.17},{"x":"2026-03-04","y":61.08},{"x":"2026-03-05","y":60.4},{"x":"2026-03-06","y":58.35},{"x":"2026-03-09","y":58.72},{"x":"2026-03-10","y":58.43},{"x":"2026-03-11","y":58.69},{"x":"2026-03-12","y":56.49},{"x":"2026-03-13","y":55.65},{"x":"2026-03-16","y":55.85},{"x":"2026-03-17","y":56.98},{"x":"2026-03-18","y":57.61},{"x":"2026-03-19","y":58.97},{"x":"2026-03-20","y":58.07},{"x":"2026-03-23","y":58.3},{"x":"2026-03-24","y":58.58},{"x":"2026-03-25","y":59.25},{"x":"2026-03-26","y":54.67},{"x":"2026-03-27","y":54.25},{"x":"2026-03-30","y":54.36},{"x":"2026-03-31","y":56.31},{"x":"2026-04-01","y":56.9},{"x":"2026-04-02","y":55.71},{"x":"2026-04-06","y":55.59},{"x":"2026-04-07","y":55.44},{"x":"2026-04-08","y":58.29},{"x":"2026-04-09","y":61.46},{"x":"2026-04-10","y":63.34},{"x":"2026-04-13","y":64.32},{"x":"2026-04-14","y":64.66},{"x":"2026-04-15","y":58.55},{"x":"2026-04-16","y":59.71},{"x":"2026-04-17","y":61.32},{"x":"2026-04-20","y":61.65},{"x":"2026-04-21","y":61.71},{"x":"2026-04-22","y":60.65},{"x":"2026-04-23","y":61.54},{"x":"2026-04-24","y":60.97},{"x":"2026-04-27","y":61.91},{"x":"2026-04-28","y":62},{"x":"2026-04-29","y":61.74},{"x":"2026-04-30","y":67.17},{"x":"2026-05-01","y":67.62},{"x":"2026-05-04","y":65.89},{"x":"2026-05-05","y":64.18},{"x":"2026-05-06","y":67.9},{"x":"2026-05-07","y":67.22},{"x":"2026-05-08","y":66.83},{"x":"2026-05-11","y":65.88},{"x":"2026-05-12","y":65.56},{"x":"2026-05-13","y":65.57},{"x":"2026-05-14","y":66.73},{"x":"2026-05-15","y":64.67},{"x":"2026-05-18","y":64.51},{"x":"2026-05-19","y":61.44}]' transactionDate='2026-05-20' isBuy={false} ticker='CARR' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 63.59 (2026-05-20) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>여름이 다가오면 가장 먼저 생각나는 가전은 에어컨입니다. 에어컨과 냉난방 시스템의 대명사로 불리는 미국의 <strong>캐리어(CARRIER GLOBAL Corp, CARR)</strong>에서 어마어마한 규모의 내부자 매도가 발생했습니다.</p>
+<p>2026년 5월 20일, 이 회사 이사(Director)인 비스만 막시밀리안(Viessmann Maximilian)이 장내에서 주식을 매도했습니다. </p>
+<p>매도 규모는 자그마치 <strong>$750.00M (약 1.09조 원)</strong>입니다. 수량으로는 <strong>12,094,823주</strong>, 1주당 단가는 <strong>$62.01</strong>였습니다. </p>
+<p>회사 내부 사정을 가장 잘 아는 임원이 이렇게 천문학적인 금액을 현금화했다는 것은 투자자들에게 중요한 질문을 던집니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>현재 이 거래 이후의 주가 변동 데이터(D+30, 90, 180, 365)는 공시일 기준 미도래 상태입니다. 오늘 기준 종가는 <strong>63.59</strong>로 매도 단가보다 약간 높은 수준입니다.</p>
+<p>그렇다면 왜 지금 매도했을까요? 보통 기업 임원이 자신의 주식을 대규모로 매도할 때는 개인적으로 큰 자금이 필요하거나, 현재 주가가 고점이라고 판단한 경우가 많습니다. </p>
+<p>특히 <strong>1조 원</strong>이라는 규모를 생각하면 단순한 자금 마련 목적은 아닐 가능성이 높습니다. 에어컨과 산업용 냉동 장비 산업의 실적이 정점을 찍었거나, 회사의 향후 성장성에 대한 재평가가 이루어졌을 가능성을 배제할 수 없습니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거에 임원들이 천문학적인 규모로 주식을 매도한 뒤, 해당 기업들의 주가 흐름을 살펴보겠습니다.</p>
+<p>첫 번째로 2021년 12월 15일, 클라우드 기업 <strong>스노우플레이크(SNOW)</strong>의 사례가 있습니다. 당시 복수의 임원들이 락업 해제 직후 약 <strong>$800.0M</strong> 규모의 주식을 일괄 매도했습니다. </p>
+<p>그 후 주가는 30일 뒤 <strong>-10%</strong>, 90일 뒤 <strong>-35%</strong>, 180일 뒤 <strong>-55%</strong>, 1년(365일) 뒤에는 <strong>-65%</strong>까지 하락했습니다. 회사의 영업은 유지되었지만, 주가는 오랫동안 회복하지 못했습니다.</p>
+<p>두 번째는 실내 자전거로 유명한 <strong>펠로톤(PTON)</strong>입니다. 2021년 2월 5일, 존 폴리(John Foley) CEO와 복수의 임원들이 약 <strong>$500.0M</strong> 규모를 매도했습니다. </p>
+<p>이 매도는 펀더멘털 정점 시그널로 작용했습니다. 주가는 30일 뒤 <strong>-25%</strong>, 180일 뒤 <strong>-60%</strong>로 하락했고, 1년 뒤에는 <strong>-83%</strong>를 기록하며 시가총액의 대부분이 증발했습니다.</p>
+<p>세 번째 사례는 2001년 <strong>엔론(ENE)</strong>입니다. 8월 14일 제프리 스킬링(Jeffrey Skilling) CEO가 사임 발표와 동시에 약 <strong>$70.0M</strong>를 매도했습니다. </p>
+<p>이후 회계 부정이 폭로되며 30일 뒤 <strong>-27%</strong>, 90일 뒤 <strong>-85%</strong>로 추락했고, 결국 그해 12월 파산하며 180일과 365일 뒤 주가 변동률은 <strong>-100%</strong>를 기록했습니다.</p>
+<p>위 3건의 유사 사례가 보여준 D+365 단순 산술평균 변동률은 <strong>-82.7%</strong>로, 대규모 내부자 매도 이후의 역사적 평균은 매우 부정적이었습니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>투자한 미국 회사의 임원이 <strong>1조 원</strong> 규모의 주식을 현금화했다면, 이는 주의 깊게 살펴봐야 할 시그널로 해석할 수 있습니다.</p>
+<p>물론 임원의 매도가 무조건적인 주가 하락을 의미하는 확정적 미래 예측은 아닙니다. 하지만 통계적으로 회사 내부자가 천문학적인 물량을 매도했을 때는, 중장기적으로 주가가 하락하는 경향이 있었습니다.</p>
+<p>만약 이 기업에 투자 중이거나 신규 진입을 고려하고 있다면, 이번 대규모 매도 사례를 참고할 필요가 있습니다. 내부자의 자금 흐름이 어느 방향으로 움직이는지 확인하는 것은 리스크 관리에 도움이 될 수 있습니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Snowflake (SNOW)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">복수 임원 / 락업 해제 후 일괄 매도 · 2021-12-15 · 약 $800.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-10.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-35.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-65.0%</span></span>
+        </div>
+        <p class="case-narrative">IPO 락업 해제 직후 다수 임원이 매도하면 통상 6~12개월 -30% 이상 디레이팅이 동반.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-12) · 회사 후속: 고밸류에이션 SaaS 디레이팅, 영업 유지되나 주가는 장기 횡보</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Peloton Interactive (PTON)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">John Foley (CEO) / 복수 임원 · 2021-02-05 · 약 $500.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-25.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-50.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-60.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-83.0%</span></span>
+        </div>
+        <p class="case-narrative">팬데믹 수혜 정점에서 임원 대규모 매도. 펀더멘털 정점 시그널로 작용.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-02) · 회사 후속: 리콜·구독자 감소·CEO 교체, 시총 95% 증발</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 CARRIER GLOBAL Corp 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=CARR">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="CARR"
+        name="CARRIER GLOBAL Corp"
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-carr-2026-05-20" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

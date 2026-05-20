@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "바른손이앤에이 대표의 146억 원 주식 매도, 내 주식 계좌에 켜진 경고등일까?";
+const date = "2026-05-20";
+const description = "바른손이앤에이 대표이사의 146억 원 장내 매도 공시. 과거 유사 사례의 1년 뒤 평균 주가 하락률은 -73.3%였습니다. 내 지갑을 지키는 힌트를 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇰🇷 바른손이앤에이</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇰🇷 바른손이앤에이 (035620)</h3>
+        <p><strong>매매자:</strong> 문양권 / 사내이사(대표)</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $10.05M <span style="opacity:.85">(약 146억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 14,255,250주 · ₩1,022</p>
+        <p><strong>출처:</strong> DART 지분공시</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-20","y":1628},{"x":"2025-11-21","y":1592},{"x":"2025-11-24","y":1588},{"x":"2025-11-25","y":1568},{"x":"2025-11-26","y":1584},{"x":"2025-11-27","y":1488},{"x":"2025-11-28","y":1536},{"x":"2025-12-01","y":1544},{"x":"2025-12-02","y":1580},{"x":"2025-12-03","y":1584},{"x":"2025-12-04","y":1568},{"x":"2025-12-05","y":1544},{"x":"2025-12-08","y":1552},{"x":"2025-12-09","y":1572},{"x":"2025-12-10","y":1588},{"x":"2025-12-11","y":1564},{"x":"2025-12-12","y":1572},{"x":"2025-12-15","y":1584},{"x":"2025-12-16","y":1608},{"x":"2025-12-17","y":1592},{"x":"2025-12-18","y":1568},{"x":"2025-12-19","y":1576},{"x":"2025-12-22","y":1556},{"x":"2025-12-23","y":1484},{"x":"2025-12-24","y":1480},{"x":"2025-12-26","y":1520},{"x":"2025-12-29","y":1476},{"x":"2025-12-30","y":1488},{"x":"2026-01-02","y":1492},{"x":"2026-01-05","y":1424},{"x":"2026-01-06","y":1404},{"x":"2026-01-07","y":1396},{"x":"2026-01-08","y":1408},{"x":"2026-01-09","y":1428},{"x":"2026-01-12","y":1440},{"x":"2026-01-13","y":1428},{"x":"2026-01-14","y":1424},{"x":"2026-01-15","y":1400},{"x":"2026-01-16","y":1340},{"x":"2026-01-19","y":1360},{"x":"2026-01-20","y":1372},{"x":"2026-01-21","y":1376},{"x":"2026-01-22","y":1304},{"x":"2026-01-23","y":1316},{"x":"2026-01-26","y":1360},{"x":"2026-01-27","y":1368},{"x":"2026-01-28","y":1344},{"x":"2026-01-29","y":1340},{"x":"2026-01-30","y":1356},{"x":"2026-02-02","y":1292},{"x":"2026-02-03","y":1272},{"x":"2026-02-04","y":1316},{"x":"2026-02-05","y":1348},{"x":"2026-02-06","y":1308},{"x":"2026-02-09","y":1316},{"x":"2026-02-10","y":1284},{"x":"2026-02-11","y":1312},{"x":"2026-02-12","y":1320},{"x":"2026-02-13","y":1260},{"x":"2026-02-19","y":1140},{"x":"2026-02-20","y":1140},{"x":"2026-02-23","y":1080},{"x":"2026-02-24","y":1160},{"x":"2026-02-25","y":1136},{"x":"2026-02-26","y":1128},{"x":"2026-02-27","y":1128},{"x":"2026-03-03","y":1140},{"x":"2026-03-04","y":1048},{"x":"2026-03-05","y":1096},{"x":"2026-03-06","y":1088},{"x":"2026-03-09","y":1072},{"x":"2026-03-10","y":1084},{"x":"2026-03-11","y":1096},{"x":"2026-03-12","y":1104},{"x":"2026-03-13","y":972},{"x":"2026-03-16","y":960},{"x":"2026-03-17","y":996},{"x":"2026-03-18","y":1056},{"x":"2026-03-19","y":1000},{"x":"2026-03-20","y":1000},{"x":"2026-03-23","y":984},{"x":"2026-03-24","y":984},{"x":"2026-03-25","y":1004},{"x":"2026-03-26","y":1012},{"x":"2026-03-27","y":1012},{"x":"2026-03-30","y":1012},{"x":"2026-03-31","y":988},{"x":"2026-04-01","y":1028},{"x":"2026-04-02","y":1024},{"x":"2026-04-03","y":992},{"x":"2026-04-06","y":992},{"x":"2026-04-07","y":980},{"x":"2026-04-08","y":992},{"x":"2026-04-09","y":948},{"x":"2026-04-10","y":972},{"x":"2026-04-13","y":972},{"x":"2026-04-14","y":972},{"x":"2026-04-15","y":972},{"x":"2026-04-16","y":972},{"x":"2026-04-17","y":972},{"x":"2026-04-20","y":972},{"x":"2026-04-21","y":972},{"x":"2026-04-22","y":972},{"x":"2026-04-23","y":972},{"x":"2026-04-24","y":972},{"x":"2026-04-27","y":972},{"x":"2026-04-28","y":972},{"x":"2026-04-29","y":972},{"x":"2026-04-30","y":972},{"x":"2026-05-04","y":972},{"x":"2026-05-06","y":950},{"x":"2026-05-07","y":940},{"x":"2026-05-08","y":942},{"x":"2026-05-11","y":912},{"x":"2026-05-12","y":916},{"x":"2026-05-13","y":952},{"x":"2026-05-14","y":1031},{"x":"2026-05-15","y":1031},{"x":"2026-05-18","y":1032},{"x":"2026-05-19","y":1341},{"x":"2026-05-20","y":1022}]' transactionDate='2026-05-20' isBuy={false} ticker='035620' currency='KRW' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 1022.00 (2026-05-20) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>바른손이앤에이(035620)의 문양권 사내이사(대표)가 보유 중이던 회사 주식을 대거 매도했습니다. </p>
+<p>이번 거래 규모는 총 <strong>$10.05M(약 146억 원)</strong>이며, 처분 주식 수는 <strong>14,255,250주</strong>입니다. 1주당 매도 단가는 <strong>1,022원</strong>입니다.</p>
+<p>회사의 내부 사정을 가장 잘 아는 대표이사가 대규모로 지분을 매각하고 현금화했다는 점은 투자자 입장에서 유심히 지켜봐야 할 대목입니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>대표이사의 대규모 장내 매도는 주식 시장에서 고점 신호나 향후 실적 우려에 대한 선행 지표로 해석되곤 합니다. </p>
+<p>개인적인 자금 수요가 원인일 수 있으나, <strong>146억 원</strong>이라는 규모는 시장에 유의미한 메시지를 던질 수 있습니다.</p>
+<p>현재 이 거래의 기준일(<strong>2026년 5월 20일</strong>) 종가는 <strong>1,022원</strong>입니다. 아직 거래 이후 30일이나 1년 뒤의 주가 변화(후행 변동률)는 미도래 상태라 확인할 수 없습니다. </p>
+<p>따라서 과거 다른 기업의 경영진이 대규모 매도를 진행했을 때 주가가 어떻게 움직였는지 살펴보면 향후 흐름을 가늠하는 데 도움이 됩니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거 시장에서 회사 수뇌부가 대규모로 주식을 매도했던 3가지 주요 사례를 살펴봤습니다. (아래 언급되는 모든 주가 변동률은 코스피나 S&amp;P500 같은 시장 평균의 영향을 배제하지 않은 단순 변동률입니다.)</p>
+<p>첫 번째는 2021년 12월 15일, <strong>카카오(035720)</strong>의 대표이사를 포함한 임원 다수가 자회사 상장 직후 약 <strong>$90.0M</strong> 규모의 주식을 매도한 사례입니다. 
+당시 플랫폼 규제 등의 이슈가 겹치며 주가는 매도 30일 뒤(D+30) <strong>-8%</strong>, 90일 뒤(D+90) <strong>-22%</strong>, 180일 뒤(D+180) <strong>-38%</strong>, 1년 뒤(D+365) <strong>-55%</strong>를 기록했습니다.</p>
+<p>두 번째는 미국 기업 <strong>엔론(Enron)</strong>입니다. 2001년 8월 14일, CEO와 회장이 약 <strong>$70.0M</strong>의 주식을 매도했습니다. 
+이후 회계부정이 폭로되며 주가는 30일 뒤 <strong>-27%</strong>, 90일 뒤 <strong>-85%</strong>로 급락했고, 180일과 365일 뒤에는 <strong>-100%</strong>를 기록하며 회사가 파산에 이르렀습니다.</p>
+<p>세 번째는 미국의 클라우드 기업 <strong>스노우플레이크(Snowflake)</strong>입니다. 2021년 12월 15일, 락업 해제 직후 복수의 임원이 약 <strong>$800.0M</strong> 규모를 일괄 매도했습니다. 
+이후 주가는 30일 뒤 <strong>-10%</strong>, 90일 뒤 <strong>-35%</strong>, 180일 뒤 <strong>-55%</strong>, 1년 뒤 <strong>-65%</strong>로 장기적인 하락세를 보였습니다.</p>
+<p>이 세 가지 유사 사례의 1년 뒤(D+365) 주가 변동률을 단순 산술평균 해보면, 평균 <strong>-73.3%</strong> 하락했다는 결과가 도출됩니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>바른손이앤에이에 1천만 원을 투자했다고 가정할 때, 과거 평균 데이터(<strong>-73.3%</strong>)를 대입하면 1년 뒤 계좌 잔고가 <strong>267만 원</strong>으로 줄어들 수 있다는 시나리오를 고려해볼 수 있습니다. </p>
+<p>물론 과거의 통계가 미래를 완벽히 예측하지는 않으며, 대표의 주식 매도가 기업의 즉각적인 위기를 의미하는 것은 아닙니다. </p>
+<p>하지만 경영진의 대규모 매도는 통계적으로 주가 하락의 선행 지표로 작용하는 경향이 있었습니다. 따라서 현재 시점에서는 섣부른 매수보다는 리스크를 관리하며 보수적인 관점에서 접근하는 것이 바람직합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 카카오 (035720)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">임원 다수 (대표이사 포함) / 핀테크 자회사 상장 직후 · 2021-12-15 · 약 $90.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-22.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-38.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+        </div>
+        <p class="case-narrative">자회사 상장 직후 본사 임원 매도. 한국 시장에서 '쪼개기 상장' 디스카운트의 대표 사례.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2021-12) · 회사 후속: 플랫폼 규제 강화 + 자회사 쪼개기 상장 비판, 시총 절반 이하로 축소</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Snowflake (SNOW)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">복수 임원 / 락업 해제 후 일괄 매도 · 2021-12-15 · 약 $800.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-10.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-35.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-65.0%</span></span>
+        </div>
+        <p class="case-narrative">IPO 락업 해제 직후 다수 임원이 매도하면 통상 6~12개월 -30% 이상 디레이팅이 동반.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-12) · 회사 후속: 고밸류에이션 SaaS 디레이팅, 영업 유지되나 주가는 장기 횡보</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 바른손이앤에이 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=035620">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="035620"
+        name="바른손이앤에이"
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-035620-2026-05-20" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

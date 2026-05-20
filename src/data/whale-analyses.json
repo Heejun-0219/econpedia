@@ -1,5 +1,47 @@
 [
   {
+    "slug": "whale-365330-2026-05-20",
+    "title": "회장님의 84억 원어치 주식 매도, 내 지갑엔 어떤 의미일까?",
+    "excerpt": "에스와이스틸텍 회장의 84억 원 규모 장내 매도 발생. 카카오, 엔론 등 과거 핵심 경영진 매도 사례를 통해 내 지갑에 미칠 영향을 숫자로 분석합니다.",
+    "date": "2026-05-20",
+    "ticker": "365330",
+    "companyName": "에스와이스틸텍",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": false,
+    "person": "홍영돈 / 회장",
+    "amount": "$5.81M (약 84억 원) · 3,000,000주 처분",
+    "significance": 65
+  },
+  {
+    "slug": "whale-035620-2026-05-20",
+    "title": "바른손이앤에이 대표의 146억 원 주식 매도, 내 주식 계좌에 켜진 경고등일까?",
+    "excerpt": "바른손이앤에이 대표이사의 146억 원 장내 매도 공시. 과거 유사 사례의 1년 뒤 평균 주가 하락률은 -73.3%였습니다. 내 지갑을 지키는 힌트를 확인하세요.",
+    "date": "2026-05-20",
+    "ticker": "035620",
+    "companyName": "바른손이앤에이",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": false,
+    "person": "문양권 / 사내이사(대표)",
+    "amount": "$10.05M (약 146억 원) · 14,255,250주 처분",
+    "significance": 65
+  },
+  {
+    "slug": "whale-carr-2026-05-20",
+    "title": "에어컨의 대명사 '캐리어', 임원이 1조 원어치 주식을 던진 이유는?",
+    "excerpt": "캐리어(CARR) 임원의 1.09조 원 규모 매도. 과거 유사 사례를 통해 이 거대한 자금 흐름이 내 투자금에 던지는 시그널을 확인하세요.",
+    "date": "2026-05-20",
+    "ticker": "CARR",
+    "companyName": "CARRIER GLOBAL Corp",
+    "category": "insider",
+    "market": "us",
+    "isBuy": false,
+    "person": "Viessmann Maximilian / Director",
+    "amount": "$750.00M (약 1.09조 원)",
+    "significance": 85
+  },
+  {
     "slug": "whale-frpt-2026-05-19",
     "title": "프레시펫(FRPT) CEO의 6억 원 규모 주식 매도 분석",
     "excerpt": "프레시펫 CEO의 6억 원 규모 자사주 매도. 과거 엔론, 펠로톤 사례와 비교해 내 주식 계좌에 미칠 영향을 숫자로 명확히 분석합니다.",
