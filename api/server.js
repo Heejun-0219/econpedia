@@ -177,6 +177,15 @@ function isRateLimited(ip) {
   rateLimitMap.set(ip, entry);
   return entry.count > 5; // 분당 5회 제한
 }
+function isAnalyticsRateLimited(ip) {
+  const key = ip + ':analytics';
+  const now = Date.now();
+  const entry = rateLimitMap.get(key) || { count: 0, resetAt: now + 60_000 };
+  if (now > entry.resetAt) { entry.count = 0; entry.resetAt = now + 60_000; }
+  entry.count++;
+  rateLimitMap.set(key, entry);
+  return entry.count > 120; // 분당 120회 (페이지뷰 트래킹용)
+}
 
 // ─── Resend Contacts API 헬퍼 ────────────────────────────
 async function addContact(email, firstName = '') {
@@ -323,6 +332,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/track (방문자 수 카운팅 — 인메모리, 논블로킹) ──────
   if (req.method === 'GET' && path === '/api/track') {
+    if (isAnalyticsRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     stats.total = (stats.total || 0) + 1;
     stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
@@ -340,6 +350,7 @@ const server = createServer(async (req, res) => {
 
   // ── POST /api/analytics (체류 시간 / 이탈률 수집) ───────────────
   if (req.method === 'POST' && path === '/api/analytics') {
+    if (isAnalyticsRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
@@ -356,7 +367,8 @@ const server = createServer(async (req, res) => {
       todayStats.pageviews += 1;
       if (body.isNewSession) todayStats.sessions += 1;
     } else if (body.type === 'dwell') {
-      todayStats.totalDwell += (body.timeSpent || 0);
+      const td = typeof body.timeSpent === 'number' && Number.isFinite(body.timeSpent) ? Math.min(Math.max(body.timeSpent, 0), 86400) : 0;
+      todayStats.totalDwell += td;
     } else if (body.type === 'bounce') {
       todayStats.bounces += 1;
     }
