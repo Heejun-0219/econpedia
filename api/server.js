@@ -166,7 +166,7 @@ setInterval(() => {
   const now = Date.now();
   for (const [k, v] of rateLimitMap) if (v.resetAt < now) rateLimitMap.delete(k);
 }, 120_000).unref();
-function isRateLimited(ip) {
+function isRateLimited(ip, max = 5) {
   const now = Date.now();
   const entry = rateLimitMap.get(ip) || { count: 0, resetAt: now + 60_000 };
   if (now > entry.resetAt) {
@@ -175,7 +175,7 @@ function isRateLimited(ip) {
   }
   entry.count++;
   rateLimitMap.set(ip, entry);
-  return entry.count > 5; // 분당 5회 제한
+  return entry.count > max;
 }
 
 // ─── Resend Contacts API 헬퍼 ────────────────────────────
@@ -323,6 +323,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/track (방문자 수 카운팅 — 인메모리, 논블로킹) ──────
   if (req.method === 'GET' && path === '/api/track') {
+    if (isRateLimited(ip, 60)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     stats.total = (stats.total || 0) + 1;
     stats.daily[todayStr] = (stats.daily[todayStr] || 0) + 1;
@@ -340,6 +341,7 @@ const server = createServer(async (req, res) => {
 
   // ── POST /api/analytics (체류 시간 / 이탈률 수집) ───────────────
   if (req.method === 'POST' && path === '/api/analytics') {
+    if (isRateLimited(ip, 60)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
@@ -349,14 +351,15 @@ const server = createServer(async (req, res) => {
     if (!stats.analytics.daily[todayStr]) {
       stats.analytics.daily[todayStr] = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0 };
     }
-    
+
     const todayStats = stats.analytics.daily[todayStr];
-    
+
     if (body.type === 'pageview') {
       todayStats.pageviews += 1;
       if (body.isNewSession) todayStats.sessions += 1;
     } else if (body.type === 'dwell') {
-      todayStats.totalDwell += (body.timeSpent || 0);
+      const timeSpent = typeof body.timeSpent === 'number' && isFinite(body.timeSpent) ? Math.min(Math.max(body.timeSpent, 0), 3600) : 0;
+      todayStats.totalDwell += timeSpent;
     } else if (body.type === 'bounce') {
       todayStats.bounces += 1;
     }
