@@ -15,14 +15,21 @@ if ! nginx -t 2>&1; then
 fi
 echo "✅ Nginx 설정 정상"
 
-# ─── Node.js API 서버 (자동 복구 루프) ────────────────────
+# ─── Node.js API 서버 (자동 복구 루프, 지수 백오프) ────────
 start_node() {
   echo "📡 Subscribe API 서버 시작 (port 3001)..."
+  retries=0
   while true; do
+    start_ts=$(date +%s)
     cd /app/api
     node server.js
-    echo "⚠️ Node.js API 크래시 감지. 3초 후 자동 재시작..."
-    sleep 3
+    elapsed=$(( $(date +%s) - start_ts ))
+    [ "$elapsed" -ge 30 ] && retries=0
+    retries=$((retries + 1))
+    delay=$((retries * 3))
+    [ "$delay" -gt 60 ] && delay=60
+    echo "⚠️ Node.js API 크래시 감지 (${retries}회, 실행 ${elapsed}초). ${delay}초 후 자동 재시작..."
+    sleep "$delay"
   done
 }
 start_node &
