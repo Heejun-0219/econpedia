@@ -21,14 +21,20 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-- **P0**: `api/server.js:94-121` — `POLLS_FILE`, `WALLETS_FILE` 미정의 → poll/wallet 데이터가 30초마다 디스크 저장 실패. 컨테이너 재시작 시 데이터 손실.
-- **P0**: `src/components/TimeAttackLounge.astro:253` — Supabase `full_name` 저장형 XSS.
-- **P0**: `/api/track`, `/api/analytics`, `/api/poll/*`, `/api/wallet-subscribe` — 인증/레이트리밋 없음.
-- **P0**: `/api/og/wallet` — 요청당 Puppeteer 인스턴스 (DoS·OOM 위험).
-- **P1**: `docker-entrypoint.sh`의 `while true; node…` 루프 + `restart: unless-stopped` 이중 supervisor.
-- **P1**: `api/server.js:295,305` — fabricated `openRate`, `course_completions`.
+- ✅ **P0 FIXED** (PR #18): `POLLS_FILE`, `WALLETS_FILE` 미정의 → 디스크 저장 실패
+- ✅ **P0 FIXED** (commit 2f296c5): `TimeAttackLounge.astro` `full_name` 저장형 XSS
+- ✅ **P0 FIXED** (PR #33): `/api/og/wallet` — 요청당 Puppeteer 인스턴스 → 싱글턴 + 동시 상한
+- ✅ **P0 PARTIAL** (PR #24, #30): `/api/poll/*`, `/api/wallet-subscribe` 레이트리밋 추가
+- ⚠️ **P0 OPEN**: `/api/track`, `/api/analytics` — 인증·레이트리밋 없음 (다음 sprint)
+- ⚠️ **P1 OPEN**: `docker-entrypoint.sh` `while true; node…` + `restart: unless-stopped` 이중 supervisor
+- ✅ **P1 FIXED** (PR #21): `api/server.js` fabricated `openRate`, `course_completions` 제거
 
-자세한 진단: `claude/production-analysis-QAFfz` 브랜치 PR #5 본문 + `ops/improvement-loop/state/history/`의 머스크/멍거 critique 참조.
+**다음 7일 deliverable** (2026-05-20 plan 기준):
+- `/api/track` + `/api/analytics` 레이트리밋 추가 (P0 완결)
+- `wallet_authenticated_users` 실측 파이프라인 연결 (Supabase DB count)
+- `whale_telegram_ctr` 측정 스크립트 작성 (Telegram API)
+
+자세한 진단: `ops/improvement-loop/state/history/`의 snapshot/critique 파일 참조.
 
 ## Self-Improvement Loop
 
