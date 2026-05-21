@@ -39,6 +39,14 @@ const isin = isinProp || ticker;
   </div>
 </div>
 
+<div class="tw-cta">
+  <div>
+    <h3>📲 {name} 다음 신호 받기</h3>
+    <p>내부자 거래 즉시 알림. 지갑 연동 30초, 무료.</p>
+  </div>
+  <a class="tw-cta-btn" href={`/wallet?utm_source=whale&utm_medium=tradecta&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}>내 지갑에 추가 →</a>
+</div>
+
 <script>
   import { supabase } from '../lib/supabase.js';
 
@@ -188,4 +196,20 @@ const isin = isinProp || ticker;
     flex-direction: column;
   }
 }
+
+.tw-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin-top: 1rem;
+}
+.tw-cta > div { flex: 1; }
+.tw-cta h3 { margin: 0 0 .25rem; font-size: 1rem; }
+.tw-cta p { margin: 0; font-size: .875em; opacity: .85; }
+.tw-cta-btn {
+  display: inline-block; padding: .65rem 1.1rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none; white-space: nowrap;
+}
+.tw-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 600px) { .tw-cta { flex-direction: column; align-items: stretch; text-align: center; } }
 </style>
