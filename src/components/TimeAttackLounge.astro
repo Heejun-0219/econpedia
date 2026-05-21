@@ -361,6 +361,18 @@ const { signalId, isBuy } = Astro.props;
         }
       });
 
+      // Footer login link → trigger Google OAuth
+      const loginLink = lounge.querySelector('.lounge-login-link');
+      if (loginLink) {
+        loginLink.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: { redirectTo: window.location.origin + window.location.pathname }
+          });
+        });
+      }
+
     });
   });
 </script>
