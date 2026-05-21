@@ -1,0 +1,269 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "125억 원을 한 번에 샀다, '앱토크롬'에 들어온 큰손의 속마음";
+const date = "2026-05-15";
+const description = "앱토크롬에 유입된 125억 원의 큰손 매수. 과거 유사 사례의 수익률을 통해 내 지갑에 미칠 영향을 분석합니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇰🇷 앱토크롬</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇰🇷 앱토크롬 (109960)</h3>
+        <p><strong>매매자:</strong> 포르테 신기술조합 제240호</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $8.64M <span style="opacity:.85">(약 125억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 4,092,770주 · ₩3,060</p>
+        <p><strong>출처:</strong> DART 지분공시</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-21","y":5380},{"x":"2025-11-24","y":5220},{"x":"2025-11-25","y":5240},{"x":"2025-11-26","y":5240},{"x":"2025-11-27","y":5360},{"x":"2025-11-28","y":5480},{"x":"2025-12-01","y":5540},{"x":"2025-12-02","y":5660},{"x":"2025-12-03","y":5380},{"x":"2025-12-04","y":5340},{"x":"2025-12-05","y":5400},{"x":"2025-12-08","y":5420},{"x":"2025-12-09","y":5600},{"x":"2025-12-10","y":5800},{"x":"2025-12-11","y":5740},{"x":"2025-12-12","y":5760},{"x":"2025-12-15","y":5600},{"x":"2025-12-16","y":5560},{"x":"2025-12-17","y":5540},{"x":"2025-12-18","y":5500},{"x":"2025-12-19","y":5460},{"x":"2025-12-22","y":5320},{"x":"2025-12-23","y":5200},{"x":"2025-12-24","y":5180},{"x":"2025-12-26","y":5080},{"x":"2025-12-29","y":5120},{"x":"2025-12-30","y":5000},{"x":"2026-01-02","y":5040},{"x":"2026-01-05","y":5160},{"x":"2026-01-06","y":5220},{"x":"2026-01-07","y":5220},{"x":"2026-01-08","y":5200},{"x":"2026-01-09","y":5220},{"x":"2026-01-12","y":5280},{"x":"2026-01-13","y":5160},{"x":"2026-01-14","y":5100},{"x":"2026-01-15","y":5020},{"x":"2026-01-16","y":4980},{"x":"2026-01-19","y":4880},{"x":"2026-01-20","y":5100},{"x":"2026-01-21","y":4800},{"x":"2026-01-22","y":4800},{"x":"2026-01-23","y":4900},{"x":"2026-01-26","y":5060},{"x":"2026-01-27","y":5180},{"x":"2026-01-28","y":5100},{"x":"2026-01-29","y":5080},{"x":"2026-01-30","y":4960},{"x":"2026-02-02","y":4940},{"x":"2026-02-03","y":4900},{"x":"2026-02-04","y":4900},{"x":"2026-02-05","y":4880},{"x":"2026-02-06","y":4800},{"x":"2026-02-09","y":4800},{"x":"2026-02-10","y":4740},{"x":"2026-02-11","y":4620},{"x":"2026-02-12","y":4580},{"x":"2026-02-13","y":4020},{"x":"2026-02-19","y":3740},{"x":"2026-02-20","y":3840},{"x":"2026-02-23","y":3860},{"x":"2026-02-24","y":3960},{"x":"2026-02-25","y":3600},{"x":"2026-02-26","y":3660},{"x":"2026-02-27","y":3440},{"x":"2026-03-03","y":3300},{"x":"2026-03-04","y":3000},{"x":"2026-03-05","y":3160},{"x":"2026-03-06","y":3280},{"x":"2026-03-09","y":3160},{"x":"2026-03-10","y":3200},{"x":"2026-03-11","y":3180},{"x":"2026-03-12","y":3180},{"x":"2026-03-13","y":3220},{"x":"2026-03-16","y":3200},{"x":"2026-03-17","y":3180},{"x":"2026-03-18","y":3160},{"x":"2026-03-19","y":3160},{"x":"2026-03-20","y":3480},{"x":"2026-03-23","y":3360},{"x":"2026-03-24","y":3320},{"x":"2026-03-25","y":3280},{"x":"2026-03-26","y":3420},{"x":"2026-03-27","y":3380},{"x":"2026-03-30","y":3380},{"x":"2026-03-31","y":3280},{"x":"2026-04-01","y":3280},{"x":"2026-04-02","y":3560},{"x":"2026-04-03","y":3420},{"x":"2026-04-06","y":3340},{"x":"2026-04-07","y":3200},{"x":"2026-04-08","y":3300},{"x":"2026-04-09","y":3460},{"x":"2026-04-10","y":3520},{"x":"2026-04-13","y":3540},{"x":"2026-04-14","y":3540},{"x":"2026-04-15","y":3620},{"x":"2026-04-16","y":3580},{"x":"2026-04-17","y":3540},{"x":"2026-04-20","y":3460},{"x":"2026-04-21","y":3400},{"x":"2026-04-22","y":3260},{"x":"2026-04-23","y":3320},{"x":"2026-04-24","y":3300},{"x":"2026-04-27","y":3220},{"x":"2026-04-28","y":3560},{"x":"2026-04-29","y":3240},{"x":"2026-04-30","y":3060},{"x":"2026-05-04","y":3060},{"x":"2026-05-06","y":3060},{"x":"2026-05-07","y":3060},{"x":"2026-05-08","y":3060},{"x":"2026-05-11","y":3060},{"x":"2026-05-12","y":3060},{"x":"2026-05-13","y":3060},{"x":"2026-05-14","y":3060},{"x":"2026-05-15","y":3060},{"x":"2026-05-18","y":3060},{"x":"2026-05-19","y":3060},{"x":"2026-05-20","y":3060},{"x":"2026-05-21","y":3060}]' transactionDate='2026-05-15' isBuy={true} ticker='109960' currency='KRW' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 3060.00 (2026-05-15) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <p>무려 <strong>125억 원</strong>이라는 거액을 한 주식에 쏟아부은 큰손이 등장했습니다. 이 거대한 자금이 대체 왜 앱토크롬에 쓰인 것인지 분석해 봅니다.</p>
+<h2>📋 거래 브리핑</h2>
+<ul>
+<li><strong>누가 샀나:</strong> 포르테 신기술조합 제240호</li>
+<li><strong>어디를 샀나:</strong> 앱토크롬 (109960)</li>
+<li><strong>얼마나 샀나:</strong> <strong>$8.64M (약 125억 원)</strong> · <strong>4,092,770주</strong> 취득</li>
+<li><strong>1주당 가격:</strong> <strong>₩3,060</strong></li>
+<li><strong>언제 샀나:</strong> <strong>2026년 5월 15일</strong></li>
+</ul>
+<p>&#39;포르테 신기술조합 제240호&#39;는 특정 기술이나 기업의 미래 가치에 베팅하기 위해 자금을 모은 투자 조합입니다. </p>
+<p>이들은 지난 5월 15일, 주당 <strong>3,060원</strong>에 앱토크롬 주식 약 <strong>409만 주</strong>를 장내 매수했습니다. </p>
+<h2>🔍 왜 지금?</h2>
+<p>신기술조합이 거액을 투자했다는 것은, 시장의 불확실성을 감수하고서라도 기업의 실적 개선이나 특정 호재에 긍정적인 전망을 가졌을 가능성을 시사합니다.</p>
+<p>이번 거래는 <strong>2026년 5월 15일</strong>에 발생해 아직 한 달이 채 지나지 않았습니다. </p>
+<p>따라서 30일, 90일, 180일, 1년 뒤의 주가 변동률은 모두 <strong>&#39;미도래&#39;</strong> 상태입니다. 당장 주가의 방향성을 확언할 수는 없습니다. </p>
+<p>그렇다면 과거에 이와 비슷하게 큰 자금이 들어왔던 기업들은 1년 뒤 어떤 성적표를 받았을까요?</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거 비슷한 성격의 대규모 매수 사례 3건을 살펴봅니다. 
+(아래 언급되는 모든 수익률은 시장 평균인 S&amp;P500이나 KOSPI의 상승 및 하락분을 제거하지 않은 <strong>단순 변동률</strong>입니다.)</p>
+<p><strong>1. 두산에너빌리티 (2022년 9월 30일)</strong>
+그룹 오너 일가가 약 <strong>$15.0M</strong>을 매수했던 사례입니다. 
+주가는 30일 뒤 <strong>5%</strong>, 90일 뒤 <strong>18%</strong>, 180일 뒤 <strong>35%</strong>, 1년(365일) 뒤에는 <strong>70%</strong> 상승했습니다. 
+사업 구조가 살아나는 시점의 매수가 긍정적인 결과로 이어진 사례입니다.</p>
+<p><strong>2. 셀트리온 (2018년 10월 15일)</strong>
+특수관계인이 약 <strong>$100.0M</strong>을 매수했습니다. 
+매수 후 30일 동안은 주가가 <strong>-2%</strong>로 하락했지만, 90일 뒤 <strong>12%</strong>, 180일 뒤 <strong>28%</strong>, 1년 뒤에는 <strong>35%</strong> 상승했습니다. 
+단기적으로는 하락했으나 장기적으로 반등한 케이스입니다.</p>
+<p><strong>3. 리먼 브라더스 (2008년 4월 15일)</strong>
+글로벌 금융위기 당시 리먼 브라더스의 CEO는 약 <strong>$3.0M</strong>의 자사주를 매수했습니다. 
+하지만 주가는 30일 뒤 <strong>-8%</strong>, 90일 뒤 <strong>-45%</strong>로 하락했고, 180일과 1년 뒤에는 파산보호 신청으로 인해 <strong>-100%</strong>가 되었습니다. 
+내부자의 매수가 항상 바닥을 의미하지는 않는다는 반례입니다.</p>
+<p>위 3가지 사례의 1년(D+365) 뒤 단순 산술평균 변동률은 <strong>약 1.6%</strong>입니다. 
+높은 수익을 기록한 경우도 있지만, 파산으로 가치가 소멸된 경우도 포함되어 있어 평균값 자체는 미미합니다.</p>
+<h2>💰 투자 시사점</h2>
+<p>만약 앱토크롬에 <strong>1천만 원을 투자한다고 가정</strong>해 봅니다. </p>
+<p>셀트리온의 사례처럼 한 달 동안 주가가 <strong>-2%</strong> 하락해 계좌가 <strong>980만 원</strong>이 될 수도 있습니다. 
+리먼 브라더스처럼 회사의 근본적인 문제가 숨어있다면 투자금 전체를 잃을 위험도 존재합니다. </p>
+<p>이번 <strong>125억 원</strong>의 매수는 기업 내부에 긍정적인 변화가 일어나고 있을 수 있다는 하나의 신호로 해석될 수 있습니다. 
+투자를 결정하기 전에는 기업의 재무 상태와 거시 경제 환경을 반드시 확인하는 보조 지표로만 활용하시길 권장합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 두산에너빌리티 (034020)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">박정원 회장 외 친족 / 그룹 오너 일가 · 2022-09-30 · 약 $15.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+5.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+18.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+70.0%</span></span>
+        </div>
+        <p class="case-narrative">사업구조 턴어라운드 국면에서 오너 일가 매수. 원전 수주 기대와 맞물려 24개월 상승 추세.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2022-09) · 회사 후속: 원전 수주 확대, 영업이익 흑전, 그룹 재무구조 개선</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Lehman Brothers (LEH)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Dick Fuld (CEO) · 2008-04-15 · 약 $3.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-45.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 자사주 매수가 항상 '바닥 시그널'은 아님을 보여주는 가장 유명한 반례.</p>
+        <p class="case-source">📎 SEC Form 4 / 공공 파산 기록 · 회사 후속: 2008-09 챕터 11 파산보호 신청. 보통주 가치 사실상 0.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 셀트리온 (068270)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">서정진 회장 / 특수관계인 · 2018-10-15 · 약 $100.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-2.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+12.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+28.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+        </div>
+        <p class="case-narrative">바이오 디레이팅 국면에서 오너 매수. 단기 추가 하락 후 6~12개월 반등이 전형.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2018-10) · 회사 후속: 바이오시밀러 글로벌 매출 확대, 합병으로 단일 법인화 추진</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 앱토크롬 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=109960">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="109960"
+        name="앱토크롬"
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-109960-2026-05-15" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

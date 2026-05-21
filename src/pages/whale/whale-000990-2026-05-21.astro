@@ -1,0 +1,259 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+
+const title = "큰손들은 왜 지금 지갑을 열었을까? 413억 원이 움직인 오늘의 시그널";
+const date = "2026-05-21";
+const description = "미래에셋자산운용이 DB하이텍 주식을 413억 원어치 매수했습니다. 과거 유사 사례의 1년 뒤 성적표와 내 지갑을 지키는 활용법을 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇰🇷 DB하이텍</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇰🇷 DB하이텍 (000990)</h3>
+        <p><strong>매매자:</strong> 미래에셋자산운용</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $28.45M <span style="opacity:.85">(약 413억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 227,939주 · ₩181,000</p>
+        <p><strong>출처:</strong> DART 지분공시</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-21","y":61900},{"x":"2025-11-24","y":60800},{"x":"2025-11-25","y":61900},{"x":"2025-11-26","y":61900},{"x":"2025-11-27","y":63600},{"x":"2025-11-28","y":63600},{"x":"2025-12-01","y":64500},{"x":"2025-12-02","y":65000},{"x":"2025-12-03","y":65600},{"x":"2025-12-04","y":64400},{"x":"2025-12-05","y":64800},{"x":"2025-12-08","y":66100},{"x":"2025-12-09","y":64900},{"x":"2025-12-10","y":66200},{"x":"2025-12-11","y":66500},{"x":"2025-12-12","y":67600},{"x":"2025-12-15","y":65400},{"x":"2025-12-16","y":65300},{"x":"2025-12-17","y":65500},{"x":"2025-12-18","y":64000},{"x":"2025-12-19","y":65300},{"x":"2025-12-22","y":68300},{"x":"2025-12-23","y":69400},{"x":"2025-12-24","y":68500},{"x":"2025-12-26","y":67300},{"x":"2025-12-29","y":67100},{"x":"2025-12-30","y":67600},{"x":"2026-01-02","y":73700},{"x":"2026-01-05","y":75200},{"x":"2026-01-06","y":75200},{"x":"2026-01-07","y":74200},{"x":"2026-01-08","y":71700},{"x":"2026-01-09","y":71900},{"x":"2026-01-12","y":74000},{"x":"2026-01-13","y":76400},{"x":"2026-01-14","y":81900},{"x":"2026-01-15","y":81900},{"x":"2026-01-16","y":85200},{"x":"2026-01-19","y":85700},{"x":"2026-01-20","y":84700},{"x":"2026-01-21","y":90300},{"x":"2026-01-22","y":93100},{"x":"2026-01-23","y":91000},{"x":"2026-01-26","y":90700},{"x":"2026-01-27","y":95600},{"x":"2026-01-28","y":104700},{"x":"2026-01-29","y":101100},{"x":"2026-01-30","y":105800},{"x":"2026-02-02","y":103000},{"x":"2026-02-03","y":112900},{"x":"2026-02-04","y":110800},{"x":"2026-02-05","y":104400},{"x":"2026-02-06","y":103000},{"x":"2026-02-09","y":99000},{"x":"2026-02-10","y":96800},{"x":"2026-02-11","y":93800},{"x":"2026-02-12","y":94800},{"x":"2026-02-13","y":93000},{"x":"2026-02-19","y":91400},{"x":"2026-02-20","y":93000},{"x":"2026-02-23","y":93000},{"x":"2026-02-24","y":91400},{"x":"2026-02-25","y":90900},{"x":"2026-02-26","y":94000},{"x":"2026-02-27","y":95700},{"x":"2026-03-03","y":90500},{"x":"2026-03-04","y":77300},{"x":"2026-03-05","y":95000},{"x":"2026-03-06","y":90000},{"x":"2026-03-09","y":83200},{"x":"2026-03-10","y":87700},{"x":"2026-03-11","y":85000},{"x":"2026-03-12","y":85900},{"x":"2026-03-13","y":86500},{"x":"2026-03-16","y":87900},{"x":"2026-03-17","y":85700},{"x":"2026-03-18","y":87900},{"x":"2026-03-19","y":87900},{"x":"2026-03-20","y":88100},{"x":"2026-03-23","y":83500},{"x":"2026-03-24","y":83400},{"x":"2026-03-25","y":82400},{"x":"2026-03-26","y":77900},{"x":"2026-03-27","y":77900},{"x":"2026-03-30","y":80800},{"x":"2026-03-31","y":78500},{"x":"2026-04-01","y":86000},{"x":"2026-04-02","y":83300},{"x":"2026-04-03","y":90600},{"x":"2026-04-06","y":91600},{"x":"2026-04-07","y":87800},{"x":"2026-04-08","y":94400},{"x":"2026-04-09","y":92600},{"x":"2026-04-10","y":94800},{"x":"2026-04-13","y":96500},{"x":"2026-04-14","y":96700},{"x":"2026-04-15","y":98600},{"x":"2026-04-16","y":103500},{"x":"2026-04-17","y":106900},{"x":"2026-04-20","y":126700},{"x":"2026-04-21","y":122000},{"x":"2026-04-22","y":127900},{"x":"2026-04-23","y":137400},{"x":"2026-04-24","y":152000},{"x":"2026-04-27","y":159000},{"x":"2026-04-28","y":154700},{"x":"2026-04-29","y":152600},{"x":"2026-04-30","y":158500},{"x":"2026-05-04","y":161700},{"x":"2026-05-06","y":162000},{"x":"2026-05-07","y":157500},{"x":"2026-05-08","y":168100},{"x":"2026-05-11","y":186700},{"x":"2026-05-12","y":165800},{"x":"2026-05-13","y":185600},{"x":"2026-05-14","y":182800},{"x":"2026-05-15","y":163500},{"x":"2026-05-18","y":170900},{"x":"2026-05-19","y":157300},{"x":"2026-05-20","y":162000},{"x":"2026-05-21","y":181000}]' transactionDate='2026-05-21' isBuy={true} ticker='000990' currency='KRW' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 181000.00 (2026-05-21) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>오늘 시장에 눈에 띄는 영수증이 하나 날아왔습니다. 주인공은 국내 대표 운용사인 미래에셋자산운용입니다. </p>
+<p>이들이 반도체 기업 <strong>DB하이텍(000990)</strong> 주식을 장내에서 대거 매수했습니다. </p>
+<p>구체적인 내역을 살펴보면, 주당 <strong>181,000원</strong>에 총 <strong>227,939주</strong>를 샀습니다. </p>
+<p>결제 금액은 무려 <strong>$28.45M (약 413억 원)</strong>에 달합니다. </p>
+<p>서울의 고급 아파트를 통째로 몇 채나 살 수 있는 거액을 한 기업의 주식에 베팅한 것입니다. </p>
+<h2>🔍 왜 지금?</h2>
+<p>시장 전체적으로 변동성이 큰 상황에서, 자산운용사가 이렇게 큰돈을 들여 자발적으로 주식을 샀다는 건 어떤 의미일까요? </p>
+<p>보통 기관이나 큰손들이 주식을 대량으로 사들이는 건 현재 주가가 기업의 내재 가치 대비 저평가되어 있다고 판단했을 때입니다. </p>
+<p>오늘(2026년 5월 21일) 막 거래가 공시되었기 때문에, 이 베팅의 성공 여부를 보여주는 후행 주가 성적표는 아직 나오지 않았습니다(D+30~365 미도래). </p>
+<p>하지만 우리는 과거의 비슷한 영수증들을 통해 힌트를 얻을 수 있습니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거 시장에서 오너나 큰손들이 대규모로 주식을 사들였던 유사한 사례 3건의 성적표를 살펴보겠습니다. </p>
+<p>첫 번째는 2022년 9월 30일, <strong>두산에너빌리티</strong>입니다. 그룹 오너 일가가 약 <strong>1,500만 달러</strong>어치를 매수했습니다. </p>
+<p>이 주식에 1천만 원을 같이 투자했다면 한 달(D+30) 뒤엔 <strong>50만 원(5%)</strong>, 석 달(D+90) 뒤엔 <strong>180만 원(18%)</strong>, 반년(D+180) 뒤엔 <strong>350만 원(35%)</strong>이 올랐고, 1년(D+365) 뒤에는 무려 <strong>700만 원(70%)</strong>의 이익이 났습니다.</p>
+<p>두 번째는 2018년 10월 15일, <strong>셀트리온</strong>입니다. 서정진 회장 측이 약 <strong>1억 달러</strong>어치를 매수했습니다. </p>
+<p>1천만 원을 투자했다면 한 달(D+30) 뒤엔 오히려 <strong>20만 원(-2%)</strong> 손해를 봤습니다. </p>
+<p>하지만 석 달(D+90) 뒤 <strong>120만 원(12%)</strong>, 반년(D+180) 뒤 <strong>280만 원(28%)</strong>, 1년(D+365) 뒤에는 <strong>350만 원(35%)</strong>의 수익으로 돌아왔습니다.</p>
+<p>세 번째는 2016년 2월 11일, 미국 <strong>JP모건(JPM)</strong>입니다. 제이미 다이먼 CEO가 시장 패닉기에 <strong>2,660만 달러</strong>를 직접 매수했습니다. </p>
+<p>1천만 원을 투자했다면 한 달(D+30) 뒤 <strong>125만 원(12.5%)</strong>, 석 달(D+90) 뒤 <strong>210만 원(21%)</strong>, 반년(D+180) 뒤 <strong>250만 원(25%)</strong>, 1년(D+365) 뒤엔 <strong>750만 원(75%)</strong>이 올랐습니다.</p>
+<p>위 3건의 유사 사례에서 1년(D+365) 뒤 평균 상승률은 <strong>60%</strong>였습니다. </p>
+<p>1천만 원을 투자했다면 1년 뒤 평균 <strong>600만 원</strong>이 불어났다는 뜻입니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>과거의 통계만 보면 <strong>긍정적인 시그널로 해석될 수 있습니다.</strong> </p>
+<p>하지만 큰손들은 수백억을 투자하고도 장기간 버틸 수 있는 자금력이 있는 반면, 개인 투자자의 상황은 다를 수 있습니다. </p>
+<p>셀트리온 사례에서 보듯, 큰손이 샀다고 해서 당장 주가가 오르는 것은 아니며 단기적으로는 하락(<strong>-2%</strong>)할 수도 있습니다.</p>
+<p>이러한 대규모 매수 뉴스는 확정적인 투자 권유가 아닙니다. </p>
+<p>스마트 머니가 해당 기업을 긍정적으로 평가하고 있다는 보조 지표로 활용하는 것이 적절합니다. </p>
+<p>관심 종목 리스트에 올려두고 여윳돈으로 차분히 지켜보는 것을 권장합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 두산에너빌리티 (034020)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">박정원 회장 외 친족 / 그룹 오너 일가 · 2022-09-30 · 약 $15.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+5.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+18.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+70.0%</span></span>
+        </div>
+        <p class="case-narrative">사업구조 턴어라운드 국면에서 오너 일가 매수. 원전 수주 기대와 맞물려 24개월 상승 추세.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2022-09) · 회사 후속: 원전 수주 확대, 영업이익 흑전, 그룹 재무구조 개선</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 셀트리온 (068270)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">서정진 회장 / 특수관계인 · 2018-10-15 · 약 $100.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-2.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+12.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+28.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+        </div>
+        <p class="case-narrative">바이오 디레이팅 국면에서 오너 매수. 단기 추가 하락 후 6~12개월 반등이 전형.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2018-10) · 회사 후속: 바이오시밀러 글로벌 매출 확대, 합병으로 단일 법인화 추진</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 DB하이텍 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=000990">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <TradeCTA
+        ticker="000990"
+        name="DB하이텍"
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-000990-2026-05-21" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

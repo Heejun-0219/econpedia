@@ -1,5 +1,33 @@
 [
   {
+    "slug": "whale-000990-2026-05-21",
+    "title": "큰손들은 왜 지금 지갑을 열었을까? 413억 원이 움직인 오늘의 시그널",
+    "excerpt": "미래에셋자산운용이 DB하이텍 주식을 413억 원어치 매수했습니다. 과거 유사 사례의 1년 뒤 성적표와 내 지갑을 지키는 활용법을 확인하세요.",
+    "date": "2026-05-21",
+    "ticker": "000990",
+    "companyName": "DB하이텍",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": true,
+    "person": "미래에셋자산운용",
+    "amount": "$28.45M (약 413억 원) · 227,939주 취득",
+    "significance": 60
+  },
+  {
+    "slug": "whale-cvlt-2026-05-21",
+    "title": "회사 대표의 42억 원어치 주식 매도, 어떤 의미일까?",
+    "excerpt": "컴볼트 시스템즈 CEO의 42억 원 규모 주식 매도. 과거 유사 사례의 1년 뒤 평균 주가 하락률은 -82.6%였습니다. 이 거래에 담긴 핵심 시그널을 확인하세요.",
+    "date": "2026-05-21",
+    "ticker": "CVLT",
+    "companyName": "COMMVAULT SYSTEMS INC",
+    "category": "insider",
+    "market": "us",
+    "isBuy": false,
+    "person": "Mirchandani Sanjay / President &amp; CEO",
+    "amount": "$2.88M (약 42억 원)",
+    "significance": 60
+  },
+  {
     "slug": "whale-365330-2026-05-20",
     "title": "회장님의 84억 원어치 주식 매도, 내 지갑엔 어떤 의미일까?",
     "excerpt": "에스와이스틸텍 회장의 84억 원 규모 장내 매도 발생. 카카오, 엔론 등 과거 핵심 경영진 매도 사례를 통해 내 지갑에 미칠 영향을 숫자로 분석합니다.",
@@ -152,6 +180,20 @@
     "person": "Erdoes Mary E. / CEO Asset &amp; Wealth Management",
     "amount": "$1.98M (약 29억 원)",
     "significance": 80
+  },
+  {
+    "slug": "whale-109960-2026-05-15",
+    "title": "125억 원을 한 번에 샀다, '앱토크롬'에 들어온 큰손의 속마음",
+    "excerpt": "앱토크롬에 유입된 125억 원의 큰손 매수. 과거 유사 사례의 수익률을 통해 내 지갑에 미칠 영향을 분석합니다.",
+    "date": "2026-05-15",
+    "ticker": "109960",
+    "companyName": "앱토크롬",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": true,
+    "person": "포르테 신기술조합 제240호",
+    "amount": "$8.64M (약 125억 원) · 4,092,770주 취득",
+    "significance": 50
   },
   {
     "slug": "whale-015590-2026-05-15",
