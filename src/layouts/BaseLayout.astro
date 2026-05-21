@@ -311,6 +311,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <main>
       {/* AI disclaimer removed for cleaner UI. Footer disclaimer serves the legal purpose. */}
       <slot />
+      {Astro.url.pathname.startsWith('/whale/') && (
+        <div class="whale-layout-cta">
+          <span class="whale-layout-cta__text">📲 다음 내부자 거래 시그널, 내 지갑으로</span>
+          <a href="/wallet?utm_source=whale_bottom&utm_medium=layout&utm_campaign=wallet_signup" class="whale-layout-cta__btn">
+            무료 알림 받기 →
+          </a>
+        </div>
+      )}
     </main>
 
     <!-- Mobile Bottom Navigation (Toss Style) -->
@@ -780,5 +788,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         }
       });
     </script>
+    <style>
+      .whale-layout-cta { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.25rem 1.5rem; margin:2rem auto 0; max-width:800px; background:rgba(16,185,129,.06); border:1px solid rgba(16,185,129,.2); border-radius:12px; }
+      .whale-layout-cta__text { font-size:.95rem; }
+      .whale-layout-cta__btn { white-space:nowrap; padding:.6rem 1.25rem; background:#10b981; color:#fff; border-radius:8px; font-weight:700; font-size:.9rem; text-decoration:none; }
+      .whale-layout-cta__btn:hover { background:#059669; }
+      @media (max-width:600px) { .whale-layout-cta { flex-direction:column; text-align:center; } .whale-layout-cta__btn { width:100%; text-align:center; } }
+    </style>
   </body>
 </html>
