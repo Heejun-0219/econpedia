@@ -87,7 +87,7 @@ const isin = isinProp || ticker;
         }
         
         const t = (e.currentTarget as HTMLElement).getAttribute('data-ticker') || '';
-        window.location.href = `/wallet?ticker=${encodeURIComponent(t)}`;
+        window.location.href = `/wallet?ticker=${encodeURIComponent(t)}&utm_source=whale_detail&utm_medium=tradecta&utm_campaign=wallet_signup`;
       });
     });
   });
