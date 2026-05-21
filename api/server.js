@@ -283,6 +283,7 @@ const server = createServer(async (req, res) => {
 
   // ── GET /api/stats (슬랙 리포트용 + 홈페이지 Social Proof) ──────────
   if (req.method === 'GET' && path === '/api/stats') {
+    if (isRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
     const todayCount = stats.daily[todayStr] || 0;
 
@@ -621,6 +622,7 @@ const server = createServer(async (req, res) => {
 
   // ── DELETE /api/subscribe (구독 취소) ─────────────────
   if (req.method === 'DELETE' && path === '/api/subscribe') {
+    if (isRateLimited(ip)) return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: '잘못된 요청 형식입니다.' }); }
