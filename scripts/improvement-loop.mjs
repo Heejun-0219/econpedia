@@ -29,6 +29,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
 
 dotenv.config();
 
@@ -182,6 +183,20 @@ async function buildSnapshot() {
   const planPath = await latestHistoryFile('-plan.md');
   if (planPath) latestPlan = await fs.readFile(planPath, 'utf8');
 
+  // Supabase: wallet_authenticated_users (user_settings row count)
+  let walletAuthUsers = kpis.engagement?.wallet_authenticated_users ?? null;
+  try {
+    const sbUrl = process.env.PUBLIC_SUPABASE_URL;
+    const sbKey = process.env.PUBLIC_SUPABASE_ANON_KEY;
+    if (sbUrl && sbKey && !sbUrl.includes('dummy')) {
+      const sb = createClient(sbUrl, sbKey);
+      const { count, error } = await sb.from('user_settings').select('*', { count: 'exact', head: true });
+      if (!error && count !== null) walletAuthUsers = count;
+    }
+  } catch (e) {
+    console.warn('[snapshot] Supabase wallet count 실패:', e.message);
+  }
+
   const snapshot = {
     timestamp: new Date().toISOString(),
     branch,
@@ -205,6 +220,7 @@ async function buildSnapshot() {
     kpis: {
       ...kpis,
       content: { ...kpis.content, whale_alert_pages: whalePages },
+      engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers },
       _lastUpdated: new Date().toISOString().slice(0, 10),
     },
     goals,
