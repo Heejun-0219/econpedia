@@ -21,14 +21,19 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-- **P0**: `api/server.js:94-121` — `POLLS_FILE`, `WALLETS_FILE` 미정의 → poll/wallet 데이터가 30초마다 디스크 저장 실패. 컨테이너 재시작 시 데이터 손실.
-- **P0**: `src/components/TimeAttackLounge.astro:253` — Supabase `full_name` 저장형 XSS.
-- **P0**: `/api/track`, `/api/analytics`, `/api/poll/*`, `/api/wallet-subscribe` — 인증/레이트리밋 없음.
-- **P0**: `/api/og/wallet` — 요청당 Puppeteer 인스턴스 (DoS·OOM 위험).
-- **P1**: `docker-entrypoint.sh`의 `while true; node…` 루프 + `restart: unless-stopped` 이중 supervisor.
-- **P1**: `api/server.js:295,305` — fabricated `openRate`, `course_completions`.
+> 2026-05-21 기준: 이전 P0/P1 항목이 모두 해결됨. 잔존 기술부채 및 다음 우선순위:
 
-자세한 진단: `claude/production-analysis-QAFfz` 브랜치 PR #5 본문 + `ops/improvement-loop/state/history/`의 머스크/멍거 critique 참조.
+- **P1 잔존**: `api/server.js` in-memory poll/wallet 데이터 — graceful shutdown으로 완화됐으나 강제 종료 시 데이터 유실 위험 존재. Supabase 직접 저장으로 전환 권고.
+- **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 (정유 마진 반영률) — 출처 명시 필요.
+- **다음 growth 우선순위**: `wallet_authenticated_users` 실측 추적 파이프라인 (현재 null, Supabase `user_settings` row count 연동).
+
+**해결 완료 항목** (참고용):
+- ~~P0: `POLLS_FILE`/`WALLETS_FILE` 미정의~~ → PR #18
+- ~~P0: TimeAttackLounge `full_name` XSS~~ → HTML escaping 적용
+- ~~P0: `/api/track`, `/api/analytics`, `/api/poll/*`, `/api/wallet-subscribe` 레이트리밋 없음~~ → PR #30, #36
+- ~~P0: `/api/og/wallet` Puppeteer 인스턴스 per request~~ → PR #33 (싱글턴 + 동시 상한)
+- ~~P1: `docker-entrypoint.sh` 이중 supervisor~~ → PR #37 (지수 백오프)
+- ~~P1: fabricated `openRate`/`course_completions`/`rating`~~ → PR #21 (완전 제거)
 
 ## Self-Improvement Loop
 
