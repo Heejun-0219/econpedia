@@ -504,6 +504,8 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
             netGain -= change;
           }
           if (raw.oil) {
+            // 0.5: 국제유가 → 국내 소비자가 실반영률 추산 (세금·유통마진 ~50-60% 차감)
+            // 출처: 한국석유공사 Opinet 유가 구성 통계 https://www.opinet.co.kr
             const change = Math.round(settings.gasoline * (raw.oil.changePercent / 100) * 0.5);
             updateCard('gasoline', `1회 주유 시 약 ${Math.abs(change).toLocaleString()}원 ${formatChange(change, '올랐어요', '내렸어요')}`, change);
             netGain -= change;
