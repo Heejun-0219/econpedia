@@ -246,6 +246,12 @@ function sendJSON(res, status, data) {
     'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'X-XSS-Protection': '0',
+    'Content-Security-Policy': "default-src 'none'",
+    'Cache-Control': 'no-store',
   });
   res.end(JSON.stringify(data));
 }
