@@ -620,7 +620,8 @@ async function sendWhaleTelegram(signal, meta, ctx = {}) {
   ];
   if (followLine) lines.push(`📈 ${followLine}`);
   if (similarLine) lines.push(similarLine);
-  lines.push(``, `📰 *${escapeMd(meta.title)}*`, ``, `👉 [냉철한 AI 분석 읽기](${url})`);
+  const walletUrl = `https://econpedia.dedyn.io/wallet?ticker=${encodeURIComponent(signal.ticker)}&utm_source=telegram&utm_medium=push_cta&utm_campaign=wallet_signup`;
+  lines.push(``, `📰 *${escapeMd(meta.title)}*`, ``, `👉 [냉철한 AI 분석 읽기](${url})`, `📲 [${escapeMd(signal.ticker)} 내 지갑에 반영하기](${walletUrl})`);
   const text = lines.join('\n');
 
   try {
