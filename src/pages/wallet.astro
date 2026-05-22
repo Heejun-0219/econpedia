@@ -307,6 +307,14 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
               showAuthView(currentUser);
               await loadSettings(currentUser.id);
             }
+            if (event === 'SIGNED_IN') {
+              const utmSrc = new URLSearchParams(window.location.search).get('utm_source');
+              if (utmSrc && !sessionStorage.getItem('wfw_tracked')) {
+                sessionStorage.setItem('wfw_tracked', '1');
+                const src = `wallet_${utmSrc}`.replace(/[^a-z0-9_-]/gi, '_').slice(0, 20);
+                fetch(`/api/track?source=${encodeURIComponent(src)}`).catch(() => {});
+              }
+            }
           } else if (event === 'SIGNED_OUT') {
             currentUser = null;
             showUnauthView();
