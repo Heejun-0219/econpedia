@@ -6,11 +6,11 @@ export interface Props {
   change?: string;
   isPositive?: boolean;
   isin?: string;
+  // price/change are optional — omit to hide the price block (avoids stale hardcoded values)
 }
 
-const { ticker, name, price = "₩85,300", change = "▲ 1.2%", isPositive = true, isin: isinProp } = Astro.props;
+const { ticker, name, price, change, isPositive = true, isin: isinProp } = Astro.props;
 
-// 데이터에서 넘어온 isin 우선 사용, 없으면 티커를 폴백으로 사용
 const isin = isinProp || ticker;
 ---
 
@@ -20,10 +20,12 @@ const isin = isinProp || ticker;
       <span class="trade-cta__name">{name}</span>
       <span class="trade-cta__ticker">{ticker}</span>
     </div>
-    <div class="trade-cta__price-block">
-      <span class="trade-cta__price">{price}</span>
-      <span class={isPositive ? 'trade-cta__change positive' : 'trade-cta__change negative'}>{change}</span>
-    </div>
+    {price && (
+      <div class="trade-cta__price-block">
+        <span class="trade-cta__price">{price}</span>
+        {change && <span class={isPositive ? 'trade-cta__change positive' : 'trade-cta__change negative'}>{change}</span>}
+      </div>
+    )}
   </div>
   
   <div class="trade-cta__actions">
@@ -45,6 +47,15 @@ const isin = isinProp || ticker;
     <p>내부자 거래 즉시 알림. 지갑 연동 30초, 무료.</p>
   </div>
   <a class="tw-cta-btn" href={`/wallet?utm_source=whale&utm_medium=tradecta&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}>내 지갑에 추가 →</a>
+</div>
+
+<div class="whale-sticky-bar" id="whale-sticky-bar" role="complementary" aria-label="지갑 연동 알림">
+  <p class="whale-sticky-bar__text">📡 <span>{ticker}</span> 다음 Whale 시그널 알림받기</p>
+  <a
+    class="whale-sticky-bar__cta"
+    href={`/wallet?utm_source=whale&utm_medium=sticky_footer&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}
+  >내 지갑 연동 →</a>
+  <button class="whale-sticky-bar__close" aria-label="닫기" id="whale-sticky-close">✕</button>
 </div>
 
 <script>
@@ -98,6 +109,29 @@ const isin = isinProp || ticker;
         window.location.href = `/wallet?ticker=${encodeURIComponent(t)}&utm_source=whale_detail&utm_medium=tradecta&utm_campaign=wallet_signup`;
       });
     });
+
+    // 3. Scroll-triggered sticky footer CTA
+    const stickyBar = document.getElementById('whale-sticky-bar');
+    const stickyClose = document.getElementById('whale-sticky-close');
+    if (stickyBar && stickyClose) {
+      const DISMISS_KEY = 'whale-sticky-dismissed';
+      if (sessionStorage.getItem(DISMISS_KEY)) {
+        stickyBar.remove();
+      } else {
+        const onScroll = () => {
+          const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+          if (scrolled >= 0.4) {
+            stickyBar.classList.add('visible');
+            window.removeEventListener('scroll', onScroll);
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        stickyClose.addEventListener('click', () => {
+          stickyBar.classList.remove('visible');
+          sessionStorage.setItem(DISMISS_KEY, '1');
+        });
+      }
+    }
   });
 </script>
 
@@ -212,4 +246,32 @@ const isin = isinProp || ticker;
 }
 .tw-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
 @media (max-width: 600px) { .tw-cta { flex-direction: column; align-items: stretch; text-align: center; } }
+
+.whale-sticky-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: var(--color-bg-card, #1a1a2e);
+  border-top: 1px solid rgba(16,185,129,.4);
+  padding: .75rem 1rem;
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  transform: translateY(100%);
+  transition: transform .3s ease;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.25);
+}
+.whale-sticky-bar.visible { transform: translateY(0); }
+.whale-sticky-bar__text { flex: 1; font-size: .9rem; font-weight: 600; color: var(--color-text-primary, #fff); }
+.whale-sticky-bar__text span { color: #10b981; }
+.whale-sticky-bar__cta {
+  padding: .55rem 1rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; font-size: .875rem;
+  text-decoration: none; white-space: nowrap; flex-shrink: 0;
+}
+.whale-sticky-bar__cta:hover { background: #059669; }
+.whale-sticky-bar__close {
+  background: none; border: none; cursor: pointer; padding: .25rem;
+  color: var(--color-text-muted, #888); font-size: 1.1rem; line-height: 1; flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .whale-sticky-bar { flex-wrap: wrap; }
+  .whale-sticky-bar__text { width: 100%; margin-bottom: .25rem; }
+}
 </style>
