@@ -11,6 +11,13 @@ import { buildWhaleAnalysisPrompt } from '../src/data/prompts.js';
 
 dotenv.config();
 
+// Whitelist ticker to prevent HTML/URL injection if .whale-signals.json is corrupted or supply-chain attacked.
+const TICKER_RE = /^[A-Z0-9.]{1,6}$|^\d{6}$/;
+function safeTicker(t) {
+  const v = String(t ?? '').trim().toUpperCase();
+  return TICKER_RE.test(v) ? v : 'UNKNOWN';
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.join(__dirname, '..');
@@ -298,7 +305,7 @@ const description = "${safeDescription}";
 
     <div class="article-content portfolio-content">
       <div class="investor-profile-card">
-        <h3>${marketFlag} ${signal.companyName} (${signal.ticker})</h3>
+        <h3>${marketFlag} ${signal.companyName} (${safeTicker(signal.ticker)})</h3>
         <p><strong>매매자:</strong> ${signal.person}</p>
         <p>
           <strong>거래 방향:</strong>
@@ -313,7 +320,7 @@ const description = "${safeDescription}";
         <p><strong>출처:</strong> ${signal.source}${signal.sector ? ` · ${signal.sector}` : ''}</p>
       </div>
 
-      <WhaleChart chartData='${chartDataStr}' transactionDate='${signal.date}' isBuy={${isBuy}} ticker='${signal.ticker}' currency='${signal.currency || 'USD'}' />
+      <WhaleChart chartData='${chartDataStr}' transactionDate='${signal.date}' isBuy={${isBuy}} ticker='${safeTicker(signal.ticker)}' currency='${signal.currency || 'USD'}' />
 
       ${renderFollowUpBlock(followUp)}
 
@@ -326,13 +333,13 @@ const description = "${safeDescription}";
           <h3>📲 ${signal.companyName} 다음 신호 알림 받기</h3>
           <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
         </div>
-        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=${signal.ticker}">
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=${safeTicker(signal.ticker)}">
           내 지갑에 추가 →
         </a>
       </div>
 
       <TradeCTA
-        ticker="${signal.ticker}"
+        ticker="${safeTicker(signal.ticker)}"
         name="${signal.companyName}"
         isPositive={${isBuy}}
         isin="${isin || ''}"
