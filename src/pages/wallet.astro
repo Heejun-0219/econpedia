@@ -391,6 +391,10 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
                   settings = { ...DEFAULTS, ...JSON.parse(saved) };
                   const { error: upsertErr } = await supabase.from('user_settings').upsert({ user_id: userId, ...settings });
                   if (upsertErr) console.warn("Supabase upsert failed:", upsertErr.message);
+                } else {
+                  // 신규 사용자 — 기본 row 생성 (wallet_authenticated_users 집계를 위해 필수)
+                  const { error: initErr } = await supabase.from('user_settings').upsert({ user_id: userId, ...DEFAULTS });
+                  if (initErr) console.warn("Supabase init save failed:", initErr.message);
                 }
               }
             } else {
