@@ -21,11 +21,11 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-05-21 기준: 이전 P0/P1 항목이 모두 해결됨. 잔존 기술부채 및 다음 우선순위:
+> 2026-05-22 기준: 이전 P0/P1 항목이 모두 해결됨. 잔존 기술부채 및 다음 우선순위:
 
 - **P1 잔존**: `api/server.js` in-memory poll/wallet 데이터 — graceful shutdown으로 완화됐으나 강제 종료 시 데이터 유실 위험 존재. Supabase 직접 저장으로 전환 권고.
-- **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 (정유 마진 반영률) — 출처 명시 필요.
-- **다음 growth 우선순위**: `wallet_authenticated_users` 실측 추적 파이프라인 (현재 null, Supabase `user_settings` row count 연동).
+- **다음 growth 우선순위 (P1)**: sticky_footer CTA 전환 측정 파이프라인 — `user_settings` 테이블에 `utm_source`/`utm_medium` 컬럼 추가 + SIGNED_IN 핸들러에서 기록. sticky_footer가 배포됐으나 측정 불가 상태.
+- **다음 growth 우선순위 (P2)**: `wallet_authenticated_users` 실측 추적 파이프라인 — Supabase `user_settings` row count 연동 (현재 null, `api/server.js` `/api/stats`에 쿼리 패턴 구현됨).
 
 **해결 완료 항목** (참고용):
 - ~~P0: `POLLS_FILE`/`WALLETS_FILE` 미정의~~ → PR #18
@@ -34,6 +34,9 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 - ~~P0: `/api/og/wallet` Puppeteer 인스턴스 per request~~ → PR #33 (싱글턴 + 동시 상한)
 - ~~P1: `docker-entrypoint.sh` 이중 supervisor~~ → PR #37 (지수 백오프)
 - ~~P1: fabricated `openRate`/`course_completions`/`rating`~~ → PR #21 (완전 제거)
+- ~~관찰: gasoline `* 0.5` 추산 계수 출처 미명시~~ → PR #51 (Opinet 출처 주석 추가)
+- ~~TradeCTA `price`/`change` 하드코딩 기본값 → 실측치처럼 노출~~ → PR #59 (기본값 제거, props 없을 시 가격 블록 미노출)
+- ~~API 응답 보안 헤더 없음~~ → PR #59 (X-Content-Type-Options, X-Frame-Options, CSP 등 6종 추가)
 
 ## Self-Improvement Loop
 
