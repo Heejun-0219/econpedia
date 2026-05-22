@@ -177,6 +177,19 @@ async function buildSnapshot() {
   const ghIssues = safeExec('gh issue list --state open --limit 20 --json number,title,labels 2>/dev/null') || '[]';
   const ghPrs = safeExec('gh pr list --state open --limit 10 --json number,title,isDraft 2>/dev/null') || '[]';
 
+  // wallet_authenticated_users — Supabase user_settings row count (anon key, RLS 허용 시)
+  let walletAuthUsers = kpis.engagement?.wallet_authenticated_users ?? null;
+  try {
+    const sbUrl = process.env.PUBLIC_SUPABASE_URL;
+    const sbKey = process.env.PUBLIC_SUPABASE_ANON_KEY;
+    if (sbUrl && sbKey && !sbUrl.includes('dummy')) {
+      const { createClient } = await import('@supabase/supabase-js');
+      const sb = createClient(sbUrl, sbKey);
+      const { count, error } = await sb.from('user_settings').select('*', { count: 'exact', head: true });
+      if (!error && count !== null) walletAuthUsers = count;
+    }
+  } catch {}
+
   // Past synthesis plan (if any) — pick the most recent across all dates
   let latestPlan = null;
   const planPath = await latestHistoryFile('-plan.md');
@@ -205,6 +218,7 @@ async function buildSnapshot() {
     kpis: {
       ...kpis,
       content: { ...kpis.content, whale_alert_pages: whalePages },
+      engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers },
       _lastUpdated: new Date().toISOString().slice(0, 10),
     },
     goals,
