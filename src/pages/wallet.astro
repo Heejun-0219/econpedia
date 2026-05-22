@@ -315,7 +315,7 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
 
         // Google Login Action
         document.getElementById('btn-google-login')?.addEventListener('click', async () => {
-          const redirectUrl = window.location.origin + '/wallet';
+          const redirectUrl = window.location.origin + '/wallet' + window.location.search;
           console.log("Redirecting to:", redirectUrl);
           const { error } = await supabase.auth.signInWithOAuth({ 
             provider: 'google', 
