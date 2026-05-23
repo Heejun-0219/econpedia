@@ -132,6 +132,21 @@ const isin = isinProp || ticker;
         });
       }
     }
+
+    // 4. 이미 로그인한 사용자: 회원가입 CTA → "내 지갑 보기" 로 교체
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      const twBtn = document.querySelector<HTMLAnchorElement>('.tw-cta-btn');
+      if (twBtn) {
+        twBtn.textContent = '내 지갑 보기 →';
+        twBtn.href = twBtn.href.replace('wallet_signup', 'wallet_visit_return');
+      }
+      const stickyBtn = document.querySelector<HTMLAnchorElement>('.whale-sticky-bar__cta');
+      if (stickyBtn) {
+        stickyBtn.textContent = '내 지갑 보기 →';
+        stickyBtn.href = stickyBtn.href.replace('wallet_signup', 'wallet_visit_return');
+      }
+    });
   });
 </script>
 
