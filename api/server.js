@@ -194,14 +194,14 @@ function isAnalyticsRateLimited(ip) {
 }
 
 // ─── Resend Contacts API 헬퍼 ────────────────────────────
-async function addContact(email, firstName = '') {
+async function addContact(email, firstName = '', source = '') {
   const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, first_name: firstName, unsubscribed: false }),
+    body: JSON.stringify({ email, first_name: firstName, last_name: source, unsubscribed: false }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || `Resend API 오류: ${res.status}`);
@@ -615,14 +615,16 @@ const server = createServer(async (req, res) => {
 
     const { email } = body;
     const name = (typeof body.name === 'string') ? body.name.slice(0, 100).trim() : '';
+    const referer = req.headers['referer'] || req.headers['referrer'] || '';
+    const source = referer.includes('/whale/') ? 'whale' : '';
 
     if (!email || !isValidEmail(email)) {
       return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
     }
 
     try {
-      await addContact(email, name);
-      console.log(`[subscribe] ✅ ${email}`);
+      await addContact(email, name, source);
+      console.log(`[subscribe] ✅ ${email} source=${source || 'newsletter'}`);
       return sendJSON(res, 200, {
         success: true,
         message: '구독 신청이 완료됐습니다! 내일 아침 첫 브리핑을 보내드릴게요. 📊',
