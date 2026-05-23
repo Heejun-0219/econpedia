@@ -1,5 +1,33 @@
 [
   {
+    "slug": "whale-cgct-2026-05-23",
+    "title": "회장님의 9천만 원어치 자사주 쇼핑, 내 지갑엔 어떤 의미일까?",
+    "excerpt": "CGCT 회장의 9,162만원 자사주 매수! 과거 리먼 브라더스, JP모건 사례와 비교해 내 지갑에 주는 진짜 시그널을 숫자로 번역해 드립니다.",
+    "date": "2026-05-23",
+    "ticker": "CGCT",
+    "companyName": "Cartesian Growth Corp III",
+    "category": "insider",
+    "market": "us",
+    "isBuy": true,
+    "person": "CGC III Sponsor LLC / Chairman and CEO",
+    "amount": "$63K (약 9,162만 원)",
+    "significance": 60
+  },
+  {
+    "slug": "whale-crwv-2026-05-23",
+    "title": "코어위브(CRWV) CEO, 19억 원어치 주식을 팔다: 내 지갑에 주는 시그널은?",
+    "excerpt": "코어위브(CRWV) CEO의 19억 원 매도 공시. 과거 유사한 기술주 내부자 매도 사례의 1년 뒤 주가 변동률로 내 지갑에 주는 시그널을 확인하세요.",
+    "date": "2026-05-23",
+    "ticker": "CRWV",
+    "companyName": "CoreWeave, Inc.",
+    "category": "insider",
+    "market": "us",
+    "isBuy": false,
+    "person": "Intrator Michael N / CEO and President",
+    "amount": "$1.31M (약 19억 원)",
+    "significance": 60
+  },
+  {
     "slug": "whale-twfg-2026-05-22",
     "title": "[TWFG] 이사의 9억 원 규모 자사주 매수 분석",
     "excerpt": "TWFG 이사의 9억 원 자사주 매수, 과거 금융주 내부자 매수 사례와 비교해 내 지갑에 미칠 영향을 분석합니다.",
@@ -29,8 +57,8 @@
   },
   {
     "slug": "whale-462350-2026-05-22",
-    "title": "이노스페이스 대표이사의 110억 원 베팅, 내 지갑엔 어떤 의미일까?",
-    "excerpt": "이노스페이스 대표이사의 110억 원 자사주 매수, 과거 유사 사례를 통해 내 지갑에 미칠 영향을 분석합니다.",
+    "title": "대표의 110억 원 베팅, 내 지갑에는 어떤 의미일까?",
+    "excerpt": "이노스페이스 대표이사의 110억 원 규모 자사주 매수. 과거 유사 사례를 통해 내 지갑을 지키는 투자 시그널을 확인하세요.",
     "date": "2026-05-22",
     "ticker": "462350",
     "companyName": "이노스페이스",

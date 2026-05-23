@@ -109,7 +109,6 @@ export const CATEGORIES = {
         readingTime: '10분',
         date: '2026.04.01',
         href: '/economy/global/us-fed-explained',
-        comingSoon: true,
       },
       {
         title: '중국 경제 위기, 나한테도 영향이 있을까?',

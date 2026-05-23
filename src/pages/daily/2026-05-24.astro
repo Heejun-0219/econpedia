@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "오늘 시장은 아주 조용합니다. 내 지갑도 평화롭네요 😌";
+const date = "2026-05-24";
+const description = "오늘은 금융 시장의 움직임이 아주 잔잔한 하루입니다. 억지로 골치 아픈 뉴스를 찾아볼 필요 없이, 가벼운 마음으로 오늘 내 지갑 상태만 슥 훑어보세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>오늘은 금융 시장의 움직임이 아주 잔잔한 하루입니다. 억지로 골치 아픈 뉴스를 찾아볼 필요 없이, 가벼운 마음으로 오늘 내 지갑 상태만 슥 훑어보세요.</p>
+<table>
+<thead>
+<tr>
+<th align="left">내 생활 영역</th>
+<th align="left">오늘 내 지갑에 미치는 영향</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>✈️ 해외여행 &amp; 직구</strong></td>
+<td align="left">100만 원을 환전할 때 어제보다 딱 <strong>89원</strong> 더 비싸진 수준이에요. 사실상 차이가 없답니다.</td>
+</tr>
+<tr>
+<td align="left"><strong>🏠 대출이자</strong></td>
+<td align="left">한국은행 기준금리가 그대로라, 당장 대출이자가 오를 걱정은 안 하셔도 돼요.</td>
+</tr>
+<tr>
+<td align="left"><strong>📊 국내 주식</strong></td>
+<td align="left">내 계좌에 1,000만 원이 들어있다면, 어제보다 약 <strong>41,097원</strong> 정도 가볍게 오른 수준이에요.</td>
+</tr>
+</tbody></table>
+<br>
+
+<h2>이코노의 가이드: 조용한 날엔 내 &#39;고정 지출&#39;을 점검해 보세요</h2>
+<p>오늘처럼 시장에 큰 바람이 불지 않는 평화로운 날은 억지로 투자 앱을 들여다볼 필요가 없습니다. 대신, 평소에 무심코 흘려보냈던 내 지갑 속 숨은 구멍을 찾아보는 건강한 휴식을 추천해 드려요.</p>
+<ul>
+<li><strong>지난 3개월간 한 번도 안 쓴 구독 서비스</strong> (OTT, 운동 앱 등)가 있다면 오늘 바로 해지해 보세요.</li>
+<li><strong>통신사 멤버십 혜택</strong>이나 자주 쓰는 <strong>신용카드 할인 실적</strong>을 가볍게 점검해 보세요.</li>
+</ul>
+<p>빨간 불, 파란 불로 가득한 주식 창을 보는 것보다, 매달 새어 나가는 고정 지출 1만 원을 줄이는 것이 훨씬 더 확실하고 똑똑한 재테크입니다. 오늘은 내 지갑을 가볍게 다이어트 시켜주는 하루를 보내보세요!</p>
+<br>
+
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
