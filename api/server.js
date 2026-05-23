@@ -126,13 +126,19 @@ function pruneOldDaily() {
   }
 }
 
+async function atomicWriteJSON(filePath, data) {
+  const { writeFile, rename } = await import('fs/promises');
+  const tmp = filePath + '.tmp';
+  await writeFile(tmp, JSON.stringify(data, null, 2), 'utf-8');
+  await rename(tmp, filePath);
+}
+
 async function flushStats() {
   try {
     pruneOldDaily();
-    const { writeFile } = await import('fs/promises');
-    await writeFile(STATS_FILE, JSON.stringify(stats, null, 2), 'utf-8');
-    await writeFile(POLLS_FILE, JSON.stringify(polls, null, 2), 'utf-8');
-    await writeFile(WALLETS_FILE, JSON.stringify(wallets, null, 2), 'utf-8');
+    await atomicWriteJSON(STATS_FILE, stats);
+    await atomicWriteJSON(POLLS_FILE, polls);
+    await atomicWriteJSON(WALLETS_FILE, wallets);
   } catch (e) {
     console.error('⚠️ 데이터 비동기 플러시 실패:', e.message);
   }
@@ -228,10 +234,18 @@ async function removeContact(email) {
 }
 
 // ─── 요청 파싱 헬퍼 ─────────────────────────────────────
+const MAX_BODY_BYTES = 8192;
+
 function parseBody(req) {
   return new Promise((resolve, reject) => {
     let body = '';
-    req.on('data', chunk => { body += chunk; });
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > MAX_BODY_BYTES) {
+        req.destroy();
+        reject(new Error('Body too large'));
+      }
+    });
     req.on('end', () => {
       try { resolve(JSON.parse(body || '{}')); }
       catch { reject(new Error('Invalid JSON')); }
@@ -599,14 +613,15 @@ const server = createServer(async (req, res) => {
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: '잘못된 요청 형식입니다.' }); }
 
-    const { email, name } = body;
+    const { email } = body;
+    const name = (typeof body.name === 'string') ? body.name.slice(0, 100).trim() : '';
 
     if (!email || !isValidEmail(email)) {
       return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
     }
 
     try {
-      await addContact(email, name || '');
+      await addContact(email, name);
       console.log(`[subscribe] ✅ ${email}`);
       return sendJSON(res, 200, {
         success: true,
@@ -627,6 +642,9 @@ const server = createServer(async (req, res) => {
 
   // ── DELETE /api/subscribe (구독 취소) ─────────────────
   if (req.method === 'DELETE' && path === '/api/subscribe') {
+    if (isRateLimited(ip)) {
+      return sendJSON(res, 429, { error: '너무 많은 요청입니다. 잠시 후 다시 시도해주세요.' });
+    }
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: '잘못된 요청 형식입니다.' }); }
