@@ -21,11 +21,11 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-05-21 기준: 이전 P0/P1 항목이 모두 해결됨. 잔존 기술부채 및 다음 우선순위:
+> 2026-05-23 기준: 잔존 기술부채 및 다음 우선순위:
 
-- **P1 잔존**: `api/server.js` in-memory poll/wallet 데이터 — graceful shutdown으로 완화됐으나 강제 종료 시 데이터 유실 위험 존재. Supabase 직접 저장으로 전환 권고.
-- **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 (정유 마진 반영률) — 출처 명시 필요.
-- **다음 growth 우선순위**: `wallet_authenticated_users` 실측 추적 파이프라인 (현재 null, Supabase `user_settings` row count 연동).
+- **P1 잔존 (완화됨)**: `api/server.js` in-memory poll/wallet 데이터 — PR #69로 atomic write 적용, SIGKILL 시 30초 이내 변경분 유실 위험은 잔존. Supabase 직접 저장 전환 권고 (다음 sprint 후보).
+- **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 — Opinet 출처 주석 추가 완료.
+- **다음 growth 우선순위**: Resend 구독자 whale 태그 세그먼트 (PR #68 WhaleFollow 구독자 전환율 측정). Supabase RLS `user_settings` COUNT 권한 확인 (`wallet_authenticated_users` 계속 null인 경우).
 
 **해결 완료 항목** (참고용):
 - ~~P0: `POLLS_FILE`/`WALLETS_FILE` 미정의~~ → PR #18
@@ -34,6 +34,8 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 - ~~P0: `/api/og/wallet` Puppeteer 인스턴스 per request~~ → PR #33 (싱글턴 + 동시 상한)
 - ~~P1: `docker-entrypoint.sh` 이중 supervisor~~ → PR #37 (지수 백오프)
 - ~~P1: fabricated `openRate`/`course_completions`/`rating`~~ → PR #21 (완전 제거)
+- ~~P1: `parseBody` 크기 제한 없음 + DELETE /api/subscribe rate limit 누락~~ → PR #69
+- ~~P1: flushStats 비원자적 파일 쓰기~~ → PR #69 (atomicWriteJSON)
 
 ## Self-Improvement Loop
 
