@@ -276,6 +276,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TradeCTA from '../../components/TradeCTA.astro';
 import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
 import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
 
 const title = "${safeTitle}";
 const date = "${signal.date}";
@@ -330,6 +331,8 @@ const description = "${safeDescription}";
           내 지갑에 추가 →
         </a>
       </div>
+
+      <WhaleFollow ticker="${signal.ticker}" tickerName="${signal.companyName}" />
 
       <TradeCTA
         ticker="${signal.ticker}"
