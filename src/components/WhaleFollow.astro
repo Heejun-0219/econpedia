@@ -1,0 +1,161 @@
+---
+export interface Props {
+  ticker: string;
+  tickerName?: string;
+}
+const { ticker, tickerName = ticker } = Astro.props;
+---
+
+<div class="whale-follow" id="whale-follow">
+  <div class="whale-follow__icon">🔔</div>
+  <div class="whale-follow__body">
+    <h3 class="whale-follow__title">{tickerName} 다음 내부자 거래, 이메일로 받기</h3>
+    <p class="whale-follow__desc">Whale 시그널 발생 즉시 분석 리포트를 보내드립니다. 무료, 언제든 취소 가능.</p>
+    <form class="whale-follow__form" id="whale-follow-form">
+      <input
+        type="email"
+        name="email"
+        placeholder="이메일 주소"
+        required
+        autocomplete="email"
+        class="whale-follow__input"
+      />
+      <button type="submit" class="whale-follow__btn">알림 받기</button>
+    </form>
+    <p class="whale-follow__success" id="whale-follow-success" style="display:none">
+      ✅ 구독 완료! 다음 시그널 발생 시 바로 알려드릴게요.
+      <a
+        href={`/wallet?utm_source=whale&utm_medium=follow&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}
+        class="whale-follow__wallet-link"
+      >지갑 연동으로 포트폴리오 전체 분석 받기 →</a>
+    </p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('whale-follow-form') as HTMLFormElement | null;
+  const success = document.getElementById('whale-follow-success');
+  if (!form || !success) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailInput = form.elements.namedItem('email') as HTMLInputElement;
+    const email = emailInput?.value.trim();
+    if (!email) return;
+
+    const btn = form.querySelector('button') as HTMLButtonElement;
+    const origText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '처리 중…';
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || '구독 중 오류가 발생했습니다. 다시 시도해주세요.');
+        btn.disabled = false;
+        btn.textContent = origText;
+      }
+    } catch {
+      alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+      btn.disabled = false;
+      btn.textContent = origText;
+    }
+  });
+});
+</script>
+
+<style>
+.whale-follow {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(56,189,248,.08), rgba(16,185,129,.08));
+  border: 1px solid rgba(56,189,248,.25);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+}
+.whale-follow__icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+.whale-follow__body { flex: 1; min-width: 0; }
+.whale-follow__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 .25rem;
+}
+.whale-follow__desc {
+  font-size: .875rem;
+  color: var(--color-text-muted);
+  margin: 0 0 .75rem;
+  line-height: 1.5;
+}
+.whale-follow__form {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.whale-follow__input {
+  flex: 1;
+  min-width: 180px;
+  padding: .55rem .85rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: .9rem;
+}
+.whale-follow__input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56,189,248,.2);
+}
+.whale-follow__btn {
+  padding: .55rem 1.1rem;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: #fff;
+  font-weight: 700;
+  font-size: .9rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s;
+}
+.whale-follow__btn:hover:not(:disabled) { background: #0ea5e9; }
+.whale-follow__btn:disabled { opacity: .6; cursor: not-allowed; }
+.whale-follow__success {
+  font-size: .9rem;
+  color: #10b981;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+.whale-follow__wallet-link {
+  font-size: .875rem;
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+}
+.whale-follow__wallet-link:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+  .whale-follow { flex-direction: column; gap: .75rem; }
+  .whale-follow__form { flex-direction: column; }
+  .whale-follow__input { min-width: unset; }
+  .whale-follow__btn { width: 100%; }
+}
+</style>
