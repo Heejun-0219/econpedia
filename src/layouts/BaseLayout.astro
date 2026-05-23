@@ -58,7 +58,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       "name": `${title} | EconPedia`,
       "description": description,
       "url": canonicalURL.toString(),
-      ...(article ? {} : {
+      ...(article ? {
+        "author": { "@type": "Organization", "name": "EconPedia", "url": Astro.site?.toString() },
+        "publisher": {
+          "@type": "Organization",
+          "name": "EconPedia",
+          "logo": { "@type": "ImageObject", "url": `${Astro.site}favicon.svg` }
+        }
+      } : {
         "potentialAction": {
           "@type": "SearchAction",
           "target": `${Astro.site}search?q={search_term_string}`,
