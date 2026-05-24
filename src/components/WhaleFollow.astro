@@ -11,7 +11,7 @@ const { ticker, tickerName = ticker } = Astro.props;
   <div class="whale-follow__body">
     <h3 class="whale-follow__title">{tickerName} 다음 내부자 거래, 이메일로 받기</h3>
     <p class="whale-follow__desc">Whale 시그널 발생 즉시 분석 리포트를 보내드립니다. 무료, 언제든 취소 가능.</p>
-    <form class="whale-follow__form" id="whale-follow-form">
+    <form class="whale-follow__form" id="whale-follow-form" data-ticker={ticker}>
       <input
         type="email"
         name="email"
@@ -22,13 +22,13 @@ const { ticker, tickerName = ticker } = Astro.props;
       />
       <button type="submit" class="whale-follow__btn">알림 받기</button>
     </form>
-    <p class="whale-follow__success" id="whale-follow-success" style="display:none">
-      ✅ 구독 완료! 다음 시그널 발생 시 바로 알려드릴게요.
+    <div class="whale-follow__success" id="whale-follow-success" style="display:none">
+      <p class="whale-follow__success-msg">✅ 구독 완료! 다음 시그널 발생 시 바로 알려드릴게요.</p>
       <a
         href={`/wallet?utm_source=whale&utm_medium=follow&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}
-        class="whale-follow__wallet-link"
-      >지갑 연동으로 포트폴리오 전체 분석 받기 →</a>
-    </p>
+        class="whale-follow__wallet-btn"
+      >🏦 지갑 연동으로 실시간 알림 받기 →</a>
+    </div>
   </div>
 </div>
 
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, source: 'whale', ticker: form.dataset.ticker || '' }),
       });
       if (res.ok) {
         form.style.display = 'none';
@@ -138,20 +138,29 @@ document.addEventListener('DOMContentLoaded', () => {
 .whale-follow__btn:hover:not(:disabled) { background: #0ea5e9; }
 .whale-follow__btn:disabled { opacity: .6; cursor: not-allowed; }
 .whale-follow__success {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+.whale-follow__success-msg {
   font-size: .9rem;
   color: #10b981;
   font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  gap: .4rem;
+  margin: 0;
 }
-.whale-follow__wallet-link {
-  font-size: .875rem;
-  color: #38bdf8;
+.whale-follow__wallet-btn {
+  display: inline-block;
+  padding: .55rem 1.1rem;
+  border-radius: 8px;
+  background: #10b981;
+  color: #fff;
+  font-weight: 700;
+  font-size: .9rem;
   text-decoration: none;
-  font-weight: 600;
+  text-align: center;
+  transition: background .15s;
 }
-.whale-follow__wallet-link:hover { text-decoration: underline; }
+.whale-follow__wallet-btn:hover { background: #059669; }
 @media (max-width: 600px) {
   .whale-follow { flex-direction: column; gap: .75rem; }
   .whale-follow__form { flex-direction: column; }
