@@ -49,6 +49,11 @@ const isin = isinProp || ticker;
   <a class="tw-cta-btn" href={`/wallet?utm_source=whale&utm_medium=tradecta&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}>내 지갑에 추가 →</a>
 </div>
 
+<div id="tca-em">
+  <form><input type="email" aria-label="이메일 주소" placeholder="이메일로 다음 시그널 받기" required autocomplete="email"><button type="submit">무료 구독</button></form>
+  <p id="tca-em-ok" hidden>✅ 구독 완료! 다음 시그널 발생 시 알려드릴게요.</p>
+</div>
+
 <div class="whale-sticky-bar" id="whale-sticky-bar" role="complementary" aria-label="지갑 연동 알림">
   <p class="whale-sticky-bar__text">📡 <span>{ticker}</span> 다음 Whale 시그널 알림받기</p>
   <a
@@ -129,6 +134,24 @@ const isin = isinProp || ticker;
         stickyClose.addEventListener('click', () => {
           stickyBar.classList.remove('visible');
           sessionStorage.setItem(DISMISS_KEY, '1');
+        });
+      }
+    }
+
+    // 4. 이메일 캡처 — standalone WhaleFollow 없을 때만 표시
+    const tcaEm = document.getElementById('tca-em');
+    if (tcaEm) {
+      if (document.querySelector('.whale-follow')) {
+        tcaEm.remove();
+      } else {
+        tcaEm.querySelector('form')?.addEventListener('submit', async e => {
+          e.preventDefault();
+          const inp = tcaEm.querySelector('input') as HTMLInputElement;
+          const btn = tcaEm.querySelector('button') as HTMLButtonElement;
+          btn.disabled = true;
+          const r = await fetch('/api/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:inp.value.trim(),source:'whale'}) }).catch(()=>null);
+          if (r?.ok) { (tcaEm.querySelector('form') as HTMLElement).hidden=true; (document.getElementById('tca-em-ok') as HTMLElement).hidden=false; }
+          else { btn.disabled = false; alert('구독 중 오류가 발생했습니다. 다시 시도해주세요.'); }
         });
       }
     }
@@ -274,4 +297,9 @@ const isin = isinProp || ticker;
   .whale-sticky-bar { flex-wrap: wrap; }
   .whale-sticky-bar__text { width: 100%; margin-bottom: .25rem; }
 }
+#tca-em { margin: .75rem 0; padding: .75rem 0; border-top: 1px solid var(--color-border); }
+#tca-em form { display:flex; gap:.5rem; flex-wrap:wrap; }
+#tca-em input { flex:1; min-width:160px; padding:.45rem .75rem; border-radius:8px; border:1px solid var(--color-border); background:var(--color-bg-primary); color:var(--color-text-primary); font-size:.85rem; }
+#tca-em button { padding:.45rem .9rem; border-radius:8px; background:#38bdf8; color:#fff; font-weight:700; font-size:.85rem; border:none; cursor:pointer; }
+#tca-em button:disabled { opacity:.6; }
 </style>
