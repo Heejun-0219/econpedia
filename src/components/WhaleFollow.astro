@@ -20,6 +20,7 @@ const { ticker, tickerName = ticker } = Astro.props;
         autocomplete="email"
         class="whale-follow__input"
       />
+      <input type="hidden" name="ticker" value={ticker} />
       <button type="submit" class="whale-follow__btn">알림 받기</button>
     </form>
     <p class="whale-follow__success" id="whale-follow-success" style="display:none">
@@ -28,6 +29,12 @@ const { ticker, tickerName = ticker } = Astro.props;
         href={`/wallet?utm_source=whale&utm_medium=follow&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}
         class="whale-follow__wallet-link"
       >지갑 연동으로 포트폴리오 전체 분석 받기 →</a>
+      <a
+        href="https://t.me/econpedia_channel"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="whale-follow__wallet-link"
+      >Telegram 채널 구독하기 →</a>
     </p>
   </div>
 </div>
@@ -43,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailInput = form.elements.namedItem('email') as HTMLInputElement;
     const email = emailInput?.value.trim();
     if (!email) return;
+    const tickerInput = form.elements.namedItem('ticker') as HTMLInputElement | null;
+    const ticker = tickerInput?.value || '';
 
     const btn = form.querySelector('button') as HTMLButtonElement;
     const origText = btn.textContent;
@@ -53,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, ticker }),
       });
       if (res.ok) {
         form.style.display = 'none';
