@@ -620,9 +620,13 @@ const server = createServer(async (req, res) => {
       return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
     }
 
+    const referer = req.headers['referer'] || req.headers['referrer'] || '';
+    const isWhaleSource = /\/whale($|\/)/.test(referer);
+    const firstName = isWhaleSource ? 'whale_follow' : name;
+
     try {
-      await addContact(email, name);
-      console.log(`[subscribe] ✅ ${email}`);
+      await addContact(email, firstName);
+      console.log(`[subscribe] ✅ ${email}${isWhaleSource ? ' [whale]' : ''}`);
       return sendJSON(res, 200, {
         success: true,
         message: '구독 신청이 완료됐습니다! 내일 아침 첫 브리핑을 보내드릴게요. 📊',
