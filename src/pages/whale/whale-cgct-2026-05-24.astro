@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
+
+const title = "CEO의 9천만 원 자사주 매수, 내 지갑을 열어도 되는 신호일까?";
+const date = "2026-05-24";
+const description = "CGCT CEO의 9천만 원 자사주 매수, 무조건 호재일까요? 과거 유사 사례의 1년 뒤 평균 수익률은 -0.33%였습니다. 내 지갑을 지키는 대응 가이드를 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 Cartesian Growth Corp III</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 Cartesian Growth Corp III (CGCT)</h3>
+        <p><strong>매매자:</strong> CGC III Sponsor LLC / Chairman and CEO</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $63K <span style="opacity:.85">(약 9,162만 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 6,089주 · $10.38</p>
+        <p><strong>출처:</strong> SEC Form 4 · Miscellaneous Electrical Machinery, Equipment & Supplies</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-24","y":10.15},{"x":"2025-11-25","y":10.15},{"x":"2025-11-26","y":10.15},{"x":"2025-11-28","y":10.15},{"x":"2025-12-01","y":10.14},{"x":"2025-12-02","y":10.13},{"x":"2025-12-03","y":10.12},{"x":"2025-12-04","y":10.12},{"x":"2025-12-05","y":10.12},{"x":"2025-12-08","y":10.12},{"x":"2025-12-09","y":10.11},{"x":"2025-12-10","y":10.1},{"x":"2025-12-11","y":10.11},{"x":"2025-12-12","y":10.11},{"x":"2025-12-15","y":10.11},{"x":"2025-12-16","y":10.11},{"x":"2025-12-17","y":10.11},{"x":"2025-12-18","y":10.29},{"x":"2025-12-19","y":10.3},{"x":"2025-12-22","y":10.3},{"x":"2025-12-23","y":10.3},{"x":"2025-12-24","y":10.33},{"x":"2025-12-26","y":10.31},{"x":"2025-12-29","y":10.29},{"x":"2025-12-30","y":10.27},{"x":"2025-12-31","y":10.3},{"x":"2026-01-02","y":10.32},{"x":"2026-01-05","y":10.3},{"x":"2026-01-06","y":10.31},{"x":"2026-01-07","y":10.3},{"x":"2026-01-08","y":10.28},{"x":"2026-01-09","y":10.29},{"x":"2026-01-12","y":10.29},{"x":"2026-01-13","y":10.31},{"x":"2026-01-14","y":10.29},{"x":"2026-01-15","y":10.33},{"x":"2026-01-16","y":10.31},{"x":"2026-01-20","y":10.3},{"x":"2026-01-21","y":10.29},{"x":"2026-01-22","y":10.28},{"x":"2026-01-23","y":10.24},{"x":"2026-01-26","y":10.23},{"x":"2026-01-27","y":10.27},{"x":"2026-01-28","y":10.29},{"x":"2026-01-29","y":10.3},{"x":"2026-01-30","y":10.31},{"x":"2026-02-02","y":10.29},{"x":"2026-02-03","y":10.29},{"x":"2026-02-04","y":10.29},{"x":"2026-02-05","y":10.3},{"x":"2026-02-06","y":10.3},{"x":"2026-02-09","y":10.29},{"x":"2026-02-10","y":10.3},{"x":"2026-02-11","y":10.29},{"x":"2026-02-12","y":10.28},{"x":"2026-02-13","y":10.3},{"x":"2026-02-17","y":10.29},{"x":"2026-02-18","y":10.3},{"x":"2026-02-19","y":10.29},{"x":"2026-02-20","y":10.28},{"x":"2026-02-23","y":10.28},{"x":"2026-02-24","y":10.28},{"x":"2026-02-25","y":10.29},{"x":"2026-02-26","y":10.29},{"x":"2026-02-27","y":10.25},{"x":"2026-03-02","y":10.26},{"x":"2026-03-03","y":10.27},{"x":"2026-03-04","y":10.27},{"x":"2026-03-05","y":10.28},{"x":"2026-03-06","y":10.27},{"x":"2026-03-09","y":10.26},{"x":"2026-03-10","y":10.26},{"x":"2026-03-11","y":10.27},{"x":"2026-03-12","y":10.27},{"x":"2026-03-13","y":10.27},{"x":"2026-03-16","y":10.26},{"x":"2026-03-17","y":10.26},{"x":"2026-03-18","y":10.26},{"x":"2026-03-19","y":10.26},{"x":"2026-03-20","y":10.26},{"x":"2026-03-23","y":10.26},{"x":"2026-03-24","y":10.26},{"x":"2026-03-25","y":10.25},{"x":"2026-03-26","y":10.23},{"x":"2026-03-27","y":10.24},{"x":"2026-03-30","y":10.25},{"x":"2026-03-31","y":10.26},{"x":"2026-04-01","y":10.3},{"x":"2026-04-02","y":10.28},{"x":"2026-04-06","y":10.28},{"x":"2026-04-07","y":10.27},{"x":"2026-04-08","y":10.27},{"x":"2026-04-09","y":10.27},{"x":"2026-04-10","y":10.26},{"x":"2026-04-13","y":10.26},{"x":"2026-04-14","y":10.26},{"x":"2026-04-15","y":10.28},{"x":"2026-04-16","y":10.29},{"x":"2026-04-17","y":10.29},{"x":"2026-04-20","y":10.3},{"x":"2026-04-21","y":10.29},{"x":"2026-04-22","y":10.28},{"x":"2026-04-23","y":10.31},{"x":"2026-04-24","y":10.32},{"x":"2026-04-27","y":10.31},{"x":"2026-04-28","y":10.31},{"x":"2026-04-29","y":10.3},{"x":"2026-04-30","y":10.37},{"x":"2026-05-01","y":10.38},{"x":"2026-05-04","y":10.39},{"x":"2026-05-05","y":10.38},{"x":"2026-05-06","y":10.41},{"x":"2026-05-07","y":10.4},{"x":"2026-05-08","y":10.38},{"x":"2026-05-11","y":10.4},{"x":"2026-05-12","y":10.38},{"x":"2026-05-13","y":10.38},{"x":"2026-05-14","y":10.39},{"x":"2026-05-15","y":10.38},{"x":"2026-05-18","y":10.39},{"x":"2026-05-19","y":10.42},{"x":"2026-05-20","y":10.4},{"x":"2026-05-21","y":10.38},{"x":"2026-05-22","y":9.86}]' transactionDate='2026-05-24' isBuy={true} ticker='CGCT' currency='USD' />
+
+      
+
+      <h2>📋 거래 브리핑</h2>
+<p><strong>2026년 5월 24일</strong>, 미국 증시에 상장된 Cartesian Growth Corp III(이하 CGCT)의 스폰서이자 최고경영자(CEO)가 자기 회사 주식을 직접 장내 매수했습니다. </p>
+<p>매수 규모는 총 <strong>6,089주</strong>, 단가는 주당 <strong>10.38달러</strong>입니다. 총액으로 따지면 <strong>6만 3천 달러</strong>, 우리 돈으로 <strong>약 9,162만 원</strong>어치입니다. 평범한 직장인의 1~2년 치 연봉에 달하는 적지 않은 현금을 자기 회사 주식을 사는 데 쓴 것입니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>현재 미국 증시는 S&amp;P 500이 소폭 상승(<strong>+0.37%</strong>)하는 등 전반적으로 무난한 흐름을 보이고 있습니다. 다만 원·달러 환율이 <strong>1,520원</strong> 선으로 꽤 높은 상태라, 해외 주식 투자 시 체감되는 비용 부담은 만만치 않은 시기입니다.</p>
+<p>이런 상황에서 전기 기계 및 장비 섹터에 속한 CGCT의 경영진이 주당 <strong>10.38달러</strong>에 주식을 매수했습니다. 통상적으로 스팩(SPAC)이나 특수목적 회사의 주가가 10달러 언저리를 맴돌 때 경영진이 지갑을 여는 것은 회사 가치가 저평가되었다는 자신감을 시장에 어필하려는 행동으로 해석됩니다. 이번 거래의 후행 주가 데이터는 아직 충분한 시간이 지나지 않아 집계되지 않았습니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>CEO가 직접 매수했다고 해서 반드시 주가 상승으로 이어지는 것은 아닙니다. 금융 시장에서 화제가 되었던 3가지 유사 매수 사례를 통해 과거의 흐름을 살펴보겠습니다. 아래 언급된 수익률은 시장 평균 상승·하락분을 빼지 않은 단순 변동률입니다.</p>
+<ul>
+<li><strong>리먼 브라더스 (2008년):</strong> 딕 펄드 CEO가 약 <strong>300만 달러</strong>를 매수했습니다. 하지만 주가는 한 달 뒤 <strong>-8%</strong>, 석 달 뒤 <strong>-45%</strong>로 추락했고, 6개월과 1년 뒤에는 <strong>-100%</strong>를 기록하며 결국 파산했습니다. CEO의 매수가 항상 바닥 시그널은 아니라는 것을 보여주는 사례입니다.</li>
+<li><strong>JP모건 체이스 (2016년):</strong> 제이미 다이먼 CEO가 시장 패닉기에 약 <strong>2,660만 달러</strong>어치를 사재로 사들였습니다. 주가는 한 달 뒤 <strong>12.5%</strong>, 석 달 뒤 <strong>21%</strong>, 1년 뒤 <strong>75%</strong> 상승하며 시가총액 사상 최고치를 경신했습니다. 단기 시장 바닥을 정확히 짚어낸 성공 사례입니다.</li>
+<li><strong>뱅크오브아메리카 (2011년):</strong> 워런 버핏이 약 <strong>50억 달러</strong>를 투자했습니다. 한 달 뒤 <strong>6%</strong>, 석 달 뒤 <strong>-3%</strong>로 단기에는 정체되었으나, 1년 뒤에는 <strong>24%</strong> 상승하며 의미 있는 반등을 이뤄냈습니다.</li>
+</ul>
+<p>이 세 가지 굵직한 매수 사례의 1년(D+365) 후 단순 산술평균 변동률은 <strong>-0.33%</strong>입니다. 역사적 평균으로 볼 때, 대주주나 경영진의 매수가 1년 뒤 무조건적인 수익으로 직결되지는 않았다는 점을 유의해야 합니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>과거 JP모건의 사례처럼 긍정적인 흐름을 보일 수도 있지만, 리먼 브라더스의 사례처럼 투자금이 크게 손실될 위험도 존재합니다. 세 사례의 평균 변동률(<strong>-0.33%</strong>)을 고려하면, 1년 뒤 수익이 정체되거나 소폭 하락할 확률도 배제할 수 없습니다.</p>
+<p>경영진의 자사주 매수는 심리적 위안을 줄 수 있는 긍정적인 시그널로 해석될 수 있으나, 확실한 수익을 보장하지는 않습니다. 특히 현재 환율이 <strong>1,520원</strong>대로 높은 상황에서는 환전 수수료와 향후 환율 하락 시의 환차손 위험까지 고려해야 합니다. </p>
+<p>통계적으로 맹목적인 추종은 위험할 수 있습니다. 따라서 조급하게 투자 결정을 내리기보다는, 보수적인 관점에서 리스크를 점검하며 신중하게 접근하는 것이 권장됩니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Lehman Brothers (LEH)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Dick Fuld (CEO) · 2008-04-15 · 약 $3.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-45.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 자사주 매수가 항상 '바닥 시그널'은 아님을 보여주는 가장 유명한 반례.</p>
+        <p class="case-source">📎 SEC Form 4 / 공공 파산 기록 · 회사 후속: 2008-09 챕터 11 파산보호 신청. 보통주 가치 사실상 0.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Bank of America (BAC)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Warren Buffett / Berkshire Hathaway (10%+ Holder) · 2011-08-25 · 약 $5000.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+6.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-3.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+17.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+24.0%</span></span>
+        </div>
+        <p class="case-narrative">대규모 자본확충성 매입. 단기에는 정체, 12개월 후부터 의미 있는 반등.</p>
+        <p class="case-source">📎 Berkshire 공식 보도자료 / SEC 13G · 회사 후속: 유럽 재정위기 우려를 넘어 영업이익 정상화</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 Cartesian Growth Corp III 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=CGCT">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <WhaleFollow ticker="CGCT" tickerName="Cartesian Growth Corp III" />
+
+      <TradeCTA
+        ticker="CGCT"
+        name="Cartesian Growth Corp III"
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-cgct-2026-05-24" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

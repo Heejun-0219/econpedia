@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "오늘 시장은 조용한 편이에요. 내 지갑도 평화롭네요 😌";
+const date = "2026-05-25";
+const description = "오늘은 시장의 움직임이 크지 않은 평온한 하루입니다. 억지로 뉴스를 찾아보며 피로해질 필요 없이, 가벼운 마음으로 내 지갑 상태만 슥 확인하고 넘어가세요!";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>오늘은 시장의 움직임이 크지 않은 평온한 하루입니다. 억지로 뉴스를 찾아보며 피로해질 필요 없이, 가벼운 마음으로 내 지갑 상태만 슥 확인하고 넘어가세요!</p>
+<h2>오늘 내 지갑 요약</h2>
+<table>
+<thead>
+<tr>
+<th align="left">내 지갑 항목</th>
+<th align="left">오늘 내 지갑의 변화</th>
+<th align="left">한 줄 가이드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>✈️ 해외여행 · 직구</strong></td>
+<td align="left">100만 원 환전할 때 <strong>86원</strong> 더 들어요</td>
+<td align="left">어제와 사실상 똑같아요. 편하게 환전하세요.</td>
+</tr>
+<tr>
+<td align="left"><strong>📈 국내 주식 투자</strong></td>
+<td align="left">1천만 원 투자 기준 약 <strong>41,097원</strong> 올랐어요</td>
+<td align="left">잔고가 아주 살짝 늘어나는 기분 좋은 날이에요.</td>
+</tr>
+<tr>
+<td align="left"><strong>🏠 대출 이자 · 주거비</strong></td>
+<td align="left">변동 없음 😌</td>
+<td align="left">추가로 빠져나갈 이자 걱정 없이 평온합니다.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>이코노의 가이드: 조용한 날에는 숨고르기를 해봐요</h2>
+<p>오늘처럼 시장이 잔잔한 날에는 굳이 주식 창을 계속 들여다보며 에너지를 쓰지 않으셔도 됩니다. 오늘 내 지갑에 미칠 영향은 딱 3줄로 요약할 수 있어요.</p>
+<ul>
+<li><strong>환율과 기름값 모두 제자리걸음이에요.</strong> 100만 원을 환전해도 어제보다 고작 86원 차이라, 여행이나 직구를 준비 중이시라면 환율 타이밍을 재지 않고 평소대로 진행하셔도 좋습니다.</li>
+<li><strong>내 주식 잔고는 소폭 보너스를 받았어요.</strong> 국내외 주식 시장이 조금씩 올라 1천만 원을 굴리고 계신다면 오늘 약 4만 원 정도 잔고가 늘어나는 조용한 상승장입니다.</li>
+<li><strong>금리와 대출 이자도 평화롭습니다.</strong> 기준금리가 묶여 있어 당장 내 지갑에서 추가로 빠져나갈 돈이 없으니, 오늘은 안심하고 일상에 집중하세요.</li>
+</ul>
+<p>가끔은 이렇게 아무 일도 일어나지 않는 평범한 날이 가장 좋은 날이기도 합니다. 오늘은 금융 앱을 잠시 닫아두고, 퇴근길에 나를 위한 시원한 커피 한 잔의 여유를 선물해보는 건 어떨까요?</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
