@@ -89,6 +89,9 @@ const categories = [
                 <span class="whale-card__date">{formatDate(a.date)}</span>
               </div>
               <h3 class="whale-card__title">{a.title}</h3>
+              {a.amount && (
+                <p class="whale-card__amount">{a.amount.split('·')[0].trim()}</p>
+              )}
               <p class="whale-card__excerpt">{a.excerpt}</p>
               <div class="whale-card__footer">
                 <span class="whale-card__ticker">{a.companyName} ({a.ticker})</span>
@@ -232,6 +235,10 @@ const categories = [
 }
 .whale-card__date { font-size: 0.8rem; opacity: 0.6; }
 .whale-card__title { font-size: 1.15rem; margin: 0 0 0.75rem; line-height: 1.4; }
+.whale-card__amount {
+  font-size: .85rem; font-weight: 700; color: var(--color-text-muted);
+  margin: .2rem 0 .4rem; letter-spacing: .01em;
+}
 .whale-card__excerpt {
   font-size: 0.95rem; opacity: 0.75; margin: 0 0 1.5rem; line-height: 1.5;
   flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
