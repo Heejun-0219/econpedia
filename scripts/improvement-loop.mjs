@@ -272,6 +272,9 @@ async function runSnapshot({ writeFile = true } = {}) {
     const ts = stamp();
     await fs.writeFile(path.join(HISTORY_DIR, `${ts}-snapshot.md`), md, 'utf8');
     console.error(`[snapshot] wrote history/${ts}-snapshot.md`);
+    // kpis.json을 최신 실측값으로 갱신 (whale_alert_pages, wallet_authenticated_users 등 누적)
+    await fs.writeFile(path.join(STATE_DIR, 'kpis.json'), JSON.stringify(snapshot.kpis, null, 2) + '\n', 'utf8');
+    console.error('[snapshot] updated kpis.json with live values');
   }
   return { snapshot, snapshotMd: md, latestPlan };
 }

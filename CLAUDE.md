@@ -21,11 +21,12 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-05-23 기준: 잔존 기술부채 및 다음 우선순위:
+> 2026-05-24 기준: 잔존 기술부채 및 다음 우선순위:
 
 - **P1 잔존 (완화됨)**: `api/server.js` in-memory poll/wallet 데이터 — PR #69로 atomic write 적용, SIGKILL 시 30초 이내 변경분 유실 위험은 잔존. Supabase 직접 저장 전환 권고 (다음 sprint 후보).
 - **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 — Opinet 출처 주석 추가 완료.
-- **다음 growth 우선순위**: Resend 구독자 whale 태그 세그먼트 (PR #68 WhaleFollow 구독자 전환율 측정). Supabase RLS `user_settings` COUNT 권한 확인 (`wallet_authenticated_users` 계속 null인 경우).
+- **다음 growth 우선순위**: whale→email 퍼널 실제 전환율 측정 (PR #78 태그 배포 후 Resend 대시보드 확인). Supabase RLS `user_settings` COUNT 권한 확인 (`wallet_authenticated_users` 계속 null인 경우 → 직접 RLS 정책 수정).
+- **다음 defensive 우선순위**: Supabase Edge Functions poll/wallet 영구 저장 전환 (P1 잔존, 별도 sprint 1개 분량).
 
 **해결 완료 항목** (참고용):
 - ~~P0: `POLLS_FILE`/`WALLETS_FILE` 미정의~~ → PR #18

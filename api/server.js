@@ -194,16 +194,30 @@ function isAnalyticsRateLimited(ip) {
 }
 
 // ─── Resend Contacts API 헬퍼 ────────────────────────────
-async function addContact(email, firstName = '') {
+async function addContact(email, firstName = '', tags = []) {
+  const body = { email, first_name: firstName, unsubscribed: false };
+  if (tags.length > 0) body.tags = tags.map(name => ({ name }));
   const res = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email, first_name: firstName, unsubscribed: false }),
+    body: JSON.stringify(body),
   });
   const data = await res.json();
+  // tags 필드 미지원(422) 시 tags 없이 재시도
+  if (!res.ok && res.status === 422 && tags.length > 0) {
+    delete body.tags;
+    const retry = await fetch(`https://api.resend.com/audiences/${AUDIENCE_ID}/contacts`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const retryData = await retry.json();
+    if (!retry.ok) throw new Error(retryData.message || `Resend API 오류: ${retry.status}`);
+    return retryData;
+  }
   if (!res.ok) throw new Error(data.message || `Resend API 오류: ${res.status}`);
   return data;
 }
@@ -615,14 +629,17 @@ const server = createServer(async (req, res) => {
 
     const { email } = body;
     const name = (typeof body.name === 'string') ? body.name.slice(0, 100).trim() : '';
+    // source 화이트리스트: 'whale' 만 태그로 인정 (임의 문자열 Resend 주입 방지)
+    const source = body.source === 'whale' ? 'whale' : '';
+    const tags = source ? [source] : [];
 
     if (!email || !isValidEmail(email)) {
       return sendJSON(res, 400, { error: '올바른 이메일 주소를 입력해주세요.' });
     }
 
     try {
-      await addContact(email, name);
-      console.log(`[subscribe] ✅ ${email}`);
+      await addContact(email, name, tags);
+      console.log(`[subscribe] ✅ ${email}${source ? ` (source=${source})` : ''}`);
       return sendJSON(res, 200, {
         success: true,
         message: '구독 신청이 완료됐습니다! 내일 아침 첫 브리핑을 보내드릴게요. 📊',
