@@ -190,6 +190,22 @@ async function buildSnapshot() {
     }
   } catch {}
 
+  // newsletter_subscribers — Resend Audience 활성 구독자 수
+  let newsletterSubscribers = kpis.engagement?.newsletter_subscribers ?? null;
+  try {
+    const resendKey = process.env.RESEND_API_KEY;
+    const audienceId = process.env.RESEND_AUDIENCE_ID;
+    if (resendKey && audienceId) {
+      const r = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+        headers: { Authorization: `Bearer ${resendKey}` },
+      });
+      if (r.ok) {
+        const data = await r.json();
+        newsletterSubscribers = (data.data || []).filter(c => !c.unsubscribed).length;
+      }
+    }
+  } catch {}
+
   // Past synthesis plan (if any) — pick the most recent across all dates
   let latestPlan = null;
   const planPath = await latestHistoryFile('-plan.md');
@@ -218,7 +234,7 @@ async function buildSnapshot() {
     kpis: {
       ...kpis,
       content: { ...kpis.content, whale_alert_pages: whalePages },
-      engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers },
+      engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers, newsletter_subscribers: newsletterSubscribers },
       _lastUpdated: new Date().toISOString().slice(0, 10),
     },
     goals,
