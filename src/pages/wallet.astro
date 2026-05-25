@@ -206,6 +206,23 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
           ))}
       </div>
 
+      <!-- Telegram Whale Alert 구독 CTA -->
+      <div style="background: linear-gradient(135deg, #0088cc12, #0088cc08); border: 1px solid #0088cc30; border-radius: 20px; padding: 24px; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 16px; min-width: 0;">
+          <div style="flex-shrink: 0; width: 44px; height: 44px; background: #0088cc; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+          </div>
+          <div style="min-width: 0;">
+            <div style="font-size: 15px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 2px;">Whale Alert 실시간 알림</div>
+            <div style="font-size: 13px; color: var(--color-text-muted); line-height: 1.4;">내부자 거래가 포착되는 순간 Telegram으로 즉시 전달받으세요.</div>
+          </div>
+        </div>
+        <a href="https://t.me/econpedia_channel" target="_blank" rel="noopener noreferrer" aria-label="EconPedia Telegram 채널 구독" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; background: #0088cc; color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: opacity 0.2s; white-space: nowrap;">
+          구독하기
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
     </div>
 
     <!-- Personalization Modal (Toss Style Bottom Sheet) -->
