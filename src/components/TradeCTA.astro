@@ -110,7 +110,12 @@ const isin = isinProp || ticker;
     const stickyClose = document.getElementById('whale-sticky-close');
     if (stickyBar && stickyClose) {
       const DISMISS_KEY = 'whale-sticky-dismissed';
-      if (sessionStorage.getItem(DISMISS_KEY)) {
+      let dismissed = false;
+      try {
+        const ts = localStorage.getItem(DISMISS_KEY);
+        if (ts && Date.now() - parseInt(ts, 10) < 86_400_000) dismissed = true;
+      } catch (_) {}
+      if (dismissed) {
         stickyBar.remove();
       } else {
         const onScroll = () => {
@@ -123,7 +128,7 @@ const isin = isinProp || ticker;
         window.addEventListener('scroll', onScroll, { passive: true });
         stickyClose.addEventListener('click', () => {
           stickyBar.classList.remove('visible');
-          sessionStorage.setItem(DISMISS_KEY, '1');
+          try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (_) {}
         });
       }
     }
