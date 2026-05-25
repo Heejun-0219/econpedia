@@ -98,18 +98,18 @@ startMarketDataPolling();
 
 // 인메모리 카운터 및 데이터 (디스크 I/O 제거 — 비동기 플러시)
 let stats = { total: 0, daily: {} };
-let polls = {};
-let wallets = {};
+let polls = Object.create(null);
+let wallets = Object.create(null);
 
 try {
   if (fs.existsSync(STATS_FILE)) {
     stats = JSON.parse(fs.readFileSync(STATS_FILE, 'utf-8'));
   }
   if (fs.existsSync(POLLS_FILE)) {
-    polls = JSON.parse(fs.readFileSync(POLLS_FILE, 'utf-8'));
+    polls = Object.assign(Object.create(null), JSON.parse(fs.readFileSync(POLLS_FILE, 'utf-8')));
   }
   if (fs.existsSync(WALLETS_FILE)) {
-    wallets = JSON.parse(fs.readFileSync(WALLETS_FILE, 'utf-8'));
+    wallets = Object.assign(Object.create(null), JSON.parse(fs.readFileSync(WALLETS_FILE, 'utf-8')));
   }
 } catch (e) {
   console.warn('⚠️ 데이터 파일 로드 실패, 초기값으로 시작:', e.message);
@@ -165,6 +165,9 @@ const shutdown = () => {
 process.on('SIGTERM', shutdown);
 process.on('SIGINT', shutdown);
 
+
+// JS 객체 key로 사용되는 입력에서 prototype pollution 위험 키 차단
+const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype', 'toString', 'hasOwnProperty', 'valueOf', 'toJSON', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__']);
 
 // ─── 간단한 인메모리 Rate Limiter ────────────────────────
 const rateLimitMap = new Map(); // ip → { count, resetAt }
@@ -413,8 +416,8 @@ const server = createServer(async (req, res) => {
   // ── GET /api/poll (투표 결과 조회) ────────────────────────────────
   if (req.method === 'GET' && path.startsWith('/api/poll/')) {
     const pollId = path.replace('/api/poll/', '').split('?')[0];
-    if (!pollId) return sendJSON(res, 400, { error: 'Invalid poll id' });
-    
+    if (!pollId || pollId.length > 100 || FORBIDDEN_KEYS.has(pollId)) return sendJSON(res, 400, { error: 'Invalid poll id' });
+
     const results = polls[pollId] || {};
     return sendJSON(res, 200, { success: true, results });
   }
@@ -424,14 +427,14 @@ const server = createServer(async (req, res) => {
     if (isRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
 
     const pollId = path.replace('/api/poll/', '').split('?')[0];
-    if (!pollId) return sendJSON(res, 400, { error: 'Invalid poll id' });
+    if (!pollId || pollId.length > 100 || FORBIDDEN_KEYS.has(pollId)) return sendJSON(res, 400, { error: 'Invalid poll id' });
 
     let body;
     try { body = await parseBody(req); }
     catch { return sendJSON(res, 400, { error: 'Invalid JSON' }); }
 
     const { option } = body;
-    if (!option) return sendJSON(res, 400, { error: 'Option required' });
+    if (!option || typeof option !== 'string' || option.length > 200 || FORBIDDEN_KEYS.has(option)) return sendJSON(res, 400, { error: 'Invalid option' });
 
     if (!polls[pollId]) polls[pollId] = {};
     polls[pollId][option] = (polls[pollId][option] || 0) + 1;
