@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "오늘 시장은 잔잔합니다. 내 지갑도 평화로운 하루네요 😌";
+const date = "2026-05-26";
+const description = "오늘은 금융 시장의 바람이 아주 잔잔하게 부는 날입니다. 억지로 투자 결정을 내리거나 불안해할 필요 없이, 내 지갑을 편안하게 지키면 되는 평범한 하루예요. 오늘 내 지갑에 일어난 변화들을 가볍게 짚어 드릴게요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <p>오늘은 금융 시장의 바람이 아주 잔잔하게 부는 날입니다. 억지로 투자 결정을 내리거나 불안해할 필요 없이, 내 지갑을 편안하게 지키면 되는 평범한 하루예요. 오늘 내 지갑에 일어난 변화들을 가볍게 짚어 드릴게요.</p>
+<h3>💰 오늘 내 지갑 요약</h3>
+<table>
+<thead>
+<tr>
+<th align="left">구분</th>
+<th align="left">오늘 내 지갑의 변화</th>
+<th align="left">오늘의 행동 가이드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>📊 국내 주식</strong></td>
+<td align="left">1,000만 원 투자 기준 <strong>약 41,097원 올랐어요</strong></td>
+<td align="left">잔잔한 상승세이니 앱을 끄고 본업에 집중하세요.</td>
+</tr>
+<tr>
+<td align="left"><strong>✈️ 여행·직구</strong></td>
+<td align="left">100만 원 환전 시 <strong>22원 아꼈어요</strong></td>
+<td align="left">환율 변동이 거의 없으니 편할 때 환전해도 좋아요.</td>
+</tr>
+<tr>
+<td align="left"><strong>🏠 대출 이자</strong></td>
+<td align="left">금리 변동 없이 <strong>그대로 유지돼요</strong></td>
+<td align="left">이번 달 이자 예산은 평소처럼 준비하시면 됩니다.</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>🔍 오늘 지갑 날씨, 3줄 요약</h3>
+<ul>
+<li><strong>내 주식 계좌:</strong> 국내 주식 시장이 아주 소폭 올라 1,000만 원 기준 약 4만 원 정도 늘어난 수준이에요. 미국 주식과 코인 시장도 큰 변화 없이 조용히 숨을 고르고 있습니다.</li>
+<li><strong>해외 직구와 여행:</strong> 환율이 아주 미세하게 내렸지만, 100만 원을 환전해도 고작 22원 이득이라 체감되는 변화는 거의 없어요.</li>
+<li><strong>가계 고정 지출:</strong> 대출 금리와 기름값, 장바구니 물가 모두 큰 흔들림 없이 안정적인 흐름을 이어가고 있습니다.</li>
+</ul>
+<hr>
+<h2>🙋‍♂️ 이코노의 쉬어가는 가이드</h2>
+<p>가끔은 <strong>&#39;아무 일도 일어나지 않는 것&#39;</strong>이 가장 좋은 소식일 때가 있습니다. 오늘처럼 시장이 조용할 때는 굳이 무리해서 주식 창을 들여다보며 에너지를 쓸 필요가 전혀 없어요. </p>
+<p>오늘은 주식 차트 대신, 내 지갑 속 숨은 고정 지출을 점검해 보는 건 어떨까요? </p>
+<ul>
+<li>혹시 몇 달째 쓰지 않는 OTT 서비스가 매달 자동 결제되고 있진 않나요?</li>
+<li>통신사 멤버십 혜택이나 할인 쿠폰을 놓치고 있진 않으신가요?</li>
+</ul>
+<p>가만히만 있어도 내 자산이 안전하게 지켜지는 평화로운 오늘, 마음 편히 여유를 즐기시길 바랍니다.</p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>
