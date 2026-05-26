@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "오늘 한국 주식에 1천만 원 묻어두셨다면, 하루 만에 25만 원 벌었습니다!";
+const date = "2026-05-27";
+const description = "오늘 한국 주식시장이 그야말로 뜨겁게 불타올랐습니다. 어젯밤 미국 주식시장(S&P 500, 나스닥)이 기분 좋게 상승 마감하더니, 그 온기가 오늘 우리 시장까지 그대로 이어졌어요. 덕분에 파란 불만 가득하던 주식 계좌에 오랜만에 기분 좋은 빨간 불이 켜진 분들이 많으실...";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>오늘 한국 주식시장이 그야말로 뜨겁게 불타올랐습니다. 어젯밤 미국 주식시장(S&amp;P 500, 나스닥)이 기분 좋게 상승 마감하더니, 그 온기가 오늘 우리 시장까지 그대로 이어졌어요. 덕분에 파란 불만 가득하던 주식 계좌에 오랜만에 기분 좋은 빨간 불이 켜진 분들이 많으실 겁니다.</p>
+<p>반면, 1달러에 1,500원을 넘나들며 우리를 긴장하게 만들었던 환율은 오늘 아주 미세하게 숨고르기에 들어갔습니다. 코인 시장 역시 주식시장으로 돈이 몰리면서 잠시 쉬어가는 모습을 보이고 있어요. 오늘 이 변화들이 내 지갑에 어떤 영향을 주는지 핵심만 짚어 드릴게요.</p>
+<h2>💰 내 지갑 가이드</h2>
+<h3>📊 국내 주식·투자: &quot;기분 좋은 상승, 차분하게 계좌를 점검해 보세요&quot;</h3>
+<ul>
+<li><strong>실제 내 지갑 영향:</strong> 1천만 원을 투자 중이시라면 오늘 하루 만에 계좌가 <strong>약 254,596원</strong> 불어났을 거예요.</li>
+<li><strong>행동 가이드:</strong> 오랜만의 큰 상승에 당장 팔아서 이익을 챙겨야 할지 고민되실 텐데요. 흥분해서 추격 매수를 하기보다는, 내가 목표로 했던 수익률에 도달한 종목이 있는지 차분히 물만 주는 마음으로 살펴보세요.</li>
+</ul>
+<h3>✈️ 해외여행·직구: &quot;아주 찔끔 내렸지만, 여전히 지갑 닫을 때입니다&quot;</h3>
+<ul>
+<li><strong>실제 내 지갑 영향:</strong> 오늘 100만 원을 환전하신다면 어제보다 <strong>딱 63원</strong> 아낄 수 있습니다. </li>
+<li><strong>행동 가이드:</strong> 환율이 아주 살짝 내려가긴 했지만, 여전히 1달러에 1,500원이 넘는 초고환율 상태입니다. 미국 직구 장바구니 결제나 일본·해외여행 환전은 조금 더 지켜보며 미루는 것을 권해 드려요. 지금 결제하면 카드값 고지서를 보고 깜짝 놀라실 수 있습니다.</li>
+</ul>
+<h3>₿ 비트코인·코인: &quot;무 무리한 투자는 금물, 잠시 관망하세요&quot;</h3>
+<ul>
+<li><strong>실제 내 지갑 영향:</strong> 코인에 100만 원을 투자하셨다면 오늘 하루 <strong>약 17,421원</strong> 정도 줄어들었습니다.</li>
+<li><strong>행동 가이드:</strong> 돈의 흐름이 주식시장으로 쏠리면서 코인 시장은 살짝 조정을 받고 있습니다. 가격이 떨어졌다고 급하게 물타기를 하기보다는, 당분간은 시장 흐름을 지켜보는 것이 안전합니다.</li>
+</ul>
+<h3>🏠 대출이자·기름값·생활비: &quot;오늘은 걱정 없이 평화롭습니다&quot;</h3>
+<ul>
+<li><strong>실제 내 지갑 영향:</strong> 대출 금리 변동 없고, 기름값과 마트 장바구니 물가도 안정적인 흐름을 유지하고 있어요.</li>
+<li><strong>행동 가이드:</strong> 오늘은 예상치 못한 지출 걱정 없이 마음 편히 보내셔도 좋은 날입니다. 퇴근길 가벼운 발걸음으로 하루를 마무리하세요!</li>
+</ul>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

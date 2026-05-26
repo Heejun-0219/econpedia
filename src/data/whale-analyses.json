@@ -1,5 +1,47 @@
 [
   {
+    "slug": "whale-mstr-2026-05-26",
+    "title": "[Whale Alert] Strategy Inc(MSTR) CEO의 793만 원 매수, 내 지갑엔 어떤 의미일까?",
+    "excerpt": "Strategy Inc CEO의 소액 자사주 매수. 과거 유사 사례의 1년 후 평균 수익률은 -0.33%였습니다. 고환율 시대, 이 시그널을 어떻게 활용해야 할지 확인하세요.",
+    "date": "2026-05-26",
+    "ticker": "MSTR",
+    "companyName": "Strategy Inc",
+    "category": "insider",
+    "market": "us",
+    "isBuy": true,
+    "person": "Le Phong / President &amp; CEO",
+    "amount": "$5K (약 793만 원)",
+    "significance": 60
+  },
+  {
+    "slug": "whale-080720-2026-05-26",
+    "title": "773억 원 베팅한 제약사 내부자, 내 지갑엔 어떤 의미일까?",
+    "excerpt": "한국유니온제약 내부자의 773억 원 매수. 과거 유사 사례를 통해 이 거래가 내 지갑에 주는 시그널을 쉽고 명확하게 분석합니다.",
+    "date": "2026-05-26",
+    "ticker": "080720",
+    "companyName": "한국유니온제약",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": true,
+    "person": "박광석",
+    "amount": "$53.32M (약 773억 원) · 9,455,845주 취득",
+    "significance": 70
+  },
+  {
+    "slug": "whale-163730-2026-05-26",
+    "title": "1,092억 원의 장바구니, 서룡전자는 왜 '핑거'를 쓸어 담았을까?",
+    "excerpt": "서룡전자가 핑거(163730)에 1,092억 원을 배팅했습니다. 과거 유사 사례의 1년 뒤 수익률 통계와 내 지갑에 미치는 영향을 확인하세요.",
+    "date": "2026-05-26",
+    "ticker": "163730",
+    "companyName": "핑거",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": true,
+    "person": "서룡전자",
+    "amount": "$75.32M (약 1,092억 원) · 5,926,028주 취득",
+    "significance": 70
+  },
+  {
     "slug": "whale-cgct-2026-05-25",
     "title": "CEO의 9천만 원 자사주 쇼핑, 내 지갑도 따라가야 할까?",
     "excerpt": "CGCT CEO가 9,162만 원어치 자사주를 매수했습니다. 과거 유사 사례 분석을 통해 이 거래가 내 지갑에 미칠 영향을 숫자로 풀어드립니다.",

@@ -116,7 +116,6 @@ export const CATEGORIES = {
         readingTime: '8분',
         date: '2026.04.01',
         href: '/economy/global/china-economy-crisis',
-        comingSoon: true,
       },
       {
         title: '달러가 강해지면 세계 경제에 어떤 일이 벌어지나?',
