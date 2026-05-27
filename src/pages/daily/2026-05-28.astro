@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "국내 주식 가치 1천만 원당 22만 원 상승! 계좌는 웃었지만, 1,500원대 환율에 직구 장바구니는 잠시 닫아두세요";
+const date = "2026-05-28";
+const description = "오늘 우리 주식시장이 오랜만에 크게 웃었습니다. 국내 주식을 가지고 계셨던 분들이라면 퇴근길 계좌 잔고가 제법 두둑해진 걸 느끼셨을 텐데요. 외국인 투자자들의 자금이 우리 시장으로 강하게 흘러들어오면서 전체적인 주식 가치가 크게 올랐습니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <h2>🚨 오늘 왜 이러는 걸까?</h2>
+<p>오늘 우리 주식시장이 오랜만에 크게 웃었습니다. 국내 주식을 가지고 계셨던 분들이라면 퇴근길 계좌 잔고가 제법 두둑해진 걸 느끼셨을 텐데요. 외국인 투자자들의 자금이 우리 시장으로 강하게 흘러들어오면서 전체적인 주식 가치가 크게 올랐습니다. </p>
+<p>하지만 기쁨도 잠시, 환율이 여전히 1,500원 선에 턱걸이하고 있고 기름값도 살짝 오름세를 보이고 있어요. 주식 계좌는 따뜻해졌지만, 내 지갑에서 나가는 생활 물가는 여전히 팽팽한 긴장감이 흐르는 하루입니다.</p>
+<hr>
+<h2>💰 내 지갑 가이드</h2>
+<p>오늘 시장 변화에 맞춰 내 지갑을 지키기 위해 딱 이것만 기억하세요.</p>
+<ul>
+<li><strong>📊 국내 주식 보유자라면: &quot;오늘은 계좌 보고 흐뭇해하셔도 좋습니다&quot;</strong><ul>
+<li>1천만 원을 묻어두셨다면 오늘 하루에만 약 <strong>225,151원</strong> 정도 자산이 늘어난 셈이에요. 기분 좋게 잔고를 확인하시되, 급하게 팔기보다는 차분히 흐름을 더 지켜보세요.</li>
+</ul>
+</li>
+<li><strong>✈️ 해외여행·직구 계획 중이라면: &quot;환전은 일단 대기, 장바구니도 홀딩!&quot;</strong><ul>
+<li>오늘 100만 원을 환전해 봐야 어제보다 딱 <strong>41원</strong> 아끼는 수준에 그쳤어요. 환율이 1,500원대로 매우 높은 상황이니, 급하지 않은 해외 직구 결제나 여행 환전은 뒤로 미루는 것이 내 돈을 아끼는 길입니다.</li>
+</ul>
+</li>
+<li><strong>⛽ 주유소 방문 예정이라면: &quot;퇴근길에 미리 가득 채워두세요&quot;</strong><ul>
+<li>국제 유가가 오르면서 기름값에 시동이 걸렸습니다. 5만 원 주유할 때 약 <strong>369원</strong> 정도 더 내야 하는 흐름이에요. 주유 경고등이 켜지기 전에 오늘 미리 주유해 두는 것을 추천합니다.</li>
+</ul>
+</li>
+<li><strong>🪙 코인 투자자라면: &quot;소폭 조정 중, 차분하게 관망하기&quot;</strong><ul>
+<li>비트코인은 100만 원 투자 기준 약 <strong>14,831원</strong> 정도 빠졌습니다. 급격한 폭락은 아니니 불안해하며 섣불리 움직이기보다는 시장을 가만히 지켜볼 때입니다.</li>
+</ul>
+</li>
+<li><strong>🏠 대출과 장바구니: &quot;이 부분은 걱정 없이 평화롭습니다&quot;</strong><ul>
+<li>다행히 대출 금리나 마트 장바구니 물가는 큰 변화 없이 안정적인 흐름을 유지하고 있으니 안심하셔도 돼요. 😌</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>주식 계좌가 빨간불로 물들어 기분 좋은 목요일입니다. 번 돈을 잘 지키는 것도 훌륭한 재테크인 만큼, 오늘만큼은 비싼 해외 쇼핑은 꾹 참고 지갑을 지키는 하루를 보내보세요. </p>
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

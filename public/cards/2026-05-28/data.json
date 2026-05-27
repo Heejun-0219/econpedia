@@ -1,0 +1,38 @@
+{
+  "slides": [
+    {
+      "type": "all_in_one",
+      "headline": "국내 주식 계좌는 22만원 오르고, 기름값은 살짝 오른 하루예요.",
+      "badge": "2026-05-28 내 지갑 변화",
+      "walletItems": [
+        {
+          "label": "국내 주식",
+          "impact": "1천만원 투자 시 약 22만 5천원 올랐어요",
+          "trend": "up"
+        },
+        {
+          "label": "주유비",
+          "impact": "5만원 주유 시 약 369원 더 들어요",
+          "trend": "up"
+        },
+        {
+          "label": "비트코인",
+          "impact": "100만원 투자 시 약 1만 4천원 빠졌어요",
+          "trend": "down"
+        },
+        {
+          "label": "해외여행",
+          "impact": "100만원 환전 시 41원 아꼈어요",
+          "trend": "down"
+        },
+        {
+          "label": "대출이자",
+          "impact": "변화 없이 평화로워요 😌",
+          "trend": "flat"
+        }
+      ],
+      "url": "econpedia.dedyn.io/daily",
+      "ctaText": "자세한 대응법 보기"
+    }
+  ]
+}
