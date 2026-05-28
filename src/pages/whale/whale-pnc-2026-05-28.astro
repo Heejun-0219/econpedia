@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
+
+const title = "[PNC] 미국 대형 은행 임원의 144억 원 매도, 내 통장엔 어떤 의미일까?";
+const date = "2026-05-28";
+const description = "미국 대형 은행 PNC 임원의 144억 원 매도. 과거 엔론, 리먼 사태와 비교해 내 지갑에 미칠 영향을 분석합니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 PNC FINANCIAL SERVICES GROUP, INC.</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 PNC FINANCIAL SERVICES GROUP, INC. (PNC)</h3>
+        <p><strong>매매자:</strong> Feldstein Andrew T / Director</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $9.93M <span style="opacity:.85">(약 144억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 45,000주 · $220.57</p>
+        <p><strong>출처:</strong> SEC Form 4 · National Commercial Banks</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-28","y":190.72},{"x":"2025-12-01","y":192.4},{"x":"2025-12-02","y":192.05},{"x":"2025-12-03","y":198},{"x":"2025-12-04","y":198.27},{"x":"2025-12-05","y":197.86},{"x":"2025-12-08","y":197.65},{"x":"2025-12-09","y":202.15},{"x":"2025-12-10","y":206.97},{"x":"2025-12-11","y":211.49},{"x":"2025-12-12","y":210.59},{"x":"2025-12-15","y":210.89},{"x":"2025-12-16","y":209.98},{"x":"2025-12-17","y":210.3},{"x":"2025-12-18","y":209.5},{"x":"2025-12-19","y":210.2},{"x":"2025-12-22","y":212.9},{"x":"2025-12-23","y":211.95},{"x":"2025-12-24","y":213.48},{"x":"2025-12-26","y":213.89},{"x":"2025-12-29","y":211.97},{"x":"2025-12-30","y":211.06},{"x":"2025-12-31","y":208.73},{"x":"2026-01-02","y":211.46},{"x":"2026-01-05","y":215.8},{"x":"2026-01-06","y":218.04},{"x":"2026-01-07","y":216.27},{"x":"2026-01-08","y":218.64},{"x":"2026-01-09","y":217.55},{"x":"2026-01-12","y":215.74},{"x":"2026-01-13","y":212.45},{"x":"2026-01-14","y":212.32},{"x":"2026-01-15","y":215.04},{"x":"2026-01-16","y":223.18},{"x":"2026-01-20","y":220.96},{"x":"2026-01-21","y":225.49},{"x":"2026-01-22","y":222},{"x":"2026-01-23","y":219.39},{"x":"2026-01-26","y":220.75},{"x":"2026-01-27","y":223.7},{"x":"2026-01-28","y":221.39},{"x":"2026-01-29","y":224.46},{"x":"2026-01-30","y":223.3},{"x":"2026-02-02","y":227.63},{"x":"2026-02-03","y":233.82},{"x":"2026-02-04","y":237.25},{"x":"2026-02-05","y":238.51},{"x":"2026-02-06","y":242.48},{"x":"2026-02-09","y":240.95},{"x":"2026-02-10","y":240.33},{"x":"2026-02-11","y":235.48},{"x":"2026-02-12","y":229.68},{"x":"2026-02-13","y":229.32},{"x":"2026-02-17","y":231.24},{"x":"2026-02-18","y":232.74},{"x":"2026-02-19","y":230.3},{"x":"2026-02-20","y":232.97},{"x":"2026-02-23","y":220.77},{"x":"2026-02-24","y":217.91},{"x":"2026-02-25","y":221.95},{"x":"2026-02-26","y":222.82},{"x":"2026-02-27","y":212.35},{"x":"2026-03-02","y":214.23},{"x":"2026-03-03","y":213.05},{"x":"2026-03-04","y":213.86},{"x":"2026-03-05","y":212.37},{"x":"2026-03-06","y":206.12},{"x":"2026-03-09","y":205.34},{"x":"2026-03-10","y":206.39},{"x":"2026-03-11","y":205.64},{"x":"2026-03-12","y":202.69},{"x":"2026-03-13","y":201.13},{"x":"2026-03-16","y":200.75},{"x":"2026-03-17","y":203.92},{"x":"2026-03-18","y":201.17},{"x":"2026-03-19","y":202.05},{"x":"2026-03-20","y":201.71},{"x":"2026-03-23","y":203.93},{"x":"2026-03-24","y":206.35},{"x":"2026-03-25","y":205.95},{"x":"2026-03-26","y":205.46},{"x":"2026-03-27","y":202.39},{"x":"2026-03-30","y":201.66},{"x":"2026-03-31","y":208.09},{"x":"2026-04-01","y":209.24},{"x":"2026-04-02","y":211.7},{"x":"2026-04-06","y":213.14},{"x":"2026-04-07","y":213.92},{"x":"2026-04-08","y":220.76},{"x":"2026-04-09","y":223.23},{"x":"2026-04-10","y":221.13},{"x":"2026-04-13","y":223},{"x":"2026-04-14","y":221.2},{"x":"2026-04-15","y":222.06},{"x":"2026-04-16","y":220.07},{"x":"2026-04-17","y":224.81},{"x":"2026-04-20","y":227.03},{"x":"2026-04-21","y":228.05},{"x":"2026-04-22","y":225.06},{"x":"2026-04-23","y":225.09},{"x":"2026-04-24","y":219.86},{"x":"2026-04-27","y":221.33},{"x":"2026-04-28","y":220.89},{"x":"2026-04-29","y":218.71},{"x":"2026-04-30","y":223},{"x":"2026-05-01","y":220.71},{"x":"2026-05-04","y":218.04},{"x":"2026-05-05","y":221.63},{"x":"2026-05-06","y":222.42},{"x":"2026-05-07","y":219.29},{"x":"2026-05-08","y":216.85},{"x":"2026-05-11","y":214.59},{"x":"2026-05-12","y":215.21},{"x":"2026-05-13","y":209.86},{"x":"2026-05-14","y":213.45},{"x":"2026-05-15","y":212.84},{"x":"2026-05-18","y":213.72},{"x":"2026-05-19","y":213.27},{"x":"2026-05-20","y":216.83},{"x":"2026-05-21","y":218.37},{"x":"2026-05-22","y":219.23},{"x":"2026-05-26","y":220.81},{"x":"2026-05-27","y":220.8}]' transactionDate='2026-05-28' isBuy={false} ticker='PNC' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 219.78 (2026-05-28) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>미국 대형 은행 중 하나인 <strong>PNC(PNC Financial Services Group)</strong>에서 대규모 내부자 매도가 발생했습니다. </p>
+<p>2026년 5월 28일, 이사인 앤드류 펠드스타인(Feldstein Andrew T)이 자신이 보유한 주식 <strong>45,000주</strong>를 시장에 매도했습니다. </p>
+<p>주당 매도 단가는 <strong>220.57달러</strong>로, 총 거래 금액은 993만 달러, 즉 <strong>약 144억 원($9.93M)</strong>에 달합니다. </p>
+<h2>🔍 왜 지금?</h2>
+<p>은행 임원이 144억 원어치 주식을 팔았다는 건 어떤 의미일까요? </p>
+<p>보통 내부자 매도는 세금 납부나 부동산 구매 등 개인적인 현금 필요 때문일 수 있습니다. 하지만 주가가 고점이라고 판단했거나, 향후 은행업 전망을 보수적으로 보고 있다는 <strong>부정적인 시그널</strong>로 해석될 수도 있습니다. </p>
+<p>현재 PNC의 기준일(5월 28일) 종가는 <strong>219.78달러</strong>로, 이사가 매도한 단가(220.57달러)와 거의 비슷한 수준에 머물러 있습니다. </p>
+<p>아직 거래일로부터 충분한 시간이 지나지 않아 이후 주가가 얼마나 변동했는지를 나타내는 후행 주가는 미도래 상태입니다. 당장 이 거래 하나만으로 주가 방향을 단정 짓기는 어렵습니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>만약 내 투자금이 PNC나 미국 금융주에 들어가 있다면, 이번 144억 원 매도 소식을 어떻게 받아들여야 할까요? </p>
+<p>내부자의 대량 매도는 즉각적인 매도 경고라기보다는, 시장 상황을 주의 깊게 살피라는 신호에 가깝습니다. </p>
+<p>통계적으로 내부자 거래는 기업의 장기적인 방향성을 엿보는 보조 지표로 유용하지만, 맹목적으로 따라 하는 것은 위험합니다. 개인적인 이유로 주식을 팔았을 뿐인데 주가가 더 오르는 경우도 많기 때문입니다. </p>
+<p>따라서 이번 매도 소식만으로 보유 주식을 급하게 처분할 필요는 없습니다. </p>
+<p>대신, 미국 은행들의 <strong>대출 연체율 상승</strong>이나 <strong>배당금 삭감</strong> 등 실질적인 재무 지표와 뉴스를 한 번 더 꼼꼼히 점검하는 계기로 삼으시길 권장합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Lehman Brothers (LEH)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Dick Fuld (CEO) · 2008-04-15 · 약 $3.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-45.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 자사주 매수가 항상 '바닥 시그널'은 아님을 보여주는 가장 유명한 반례.</p>
+        <p class="case-source">📎 SEC Form 4 / 공공 파산 기록 · 회사 후속: 2008-09 챕터 11 파산보호 신청. 보통주 가치 사실상 0.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 PNC FINANCIAL SERVICES GROUP, INC. 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=PNC">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <WhaleFollow ticker="PNC" tickerName="PNC FINANCIAL SERVICES GROUP, INC." />
+
+      <TradeCTA
+        ticker="PNC"
+        name="PNC FINANCIAL SERVICES GROUP, INC."
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-pnc-2026-05-28" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

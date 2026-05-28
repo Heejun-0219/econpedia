@@ -1,0 +1,250 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
+
+const title = "모회사 '대동'이 대동기어 주식 252억 원어치를 장바구니에 담은 이유";
+const date = "2026-04-22";
+const description = "모회사 대동이 대동기어 주식 252억 원어치를 매수했습니다. 1천만 원 투자 시 내 지갑에 미칠 영향과 과거 유사 사례를 분석합니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇰🇷 대동기어</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇰🇷 대동기어 (008830)</h3>
+        <p><strong>매매자:</strong> 대동</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $17.40M <span style="opacity:.85">(약 252억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 1,176,060주 · ₩21,450</p>
+        <p><strong>출처:</strong> DART 지분공시</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-11-28","y":18250},{"x":"2025-12-01","y":18400},{"x":"2025-12-02","y":18410},{"x":"2025-12-03","y":17660},{"x":"2025-12-04","y":17000},{"x":"2025-12-05","y":16890},{"x":"2025-12-08","y":16790},{"x":"2025-12-09","y":16560},{"x":"2025-12-10","y":17180},{"x":"2025-12-11","y":17250},{"x":"2025-12-12","y":17840},{"x":"2025-12-15","y":17750},{"x":"2025-12-16","y":17210},{"x":"2025-12-17","y":16880},{"x":"2025-12-18","y":16460},{"x":"2025-12-19","y":17380},{"x":"2025-12-22","y":17000},{"x":"2025-12-23","y":16610},{"x":"2025-12-24","y":16540},{"x":"2025-12-26","y":16430},{"x":"2025-12-29","y":18240},{"x":"2025-12-30","y":17250},{"x":"2026-01-02","y":16840},{"x":"2026-01-05","y":16890},{"x":"2026-01-06","y":16780},{"x":"2026-01-07","y":16650},{"x":"2026-01-08","y":16200},{"x":"2026-01-09","y":17230},{"x":"2026-01-12","y":17390},{"x":"2026-01-13","y":17110},{"x":"2026-01-14","y":16760},{"x":"2026-01-15","y":17490},{"x":"2026-01-16","y":17230},{"x":"2026-01-19","y":17680},{"x":"2026-01-20","y":17670},{"x":"2026-01-21","y":17460},{"x":"2026-01-22","y":17740},{"x":"2026-01-23","y":18000},{"x":"2026-01-26","y":17620},{"x":"2026-01-27","y":17440},{"x":"2026-01-28","y":17780},{"x":"2026-01-29","y":17940},{"x":"2026-01-30","y":17390},{"x":"2026-02-02","y":17720},{"x":"2026-02-03","y":20800},{"x":"2026-02-04","y":19700},{"x":"2026-02-05","y":22850},{"x":"2026-02-06","y":22200},{"x":"2026-02-09","y":22500},{"x":"2026-02-10","y":26100},{"x":"2026-02-11","y":25250},{"x":"2026-02-12","y":25700},{"x":"2026-02-13","y":25200},{"x":"2026-02-19","y":25300},{"x":"2026-02-20","y":24300},{"x":"2026-02-23","y":23300},{"x":"2026-02-24","y":23300},{"x":"2026-02-25","y":22900},{"x":"2026-02-26","y":24300},{"x":"2026-02-27","y":24550},{"x":"2026-03-03","y":22000},{"x":"2026-03-04","y":18300},{"x":"2026-03-05","y":20750},{"x":"2026-03-06","y":21200},{"x":"2026-03-09","y":19750},{"x":"2026-03-10","y":21600},{"x":"2026-03-11","y":20900},{"x":"2026-03-12","y":21400},{"x":"2026-03-13","y":21300},{"x":"2026-03-16","y":20200},{"x":"2026-03-17","y":20450},{"x":"2026-03-18","y":20750},{"x":"2026-03-19","y":20300},{"x":"2026-03-20","y":21750},{"x":"2026-03-23","y":19520},{"x":"2026-03-24","y":19820},{"x":"2026-03-25","y":20700},{"x":"2026-03-26","y":19810},{"x":"2026-03-27","y":19810},{"x":"2026-03-30","y":19580},{"x":"2026-03-31","y":19120},{"x":"2026-04-01","y":20950},{"x":"2026-04-02","y":19590},{"x":"2026-04-03","y":19730},{"x":"2026-04-06","y":19510},{"x":"2026-04-07","y":19800},{"x":"2026-04-08","y":21750},{"x":"2026-04-09","y":21700},{"x":"2026-04-10","y":21650},{"x":"2026-04-13","y":21100},{"x":"2026-04-14","y":21200},{"x":"2026-04-15","y":21250},{"x":"2026-04-16","y":21300},{"x":"2026-04-17","y":21350},{"x":"2026-04-20","y":21000},{"x":"2026-04-21","y":21900},{"x":"2026-04-22","y":21450},{"x":"2026-04-23","y":19550},{"x":"2026-04-24","y":20050},{"x":"2026-04-27","y":20450},{"x":"2026-04-28","y":20500},{"x":"2026-04-29","y":20550},{"x":"2026-04-30","y":20200},{"x":"2026-05-04","y":20600},{"x":"2026-05-06","y":20200},{"x":"2026-05-07","y":20400},{"x":"2026-05-08","y":20250},{"x":"2026-05-11","y":19600},{"x":"2026-05-12","y":19920},{"x":"2026-05-13","y":20850},{"x":"2026-05-14","y":20100},{"x":"2026-05-15","y":18980},{"x":"2026-05-18","y":17950},{"x":"2026-05-19","y":17630},{"x":"2026-05-20","y":16910},{"x":"2026-05-21","y":17950},{"x":"2026-05-22","y":18610},{"x":"2026-05-26","y":18070},{"x":"2026-05-27","y":17400},{"x":"2026-05-28","y":16560}]' transactionDate='2026-04-22' isBuy={true} ticker='008830' currency='KRW' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="color:#ef4444;font-weight:700">-13.2%</span></div>
+      <div class="followup-date">2026-05-22</div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 21450.00 (2026-04-22) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>2026년 4월 22일, 농기계 기업 &#39;대동&#39;이 자회사인 &#39;대동기어(008830)&#39;의 주식을 대거 매수했습니다. </p>
+<p>공시된 정확한 거래 규모는 <strong>$17.40M (약 252억 원) · 1,176,060주 취득</strong>입니다. 1주당 <strong>21,450원</strong>에 결제한 셈입니다. </p>
+<p>모회사가 자회사 주식을 대규모로 직접 매수하는 것은 기업 가치가 저평가되어 있거나 향후 긍정적인 전망이 있음을 시장에 시사하는 긍정적인 시그널로 해석될 수 있습니다. </p>
+<p>투자자 입장에서는 관심을 가질 만한 거대한 자금 흐름입니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>대동이 <strong>252억 원</strong>이라는 거금을 투자한 직후, 시장의 반응은 어땠을까요? 단기적인 주가 흐름은 부진한 모습을 보였습니다. </p>
+<p>공시일(4월 22일) 기준 <strong>21,450원</strong>이던 주가는 한 달 뒤인 5월 22일(D+30) 기준 <strong>-13.24%</strong> 하락했습니다. </p>
+<p>만약 대동을 따라 공시일에 대동기어 주식에 <strong>1,000만 원</strong>을 투자했다고 가정해 보겠습니다. 한 달 만에 투자금은 약 <strong>132만 원</strong>이 감소해 <strong>868만 원</strong>이 된 셈입니다. </p>
+<p>이는 모회사나 대주주의 대규모 매수가 당장의 주가 상승을 보장하지는 않는다는 점을 보여줍니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>대동의 <strong>252억 원</strong> 매수 소식은 분명 솔깃한 정보입니다. </p>
+<p>하지만 앞서 보셨듯, 모회사의 매수 사실만으로 즉각적인 주가 상승을 기대하고 단기 투자를 진행할 경우 손실을 입을 수 있습니다. </p>
+<p><strong>오늘의 행동 가이드:</strong> 
+대규모 내부자 매수는 단기적인 수익을 보장하는 지표가 아니라, 장기적인 관점에서 참고하는 보조 지표로 활용해야 합니다. </p>
+<p>대동기어에 관심이 생겼다면 즉각적인 매수보다는, 단기적인 하락세가 진정되는지 일정 기간 지켜보는 것을 권장합니다. </p>
+<p>회사의 펀더멘털 개선 여부를 충분히 확인한 뒤에 투자 결정을 내리는 것이 바람직합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 두산에너빌리티 (034020)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">박정원 회장 외 친족 / 그룹 오너 일가 · 2022-09-30 · 약 $15.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+5.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+18.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+70.0%</span></span>
+        </div>
+        <p class="case-narrative">사업구조 턴어라운드 국면에서 오너 일가 매수. 원전 수주 기대와 맞물려 24개월 상승 추세.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2022-09) · 회사 후속: 원전 수주 확대, 영업이익 흑전, 그룹 재무구조 개선</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 셀트리온 (068270)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">서정진 회장 / 특수관계인 · 2018-10-15 · 약 $100.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-2.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+12.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+28.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+        </div>
+        <p class="case-narrative">바이오 디레이팅 국면에서 오너 매수. 단기 추가 하락 후 6~12개월 반등이 전형.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2018-10) · 회사 후속: 바이오시밀러 글로벌 매출 확대, 합병으로 단일 법인화 추진</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 대동기어 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=008830">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <WhaleFollow ticker="008830" tickerName="대동기어" />
+
+      <TradeCTA
+        ticker="008830"
+        name="대동기어"
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-008830-2026-04-22" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

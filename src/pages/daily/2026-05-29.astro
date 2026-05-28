@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PollWidget from '../../components/PollWidget.astro';
+
+const title = "오늘 시장은 아주 조용합니다. 내 지갑도 평화롭네요 😌";
+const date = "2026-05-29";
+const description = "| 내 지갑 항목 | 오늘 지갑의 변화 | 한 줄 요약 |";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/daily" class="article-header__category">데일리 브리핑</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>⏱ 5분 읽기</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <table>
+<thead>
+<tr>
+<th align="left">내 지갑 항목</th>
+<th align="left">오늘 지갑의 변화</th>
+<th align="left">한 줄 요약</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">📊 <strong>국내 주식</strong></td>
+<td align="left">1천만 원 투자 기준 <strong>약 52,755원 감소</strong></td>
+<td align="left">국내 주식이 살짝 숨을 고르며 아주 조금 내려갔어요.</td>
+</tr>
+<tr>
+<td align="left">✈️ <strong>해외여행·직구</strong></td>
+<td align="left">100만 원 환전 시 <strong>약 42원 절약</strong></td>
+<td align="left">환율 움직임이 거의 없어서 어제와 똑같은 예산으로 준비하시면 돼요.</td>
+</tr>
+<tr>
+<td align="left">🏠 <strong>대출 이자</strong></td>
+<td align="left"><strong>변동 없음</strong> 😌</td>
+<td align="left">금리에 변화가 없으니 이번 달 이자 걱정은 잠시 내려놓으세요.</td>
+</tr>
+</tbody></table>
+<br>
+
+<h2>이코노의 가이드: &quot;아무것도 안 하는 것&quot;도 훌륭한 재테크입니다</h2>
+<p>오늘은 주식시장도, 환율도 큰 움직임 없이 잔잔하게 흘러가고 있습니다. 매일 억지로 뉴스를 찾아보며 불안해할 필요가 전혀 없는 날이에요. </p>
+<p>이렇게 시장이 평화로운 날에는 투자 앱을 잠시 닫아두는 것을 추천합니다. 잦은 거래로 수수료를 쓰는 것보다, 가만히 지갑을 지키는 것이 오히려 돈을 버는 길일 수 있거든요. 오늘은 주식 차트 대신 이번 달 카드 명세서를 가볍게 훑어보며 커피 한 잔의 여유를 즐겨보시는 건 어떨까요?</p>
+<br>
+
+<p>오늘도 지갑이 든든한 하루 보내세요! 💪</p>
+
+
+      <PollWidget 
+        questionId={`daily-${date}`}
+        question="오늘 브리핑에서 가장 인상 깊었던 이슈는 무엇인가요?"
+        optionA="📈 긍정적인 지표/소식"
+        optionB="📉 우려되는 지표/소식"
+      />
+    </div>
+  </div>
+</BaseLayout>

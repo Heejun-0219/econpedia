@@ -1,5 +1,33 @@
 [
   {
+    "slug": "whale-pnc-2026-05-28",
+    "title": "[PNC] 미국 대형 은행 임원의 144억 원 매도, 내 통장엔 어떤 의미일까?",
+    "excerpt": "미국 대형 은행 PNC 임원의 144억 원 매도. 과거 엔론, 리먼 사태와 비교해 내 지갑에 미칠 영향을 분석합니다.",
+    "date": "2026-05-28",
+    "ticker": "PNC",
+    "companyName": "PNC FINANCIAL SERVICES GROUP, INC.",
+    "category": "insider",
+    "market": "us",
+    "isBuy": false,
+    "person": "Feldstein Andrew T / Director",
+    "amount": "$9.93M (약 144억 원)",
+    "significance": 65
+  },
+  {
+    "slug": "whale-psec-2026-05-28",
+    "title": "15억 원어치 자사주를 긁어모은 CEO, 내 지갑도 따라가야 할까?",
+    "excerpt": "PSEC 최고경영자의 15억 원 규모 자사주 매수. 과거 유사 사례를 통해 내 지갑에 미칠 영향을 숫자로 명확히 분석합니다.",
+    "date": "2026-05-28",
+    "ticker": "PSEC",
+    "companyName": "PROSPECT CAPITAL CORP",
+    "category": "insider",
+    "market": "us",
+    "isBuy": true,
+    "person": "Barry John F / CHIEF EXECUTIVE OFFICER",
+    "amount": "$1.01M (약 15억 원)",
+    "significance": 70
+  },
+  {
     "slug": "whale-192440-2026-05-27",
     "title": "슈피겐코리아 대표이사는 왜 오늘 자기 회사 주식에 2억 원을 썼을까?",
     "excerpt": "슈피겐코리아 대표이사의 2억원 자사주 매수. 과거 유사 사례의 1년 뒤 평균 수익률을 통해 내 지갑에 미치는 영향을 분석합니다.",
@@ -726,6 +754,20 @@
     "person": "RUBINSTEIN JONATHAN / Director",
     "amount": "$1.0M (약 15억 원)",
     "significance": 55
+  },
+  {
+    "slug": "whale-008830-2026-04-22",
+    "title": "모회사 '대동'이 대동기어 주식 252억 원어치를 장바구니에 담은 이유",
+    "excerpt": "모회사 대동이 대동기어 주식 252억 원어치를 매수했습니다. 1천만 원 투자 시 내 지갑에 미칠 영향과 과거 유사 사례를 분석합니다.",
+    "date": "2026-04-22",
+    "ticker": "008830",
+    "companyName": "대동기어",
+    "category": "insider",
+    "market": "kr",
+    "isBuy": true,
+    "person": "대동",
+    "amount": "$17.40M (약 252억 원) · 1,176,060주 취득",
+    "significance": 60
   },
   {
     "slug": "whale-meta-2026-04-22",
