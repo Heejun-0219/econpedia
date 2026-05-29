@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
+
+const title = "엘티씨 대표이사의 57억 원어치 현금화, 내 계좌엔 어떤 신호일까?";
+const date = "2026-05-29";
+const description = "엘티씨 대표이사의 57억 원 장내 매도. 과거 유사 사례의 1년 뒤 평균 변동률은 -73.3%였습니다. 이 거래에 담긴 내 지갑의 핵심 시그널을 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇰🇷 엘티씨</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇰🇷 엘티씨 (170920)</h3>
+        <p><strong>매매자:</strong> 최호성 / 대표이사</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $3.96M <span style="opacity:.85">(약 57억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 150,000주 · ₩38,250</p>
+        <p><strong>출처:</strong> DART 지분공시</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-12-01","y":16800},{"x":"2025-12-02","y":16560},{"x":"2025-12-03","y":17000},{"x":"2025-12-04","y":16050},{"x":"2025-12-05","y":16080},{"x":"2025-12-08","y":16040},{"x":"2025-12-09","y":18300},{"x":"2025-12-10","y":17770},{"x":"2025-12-11","y":17310},{"x":"2025-12-12","y":16810},{"x":"2025-12-15","y":16300},{"x":"2025-12-16","y":15910},{"x":"2025-12-17","y":16400},{"x":"2025-12-18","y":17360},{"x":"2025-12-19","y":17940},{"x":"2025-12-22","y":19210},{"x":"2025-12-23","y":18650},{"x":"2025-12-24","y":18650},{"x":"2025-12-26","y":18660},{"x":"2025-12-29","y":18960},{"x":"2025-12-30","y":19190},{"x":"2026-01-02","y":20400},{"x":"2026-01-05","y":22400},{"x":"2026-01-06","y":22800},{"x":"2026-01-07","y":21750},{"x":"2026-01-08","y":22050},{"x":"2026-01-09","y":21700},{"x":"2026-01-12","y":21300},{"x":"2026-01-13","y":21950},{"x":"2026-01-14","y":22600},{"x":"2026-01-15","y":23600},{"x":"2026-01-16","y":21700},{"x":"2026-01-19","y":22250},{"x":"2026-01-20","y":23300},{"x":"2026-01-21","y":23850},{"x":"2026-01-22","y":24000},{"x":"2026-01-23","y":24050},{"x":"2026-01-26","y":24900},{"x":"2026-01-27","y":27200},{"x":"2026-01-28","y":27200},{"x":"2026-01-29","y":28300},{"x":"2026-01-30","y":27600},{"x":"2026-02-02","y":25250},{"x":"2026-02-03","y":27300},{"x":"2026-02-04","y":26950},{"x":"2026-02-05","y":26000},{"x":"2026-02-06","y":25100},{"x":"2026-02-09","y":28950},{"x":"2026-02-10","y":28500},{"x":"2026-02-11","y":28050},{"x":"2026-02-12","y":27550},{"x":"2026-02-13","y":26600},{"x":"2026-02-19","y":28400},{"x":"2026-02-20","y":27450},{"x":"2026-02-23","y":27050},{"x":"2026-02-24","y":24700},{"x":"2026-02-25","y":25350},{"x":"2026-02-26","y":25050},{"x":"2026-02-27","y":23250},{"x":"2026-03-03","y":23000},{"x":"2026-03-04","y":19790},{"x":"2026-03-05","y":22150},{"x":"2026-03-06","y":22400},{"x":"2026-03-09","y":19890},{"x":"2026-03-10","y":21800},{"x":"2026-03-11","y":22500},{"x":"2026-03-12","y":24000},{"x":"2026-03-13","y":21950},{"x":"2026-03-16","y":24500},{"x":"2026-03-17","y":27550},{"x":"2026-03-18","y":29950},{"x":"2026-03-19","y":34100},{"x":"2026-03-20","y":34000},{"x":"2026-03-23","y":30150},{"x":"2026-03-24","y":30350},{"x":"2026-03-25","y":34400},{"x":"2026-03-26","y":34850},{"x":"2026-03-27","y":33950},{"x":"2026-03-30","y":31900},{"x":"2026-03-31","y":30300},{"x":"2026-04-01","y":32800},{"x":"2026-04-02","y":30000},{"x":"2026-04-03","y":30000},{"x":"2026-04-06","y":28400},{"x":"2026-04-07","y":27450},{"x":"2026-04-08","y":29000},{"x":"2026-04-09","y":27700},{"x":"2026-04-10","y":28000},{"x":"2026-04-13","y":28750},{"x":"2026-04-14","y":30850},{"x":"2026-04-15","y":31050},{"x":"2026-04-16","y":32300},{"x":"2026-04-17","y":34750},{"x":"2026-04-20","y":33200},{"x":"2026-04-21","y":36250},{"x":"2026-04-22","y":41500},{"x":"2026-04-23","y":48000},{"x":"2026-04-24","y":46250},{"x":"2026-04-27","y":47300},{"x":"2026-04-28","y":47400},{"x":"2026-04-29","y":47800},{"x":"2026-04-30","y":45800},{"x":"2026-05-04","y":47850},{"x":"2026-05-06","y":49650},{"x":"2026-05-07","y":43650},{"x":"2026-05-08","y":44950},{"x":"2026-05-11","y":43900},{"x":"2026-05-12","y":40800},{"x":"2026-05-13","y":44000},{"x":"2026-05-14","y":44850},{"x":"2026-05-15","y":38400},{"x":"2026-05-18","y":39100},{"x":"2026-05-19","y":42700},{"x":"2026-05-20","y":42600},{"x":"2026-05-21","y":44000},{"x":"2026-05-22","y":47200},{"x":"2026-05-26","y":45550},{"x":"2026-05-27","y":42000},{"x":"2026-05-28","y":39250},{"x":"2026-05-29","y":38250}]' transactionDate='2026-05-29' isBuy={false} ticker='170920' currency='KRW' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 38250.00 (2026-05-29) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p><strong>2026년 5월 29일</strong>, 엘티씨(170920)의 최호성 대표이사가 회사 주식 <strong>15만 주</strong>를 시장에 매도했습니다. </p>
+<p>매도 단가는 <strong>주당 38,250원</strong>이며, 총거래액은 <strong>약 $3.96M(약 57억 원)</strong>에 달합니다. </p>
+<p>회사의 가장 깊숙한 속사정을 아는 최고 경영자가 자신의 주식을 대규모로 처분해 현금화했다는 것은, 개인 투자자 입장에서도 주의 깊게 상황을 지켜봐야 할 묵직한 시그널로 해석될 수 있습니다.</p>
+<h2>🔍 왜 지금?</h2>
+<p>최호성 대표는 주당 <strong>38,250원</strong>에 주식을 매도했습니다. </p>
+<p>현재 공시 직후이므로, 이 거래 이후 한 달(D+30)이나 1년(D+365) 뒤의 주가 변동을 나타내는 후행 데이터는 아직 미도래 상태입니다. </p>
+<p>다만 매도 시점의 시장 분위기와 비교해 보면 흥미롭습니다. 코스피 지수가 하루 만에 크게 상승하고, 원·달러 환율은 <strong>1,507원</strong>까지 오르는 등 변동성이 큰 장세였습니다. </p>
+<p>이처럼 주식 시장이 달아오르고 물가 부담이 커지는 시점에, 기업의 수장이 주식을 팔아 <strong>57억 원</strong>이라는 막대한 현금을 손에 쥐는 쪽을 택했다는 점은 주목할 만합니다.</p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거에 기업을 이끄는 임원진이 대규모로 주식을 팔았을 때의 주가 흐름을 살펴보겠습니다. (아래 제시된 후행 변동률은 시장 평균을 보정하지 않은 단순 raw 변동률입니다.)</p>
+<ol>
+<li><p><strong>카카오 (2021-12-15)</strong>: 핀테크 자회사 상장 직후, 대표이사를 포함한 임원 다수가 <strong>약 $90.0M</strong> 규모의 주식을 매도했습니다. 이후 주가는 1달 뒤(D+30) <strong>-8%</strong>, 3달 뒤(D+90) <strong>-22%</strong>, 6달 뒤(D+180) <strong>-38%</strong>, 1년 뒤(D+365) <strong>-55%</strong>로 하락했습니다. </p>
+</li>
+<li><p><strong>Enron (2001-08-14)</strong>: 미국 엔론의 CEO 제프리 스킬링 등은 사임 발표와 함께 <strong>약 $70.0M</strong>를 매도했습니다. 주가는 1달 뒤 <strong>-27%</strong>, 3달 뒤 <strong>-85%</strong>로 추락했고, 6달 뒤와 1년 뒤에는 <strong>-100%</strong>를 기록하며 회사가 파산했습니다. </p>
+</li>
+<li><p><strong>Snowflake (2021-12-15)</strong>: 미국 주식 스노우플레이크도 보호예수 해제 직후 복수의 임원이 <strong>약 $800.0M</strong>를 일괄 매도했습니다. 주가는 1달 뒤 <strong>-10%</strong>, 3달 뒤 <strong>-35%</strong>, 6달 뒤 <strong>-55%</strong>, 1년 뒤 <strong>-65%</strong>로 장기적인 하락을 겪었습니다.</p>
+</li>
+</ol>
+<p>위 세 가지 유사 사례의 1년 뒤(D+365) 단순 산술평균 변동률은 <strong>-73.3%</strong>를 기록했습니다. 역사적 평균으로 보았을 때, 경영진의 대규모 매도는 주가에 부정적으로 작용하는 경향이 확인됩니다.</p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>대표이사가 <strong>57억 원</strong>을 현금화했다고 해서 당장 주가가 하락한다는 확정적인 미래를 뜻하는 것은 아닙니다. 개인적인 세금 납부나 자금 융통 등 다른 이유가 있을 수도 있습니다. </p>
+<p>하지만 과거 비슷한 사례들의 1년 뒤 평균 변동률이 <strong>-73.3%</strong>였다는 통계는 리스크 관리 차원에서 유의미한 지표입니다. </p>
+<p>맹목적으로 공포에 질려 주식을 매도할 필요는 없지만, 회사의 수장이 큰돈을 빼낸 현시점에서는 섣부른 추가 투자를 경계하고 보수적으로 시장을 관망하는 방어적인 접근을 고려해 볼 수 있습니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 카카오 (035720)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">임원 다수 (대표이사 포함) / 핀테크 자회사 상장 직후 · 2021-12-15 · 약 $90.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-22.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-38.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+        </div>
+        <p class="case-narrative">자회사 상장 직후 본사 임원 매도. 한국 시장에서 '쪼개기 상장' 디스카운트의 대표 사례.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2021-12) · 회사 후속: 플랫폼 규제 강화 + 자회사 쪼개기 상장 비판, 시총 절반 이하로 축소</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Snowflake (SNOW)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">복수 임원 / 락업 해제 후 일괄 매도 · 2021-12-15 · 약 $800.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-10.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-35.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-65.0%</span></span>
+        </div>
+        <p class="case-narrative">IPO 락업 해제 직후 다수 임원이 매도하면 통상 6~12개월 -30% 이상 디레이팅이 동반.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-12) · 회사 후속: 고밸류에이션 SaaS 디레이팅, 영업 유지되나 주가는 장기 횡보</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 엘티씨 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=170920">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <WhaleFollow ticker="170920" tickerName="엘티씨" />
+
+      <TradeCTA
+        ticker="170920"
+        name="엘티씨"
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-170920-2026-05-29" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

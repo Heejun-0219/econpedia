@@ -1,0 +1,271 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
+
+const title = "🚨 대주주의 773억 원 규모 장내 매도 분석";
+const date = "2026-05-29";
+const description = "폴라리스오피스가 폴라리스세원 주식 773억 원어치를 장내 매도했습니다. 과거 유사 사례의 1년 뒤 주가 변동률과 함께 내 지갑을 지키는 대응 가이드를 확인하세요.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇰🇷 폴라리스세원</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇰🇷 폴라리스세원 (234100)</h3>
+        <p><strong>매매자:</strong> 폴라리스오피스</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+            🔴 장내 매도 (Sell)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $53.30M <span style="opacity:.85">(약 773억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 21,002,554주 · ₩3,680</p>
+        <p><strong>출처:</strong> DART 지분공시</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-12-01","y":5455},{"x":"2025-12-02","y":5535},{"x":"2025-12-03","y":5575},{"x":"2025-12-04","y":5605},{"x":"2025-12-05","y":5700},{"x":"2025-12-08","y":5700},{"x":"2025-12-09","y":5610},{"x":"2025-12-10","y":5570},{"x":"2025-12-11","y":5600},{"x":"2025-12-12","y":5635},{"x":"2025-12-15","y":5515},{"x":"2025-12-16","y":5400},{"x":"2025-12-17","y":5430},{"x":"2025-12-18","y":5305},{"x":"2025-12-19","y":5355},{"x":"2025-12-22","y":5450},{"x":"2025-12-23","y":5305},{"x":"2025-12-24","y":5280},{"x":"2025-12-26","y":5185},{"x":"2025-12-29","y":5210},{"x":"2025-12-30","y":5245},{"x":"2026-01-02","y":5375},{"x":"2026-01-05","y":5355},{"x":"2026-01-06","y":5325},{"x":"2026-01-07","y":6920},{"x":"2026-01-08","y":6670},{"x":"2026-01-09","y":6395},{"x":"2026-01-12","y":6435},{"x":"2026-01-13","y":6875},{"x":"2026-01-14","y":6350},{"x":"2026-01-15","y":6410},{"x":"2026-01-16","y":6135},{"x":"2026-01-19","y":6550},{"x":"2026-01-20","y":6470},{"x":"2026-01-21","y":6405},{"x":"2026-01-22","y":6360},{"x":"2026-01-23","y":6325},{"x":"2026-01-26","y":6325},{"x":"2026-01-27","y":6270},{"x":"2026-01-28","y":6230},{"x":"2026-01-29","y":6295},{"x":"2026-01-30","y":6100},{"x":"2026-02-02","y":5955},{"x":"2026-02-03","y":6175},{"x":"2026-02-04","y":6195},{"x":"2026-02-05","y":6005},{"x":"2026-02-06","y":5860},{"x":"2026-02-09","y":5955},{"x":"2026-02-10","y":5960},{"x":"2026-02-11","y":5970},{"x":"2026-02-12","y":6020},{"x":"2026-02-13","y":5855},{"x":"2026-02-19","y":5945},{"x":"2026-02-20","y":5935},{"x":"2026-02-23","y":6030},{"x":"2026-02-24","y":5985},{"x":"2026-02-25","y":5990},{"x":"2026-02-26","y":5800},{"x":"2026-02-27","y":5660},{"x":"2026-03-03","y":5385},{"x":"2026-03-04","y":4690},{"x":"2026-03-05","y":5135},{"x":"2026-03-06","y":5140},{"x":"2026-03-09","y":4785},{"x":"2026-03-10","y":5000},{"x":"2026-03-11","y":4985},{"x":"2026-03-12","y":5280},{"x":"2026-03-13","y":5745},{"x":"2026-03-16","y":5355},{"x":"2026-03-17","y":5290},{"x":"2026-03-18","y":5280},{"x":"2026-03-19","y":5145},{"x":"2026-03-20","y":5255},{"x":"2026-03-23","y":5030},{"x":"2026-03-24","y":5310},{"x":"2026-03-25","y":5315},{"x":"2026-03-26","y":5260},{"x":"2026-03-27","y":5215},{"x":"2026-03-30","y":5110},{"x":"2026-03-31","y":5035},{"x":"2026-04-01","y":5155},{"x":"2026-04-02","y":5000},{"x":"2026-04-03","y":5045},{"x":"2026-04-06","y":4995},{"x":"2026-04-07","y":5020},{"x":"2026-04-08","y":5115},{"x":"2026-04-09","y":5055},{"x":"2026-04-10","y":5245},{"x":"2026-04-13","y":5155},{"x":"2026-04-14","y":5240},{"x":"2026-04-15","y":5290},{"x":"2026-04-16","y":5370},{"x":"2026-04-17","y":5385},{"x":"2026-04-20","y":5305},{"x":"2026-04-21","y":5275},{"x":"2026-04-22","y":5245},{"x":"2026-04-23","y":5160},{"x":"2026-04-24","y":5105},{"x":"2026-04-27","y":4970},{"x":"2026-04-28","y":5100},{"x":"2026-04-29","y":5100},{"x":"2026-04-30","y":5100},{"x":"2026-05-04","y":5100},{"x":"2026-05-06","y":5100},{"x":"2026-05-07","y":5100},{"x":"2026-05-08","y":5100},{"x":"2026-05-11","y":5100},{"x":"2026-05-12","y":5100},{"x":"2026-05-13","y":5100},{"x":"2026-05-14","y":5100},{"x":"2026-05-15","y":5100},{"x":"2026-05-18","y":5100},{"x":"2026-05-19","y":5100},{"x":"2026-05-20","y":5100},{"x":"2026-05-21","y":5100},{"x":"2026-05-22","y":5100},{"x":"2026-05-26","y":4340},{"x":"2026-05-27","y":4020},{"x":"2026-05-28","y":3960},{"x":"2026-05-29","y":3680}]' transactionDate='2026-05-29' isBuy={false} ticker='234100' currency='KRW' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 3680.00 (2026-05-29) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <p>한국 주식시장에서 대규모 내부자 거래가 포착되었습니다. 이번 거래가 시장에 미칠 영향을 분석합니다.</p>
+<h2>📋 거래 브리핑</h2>
+<ul>
+<li><strong>누가 팔았나:</strong> 폴라리스오피스 (폴라리스세원의 핵심 관계사/대주주격)</li>
+<li><strong>얼마나 팔았나:</strong> <strong>$53.30M (약 773억 원)</strong> · <strong>21,002,554주</strong> 처분</li>
+<li><strong>어떻게 팔았나:</strong> 장내 매도</li>
+</ul>
+<p>폴라리스오피스가 폴라리스세원의 주식 <strong>21,002,554주</strong>를 주당 <strong>3,680원</strong>에 장내 매도했습니다. </p>
+<p>기업의 대주주가 대규모 물량을 장내에서 매도하는 것은 시장에서 주의 깊게 지켜봐야 할 시그널로 해석될 수 있습니다.</p>
+<h2>🔍 매도 배경 분석</h2>
+<p>2026년 5월 29일 공시된 거래로, 기준일 종가는 <strong>3,680원</strong>입니다. </p>
+<p>대주주의 대규모 장내 매도는 현금 확보나 이익 실현 등 다양한 목적이 있을 수 있습니다. 다만 <strong>2,100만 주</strong> 이상의 물량이 시장에 출회되었다는 점은 단기적으로 주가 상승에 부담으로 작용할 가능성이 있습니다.</p>
+<h2>📊 유사 사례 분석</h2>
+<p>과거 대규모 내부자 매도가 발생했던 유사 사례의 주가 추이를 살펴봅니다. 
+<em>(아래 후행 변동률은 시장 평균 수익률을 보정하지 않은 단순 주가 등락률입니다.)</em></p>
+<p><strong>1. 카카오 (2021년 12월 15일) | 핀테크 자회사 상장 직후 임원진 매도</strong></p>
+<ul>
+<li><strong>매도 규모:</strong> 약 <strong>$90.0M</strong></li>
+<li><strong>주가 변화:</strong> D+30일 -8% ➡️ D+90일 -22% ➡️ D+180일 -38% ➡️ <strong>D+365일 -55%</strong></li>
+<li><strong>결과:</strong> 자회사 상장 직후 본사 임원들이 주식을 대거 매도하며 논란이 발생했고, 이후 플랫폼 규제가 겹치며 시가총액이 크게 하락했습니다.</li>
+</ul>
+<p><strong>2. 엔론 (Enron, 2001년 8월 14일) | CEO 및 회장 대규모 매도</strong></p>
+<ul>
+<li><strong>매도 규모:</strong> 약 <strong>$70.0M</strong></li>
+<li><strong>주가 변화:</strong> D+30일 -27% ➡️ D+90일 -85% ➡️ D+180일 -100% ➡️ <strong>D+365일 -100%</strong></li>
+<li><strong>결과:</strong> 내부자 매도가 회사 위기의 선행지표가 된 사례입니다. 매도 몇 달 후 회계부정이 폭로되며 파산에 이르렀습니다.</li>
+</ul>
+<p><strong>3. 스노우플레이크 (Snowflake, 2021년 12월 15일) | 락업 해제 후 임원진 일괄 매도</strong></p>
+<ul>
+<li><strong>매도 규모:</strong> 약 <strong>$800.0M</strong></li>
+<li><strong>주가 변화:</strong> D+30일 -10% ➡️ D+90일 -35% ➡️ D+180일 -55% ➡️ <strong>D+365일 -65%</strong></li>
+<li><strong>결과:</strong> 영업은 유지되었으나 기업가치 하락(디레이팅)이 발생하며 장기 횡보했습니다.</li>
+</ul>
+<p>위 3가지 유사 사례의 1년 뒤(D+365) 평균 변동률은 <strong>-73.3%</strong>를 기록했습니다. 과거 데이터에 따르면 대규모 내부자 매도 이후 장기적인 주가 흐름은 부정적인 경향을 보였습니다.</p>
+<h2>💰 투자 시사점</h2>
+<p>대규모 내부자 매도는 통계적으로 주가 하락 시그널로 작용하는 경우가 많았습니다. 회사 내부 사정에 밝은 대주주의 매도는 투자 심리에 부정적인 영향을 미칠 수 있습니다. </p>
+<p>과거의 통계가 미래를 확정하는 것은 아니지만, 대규모 물량 출회에 따른 오버행(잠재적 매도 물량) 이슈가 해소될 때까지는 보수적인 접근이 요구됩니다. </p>
+<p>무리한 매수보다는 시장 상황을 관망하며 리스크 관리에 유의하는 것이 바람직합니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 카카오 (035720)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">임원 다수 (대표이사 포함) / 핀테크 자회사 상장 직후 · 2021-12-15 · 약 $90.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-22.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-38.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+        </div>
+        <p class="case-narrative">자회사 상장 직후 본사 임원 매도. 한국 시장에서 '쪼개기 상장' 디스카운트의 대표 사례.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2021-12) · 회사 후속: 플랫폼 규제 강화 + 자회사 쪼개기 상장 비판, 시총 절반 이하로 축소</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Enron (ENE)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">Jeffrey Skilling / Kenneth Lay (CEO/Chairman) · 2001-08-14 · 약 $70.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-27.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-85.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 사임 발표와 동시에 대규모 매도. 내부자 매도가 회사 위기 선행지표가 된 대표 사례.</p>
+        <p class="case-source">📎 SEC Form 4 / DOJ 공소장 · 회사 후속: 2001-12 파산. 회계부정 폭로.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Snowflake (SNOW)</strong>
+          <span style="background:rgba(239,68,68,.15);color:#ef4444;padding:2px 8px;border-radius:4px;font-weight:700">매도</span>
+        </div>
+        <div class="case-meta">복수 임원 / 락업 해제 후 일괄 매도 · 2021-12-15 · 약 $800.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-10.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-35.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-55.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-65.0%</span></span>
+        </div>
+        <p class="case-narrative">IPO 락업 해제 직후 다수 임원이 매도하면 통상 6~12개월 -30% 이상 디레이팅이 동반.</p>
+        <p class="case-source">📎 SEC Form 4 (2021-12) · 회사 후속: 고밸류에이션 SaaS 디레이팅, 영업 유지되나 주가는 장기 횡보</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 폴라리스세원 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=234100">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <WhaleFollow ticker="234100" tickerName="폴라리스세원" />
+
+      <TradeCTA
+        ticker="234100"
+        name="폴라리스세원"
+        isPositive={false}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-234100-2026-05-29" isBuy={false} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
