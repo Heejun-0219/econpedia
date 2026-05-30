@@ -1,5 +1,33 @@
 [
   {
+    "slug": "whale-sym-2026-05-30",
+    "title": "물류 로봇주 심보틱(SYM), 대주주 소프트뱅크 4,086억 원 규모 매도",
+    "excerpt": "소프트뱅크가 심보틱(SYM) 주식 4천억 원어치를 매도했습니다. 내 계좌에 미칠 영향과 과거 유사 사례의 1년 뒤 주가 성적표를 확인하세요.",
+    "date": "2026-05-30",
+    "ticker": "SYM",
+    "companyName": "Symbotic Inc.",
+    "category": "insider",
+    "market": "us",
+    "isBuy": false,
+    "person": "SOFTBANK GROUP CORP. / 10%+ Shareholder",
+    "amount": "$281.82M (약 4,086억 원)",
+    "significance": 70
+  },
+  {
+    "slug": "whale-slmt-2026-05-30",
+    "title": "브레라 홀딩스(SLMT) CEO의 83억 원 쇼핑, 내 지갑엔 어떤 의미일까?",
+    "excerpt": "SLMT CEO의 83억 원 자사주 매수! 과거 유사 사례의 수익률과 내 투자금 1천만 원에 미치는 영향을 알기 쉽게 분석합니다.",
+    "date": "2026-05-30",
+    "ticker": "SLMT",
+    "companyName": "Brera Holdings PLC",
+    "category": "insider",
+    "market": "us",
+    "isBuy": true,
+    "person": "Sade Ron / Chief Executive Officer",
+    "amount": "$5.71M (약 83억 원)",
+    "significance": 80
+  },
+  {
     "slug": "whale-170920-2026-05-29",
     "title": "엘티씨 대표이사의 57억 원어치 현금화, 내 계좌엔 어떤 신호일까?",
     "excerpt": "엘티씨 대표이사의 57억 원 장내 매도. 과거 유사 사례의 1년 뒤 평균 변동률은 -73.3%였습니다. 이 거래에 담긴 내 지갑의 핵심 시그널을 확인하세요.",
@@ -29,8 +57,8 @@
   },
   {
     "slug": "whale-011300-2026-05-29",
-    "title": "우성머티리얼스 대표의 613만 원 매수 분석",
-    "excerpt": "우성머티리얼스 대표이사의 613만 원 자사주 매수, 내 지갑을 열어도 될 신호일까요? 과거 유사 사례의 실제 성적표와 함께 냉철하게 분석해 드립니다.",
+    "title": "우성머티리얼스 대표이사, 직장인 한 달 월급으로 자사주 샀다… 내 지갑엔 무슨 의미?",
+    "excerpt": "우성머티리얼스 임종찬 대표가 613만 원어치 자사주를 매수했습니다. 이 거래가 내 지갑에 주는 진짜 시그널과 과거 유사 사례를 확인하세요.",
     "date": "2026-05-29",
     "ticker": "011300",
     "companyName": "우성머티리얼스",

@@ -123,7 +123,6 @@ export const CATEGORIES = {
         readingTime: '7분',
         date: '2026.04.01',
         href: '/economy/global/strong-dollar-impact',
-        comingSoon: true,
       },
     ],
   },

@@ -1,0 +1,261 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TradeCTA from '../../components/TradeCTA.astro';
+import TimeAttackLounge from '../../components/TimeAttackLounge.astro';
+import WhaleChart from '../../components/WhaleChart.astro';
+import WhaleFollow from '../../components/WhaleFollow.astro';
+
+const title = "브레라 홀딩스(SLMT) CEO의 83억 원 쇼핑, 내 지갑엔 어떤 의미일까?";
+const date = "2026-05-30";
+const description = "SLMT CEO의 83억 원 자사주 매수! 과거 유사 사례의 수익률과 내 투자금 1천만 원에 미치는 영향을 알기 쉽게 분석합니다.";
+---
+
+<BaseLayout title={title} description={description} article={true}>
+  <div class="article-layout">
+    <div class="article-header">
+      <a href="/whale" class="article-header__category">🐋 Whale Alert</a>
+      <h1 class="article-header__title">{title}</h1>
+      <div class="article-header__meta">
+        <time datetime={date}>{date}</time>
+        <span>•</span>
+        <span>EconPedia AI · 이코노</span>
+        <span>•</span>
+        <span>🇺🇸 Brera Holdings PLC</span>
+      </div>
+    </div>
+
+    <div class="article-content portfolio-content">
+      <div class="investor-profile-card">
+        <h3>🇺🇸 Brera Holdings PLC (SLMT)</h3>
+        <p><strong>매매자:</strong> Sade Ron / Chief Executive Officer</p>
+        <p>
+          <strong>거래 방향:</strong>
+          <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: 700; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+            🟢 장내 매수 (Buy)
+          </span>
+        </p>
+        <p><strong>거래 총액:</strong> $5.71M <span style="opacity:.85">(약 83억 원)</span></p>
+        <p><strong>수량 · 단가:</strong> 1,149,000주 · $4.97</p>
+        <p><strong>출처:</strong> SEC Form 4 · Services-Amusement & Recreation Services</p>
+      </div>
+
+      <WhaleChart chartData='[{"x":"2025-12-01","y":21.5},{"x":"2025-12-02","y":22.1},{"x":"2025-12-03","y":23.6},{"x":"2025-12-04","y":25.7},{"x":"2025-12-05","y":23.15},{"x":"2025-12-08","y":23.9},{"x":"2025-12-09","y":25.4},{"x":"2025-12-10","y":24.3},{"x":"2025-12-11","y":23.3},{"x":"2025-12-12","y":22.2},{"x":"2025-12-15","y":21.8},{"x":"2025-12-16","y":23.8},{"x":"2025-12-17","y":23.7},{"x":"2025-12-18","y":23.9},{"x":"2025-12-19","y":22.9},{"x":"2025-12-22","y":21.6},{"x":"2025-12-23","y":20.8},{"x":"2025-12-24","y":20.6},{"x":"2025-12-26","y":21},{"x":"2025-12-29","y":17.5},{"x":"2025-12-30","y":17.8},{"x":"2025-12-31","y":18.7},{"x":"2026-01-02","y":20},{"x":"2026-01-05","y":21.4},{"x":"2026-01-06","y":21.5},{"x":"2026-01-07","y":20.5},{"x":"2026-01-08","y":20.5},{"x":"2026-01-09","y":20.7},{"x":"2026-01-12","y":21.1},{"x":"2026-01-13","y":20.6},{"x":"2026-01-14","y":20.6},{"x":"2026-01-15","y":19.7},{"x":"2026-01-16","y":19.7},{"x":"2026-01-20","y":17.4},{"x":"2026-01-21","y":17.1},{"x":"2026-01-22","y":15.85},{"x":"2026-01-23","y":19.7},{"x":"2026-01-26","y":17.2},{"x":"2026-01-27","y":17.1},{"x":"2026-01-28","y":15.35},{"x":"2026-01-29","y":14.2},{"x":"2026-01-30","y":13.8},{"x":"2026-02-02","y":13.6},{"x":"2026-02-03","y":13.8},{"x":"2026-02-04","y":12.2},{"x":"2026-02-05","y":10.2},{"x":"2026-02-06","y":11.6},{"x":"2026-02-09","y":12.8},{"x":"2026-02-10","y":12.6},{"x":"2026-02-11","y":11.7},{"x":"2026-02-12","y":10.7},{"x":"2026-02-13","y":11.3},{"x":"2026-02-17","y":11},{"x":"2026-02-18","y":12},{"x":"2026-02-19","y":10.7},{"x":"2026-02-20","y":10.8},{"x":"2026-02-23","y":10},{"x":"2026-02-24","y":10.6},{"x":"2026-02-25","y":11.2},{"x":"2026-02-26","y":11.1},{"x":"2026-02-27","y":10.5},{"x":"2026-03-02","y":11.4},{"x":"2026-03-03","y":11},{"x":"2026-03-04","y":13.8},{"x":"2026-03-05","y":12.6},{"x":"2026-03-06","y":10.95},{"x":"2026-03-09","y":11.6},{"x":"2026-03-10","y":11},{"x":"2026-03-11","y":9.9},{"x":"2026-03-12","y":9.01},{"x":"2026-03-13","y":9.39},{"x":"2026-03-16","y":9.61},{"x":"2026-03-17","y":9.7},{"x":"2026-03-18","y":8.82},{"x":"2026-03-19","y":7.9},{"x":"2026-03-20","y":7.79},{"x":"2026-03-23","y":8.83},{"x":"2026-03-24","y":8.52},{"x":"2026-03-25","y":8.66},{"x":"2026-03-26","y":8.19},{"x":"2026-03-27","y":7.52},{"x":"2026-03-30","y":6.88},{"x":"2026-03-31","y":7.84},{"x":"2026-04-01","y":7.84},{"x":"2026-04-02","y":8.41},{"x":"2026-04-06","y":8.62},{"x":"2026-04-07","y":8.26},{"x":"2026-04-08","y":8.3},{"x":"2026-04-09","y":7.75},{"x":"2026-04-10","y":7.81},{"x":"2026-04-13","y":8.16},{"x":"2026-04-14","y":8.4},{"x":"2026-04-15","y":8.6},{"x":"2026-04-16","y":8.39},{"x":"2026-04-17","y":9.41},{"x":"2026-04-20","y":9.31},{"x":"2026-04-21","y":8.16},{"x":"2026-04-22","y":8.1},{"x":"2026-04-23","y":6.8},{"x":"2026-04-24","y":6.72},{"x":"2026-04-27","y":7.67},{"x":"2026-04-28","y":7.5},{"x":"2026-04-29","y":7.26},{"x":"2026-04-30","y":7.62},{"x":"2026-05-01","y":7.77},{"x":"2026-05-04","y":7.76},{"x":"2026-05-05","y":7.27},{"x":"2026-05-06","y":6.9},{"x":"2026-05-07","y":6.6},{"x":"2026-05-08","y":6.45},{"x":"2026-05-11","y":6.48},{"x":"2026-05-12","y":6.09},{"x":"2026-05-13","y":5.59},{"x":"2026-05-14","y":6.13},{"x":"2026-05-15","y":5.6},{"x":"2026-05-18","y":4.82},{"x":"2026-05-19","y":4.5},{"x":"2026-05-20","y":4.83},{"x":"2026-05-21","y":5.69},{"x":"2026-05-22","y":6.01},{"x":"2026-05-26","y":6.17},{"x":"2026-05-27","y":6.41},{"x":"2026-05-28","y":6.14},{"x":"2026-05-29","y":5.77}]' transactionDate='2026-05-30' isBuy={true} ticker='SLMT' currency='USD' />
+
+      
+    <div class="followup-card">
+      <h4>🎯 이 거래 이후 주가 (단순 변동률, 시장 평균 미보정)</h4>
+      <div class="followup-grid">
+    <div class="followup-cell">
+      <div class="followup-label">D+30</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+90</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+180</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  
+    <div class="followup-cell">
+      <div class="followup-label">D+365</div>
+      <div class="followup-pct"><span style="opacity:.5">미도래</span></div>
+      <div class="followup-date"></div>
+    </div>
+  </div>
+      <p class="followup-caption">기준일 종가 5.77 (2026-05-29) 대비. 미도래 구간은 향후 자동 백필됩니다.</p>
+    </div>
+
+      <h2>📋 거래 브리핑</h2>
+<p>고환율 속에서도 자기 회사 주식에 무려 <strong>83억 원($5.71M)</strong>을 베팅한 사람이 있습니다. </p>
+<p>엔터테인먼트 및 레크리에이션 서비스 기업인 <strong>브레라 홀딩스(Brera Holdings PLC, SLMT)</strong>의 최고경영자(CEO)인 사데 론(Sade Ron)이 그 주인공입니다. </p>
+<p><strong>2026년 5월 30일</strong> 공시에 따르면, 그는 자발적으로 장내에서 <strong>1,149,000주</strong>를 주당 <strong>$4.97</strong>에 매수했습니다. </p>
+<p>회사의 사정을 가장 잘 아는 CEO가 거액을 들여 주식을 샀다는 것은 긍정적인 시그널로 해석될 수 있습니다.</p>
+<h2>🔍 왜 지금일까?</h2>
+<p>CEO가 주식을 샀다는 소식은 보통 바닥 확인이나 향후 호재에 대한 자신감으로 해석됩니다. </p>
+<p>흥미로운 점은 CEO가 매수한 단가는 <strong>$4.97</strong>인데, 공시 전날인 <strong>5월 29일</strong> 기준 종가는 <strong>5.769999980926514달러</strong>였다는 것입니다. </p>
+<p>즉, 시장 가격이 CEO의 매수 단가보다 이미 높은 상태에 형성되어 있습니다. </p>
+<p>이번 거래는 오늘(<strong>2026년 5월 30일</strong>) 막 공시되었기 때문에, 한 달 뒤(D+30)나 1년 뒤(D+365)의 후행 주가는 아직 미도래 상태입니다. </p>
+<h2>📊 비슷한 사례, 그 후 어떻게 됐나</h2>
+<p>과거에 CEO나 오너 일가가 거액의 자사주를 샀을 때 주가는 어떻게 움직였을까요? </p>
+<p>첫 번째 사례는 <strong>2008년 4월 15일</strong>, <strong>리먼 브라더스(LEH)</strong>의 딕 풀드 CEO가 약 <strong>$3.0M</strong>을 매수한 경우입니다. </p>
+<p>CEO의 매수에도 불구하고 주가는 <strong>D+30일에 -8%</strong>, <strong>D+90일에 -45%</strong>, <strong>D+180일과 D+365일에 각각 -100%</strong>를 기록했습니다. </p>
+<p>결국 회사는 파산했고, 보통주 가치는 0원이 되었습니다. CEO 매수가 항상 바닥 시그널은 아님을 보여주는 가장 유명한 반례입니다.</p>
+<p>두 번째는 <strong>2016년 2월 11일</strong>, <strong>JP모건 체이스(JPM)</strong>의 제이미 다이먼 CEO가 약 <strong>$26.6M</strong>을 매수한 사례입니다. </p>
+<p>시장 패닉기에 사재를 털어 매수한 결과, 주가는 <strong>D+30일에 12.5%</strong>, <strong>D+90일에 21%</strong>, <strong>D+180일에 25%</strong>, <strong>D+365일에 75%</strong> 상승했습니다. </p>
+<p>세 번째는 한국의 <strong>두산에너빌리티(034020)</strong>입니다. </p>
+<p><strong>2022년 9월 30일</strong>, 박정원 회장 등 오너 일가가 약 <strong>$15.0M</strong>을 매수했습니다. </p>
+<p>사업 턴어라운드와 맞물려 주가는 <strong>D+30일에 5%</strong>, <strong>D+90일에 18%</strong>, <strong>D+180일에 35%</strong>, <strong>D+365일에 70%</strong> 올랐습니다. </p>
+<p>이 3건의 유사 사례에서 1년 뒤(D+365) 단순 산술평균 변동률은 <strong>15%</strong>였습니다. </p>
+<h2>💰 내 지갑에 주는 시그널</h2>
+<p>과거 사례의 평균 수익률이 <strong>15%</strong>라고 해서 맹목적으로 따라 사는 것은 금물입니다. </p>
+<p>리먼 브라더스의 사례처럼 투자금이 0원이 될 위험도 분명히 존재하기 때문입니다. </p>
+<p>역사적 평균은 긍정적일 수 있어도, 개별 기업의 운명은 다를 수 있습니다.</p>
+<p>CEO의 거액 매수는 투자 리스트에 올릴 관심 종목을 발견하는 힌트 정도로 활용하는 것이 좋습니다. </p>
+<p>브레라 홀딩스(SLMT)의 CEO가 <strong>83억 원</strong>을 투자한 이유가 무엇일지, 엔터테인먼트 시장에서 어떤 돌파구를 찾고 있는지 가볍게 검색해 보는 것을 권장합니다. </p>
+<p>오늘은 일단 시장의 흐름을 관망하며, 평화롭게 투자 예산을 점검해 보는 하루를 보내시길 바랍니다.</p>
+
+
+      
+    <h2 id="similar-cases">📊 비슷한 업종, 비슷한 규모 — 그 후 어떻게 됐나</h2>
+    <p style="opacity:.85;font-size:.95em">아래는 EconPedia가 사전 큐레이션한 공개 사례 중 본 거래와 섹터·방향·규모가 가장 유사한 케이스입니다. <strong>모든 변동률은 단순 raw 종가 변동률(시장 평균 미보정)이며, 큐레이션 추정치라 단가 1자리 단위에서 오차가 있을 수 있습니다.</strong> 정확한 수치는 각 카드 하단 출처(SEC Form 4 / DART 공시)에서 직접 검증하세요.</p>
+    <div class="similar-cases">
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 Lehman Brothers (LEH)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Dick Fuld (CEO) · 2008-04-15 · 약 $3.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#ef4444;font-weight:700">-8.0%</span></span>
+          <span>D+90 <span style="color:#ef4444;font-weight:700">-45.0%</span></span>
+          <span>D+180 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+          <span>D+365 <span style="color:#ef4444;font-weight:700">-100.0%</span></span>
+        </div>
+        <p class="case-narrative">CEO 자사주 매수가 항상 '바닥 시그널'은 아님을 보여주는 가장 유명한 반례.</p>
+        <p class="case-source">📎 SEC Form 4 / 공공 파산 기록 · 회사 후속: 2008-09 챕터 11 파산보호 신청. 보통주 가치 사실상 0.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇺🇸 JPMorgan Chase (JPM)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">Jamie Dimon (CEO) · 2016-02-11 · 약 $26.6M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+12.5%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+21.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+25.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+75.0%</span></span>
+        </div>
+        <p class="case-narrative">시장 패닉기에 CEO가 사재 출연으로 직접 매수. 단기 시장 바닥 시그널로 회자됨.</p>
+        <p class="case-source">📎 SEC Form 4 (2016-02-11) · 회사 후속: 지속 영업, 시가총액 사상최고치 갱신</p>
+      </div>
+      <div class="case-card">
+        <div class="case-head">
+          <strong>🇰🇷 두산에너빌리티 (034020)</strong>
+          <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:4px;font-weight:700">매수</span>
+        </div>
+        <div class="case-meta">박정원 회장 외 친족 / 그룹 오너 일가 · 2022-09-30 · 약 $15.0M</div>
+        <div class="case-outcome">
+          <span>D+30 <span style="color:#10b981;font-weight:700">+5.0%</span></span>
+          <span>D+90 <span style="color:#10b981;font-weight:700">+18.0%</span></span>
+          <span>D+180 <span style="color:#10b981;font-weight:700">+35.0%</span></span>
+          <span>D+365 <span style="color:#10b981;font-weight:700">+70.0%</span></span>
+        </div>
+        <p class="case-narrative">사업구조 턴어라운드 국면에서 오너 일가 매수. 원전 수주 기대와 맞물려 24개월 상승 추세.</p>
+        <p class="case-source">📎 DART 임원·주요주주 보고서 (2022-09) · 회사 후속: 원전 수주 확대, 영업이익 흑전, 그룹 재무구조 개선</p>
+      </div></div>
+
+      <div class="whale-wallet-cta">
+        <div class="wallet-cta-text">
+          <h3>📲 Brera Holdings PLC 다음 신호 알림 받기</h3>
+          <p>이 종목의 다음 내부자 거래·공시를 Telegram으로 즉시 받아보세요. 지갑 연동 30초, 무료.</p>
+        </div>
+        <a class="wallet-cta-btn" href="/wallet?utm_source=whale&utm_medium=cta&utm_campaign=wallet_signup&ticker=SLMT">
+          내 지갑에 추가 →
+        </a>
+      </div>
+
+      <WhaleFollow ticker="SLMT" tickerName="Brera Holdings PLC" />
+
+      <TradeCTA
+        ticker="SLMT"
+        name="Brera Holdings PLC"
+        isPositive={true}
+        isin=""
+      />
+
+      <TimeAttackLounge signalId="whale-slmt-2026-05-30" isBuy={true} />
+
+      <div class="ai-disclaimer">
+        <strong>⚠️ 투자 주의사항</strong>
+        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+.investor-profile-card {
+  background: var(--color-surface-hover);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--color-accent-primary);
+}
+.investor-profile-card h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.investor-profile-card p { margin: 0.35rem 0; font-size: 0.95em; opacity: 0.9; }
+.ai-disclaimer {
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9em;
+}
+.ai-disclaimer strong { color: #ca8a04; display: block; margin-bottom: 0.4rem; }
+.whale-wallet-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(56,189,248,.10));
+  border: 1px solid rgba(16,185,129,.35); border-radius: 14px;
+  padding: 1.25rem 1.5rem; margin: 2rem 0;
+}
+.whale-wallet-cta .wallet-cta-text { flex: 1; }
+.whale-wallet-cta h3 { margin: 0 0 .35rem; font-size: 1.05rem; }
+.whale-wallet-cta p { margin: 0; font-size: .9em; opacity: .85; }
+.whale-wallet-cta .wallet-cta-btn {
+  display: inline-block; padding: .75rem 1.25rem; border-radius: 10px;
+  background: #10b981; color: #fff; font-weight: 700; text-decoration: none;
+  white-space: nowrap; transition: transform .15s, box-shadow .15s;
+}
+.whale-wallet-cta .wallet-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16,185,129,.35); }
+@media (max-width: 640px) {
+  .whale-wallet-cta { flex-direction: column; align-items: stretch; text-align: center; }
+}
+.ai-disclaimer p { margin: 0; opacity: 0.85; line-height: 1.6; }
+
+.followup-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+.followup-card h4 { margin: 0 0 0.75rem; font-size: 1rem; }
+.followup-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+.followup-cell {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  text-align: center;
+}
+.followup-label { font-size: 0.75rem; opacity: 0.7; }
+.followup-pct { font-size: 1.1rem; margin: 0.25rem 0; }
+.followup-date { font-size: 0.7rem; opacity: 0.55; }
+.followup-caption { font-size: 0.8rem; opacity: 0.7; margin: 0.75rem 0 0; }
+
+.similar-cases { display: grid; gap: 1rem; margin-top: 1rem; }
+.case-card {
+  background: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent-primary);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.case-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; }
+.case-meta { font-size: 0.85rem; opacity: 0.75; margin: 0.25rem 0 0.5rem; }
+.case-outcome { display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 0.5rem; }
+.case-narrative { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; line-height: 1.55; }
+.case-source { margin: 0; font-size: 0.78rem; opacity: 0.6; }
+
+@media (max-width: 640px) {
+  .followup-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
