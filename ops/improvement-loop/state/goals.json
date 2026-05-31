@@ -17,9 +17,9 @@
         "open": ["30명×5거래 D+90 임계: 현재 58명 중 5+거래 0명 → 수개월 데이터 누적 필요(데이터-볼륨 블로커)", "공개 렌더는 자격 insider 발생+컴플라이언스 disclaimer 후"]
       },
       "G3_measurement": {
-        "status": "fail",
-        "done": [],
-        "open": ["dwell/scroll/CTA 무PII 카운터 미구현", "텔레그램 구독자/7일활성 일일기록 미구현", "whale→wallet 퍼널 이벤트 미커버", "kpis.json 대부분 null — 다음 사이클 최우선(G4/G5 선행조건)"]
+        "status": "instrumented",
+        "done": ["무PII GET /api/analytics/summary 라이브(#89) — 7일 pageviews/sessions/avgDwell/bounce 실서빙", "snapshot이 프로덕션 traffic 자동 fetch → kpis.traffic 실측 캡처(2026-05-31: 일평균8·체류27.4s·bounce0.286)", "whale per-path dwell 버킷팅 배포(누적 시작)", "텔레그램 구독자 폴링 snapshot 연결(채널 best-effort)"],
+        "open": ["whale per-page dwell 데이터 누적 대기(배포 직후 0)", "whale→wallet 퍼널 end-to-end 이벤트 커버", "일일 스냅샷 델타를 history에 자동 기록하는 잡", "텔레그램 구독자 실측치(채널ID 확인 필요)"]
       },
       "G4_adoption": { "status": "blocked_by_G3", "open": ["100 활성구독·120s 체류·50 일일뷰 — 측정 부재로 미산정, 실사용자 채택 필요"] },
       "G5_monetization": { "status": "blocked_1way_door", "open": ["유료/광고 첫 이벤트 — 결제·구독 모델은 위임매트릭스 1-way door, 사용자 컨펌 필요"] },
