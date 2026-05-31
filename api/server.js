@@ -24,6 +24,7 @@ async function getBrowser() {
   return _browser;
 }
 import { createClient } from '@supabase/supabase-js';
+import { computeAnalyticsSummary, isWhalePath } from '../scripts/lib/analytics-summary.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -397,20 +398,36 @@ const server = createServer(async (req, res) => {
     if (!stats.analytics.daily[todayStr]) {
       stats.analytics.daily[todayStr] = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0 };
     }
-    
+
     const todayStats = stats.analytics.daily[todayStr];
-    
+    // G3 per-page 측정: whale 섹션 dwell/pageview를 분리 버킷팅 (무PII — 경로 prefix만 사용)
+    const onWhale = isWhalePath(body.path);
+    if (onWhale && !todayStats.whale) todayStats.whale = { pageviews: 0, totalDwell: 0, sessions: 0 };
+
     if (body.type === 'pageview') {
       todayStats.pageviews += 1;
       if (body.isNewSession) todayStats.sessions += 1;
+      if (onWhale) {
+        todayStats.whale.pageviews += 1;
+        if (body.isNewSession) todayStats.whale.sessions += 1;
+      }
     } else if (body.type === 'dwell') {
       const td = typeof body.timeSpent === 'number' && Number.isFinite(body.timeSpent) ? Math.min(Math.max(body.timeSpent, 0), 86400) : 0;
       todayStats.totalDwell += td;
+      if (onWhale) todayStats.whale.totalDwell += td;
     } else if (body.type === 'bounce') {
       todayStats.bounces += 1;
     }
 
     return sendJSON(res, 200, { success: true });
+  }
+
+  // ── GET /api/analytics/summary (무PII 7일 집계 — KPI 스냅샷용) ──────
+  if (req.method === 'GET' && path === '/api/analytics/summary') {
+    if (isAnalyticsRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
+    const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+    const summary = computeAnalyticsSummary(stats.analytics?.daily || {}, todayStr, 7);
+    return sendJSON(res, 200, { success: true, generatedAt: new Date().toISOString(), summary });
   }
 
   // ── GET /api/poll (투표 결과 조회) ────────────────────────────────

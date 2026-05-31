@@ -207,6 +207,31 @@ async function buildSnapshot() {
     }
   } catch {}
 
+  // G3 측정 — 프로덕션 무PII analytics 7일 집계 (econpedia.dedyn.io/api/analytics/summary)
+  let analyticsSummary = null;
+  try {
+    const site = process.env.SITE_URL || 'https://econpedia.dedyn.io';
+    const res = await fetch(`${site}/api/analytics/summary`, { signal: AbortSignal.timeout(8000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.summary) analyticsSummary = data.summary;
+    }
+  } catch {}
+
+  // G3 측정 — 텔레그램 구독자 수 (채널일 때만 getChatMemberCount 유효, best-effort)
+  let telegramSubscribers = kpis.telegram?.subscribers ?? null;
+  try {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHANNEL_ID || process.env.TELEGRAM_CHAT_ID;
+    if (token && chatId) {
+      const res = await fetch(`https://api.telegram.org/bot${token}/getChatMemberCount?chat_id=${encodeURIComponent(chatId)}`, { signal: AbortSignal.timeout(8000) });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.ok && typeof data.result === 'number') telegramSubscribers = data.result;
+      }
+    }
+  } catch {}
+
   // Past synthesis plan (if any) — pick the most recent across all dates
   let latestPlan = null;
   const planPath = await latestHistoryFile('-plan.md');
@@ -236,6 +261,17 @@ async function buildSnapshot() {
       ...kpis,
       content: { ...kpis.content, whale_alert_pages: whalePages },
       engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers, newsletter_subscribers: newsletterSubscribers },
+      traffic: {
+        ...kpis.traffic,
+        ...(analyticsSummary ? {
+          daily_visitors_7d_avg: analyticsSummary.dailyVisitors7dAvg,
+          avg_session_duration_sec: analyticsSummary.avgSessionDurationSec,
+          bounce_rate: analyticsSummary.bounceRate,
+          whale_daily_visitors: analyticsSummary.whale?.dailyVisitors7dAvg ?? kpis.traffic?.whale_daily_visitors ?? null,
+          whale_avg_dwell_sec: analyticsSummary.whale?.avgDwellSec ?? null,
+        } : {}),
+      },
+      telegram: { ...kpis.telegram, subscribers: telegramSubscribers },
       _lastUpdated: new Date().toISOString().slice(0, 10),
     },
     goals,
