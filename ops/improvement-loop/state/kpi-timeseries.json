@@ -1,0 +1,19 @@
+{
+  "_description": "G3 일일 KPI 시계열(무PII). snapshot-delta.js가 매일 append.",
+  "entries": [
+    {
+      "date": "2026-05-31",
+      "capturedAt": "2026-05-31T10:42:41.407Z",
+      "source": "prod_summary",
+      "values": {
+        "daily_visitors_7d_avg": 8,
+        "avg_session_duration_sec": 27.4,
+        "bounce_rate": 0.286,
+        "pageviews_7d": 74,
+        "sessions_7d": 56,
+        "whale_daily_visitors_7d_avg": 0,
+        "whale_avg_dwell_sec": 0
+      }
+    }
+  ]
+}
