@@ -48,16 +48,22 @@ async function fetchQuotes(entry) {
   const period2 = farthest > today ? today : farthest;
   if (period2 <= baseDate) return null;
 
+  let transientError = false;
   for (const sym of yahooSymbolsFor(entry)) {
-    try {
-      const res = await yahooFinance.chart(sym, { period1: baseDate, period2, interval: '1d' });
-      const quotes = (res?.quotes || []).filter((q) => q.close);
-      if (quotes.length) return { symbol: sym, baseDate, quotes };
-    } catch {
-      /* try next symbol */
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const res = await yahooFinance.chart(sym, { period1: baseDate, period2, interval: '1d' });
+        const quotes = (res?.quotes || []).filter((q) => q.close);
+        if (quotes.length) return { symbol: sym, baseDate, quotes };
+        break; // 정상 응답이나 데이터 없음 — 다음 심볼로(재시도 무의미)
+      } catch {
+        transientError = true; // 예외 = 일시 장애 가능성 → 백오프 후 재시도
+        await sleep(300 * (attempt + 1));
+      }
     }
   }
-  return null;
+  // transientError면 기존 good 데이터를 덮어쓰지 않도록 호출부에 신호
+  return transientError ? { transientError: true } : null;
 }
 
 function closestQuote(quotes, targetMs) {
@@ -160,16 +166,24 @@ async function main() {
     }
 
     const fetched = await fetchQuotes(entry);
-    if (!fetched) {
-      followups[entry.slug] = {
-        ...(prev || {}),
-        ticker: entry.ticker,
-        market: entry.market,
-        status: 'no_data',
-        horizons: prev?.horizons || emptyHorizons(),
-        fetchedAt: new Date(nowMs).toISOString(),
-      };
-      console.log(`  ⚠️  ${entry.slug} (${entry.ticker}) — 가격 데이터 없음`);
+    // 일시 장애(transientError) 또는 데이터 없음 → 기존 good('ok'+basePrice) 데이터는 절대 덮어쓰지 않음.
+    if (!fetched || fetched.transientError || !fetched.quotes) {
+      const transient = Boolean(fetched && fetched.transientError);
+      if (prev && prev.status === 'ok' && prev.basePrice != null) {
+        // 기존 good 데이터 보존 — 마지막 시도 실패 마커만 기록
+        followups[entry.slug] = { ...prev, lastFetchFailedAt: new Date(nowMs).toISOString(), lastFetchTransient: transient };
+        console.log(`  ↩️  ${entry.slug} (${entry.ticker}) — ${transient ? '일시장애' : '데이터없음'}, 기존 good 데이터 보존`);
+      } else {
+        followups[entry.slug] = {
+          ...(prev || {}),
+          ticker: entry.ticker,
+          market: entry.market,
+          status: transient ? (prev?.status || 'fetch_error') : 'no_data',
+          horizons: prev?.horizons || emptyHorizons(),
+          fetchedAt: new Date(nowMs).toISOString(),
+        };
+        console.log(`  ⚠️  ${entry.slug} (${entry.ticker}) — ${transient ? '일시장애(이력없음)' : '가격 데이터 없음'}`);
+      }
       await sleep(150);
       continue;
     }
