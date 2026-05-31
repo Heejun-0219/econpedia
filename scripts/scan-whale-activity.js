@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 import YahooFinance from 'yahoo-finance2';
 import { secForm4Url, dartReceiptUrl } from './lib/source-url.js';
+import { pickTransactionDate, dedupKey } from './lib/whale-dedup.js';
 
 dotenv.config();
 
@@ -140,7 +141,8 @@ function parseSecForm4Xml(xml) {
     person: [reporterName, role].filter(Boolean).join(' / '),
     shares: totalShares,
     pricePerShare: avgPrice,
-    totalUsd
+    totalUsd,
+    transactionDate: pickTransactionDate(xml, null) // G1: 거래일(공시일 아님)
   };
 }
 
@@ -260,7 +262,8 @@ async function scanSecForm4(majorCiks) {
         amountKrw: totals.krwStr,
         sicCode: sic?.sicCode || null,
         sector: sic?.sicDescription || null,
-        date: item.fileDate,
+        date: parsed.transactionDate || item.fileDate, // G1: 거래일 우선, 없으면 공시일 fallback
+        filingDate: item.fileDate,
         significance: Math.min(sigScore, 100)
       });
       console.log(`  ✅ ${tickerTag} | ${parsed.person} | ${parsed.direction.toUpperCase()} | ${totals.display} ${isMajor ? '(🌟 MAJOR BONUS)' : ''}`);
@@ -432,10 +435,10 @@ async function main() {
   // 중요도순 정렬
   allSignals.sort((a, b) => b.significance - a.significance);
 
-  // 중복 제거 (같은 종목+같은 날짜)
+  // 중복 제거 (같은 종목+같은 거래일 — filing drift 흡수). date는 이제 거래일(SEC).
   const seen = new Set();
   const unique = allSignals.filter(s => {
-    const key = `${s.ticker}-${s.date}`;
+    const key = dedupKey(s);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
