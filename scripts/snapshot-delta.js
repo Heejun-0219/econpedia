@@ -28,8 +28,12 @@ const METRICS = [
   ['bounce_rate', (s) => s.summary?.bounceRate],
   ['pageviews_7d', (s) => s.summary?.pageviews],
   ['sessions_7d', (s) => s.summary?.sessions],
+  ['avg_scroll_depth_pct', (s) => s.summary?.avgScrollDepthPct],
+  ['cta_clicks_7d', (s) => s.summary?.ctaClicks],
   ['whale_daily_visitors_7d_avg', (s) => s.summary?.whale?.dailyVisitors7dAvg],
   ['whale_avg_dwell_sec', (s) => s.summary?.whale?.avgDwellSec],
+  ['whale_avg_scroll_depth_pct', (s) => s.summary?.whale?.avgScrollDepthPct],
+  ['whale_cta_clicks_7d', (s) => s.summary?.whale?.ctaClicks],
 ];
 
 async function loadJson(p, fb) { try { return JSON.parse(await fs.readFile(p, 'utf8')); } catch { return fb; } }

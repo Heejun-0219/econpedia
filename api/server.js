@@ -417,6 +417,21 @@ const server = createServer(async (req, res) => {
       if (onWhale) todayStats.whale.totalDwell += td;
     } else if (body.type === 'bounce') {
       todayStats.bounces += 1;
+    } else if (body.type === 'scroll') {
+      // G3 스크롤 깊이(0-100%) 누적 → 평균 산출용
+      const depth = typeof body.depth === 'number' && Number.isFinite(body.depth) ? Math.min(Math.max(body.depth, 0), 100) : null;
+      if (depth !== null) {
+        todayStats.scrollDepthSum = (todayStats.scrollDepthSum || 0) + depth;
+        todayStats.scrollSamples = (todayStats.scrollSamples || 0) + 1;
+        if (onWhale) {
+          todayStats.whale.scrollDepthSum = (todayStats.whale.scrollDepthSum || 0) + depth;
+          todayStats.whale.scrollSamples = (todayStats.whale.scrollSamples || 0) + 1;
+        }
+      }
+    } else if (body.type === 'cta_click') {
+      // G3 CTA 클릭 수(무PII — 라벨만)
+      todayStats.ctaClicks = (todayStats.ctaClicks || 0) + 1;
+      if (onWhale) todayStats.whale.ctaClicks = (todayStats.whale.ctaClicks || 0) + 1;
     }
 
     return sendJSON(res, 200, { success: true });

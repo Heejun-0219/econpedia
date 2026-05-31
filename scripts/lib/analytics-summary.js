@@ -22,8 +22,8 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     wanted.add(d.toISOString().slice(0, 10));
   }
 
-  const acc = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0 };
-  const whaleAcc = { pageviews: 0, totalDwell: 0, sessions: 0 };
+  const acc = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
+  const whaleAcc = { pageviews: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
   let daysWithData = 0;
 
   for (const [date, v] of Object.entries(map)) {
@@ -33,10 +33,16 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     acc.bounces += v.bounces || 0;
     acc.totalDwell += v.totalDwell || 0;
     acc.sessions += v.sessions || 0;
+    acc.scrollDepthSum += v.scrollDepthSum || 0;
+    acc.scrollSamples += v.scrollSamples || 0;
+    acc.ctaClicks += v.ctaClicks || 0;
     if (v.whale) {
       whaleAcc.pageviews += v.whale.pageviews || 0;
       whaleAcc.totalDwell += v.whale.totalDwell || 0;
       whaleAcc.sessions += v.whale.sessions || 0;
+      whaleAcc.scrollDepthSum += v.whale.scrollDepthSum || 0;
+      whaleAcc.scrollSamples += v.whale.scrollSamples || 0;
+      whaleAcc.ctaClicks += v.whale.ctaClicks || 0;
     }
   }
 
@@ -48,10 +54,14 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     dailyVisitors7dAvg: round(acc.sessions / days),
     avgSessionDurationSec: acc.sessions > 0 ? round(acc.totalDwell / acc.sessions) : 0,
     bounceRate: acc.sessions > 0 ? round(acc.bounces / acc.sessions, 3) : 0,
+    avgScrollDepthPct: acc.scrollSamples > 0 ? round(acc.scrollDepthSum / acc.scrollSamples) : 0,
+    ctaClicks: acc.ctaClicks,
     whale: {
       pageviews: whaleAcc.pageviews,
       dailyVisitors7dAvg: round(whaleAcc.sessions / days),
       avgDwellSec: whaleAcc.sessions > 0 ? round(whaleAcc.totalDwell / whaleAcc.sessions) : 0,
+      avgScrollDepthPct: whaleAcc.scrollSamples > 0 ? round(whaleAcc.scrollDepthSum / whaleAcc.scrollSamples) : 0,
+      ctaClicks: whaleAcc.ctaClicks,
     },
   };
 }
