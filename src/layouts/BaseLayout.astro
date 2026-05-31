@@ -5,10 +5,17 @@ export interface Props {
   ogImage?: string;
   article?: boolean;
   hideSubHub?: boolean;
+  noindex?: boolean;
 }
 
-const { title, description, ogImage = '/og-default.png', article = false, hideSubHub = false } = Astro.props;
+const { title, description, ogImage = '/og-default.png', article = false, hideSubHub = false, noindex: noindexProp = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// W1 pivot(2026-05-31): Whale 단일 제품 집중. legacy generic 콘텐츠(blog/daily/economy)는
+// noindex로 동결(가역 — URL 유지, 검색 인덱스만 제외, 링크는 follow). 되돌리려면 prefix 제거.
+const LEGACY_NOINDEX_PREFIXES = ['/blog', '/daily', '/economy'];
+const _p = Astro.url.pathname;
+const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pre || _p.startsWith(pre + '/'));
 ---
 
 <!doctype html>
@@ -34,6 +41,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <!-- SEO Meta -->
     <title>{title} | EconPedia</title>
     <meta name="description" content={description} />
+    {isNoindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonicalURL} />
     
     <!-- Open Graph -->
