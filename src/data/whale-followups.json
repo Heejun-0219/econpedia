@@ -1,0 +1,1060 @@
+{
+  "_generatedAt": "2026-05-31T09:46:27.095Z",
+  "_note": "후행 가격(D+N)은 매니페스트 date(공시일) 기준 raw 종가 변동률(시장평균 미보정). 미도래 구간은 null이며 cron 백필로 채워짐. 기준일 ±7일 이내 종가만 인정.",
+  "coverage": {
+    "entries": 60,
+    "entriesWithBasePrice": 59,
+    "dueHorizons": 8,
+    "filledHorizons": 8,
+    "coverageRatio": 1
+  },
+  "followups": {
+    "whale-sym-2026-05-30": {
+      "ticker": "SYM",
+      "market": "us",
+      "isBuy": false,
+      "person": "SOFTBANK GROUP CORP. / 10%+ Shareholder",
+      "baseDate": "2026-05-29",
+      "basePrice": 46.42,
+      "symbol": "SYM",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-slmt-2026-05-30": {
+      "ticker": "SLMT",
+      "market": "us",
+      "isBuy": true,
+      "person": "Sade Ron / Chief Executive Officer",
+      "baseDate": "2026-05-29",
+      "basePrice": 5.77,
+      "symbol": "SLMT",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-170920-2026-05-29": {
+      "ticker": "170920",
+      "market": "kr",
+      "isBuy": false,
+      "person": "최호성 / 대표이사",
+      "baseDate": "2026-05-29",
+      "basePrice": 38250,
+      "symbol": "170920.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-234100-2026-05-29": {
+      "ticker": "234100",
+      "market": "kr",
+      "isBuy": false,
+      "person": "폴라리스오피스",
+      "baseDate": "2026-05-29",
+      "basePrice": 3680,
+      "symbol": "234100.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-011300-2026-05-29": {
+      "ticker": "011300",
+      "market": "kr",
+      "isBuy": true,
+      "person": "임종찬 / 대표이사",
+      "baseDate": "2026-05-29",
+      "basePrice": 2850,
+      "symbol": "011300.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-pnc-2026-05-28": {
+      "ticker": "PNC",
+      "market": "us",
+      "isBuy": false,
+      "person": "Feldstein Andrew T / Director",
+      "baseDate": "2026-05-28",
+      "basePrice": 219.78,
+      "symbol": "PNC",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-psec-2026-05-28": {
+      "ticker": "PSEC",
+      "market": "us",
+      "isBuy": true,
+      "person": "Barry John F / CHIEF EXECUTIVE OFFICER",
+      "baseDate": "2026-05-28",
+      "basePrice": 2.37,
+      "symbol": "PSEC",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-192440-2026-05-27": {
+      "ticker": "192440",
+      "market": "kr",
+      "isBuy": true,
+      "person": "김대영 / 대표이사",
+      "baseDate": "2026-05-27",
+      "basePrice": 31700,
+      "symbol": "192440.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-000670-2026-05-27": {
+      "ticker": "000670",
+      "market": "kr",
+      "isBuy": true,
+      "person": "김기호 / 대표이사 사장",
+      "baseDate": "2026-05-27",
+      "basePrice": 52100,
+      "symbol": "000670.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-403550-2026-05-27": {
+      "ticker": "403550",
+      "market": "kr",
+      "isBuy": true,
+      "person": "크래프톤",
+      "baseDate": "2026-05-27",
+      "basePrice": 13480,
+      "symbol": "403550.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-mstr-2026-05-26": {
+      "ticker": "MSTR",
+      "market": "us",
+      "isBuy": true,
+      "person": "Le Phong / President &amp; CEO",
+      "baseDate": "2026-05-26",
+      "basePrice": 159.93,
+      "symbol": "MSTR",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-080720-2026-05-26": {
+      "ticker": "080720",
+      "market": "kr",
+      "isBuy": true,
+      "person": "박광석",
+      "baseDate": "2026-05-26",
+      "basePrice": 8175.82,
+      "symbol": "080720.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-163730-2026-05-26": {
+      "ticker": "163730",
+      "market": "kr",
+      "isBuy": true,
+      "person": "서룡전자",
+      "baseDate": "2026-05-26",
+      "basePrice": 18430,
+      "symbol": "163730.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-cgct-2026-05-23": {
+      "ticker": "CGCT",
+      "market": "us",
+      "isBuy": true,
+      "person": "CGC III Sponsor LLC / Chairman and CEO",
+      "baseDate": "2026-05-26",
+      "basePrice": 10.85,
+      "symbol": "CGCT",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-crwv-2026-05-23": {
+      "ticker": "CRWV",
+      "market": "us",
+      "isBuy": false,
+      "person": "Intrator Michael N / CEO and President",
+      "baseDate": "2026-05-26",
+      "basePrice": 105.89,
+      "symbol": "CRWV",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-twfg-2026-05-22": {
+      "ticker": "TWFG",
+      "market": "us",
+      "isBuy": true,
+      "person": "DOAK MICHAEL / Director",
+      "baseDate": "2026-05-22",
+      "basePrice": 18.86,
+      "symbol": "TWFG",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-valu-2026-05-22": {
+      "ticker": "VALU",
+      "market": "us",
+      "isBuy": true,
+      "person": "BRECHER HOWARD A / Chairman and CEO",
+      "baseDate": "2026-05-22",
+      "basePrice": 33,
+      "symbol": "VALU",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-462350-2026-05-22": {
+      "ticker": "462350",
+      "market": "kr",
+      "isBuy": true,
+      "person": "김수종 / 대표이사",
+      "baseDate": "2026-05-22",
+      "basePrice": 15550,
+      "symbol": "462350.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-000990-2026-05-21": {
+      "ticker": "000990",
+      "market": "kr",
+      "isBuy": true,
+      "person": "미래에셋자산운용",
+      "baseDate": "2026-05-21",
+      "basePrice": 181000,
+      "symbol": "000990.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-cvlt-2026-05-21": {
+      "ticker": "CVLT",
+      "market": "us",
+      "isBuy": false,
+      "person": "Mirchandani Sanjay / President &amp; CEO",
+      "baseDate": "2026-05-21",
+      "basePrice": 106,
+      "symbol": "CVLT",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-365330-2026-05-20": {
+      "ticker": "365330",
+      "market": "kr",
+      "isBuy": false,
+      "person": "홍영돈 / 회장",
+      "baseDate": "2026-05-20",
+      "basePrice": 2810,
+      "symbol": "365330.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-035620-2026-05-20": {
+      "ticker": "035620",
+      "market": "kr",
+      "isBuy": false,
+      "person": "문양권 / 사내이사(대표)",
+      "baseDate": "2026-05-20",
+      "basePrice": 1022,
+      "symbol": "035620.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-carr-2026-05-20": {
+      "ticker": "CARR",
+      "market": "us",
+      "isBuy": false,
+      "person": "Viessmann Maximilian / Director",
+      "baseDate": "2026-05-20",
+      "basePrice": 63.59,
+      "symbol": "CARR",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-frpt-2026-05-19": {
+      "ticker": "FRPT",
+      "market": "us",
+      "isBuy": false,
+      "person": "Cyr William B. / Chief Executive Officer",
+      "baseDate": "2026-05-19",
+      "basePrice": 47.39,
+      "symbol": "FRPT",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-pcsa-2026-05-19": {
+      "ticker": "PCSA",
+      "market": "us",
+      "isBuy": true,
+      "person": "Ng George K / Chief Executive Officer",
+      "baseDate": "2026-05-19",
+      "basePrice": 2.61,
+      "symbol": "PCSA",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-brcb-2026-05-19": {
+      "ticker": "BRCB",
+      "market": "us",
+      "isBuy": true,
+      "person": "Cynosure Group, LLC",
+      "baseDate": "2026-05-19",
+      "basePrice": 6.68,
+      "symbol": "BRCB",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-226330-2026-05-18": {
+      "ticker": "226330",
+      "market": "kr",
+      "isBuy": true,
+      "person": "정종선 / 대표이사",
+      "baseDate": "2026-05-18",
+      "basePrice": 2320,
+      "symbol": "226330.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-081580-2026-05-18": {
+      "ticker": "081580",
+      "market": "kr",
+      "isBuy": true,
+      "person": "조일현 / 대표이사",
+      "baseDate": "2026-05-18",
+      "basePrice": 2855,
+      "symbol": "081580.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-439960-2026-05-18": {
+      "ticker": "439960",
+      "market": "kr",
+      "status": "no_data",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-jpm-2026-05-16": {
+      "ticker": "JPM",
+      "market": "us",
+      "isBuy": false,
+      "person": "Erdoes Mary E. / CEO Asset &amp; Wealth Management",
+      "baseDate": "2026-05-18",
+      "basePrice": 300.73,
+      "symbol": "JPM",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-109960-2026-05-15": {
+      "ticker": "109960",
+      "market": "kr",
+      "isBuy": true,
+      "person": "포르테 신기술조합 제240호",
+      "baseDate": "2026-05-15",
+      "basePrice": 3060,
+      "symbol": "109960.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-015590-2026-05-15": {
+      "ticker": "015590",
+      "market": "kr",
+      "isBuy": true,
+      "person": "덕양에너젠",
+      "baseDate": "2026-05-15",
+      "basePrice": 2985,
+      "symbol": "015590.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-004380-2026-05-15": {
+      "ticker": "004380",
+      "market": "kr",
+      "isBuy": true,
+      "person": "류영수 / 대표이사 \n사장",
+      "baseDate": "2026-05-15",
+      "basePrice": 13090,
+      "symbol": "004380.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-211050-2026-05-15": {
+      "ticker": "211050",
+      "market": "kr",
+      "isBuy": true,
+      "person": "최병채 / 대표이사",
+      "baseDate": "2026-05-15",
+      "basePrice": 10450,
+      "symbol": "211050.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-000990-2026-05-14": {
+      "ticker": "000990",
+      "market": "kr",
+      "isBuy": true,
+      "person": "미래에셋자산운용",
+      "baseDate": "2026-05-14",
+      "basePrice": 182800,
+      "symbol": "000990.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-jkhy-2026-05-14": {
+      "ticker": "JKHY",
+      "market": "us",
+      "isBuy": true,
+      "person": "Adelson Gregory R. / President &amp; CEO",
+      "baseDate": "2026-05-14",
+      "basePrice": 134.03,
+      "symbol": "JKHY",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-lode-2026-05-14": {
+      "ticker": "LODE",
+      "market": "us",
+      "isBuy": true,
+      "person": "Pei Steven Yu-Tsung / Director",
+      "baseDate": "2026-05-14",
+      "basePrice": 3.32,
+      "symbol": "LODE",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-009160-2026-05-13": {
+      "ticker": "009160",
+      "market": "kr",
+      "isBuy": true,
+      "person": "최민찬 / 부사장",
+      "baseDate": "2026-05-13",
+      "basePrice": 6440,
+      "symbol": "009160.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-081150-2026-05-13": {
+      "ticker": "081150",
+      "market": "kr",
+      "isBuy": true,
+      "person": "김태섭 / 대표이사",
+      "baseDate": "2026-05-13",
+      "basePrice": 4295,
+      "symbol": "081150.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-180400-2026-05-13": {
+      "ticker": "180400",
+      "market": "kr",
+      "isBuy": true,
+      "person": "유건상 / 대표이사",
+      "baseDate": "2026-05-13",
+      "basePrice": 3750,
+      "symbol": "180400.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-097520-2026-05-12": {
+      "ticker": "097520",
+      "market": "kr",
+      "isBuy": true,
+      "person": "서보홍 / 부사장",
+      "baseDate": "2026-05-12",
+      "basePrice": 22600,
+      "symbol": "097520.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-060560-2026-05-12": {
+      "ticker": "060560",
+      "market": "kr",
+      "isBuy": true,
+      "person": "박진모 / 부사장",
+      "baseDate": "2026-05-12",
+      "basePrice": 2985,
+      "symbol": "060560.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-355690-2026-05-12": {
+      "ticker": "355690",
+      "market": "kr",
+      "isBuy": true,
+      "person": "한택수 / 대표이사",
+      "baseDate": "2026-05-12",
+      "basePrice": 5270,
+      "symbol": "355690.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-365340-2026-05-11": {
+      "ticker": "365340",
+      "market": "kr",
+      "isBuy": false,
+      "person": "이강명 / 대표이사",
+      "baseDate": "2026-05-11",
+      "basePrice": 72700,
+      "symbol": "365340.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-418620-2026-05-11": {
+      "ticker": "418620",
+      "market": "kr",
+      "isBuy": true,
+      "person": "류제형 / 부사장",
+      "baseDate": "2026-05-11",
+      "basePrice": 1336,
+      "symbol": "418620.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-347700-2026-05-11": {
+      "ticker": "347700",
+      "market": "kr",
+      "isBuy": true,
+      "person": "최광수 / 대표이사",
+      "baseDate": "2026-05-11",
+      "basePrice": 46950,
+      "symbol": "347700.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-178320-2026-05-08": {
+      "ticker": "178320",
+      "market": "kr",
+      "isBuy": false,
+      "person": "정종기 / 부사장",
+      "baseDate": "2026-05-08",
+      "basePrice": 66100,
+      "symbol": "178320.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-270520-2026-05-08": {
+      "ticker": "270520",
+      "market": "kr",
+      "isBuy": false,
+      "person": "김대진 / 부사장",
+      "baseDate": "2026-05-08",
+      "basePrice": 1880,
+      "symbol": "270520.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-028080-2026-05-08": {
+      "ticker": "028080",
+      "market": "kr",
+      "isBuy": false,
+      "person": "변대규 / 회장",
+      "baseDate": "2026-05-08",
+      "basePrice": 8100,
+      "symbol": "028080.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-159010-2026-05-04": {
+      "ticker": "159010",
+      "market": "kr",
+      "isBuy": false,
+      "person": "강두홍 / 대표이사",
+      "baseDate": "2026-05-04",
+      "basePrice": 10920,
+      "symbol": "159010.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-054300-2026-05-04": {
+      "ticker": "054300",
+      "market": "kr",
+      "isBuy": false,
+      "person": "권재근 / 대표이사",
+      "baseDate": "2026-05-04",
+      "basePrice": 1148,
+      "symbol": "054300.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-080220-2026-05-04": {
+      "ticker": "080220",
+      "market": "kr",
+      "isBuy": true,
+      "person": "박성식 / 대표이사",
+      "baseDate": "2026-05-04",
+      "basePrice": 56700,
+      "symbol": "080220.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-006800-2026-04-30": {
+      "ticker": "006800",
+      "market": "kr",
+      "isBuy": true,
+      "person": "강성범 / 사장",
+      "baseDate": "2026-04-30",
+      "basePrice": 64800,
+      "symbol": "006800.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-29",
+          "close": 61400,
+          "pct": -5.25
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-066590-2026-04-30": {
+      "ticker": "066590",
+      "market": "kr",
+      "isBuy": true,
+      "person": "고진호 / 사내이사",
+      "baseDate": "2026-04-30",
+      "basePrice": 2760,
+      "symbol": "066590.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-29",
+          "close": 2220,
+          "pct": -19.57
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-265520-2026-04-30": {
+      "ticker": "265520",
+      "market": "kr",
+      "isBuy": true,
+      "person": "배준용 / 부사장",
+      "baseDate": "2026-04-30",
+      "basePrice": 26200,
+      "symbol": "265520.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-29",
+          "close": 24900,
+          "pct": -4.96
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-meta-2026-04-29": {
+      "ticker": "META",
+      "market": "us",
+      "isBuy": false,
+      "person": "Olivan Javier / Chief Operating Officer",
+      "baseDate": "2026-04-29",
+      "basePrice": 669.12,
+      "symbol": "META",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-28",
+          "close": 635.29,
+          "pct": -5.06
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-amzn-2026-04-28": {
+      "ticker": "AMZN",
+      "market": "us",
+      "isBuy": false,
+      "person": "RUBINSTEIN JONATHAN / Director",
+      "baseDate": "2026-04-28",
+      "basePrice": 259.7,
+      "symbol": "AMZN",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-27",
+          "close": 271.85,
+          "pct": 4.68
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-008830-2026-04-22": {
+      "ticker": "008830",
+      "market": "kr",
+      "isBuy": true,
+      "person": "대동",
+      "baseDate": "2026-04-22",
+      "basePrice": 21450,
+      "symbol": "008830.KS",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-22",
+          "close": 18610,
+          "pct": -13.24
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-meta-2026-04-22": {
+      "ticker": "META",
+      "market": "us",
+      "isBuy": false,
+      "person": "Olivan Javier / Chief Operating Officer",
+      "baseDate": "2026-04-22",
+      "basePrice": 674.72,
+      "symbol": "META",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-21",
+          "close": 607.38,
+          "pct": -9.98
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    },
+    "whale-amzn-2026-04-21": {
+      "ticker": "AMZN",
+      "market": "us",
+      "isBuy": false,
+      "person": "Jassy Andrew R / President and CEO",
+      "baseDate": "2026-04-21",
+      "basePrice": 249.91,
+      "symbol": "AMZN",
+      "status": "ok",
+      "horizons": {
+        "d30": {
+          "date": "2026-05-20",
+          "close": 265.01,
+          "pct": 6.04
+        },
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "fetchedAt": "2026-05-31T09:46:27.095Z"
+    }
+  }
+}

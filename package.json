@@ -15,7 +15,8 @@
     "loop:daily": "node scripts/improvement-loop.mjs --phase daily",
     "loop:critique": "node scripts/improvement-loop.mjs --phase critique",
     "loop:synthesize": "node scripts/improvement-loop.mjs --phase synthesize",
-    "loop:actionize": "node scripts/improvement-loop.mjs --phase actionize"
+    "loop:actionize": "node scripts/improvement-loop.mjs --phase actionize",
+    "whale:followups": "node scripts/build-followups.js --missing"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.88.0",
