@@ -32,13 +32,16 @@ jobs:
       - name: Backfill follow-up prices (newly-arrived horizons only)
         run: node scripts/build-followups.js --missing
 
+      - name: Rebuild per-insider track record (G2)
+        run: node scripts/build-track-record.js
+
       - name: Commit & push if changed
         run: |
           git config --global user.name "EconPedia AI Publisher"
           git config --global user.email "actions@github.com"
-          if [[ -n "$(git status --porcelain src/data/whale-followups.json)" ]]; then
-            git add src/data/whale-followups.json
-            git commit -m "chore(whale): backfill follow-up D+N prices"
+          if [[ -n "$(git status --porcelain src/data/whale-followups.json src/data/whale-track-record.json)" ]]; then
+            git add src/data/whale-followups.json src/data/whale-track-record.json
+            git commit -m "chore(whale): backfill follow-up D+N prices + rebuild track record"
             # main 직접 푸시(content 자동화 패턴). 충돌 시 rebase 후 재시도.
             for i in 1 2 3; do
               git fetch origin main
