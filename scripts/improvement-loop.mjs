@@ -41,7 +41,7 @@ const HISTORY_DIR = path.join(STATE_DIR, 'history');
 const PERSONAS_DIR = path.join(LOOP_DIR, 'personas');
 const PROMPTS_DIR = path.join(LOOP_DIR, 'prompts');
 
-const PERSONAS = ['musk', 'mckinsey', 'munger'];
+const PERSONAS = ['musk', 'mckinsey', 'munger', 'compliance-counsel', 'vc-partner', 'ux-researcher', 'sre-security'];
 
 // Filename-safe timestamp: YYYY-MM-DD_HH-MM (UTC). Same date supports many runs/day.
 function stamp() {
@@ -71,7 +71,7 @@ function parseArgs(argv) {
     else if (a === '--cycle') out.cycle = argv[++i];
     else if (a === '--dry-run') out.dryRun = true;
     else if (a === '--help' || a === '-h') {
-      console.log(`Usage: improvement-loop.mjs [--phase all|snapshot|critique|synthesize|actionize] [--persona musk|mckinsey|munger] [--cycle N] [--dry-run]`);
+      console.log(`Usage: improvement-loop.mjs [--phase all|snapshot|critique|synthesize|actionize] [--persona musk|mckinsey|munger|compliance-counsel|vc-partner|ux-researcher|sre-security] [--cycle N] [--dry-run]`);
       process.exit(0);
     }
   }
