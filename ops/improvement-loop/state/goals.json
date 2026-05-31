@@ -1,6 +1,37 @@
 {
   "_description": "EconPedia OKR — improvement loop가 매 사이클마다 이 목표 대비 진척도를 평가하고, 합성 플랜은 이 목표 달성을 우선한다.",
-  "_lastUpdated": "2026-05-19",
+  "_lastUpdated": "2026-05-31",
+  "active_milestone": {
+    "name": "Whale Alert Evidence Engine",
+    "mandate": "Whale Alert를 일일 콘텐츠 발행 파이프라인에서 증거 기반·트랙레코드 보유 금융 시그널 제품으로 전환한다. 검증가능한 내부자 시그널 증거(D+N 후행가격·insider별 전적·매칭 사례 결과), 측정가능한 사용자 채택(텔레그램 활성 구독·체류·전환 퍼널), 첫 유료/광고 수익 이벤트, 그리고 4주 무롤백 자가진화 자동화 표면이 모두 갖춰질 때 완료.",
+    "lastEvaluated": "2026-05-31",
+    "gate_scoreboard": {
+      "G1_data_integrity": {
+        "status": "partial",
+        "done": ["중복 fingerprint 정확일치 0 유지(#84 drift 2건 제거)", "D+N 후행가격 영속화+백필잡(#85, 도래구간 커버리지 100%)"],
+        "open": ["검증가능 소스링크(SEC/DART URL) 0/61 페이지 — 최우선", "거래일 기반 dedup 하드닝(현재 공시일 사용)", "QC 환각수치 14일 측정 미가동"]
+      },
+      "G2_track_record": {
+        "status": "infra_built_data_blocked",
+        "done": ["per-insider 트랙레코드 자동계산 빌더+Tier-1 분류(#86)"],
+        "open": ["30명×5거래 D+90 임계: 현재 58명 중 5+거래 0명 → 수개월 데이터 누적 필요(데이터-볼륨 블로커)", "공개 렌더는 자격 insider 발생+컴플라이언스 disclaimer 후"]
+      },
+      "G3_measurement": {
+        "status": "fail",
+        "done": [],
+        "open": ["dwell/scroll/CTA 무PII 카운터 미구현", "텔레그램 구독자/7일활성 일일기록 미구현", "whale→wallet 퍼널 이벤트 미커버", "kpis.json 대부분 null — 다음 사이클 최우선(G4/G5 선행조건)"]
+      },
+      "G4_adoption": { "status": "blocked_by_G3", "open": ["100 활성구독·120s 체류·50 일일뷰 — 측정 부재로 미산정, 실사용자 채택 필요"] },
+      "G5_monetization": { "status": "blocked_1way_door", "open": ["유료/광고 첫 이벤트 — 결제·구독 모델은 위임매트릭스 1-way door, 사용자 컨펌 필요"] },
+      "G6_self_evolution": {
+        "status": "infra_built_time_blocked",
+        "done": ["7페르소나 critique 패널 연결(#83)", "pipeline-tuner.js+prompt-smithy.js MVP(이번 사이클, dry-run 진단)", "self-audit 노트 #1(2026-W22)"],
+        "open": ["4주 연속 무롤백 메타자동화 사이클 — 시간 블로커(14일 후행윈도우×4)", "4주 연속 audit 노트 — 시간 블로커", "메타자동화 cron은 G3 측정 정착 후 활성"]
+      }
+    },
+    "completion_blocker": "완료정의의 시간/데이터/실사용자/1-way-door 조건(4주 연속 사이클, 30insider×5거래 누적, 100 실구독자, 첫 결제)은 단일 세션에서 충족 불가. 코드 가능한 인프라(G1·G2·G6 빌더)는 구축 완료. 다음 필수 액션: (1)G1 소스링크 provenance, (2)G3 측정 계측, (3)PR 백로그 정리, (4)G5 결제는 사용자 컨펌.",
+    "next_milestone_candidate": "Whale Alert Scale-Up — 1000 활성 텔레그램 구독 + 월 반복 수익"
+  },
   "north_star": {
     "metric": "wallet_authenticated_users",
     "current": 0,

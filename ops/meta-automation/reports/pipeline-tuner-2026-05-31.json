@@ -1,0 +1,14 @@
+{
+  "track": "pipeline-tuner",
+  "generatedAt": "2026-05-31T09:57:24.663Z",
+  "changeBudget": "1/week",
+  "guards": {
+    "pauseFlag": false,
+    "chainChangeBlock": "직전 변경 14일 윈도우 내 동일 파일 재변경 금지"
+  },
+  "decision": {
+    "action": "NO_CHANGE",
+    "reason": "G3 측정 부재 — 튜닝 대상 KPI가 모두 null/0. 측정 없이 파라미터를 바꾸면 개선/악화를 판별할 수 없음(법칙 #4). G3(텔레그램 구독자·CTR·체류·CTA) 정착 후 첫 튜닝 사이클 진행.",
+    "blockedOn": "G3-measurement"
+  }
+}
