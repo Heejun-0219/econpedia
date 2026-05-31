@@ -37,6 +37,8 @@ WORKDIR /app/api
 COPY package.json package-lock.json /app/
 RUN cd /app && npm ci --omit=dev
 COPY api/server.js ./server.js
+# server.js가 import하는 순수 라이브러리(외부 의존성 없음). 경로: /app/api → ../scripts/lib
+COPY scripts/lib /app/scripts/lib
 
 # ── 시작 스크립트 ────────────────────────────────────────
 COPY docker-entrypoint.sh /docker-entrypoint.sh
