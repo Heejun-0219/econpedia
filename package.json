@@ -18,7 +18,7 @@
     "loop:actionize": "node scripts/improvement-loop.mjs --phase actionize",
     "whale:followups": "node scripts/build-followups.js --missing",
     "whale:track-record": "node scripts/build-track-record.js",
-    "test": "node scripts/lib/source-url.test.mjs && node scripts/lib/analytics-summary.test.mjs"
+    "test": "node scripts/lib/source-url.test.mjs && node scripts/lib/analytics-summary.test.mjs && node scripts/lib/whale-dedup.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.88.0",
