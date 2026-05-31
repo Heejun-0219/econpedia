@@ -1,0 +1,51 @@
+name: 🐋 Whale Follow-up Backfill
+
+# G1 데이터 무결성 — 후행 가격(D+30/90/180/365) 영속 백필 잡.
+# 생성 당시 "미도래"였던 구간을 매일 재조회해 src/data/whale-followups.json 에 채운다.
+# auto-publish(21:00 UTC) 직후 실행해 그날 새로 발행된 whale 페이지도 포함시킨다.
+
+on:
+  schedule:
+    - cron: '40 21 * * *' # 매일 21:40 UTC (= 06:40 KST). auto-publish 이후.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Backfill follow-up prices (newly-arrived horizons only)
+        run: node scripts/build-followups.js --missing
+
+      - name: Commit & push if changed
+        run: |
+          git config --global user.name "EconPedia AI Publisher"
+          git config --global user.email "actions@github.com"
+          if [[ -n "$(git status --porcelain src/data/whale-followups.json)" ]]; then
+            git add src/data/whale-followups.json
+            git commit -m "chore(whale): backfill follow-up D+N prices"
+            # main 직접 푸시(content 자동화 패턴). 충돌 시 rebase 후 재시도.
+            for i in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main || { git rebase --abort; exit 1; }
+              if git push origin HEAD:main; then echo "pushed"; break; fi
+              sleep $((i*5))
+            done
+          else
+            echo "no follow-up changes"
+          fi
