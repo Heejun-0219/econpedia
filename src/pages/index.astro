@@ -242,11 +242,29 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
 ---
 
 <BaseLayout
-  title="경제 백과사전"
-  description="경제 초보자를 전문가로 만드는 경제 백과사전. GDP, 주식, ETF, 금리 등 복잡한 경제 개념을 쉽고 재밌게 배워보세요."
+  title="🐋 Whale Alert — 검증가능한 내부자 거래 시그널"
+  description="SEC·DART 공시 원문에 링크된 내부자·기관 거래 시그널. 거래 후 D+30/90/180/365 실제 주가 성적표와 인물별 트랙레코드까지. 추측이 아닌 검증가능한 데이터."
   hideSubHub={true}
 >
   <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
+
+    <!-- ============================================================
+      WHALE ALERT — 제품 히어로 (2026-05-31 pivot: Whale 단일 제품 front door)
+    ============================================================ -->
+    <section class="whale-home-hero" aria-label="Whale Alert">
+      <div class="whale-home-hero__badge">🐋 WHALE ALERT · EconPedia</div>
+      <h1 class="whale-home-hero__title">고래가 움직였다. <br />그래서 <em>그 후 올랐을까?</em></h1>
+      <p class="whale-home-hero__sub">
+        SEC Form 4 · DART 공시 <strong>원문에 링크된</strong> 내부자·기관 거래 시그널.
+        거래 후 <strong>D+30/90/180/365 실제 주가 성적표</strong>와 인물별 트랙레코드까지 —
+        뇌피셜이 아닌 <strong>검증가능한 데이터</strong>로.
+      </p>
+      <div class="whale-home-hero__cta">
+        <a class="whale-home-hero__btn whale-home-hero__btn--primary" href="/whale">🐋 최신 고래 시그널 보기 →</a>
+        <a class="whale-home-hero__btn whale-home-hero__btn--ghost" href="/wallet?utm_source=home&utm_medium=hero&utm_campaign=whale_signup">📲 내 종목 시그널 알림 받기</a>
+      </div>
+      <p class="whale-home-hero__disclaimer">투자 추천이 아닌 공개 공시 데이터 기반 정보 제공. 모든 수치는 원문에서 검증 가능.</p>
+    </section>
 
     <!-- ============================================================
       ISSUE 07 — WEEKLY WEATHER
@@ -665,4 +683,32 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       });
     })();
   </script>
+
+  <style>
+    /* Whale Alert 제품 히어로 (2026-05-31 pivot) */
+    .whale-home-hero {
+      background: linear-gradient(135deg, rgba(16,185,129,.12), rgba(56,189,248,.10));
+      border: 1px solid rgba(16,185,129,.32);
+      border-radius: 18px;
+      padding: 2.4rem 2rem 1.8rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+    .whale-home-hero__badge {
+      display: inline-block; font-size: .8rem; font-weight: 800; letter-spacing: .04em;
+      color: #10b981; background: rgba(16,185,129,.12);
+      padding: .35rem .8rem; border-radius: 999px; margin-bottom: 1rem;
+    }
+    .whale-home-hero__title { font-size: clamp(1.6rem, 4vw, 2.6rem); line-height: 1.25; margin: 0 0 .9rem; font-weight: 800; }
+    .whale-home-hero__title em { color: #10b981; font-style: normal; }
+    .whale-home-hero__sub { max-width: 680px; margin: 0 auto 1.5rem; font-size: 1.02rem; line-height: 1.65; opacity: .9; }
+    .whale-home-hero__cta { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+    .whale-home-hero__btn { display: inline-block; padding: .85rem 1.4rem; border-radius: 12px; font-weight: 700; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+    .whale-home-hero__btn--primary { background: #10b981; color: #fff; }
+    .whale-home-hero__btn--primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(16,185,129,.4); }
+    .whale-home-hero__btn--ghost { background: transparent; color: var(--color-text-primary); border: 1px solid rgba(16,185,129,.4); }
+    .whale-home-hero__btn--ghost:hover { background: rgba(16,185,129,.08); }
+    .whale-home-hero__disclaimer { margin: 1.1rem 0 0; font-size: .78rem; opacity: .6; }
+    @media (max-width: 560px) { .whale-home-hero { padding: 1.8rem 1.2rem 1.4rem; } .whale-home-hero__btn { width: 100%; } }
+  </style>
 </BaseLayout>
