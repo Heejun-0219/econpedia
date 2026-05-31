@@ -1,0 +1,1178 @@
+{
+  "_generatedAt": "2026-05-31T09:51:35.455Z",
+  "_note": "승률은 방향 인지(매수=이후 상승 win, 매도=이후 하락 win). 모든 수익률은 raw 종가 변동률(시장평균 미보정). Tier-1 = D+90 표본 n>=5 & 승률>=0.65. 표본 부족 insider는 비공개 권장.",
+  "summary": {
+    "totalInsiders": 58,
+    "insidersWith5PlusTrades": 0,
+    "insidersWithD90History": 0,
+    "tier1Count": 0,
+    "gateTarget": {
+      "insidersWith5PlusTradesAndD90": 30,
+      "current": 0
+    }
+  },
+  "insiders": [
+    {
+      "key": "미래에셋자산운용",
+      "name": "미래에셋자산운용",
+      "trades": 2,
+      "buys": 2,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-000990-2026-05-21",
+        "whale-000990-2026-05-14"
+      ]
+    },
+    {
+      "key": "olivanjavier",
+      "name": "Olivan Javier",
+      "trades": 2,
+      "buys": 0,
+      "sells": 2,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": -7.52,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-meta-2026-04-29",
+        "whale-meta-2026-04-22"
+      ]
+    },
+    {
+      "key": "softbankgroupcorp",
+      "name": "SOFTBANK GROUP CORP.",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-sym-2026-05-30"
+      ]
+    },
+    {
+      "key": "saderon",
+      "name": "Sade Ron",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-slmt-2026-05-30"
+      ]
+    },
+    {
+      "key": "최호성",
+      "name": "최호성",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-170920-2026-05-29"
+      ]
+    },
+    {
+      "key": "폴라리스오피스",
+      "name": "폴라리스오피스",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-234100-2026-05-29"
+      ]
+    },
+    {
+      "key": "임종찬",
+      "name": "임종찬",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-011300-2026-05-29"
+      ]
+    },
+    {
+      "key": "feldsteinandrewt",
+      "name": "Feldstein Andrew T",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-pnc-2026-05-28"
+      ]
+    },
+    {
+      "key": "barryjohnf",
+      "name": "Barry John F",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-psec-2026-05-28"
+      ]
+    },
+    {
+      "key": "김대영",
+      "name": "김대영",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-192440-2026-05-27"
+      ]
+    },
+    {
+      "key": "김기호",
+      "name": "김기호",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-000670-2026-05-27"
+      ]
+    },
+    {
+      "key": "크래프톤",
+      "name": "크래프톤",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-403550-2026-05-27"
+      ]
+    },
+    {
+      "key": "lephong",
+      "name": "Le Phong",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-mstr-2026-05-26"
+      ]
+    },
+    {
+      "key": "박광석",
+      "name": "박광석",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-080720-2026-05-26"
+      ]
+    },
+    {
+      "key": "서룡전자",
+      "name": "서룡전자",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-163730-2026-05-26"
+      ]
+    },
+    {
+      "key": "cgciiisponsorllc",
+      "name": "CGC III Sponsor LLC",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-cgct-2026-05-23"
+      ]
+    },
+    {
+      "key": "intratormichaeln",
+      "name": "Intrator Michael N",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-crwv-2026-05-23"
+      ]
+    },
+    {
+      "key": "doakmichael",
+      "name": "DOAK MICHAEL",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-twfg-2026-05-22"
+      ]
+    },
+    {
+      "key": "brecherhowarda",
+      "name": "BRECHER HOWARD A",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-valu-2026-05-22"
+      ]
+    },
+    {
+      "key": "김수종",
+      "name": "김수종",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-462350-2026-05-22"
+      ]
+    },
+    {
+      "key": "mirchandanisanjay",
+      "name": "Mirchandani Sanjay",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-cvlt-2026-05-21"
+      ]
+    },
+    {
+      "key": "홍영돈",
+      "name": "홍영돈",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-365330-2026-05-20"
+      ]
+    },
+    {
+      "key": "문양권",
+      "name": "문양권",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-035620-2026-05-20"
+      ]
+    },
+    {
+      "key": "viessmannmaximilian",
+      "name": "Viessmann Maximilian",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-carr-2026-05-20"
+      ]
+    },
+    {
+      "key": "cyrwilliamb",
+      "name": "Cyr William B.",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-frpt-2026-05-19"
+      ]
+    },
+    {
+      "key": "nggeorgek",
+      "name": "Ng George K",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-pcsa-2026-05-19"
+      ]
+    },
+    {
+      "key": "cynosuregroupllc",
+      "name": "Cynosure Group, LLC",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-brcb-2026-05-19"
+      ]
+    },
+    {
+      "key": "정종선",
+      "name": "정종선",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-226330-2026-05-18"
+      ]
+    },
+    {
+      "key": "조일현",
+      "name": "조일현",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-081580-2026-05-18"
+      ]
+    },
+    {
+      "key": "오주영",
+      "name": "오주영",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-439960-2026-05-18"
+      ]
+    },
+    {
+      "key": "erdoesmarye",
+      "name": "Erdoes Mary E.",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-jpm-2026-05-16"
+      ]
+    },
+    {
+      "key": "포르테신기술조합제240호",
+      "name": "포르테 신기술조합 제240호",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-109960-2026-05-15"
+      ]
+    },
+    {
+      "key": "덕양에너젠",
+      "name": "덕양에너젠",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-015590-2026-05-15"
+      ]
+    },
+    {
+      "key": "류영수",
+      "name": "류영수",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-004380-2026-05-15"
+      ]
+    },
+    {
+      "key": "최병채",
+      "name": "최병채",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-211050-2026-05-15"
+      ]
+    },
+    {
+      "key": "adelsongregoryr",
+      "name": "Adelson Gregory R.",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-jkhy-2026-05-14"
+      ]
+    },
+    {
+      "key": "peistevenyutsung",
+      "name": "Pei Steven Yu-Tsung",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-lode-2026-05-14"
+      ]
+    },
+    {
+      "key": "최민찬",
+      "name": "최민찬",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-009160-2026-05-13"
+      ]
+    },
+    {
+      "key": "김태섭",
+      "name": "김태섭",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-081150-2026-05-13"
+      ]
+    },
+    {
+      "key": "유건상",
+      "name": "유건상",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-180400-2026-05-13"
+      ]
+    },
+    {
+      "key": "서보홍",
+      "name": "서보홍",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-097520-2026-05-12"
+      ]
+    },
+    {
+      "key": "박진모",
+      "name": "박진모",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-060560-2026-05-12"
+      ]
+    },
+    {
+      "key": "한택수",
+      "name": "한택수",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-355690-2026-05-12"
+      ]
+    },
+    {
+      "key": "이강명",
+      "name": "이강명",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-365340-2026-05-11"
+      ]
+    },
+    {
+      "key": "류제형",
+      "name": "류제형",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-418620-2026-05-11"
+      ]
+    },
+    {
+      "key": "최광수",
+      "name": "최광수",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-347700-2026-05-11"
+      ]
+    },
+    {
+      "key": "정종기",
+      "name": "정종기",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-178320-2026-05-08"
+      ]
+    },
+    {
+      "key": "김대진",
+      "name": "김대진",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-270520-2026-05-08"
+      ]
+    },
+    {
+      "key": "변대규",
+      "name": "변대규",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-028080-2026-05-08"
+      ]
+    },
+    {
+      "key": "강두홍",
+      "name": "강두홍",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-159010-2026-05-04"
+      ]
+    },
+    {
+      "key": "권재근",
+      "name": "권재근",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-054300-2026-05-04"
+      ]
+    },
+    {
+      "key": "박성식",
+      "name": "박성식",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": null,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-080220-2026-05-04"
+      ]
+    },
+    {
+      "key": "강성범",
+      "name": "강성범",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": -5.25,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-006800-2026-04-30"
+      ]
+    },
+    {
+      "key": "고진호",
+      "name": "고진호",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": -19.57,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-066590-2026-04-30"
+      ]
+    },
+    {
+      "key": "배준용",
+      "name": "배준용",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": -4.96,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-265520-2026-04-30"
+      ]
+    },
+    {
+      "key": "rubinsteinjonathan",
+      "name": "RUBINSTEIN JONATHAN",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": 4.68,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-amzn-2026-04-28"
+      ]
+    },
+    {
+      "key": "대동",
+      "name": "대동",
+      "trades": 1,
+      "buys": 1,
+      "sells": 0,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": -13.24,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-008830-2026-04-22"
+      ]
+    },
+    {
+      "key": "jassyandrewr",
+      "name": "Jassy Andrew R",
+      "trades": 1,
+      "buys": 0,
+      "sells": 1,
+      "winRateD90": null,
+      "winRateD365": null,
+      "avgReturn": {
+        "d30": 6.04,
+        "d90": null,
+        "d180": null,
+        "d365": null
+      },
+      "d90HistoryCount": 0,
+      "tier1": false,
+      "sampleSlugs": [
+        "whale-amzn-2026-04-21"
+      ]
+    }
+  ]
+}
