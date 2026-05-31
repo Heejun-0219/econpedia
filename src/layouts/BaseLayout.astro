@@ -162,6 +162,38 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
               totalTimeSent = 0;
             }
           });
+
+          // ── G3: 스크롤 깊이(최대 도달 %) ──────────────────
+          let maxScroll = 0;
+          let scrollSent = false;
+          function currentScrollPct() {
+            const doc = document.documentElement;
+            const scrollable = doc.scrollHeight - doc.clientHeight;
+            if (scrollable <= 0) return 100;
+            return Math.min(100, Math.round((doc.scrollTop / scrollable) * 100));
+          }
+          window.addEventListener('scroll', () => {
+            const p = currentScrollPct();
+            if (p > maxScroll) maxScroll = p;
+          }, { passive: true });
+          function sendScroll() {
+            if (scrollSent) return;
+            scrollSent = true;
+            const payload = JSON.stringify({ type: 'scroll', depth: maxScroll, path: window.location.pathname });
+            if (navigator.sendBeacon) navigator.sendBeacon('/api/analytics', payload);
+            else fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
+          }
+          window.addEventListener('pagehide', sendScroll);
+
+          // ── G3: CTA 클릭 카운트(무PII — 라벨만) ───────────
+          document.addEventListener('click', (e) => {
+            const el = e.target && e.target.closest && e.target.closest('.wallet-cta-btn, [data-cta], a[href*="/wallet"]');
+            if (!el) return;
+            const label = el.getAttribute('data-cta') || (String(el.getAttribute('href') || '').includes('/wallet') ? 'wallet' : 'cta');
+            const payload = JSON.stringify({ type: 'cta_click', label, path: window.location.pathname });
+            if (navigator.sendBeacon) navigator.sendBeacon('/api/analytics', payload);
+            else fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
+          }, { capture: true });
         } catch(e) {
           console.error('Analytics tracking error:', e);
         }
