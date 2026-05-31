@@ -1,4 +1,7 @@
-name: 📰 Daily Auto Publisher
+name: 🐋 Daily Whale Publisher
+
+# 2026-05-31 pivot: Whale Alert 단일 제품 집중. generic 생성(daily/blog/cardnews/economy)은
+# Phase별 `if: ${{ false }}`로 가역 비활성화. Whale 스캔/분석(Phase 4)만 활성.
 
 on:
   schedule:
@@ -36,7 +39,9 @@ jobs:
         run: npm install
 
       # ── Phase 1: 데일리 브리핑 (기사) 생성 + 텔레그램 Push ────
+      # W1 pivot(2026-05-31): generic 생성 OFF — Whale 단일 제품 집중. 되돌리려면 `if` 줄 삭제.
       - name: 🤖 Generate Daily Briefing Article
+        if: ${{ false }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -45,7 +50,9 @@ jobs:
         run: node scripts/daily-briefing.js
 
       # ── Phase 2: 카드뉴스 이미지 생성 (월/수/금/일만) ─────────
+      # W1 pivot(2026-05-31): generic 생성 OFF. 되돌리려면 `if` 줄 삭제.
       - name: 📱 Generate Card News Images
+        if: ${{ false }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -61,7 +68,9 @@ jobs:
           fi
 
       # ── Phase 3: 블로그 심층분석 (화/목/일만) ─────────────────
+      # W1 pivot(2026-05-31): generic 생성 OFF. 되돌리려면 `if` 줄 삭제.
       - name: 📝 Generate Blog Post (Harness)
+        if: ${{ false }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BLOGGER_CLIENT_ID: ${{ secrets.BLOGGER_CLIENT_ID }}
@@ -95,7 +104,9 @@ jobs:
           node scripts/generate-whale-analysis.js || echo "✅ 분석 대상 없음"
 
       # ── Phase 5: 📘 경제 사전 시리즈 (화/토만) ────────────
+      # W1 pivot(2026-05-31): generic 생성 OFF. 되돌리려면 `if` 줄 삭제.
       - name: 📘 Generate Economy Dictionary Article
+        if: ${{ false }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -170,7 +181,7 @@ jobs:
             src/data/categories.js \
             public/cards/
 
-          git commit -m "docs: Auto-published daily briefing + blog + card news"
+          git commit -m "docs: Auto-published whale analysis"
 
           # push 실패 시 최대 3회 재시도
           for i in 1 2 3; do
