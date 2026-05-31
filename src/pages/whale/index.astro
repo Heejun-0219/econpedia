@@ -105,9 +105,29 @@ const categories = [
       <div class="container" style="margin-top: 2rem; padding-bottom: 1rem;">
         <WhaleFollow ticker="WHALE" tickerName="모든 Whale 시그널" />
       </div>
+
+      <div class="container">
+        <div class="whale-compliance">
+          <strong>⚠️ 투자 주의 · 면책</strong>
+          <p>Whale Alert는 SEC·DART 등 <strong>공개 공시 데이터</strong>를 정리·시각화한 <strong>정보 제공 서비스</strong>입니다. 특정 종목의 매수·매도 <strong>추천이나 투자 자문이 아니며</strong>, '고래를 따라 거래'할 것을 권유하지 않습니다. 표시되는 D+30/90/180/365 수치는 <strong>과거 raw 종가 변동률(시장평균 미보정)</strong>로, <strong>과거 성과는 미래 수익을 보장하지 않습니다.</strong> 내부자 거래 동향은 다양한 사유(분산·세무·보상 등)로 발생하며 <strong>미공개중요정보(MNPI)의 이용을 시사하지 않습니다.</strong> 모든 수치는 각 페이지의 공시 원문 링크에서 직접 검증하시고, 투자 결정과 책임은 전적으로 본인에게 있습니다.</p>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .whale-compliance {
+    margin: 1.5rem 0 0;
+    background: rgba(234, 179, 8, 0.07);
+    border: 1px solid rgba(234, 179, 8, 0.28);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    font-size: 0.82rem;
+  }
+  .whale-compliance strong { color: #ca8a04; }
+  .whale-compliance p { margin: 0.4rem 0 0; opacity: 0.82; line-height: 1.65; }
+</style>
 
 <style>
 .whale-signup-banner {

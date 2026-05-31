@@ -353,8 +353,8 @@ const description = "${safeDescription}";
       <TimeAttackLounge signalId="${slug}" isBuy={${isBuy}} />
 
       <div class="ai-disclaimer">
-        <strong>⚠️ 투자 주의사항</strong>
-        <p>본 콘텐츠는 AI(Google Gemini)가 공개된 공시 데이터를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목에 대한 투자 추천 또는 투자 조언이 아니며, 투자 결정은 반드시 본인의 판단과 책임하에 이루어져야 합니다.</p>
+        <strong>⚠️ 투자 주의 · 면책</strong>
+        <p>본 콘텐츠는 AI가 <strong>공개 공시 데이터(SEC·DART)</strong>를 바탕으로 생성한 정보 제공 목적의 콘텐츠입니다. 특정 종목의 매수·매도 <strong>추천 또는 투자 자문이 아니며</strong>, '고래를 따라 거래'할 것을 권유하지 않습니다. D+30/90/180/365 수치는 <strong>과거 raw 종가 변동률(시장평균 미보정)</strong>이며 <strong>과거 성과는 미래 수익을 보장하지 않습니다.</strong> 내부자 거래는 분산·세무·보상 등 다양한 사유로 발생하며 <strong>미공개중요정보(MNPI)의 이용을 시사하지 않습니다.</strong> 모든 수치는 상단 공시 원문 링크에서 직접 검증하시고, 투자 결정과 책임은 전적으로 본인에게 있습니다.</p>
       </div>
     </div>
   </div>
