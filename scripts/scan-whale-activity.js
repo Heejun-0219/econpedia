@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
 import YahooFinance from 'yahoo-finance2';
+import { secForm4Url, dartReceiptUrl } from './lib/source-url.js';
 
 dotenv.config();
 
@@ -243,6 +244,7 @@ async function scanSecForm4(majorCiks) {
         type: 'insider',
         market: 'us',
         source: 'SEC Form 4',
+        sourceUrl: secForm4Url(item.cik, item.accession),
         companyName: item.companyName,
         ticker: tickerTag,
         cik: item.cik,
@@ -352,6 +354,7 @@ async function scanDartInsider(majorCorpCodes) {
           type: 'insider',
           market: 'kr',
           source: 'DART 지분공시',
+          sourceUrl: dartReceiptUrl(item.rcept_no) || dartReceiptUrl(rep.rcept_no),
           companyName: item.corp_name,
           ticker: item.stock_code,
           corpCode: item.corp_code,
