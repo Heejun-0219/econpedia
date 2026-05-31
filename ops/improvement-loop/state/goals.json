@@ -8,8 +8,8 @@
     "gate_scoreboard": {
       "G1_data_integrity": {
         "status": "partial",
-        "done": ["중복 fingerprint 정확일치 0 유지(#84 drift 2건 제거)", "D+N 후행가격 영속화+백필잡(#85, 도래구간 커버리지 100%)"],
-        "open": ["검증가능 소스링크(SEC/DART URL) 0/61 페이지 — 최우선", "거래일 기반 dedup 하드닝(현재 공시일 사용)", "QC 환각수치 14일 측정 미가동"]
+        "done": ["중복 fingerprint 정확일치 0 유지(#84 drift 2건 제거)", "D+N 후행가격 영속화+백필잡(#85, 도래구간 커버리지 100%)", "검증가능 소스링크 SEC accession/DART rcpNo forward-fix(#88)+첫 CI 테스트", "거래일 기반 dedup 하드닝 — Form 4 transactionDate 파싱(#92, 근본원인 해소)", "백필 견고성: 일시장애 시 good 데이터 보존+재시도(#91)"],
+        "open": ["기존 61페이지 소스URL 백필(SEC/DART 재조회 필요)", "DART 거래일 dedup(elestock 거래일 필드 부재)", "QC 환각수치 14일 측정 미가동"]
       },
       "G2_track_record": {
         "status": "infra_built_data_blocked",
@@ -29,7 +29,7 @@
         "open": ["4주 연속 무롤백 메타자동화 사이클 — 시간 블로커(14일 후행윈도우×4)", "4주 연속 audit 노트 — 시간 블로커", "메타자동화 cron은 G3 측정 정착 후 활성"]
       }
     },
-    "completion_blocker": "완료정의의 시간/데이터/실사용자/1-way-door 조건(4주 연속 사이클, 30insider×5거래 누적, 100 실구독자, 첫 결제)은 단일 세션에서 충족 불가. 코드 가능한 인프라(G1·G2·G6 빌더)는 구축 완료. 다음 필수 액션: (1)G1 소스링크 provenance, (2)G3 측정 계측, (3)PR 백로그 정리, (4)G5 결제는 사용자 컨펌.",
+    "completion_blocker": "완료정의의 시간/데이터/실사용자/1-way-door 조건(4주 연속 audit·메타자동화, 30insider×5거래 누적, 100 실구독자, 첫 결제)은 단일 세션 충족 불가 — 구조적 longitudinal 게이트. 2026-05-31 확장 사이클에서 코드 가능한 G1(소스링크·거래일dedup·D+N·견고성)·G3(측정 라이브화)·G6(MVP·audit#1) 인프라 구축 완료, PR 백로그 15→8 정리. 잔여 코드 액션: (1)기존61페이지 소스URL 백필, (2)G3 일일 스냅샷 델타잡·whale per-page 누적, (3)DART 거래일 dedup, (4)QC 14일 측정. 사용자 액션: G5 결제(1-way door), 텔레그램 채널ID(구독자 실측), 잔여 8 PR 제품판단.",
     "next_milestone_candidate": "Whale Alert Scale-Up — 1000 활성 텔레그램 구독 + 월 반복 수익"
   },
   "north_star": {
