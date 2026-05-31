@@ -182,34 +182,6 @@
     "significance": 70
   },
   {
-    "slug": "whale-cgct-2026-05-25",
-    "title": "CEO의 9천만 원 자사주 쇼핑, 내 지갑도 따라가야 할까?",
-    "excerpt": "CGCT CEO가 9,162만 원어치 자사주를 매수했습니다. 과거 유사 사례 분석을 통해 이 거래가 내 지갑에 미칠 영향을 숫자로 풀어드립니다.",
-    "date": "2026-05-25",
-    "ticker": "CGCT",
-    "companyName": "Cartesian Growth Corp III",
-    "category": "insider",
-    "market": "us",
-    "isBuy": true,
-    "person": "CGC III Sponsor LLC / Chairman and CEO",
-    "amount": "$63K (약 9,162만 원)",
-    "significance": 60
-  },
-  {
-    "slug": "whale-crwv-2026-05-25",
-    "title": "CoreWeave CEO의 19억 원 규모 자사주 매도, 과거의 '위험 신호'와 얼마나 닮았을까?",
-    "excerpt": "CoreWeave CEO의 19억 원 매도, 과거 유사 사례의 1년 뒤 평균 수익률은 -82.67%였습니다. 내 계좌에 미칠 영향을 확인하세요.",
-    "date": "2026-05-25",
-    "ticker": "CRWV",
-    "companyName": "CoreWeave, Inc.",
-    "category": "insider",
-    "market": "us",
-    "isBuy": false,
-    "person": "Intrator Michael N / CEO and President",
-    "amount": "$1.31M (약 19억 원)",
-    "significance": 60
-  },
-  {
     "slug": "whale-cgct-2026-05-23",
     "title": "회장님의 9천만 원어치 자사주 쇼핑, 내 지갑엔 어떤 의미일까?",
     "excerpt": "CGCT 회장의 9,162만원 자사주 매수! 과거 리먼 브라더스, JP모건 사례와 비교해 내 지갑에 주는 진짜 시그널을 숫자로 번역해 드립니다.",
