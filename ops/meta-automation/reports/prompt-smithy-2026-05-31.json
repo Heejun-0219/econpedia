@@ -1,0 +1,19 @@
+{
+  "track": "prompt-smithy",
+  "generatedAt": "2026-05-31T09:57:24.706Z",
+  "changeBudget": "1/week",
+  "guards": {
+    "pauseFlag": false,
+    "complianceLock": "critique high-severity 프롬프트 변경 차단"
+  },
+  "decision": {
+    "action": "NO_CHANGE",
+    "reason": "프롬프트 품질 신호(후행 CTR·체류)가 G3 측정에 의존하는데 모두 null. blind rewrite는 출력 일관성·신뢰(법칙 #6) 위험. G3 정착 후 최약 프롬프트 1개 선정 → 페르소나 rewrite → LLM judge 승률 70%+ 채택 파이프라인 가동.",
+    "blockedOn": "G3-measurement",
+    "assetsTracked": [
+      "src/data/prompts.js",
+      "ops/improvement-loop/prompts/critique.md",
+      "ops/improvement-loop/prompts/synthesize.md"
+    ]
+  }
+}
