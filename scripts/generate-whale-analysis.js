@@ -318,7 +318,9 @@ const description = "${safeDescription}";
           ? `${signal.amountUsd || ''}${signal.amountKrw ? ` <span style="opacity:.85">(약 ${signal.amountKrw})</span>` : ''}`
           : (signal.amount || '집계 불가')}</p>
         ${signal.shares ? `<p><strong>수량 · 단가:</strong> ${signal.shares.toLocaleString('en-US')}주 · ${signal.currency === 'KRW' ? `₩${Math.round(signal.pricePerShare || 0).toLocaleString('ko-KR')}` : `$${(signal.pricePerShare || 0).toFixed(2)}`}${signal.priceSource === 'estimate_50000_krw' ? ' <span style="opacity:.6">(단가 추정)</span>' : ''}</p>` : ''}
-        <p><strong>출처:</strong> ${signal.source}${signal.sector ? ` · ${signal.sector}` : ''}</p>
+        <p><strong>출처:</strong> ${signal.sourceUrl
+          ? `<a href="${signal.sourceUrl}" target="_blank" rel="noopener noreferrer nofollow">${signal.source} 원문 ↗</a> <span style="opacity:.6;font-size:.85em">(공시 원문에서 직접 검증)</span>`
+          : signal.source}${signal.sector ? ` · ${signal.sector}` : ''}</p>
       </div>
 
       <WhaleChart chartData='${chartDataStr}' transactionDate='${signal.date}' isBuy={${isBuy}} ticker='${safeTicker(signal.ticker)}' currency='${signal.currency || 'USD'}' />
@@ -447,7 +449,8 @@ const description = "${safeDescription}";
     slug, title: safeTitle, excerpt: safeDescription, date: signal.date,
     ticker: signal.ticker, companyName: signal.companyName,
     category: signal.type, market: signal.market, isBuy,
-    person: signal.person, amount: signal.amount, significance: signal.significance
+    person: signal.person, amount: signal.amount, significance: signal.significance,
+    sourceUrl: signal.sourceUrl || null
   };
 }
 
