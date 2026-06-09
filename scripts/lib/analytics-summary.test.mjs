@@ -31,7 +31,15 @@ t('bounce rate = bounces/sessions', () => {
 t('whale 섹션 분리 집계', () => {
   const s = computeAnalyticsSummary(daily, '2026-05-31', 7);
   assert.equal(s.whale.pageviews, 40);
+  assert.equal(s.whale.sessions, 28); // 20 + 8
   assert.equal(s.whale.avgDwellSec, round(4800 / 28)); // (3600+1200)/(20+8)
+});
+
+t('whaleAsSessionEntryPct — W1 게이트 metric (whale.sessions / sessions)', () => {
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7);
+  assert.equal(s.whaleAsSessionEntryPct, 0.35); // 28/80 = 0.35
+  const empty = computeAnalyticsSummary({}, '2026-05-31', 7);
+  assert.equal(empty.whaleAsSessionEntryPct, 0); // 0-division 안전
 });
 
 t('빈 데이터 — 0 division 안전', () => {
