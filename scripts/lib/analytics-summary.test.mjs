@@ -6,8 +6,8 @@ let pass = 0;
 const t = (name, fn) => { fn(); pass++; console.log('  ✓', name); };
 
 const daily = {
-  '2026-05-31': { pageviews: 100, bounces: 20, totalDwell: 6000, sessions: 50, scrollDepthSum: 4000, scrollSamples: 50, ctaClicks: 5, whale: { pageviews: 30, totalDwell: 3600, sessions: 20, scrollDepthSum: 1600, scrollSamples: 20, ctaClicks: 3 } },
-  '2026-05-30': { pageviews: 60, bounces: 10, totalDwell: 3000, sessions: 30, scrollDepthSum: 1500, scrollSamples: 30, ctaClicks: 2, whale: { pageviews: 10, totalDwell: 1200, sessions: 8, scrollDepthSum: 480, scrollSamples: 8, ctaClicks: 1 } },
+  '2026-05-31': { pageviews: 100, bounces: 20, totalDwell: 6000, sessions: 50, scrollDepthSum: 4000, scrollSamples: 50, ctaClicks: 5, whale: { pageviews: 30, bounces: 5, totalDwell: 3600, sessions: 20, scrollDepthSum: 1600, scrollSamples: 20, ctaClicks: 3 } },
+  '2026-05-30': { pageviews: 60, bounces: 10, totalDwell: 3000, sessions: 30, scrollDepthSum: 1500, scrollSamples: 30, ctaClicks: 2, whale: { pageviews: 10, bounces: 2, totalDwell: 1200, sessions: 8, scrollDepthSum: 480, scrollSamples: 8, ctaClicks: 1 } },
   '2026-04-01': { pageviews: 999, bounces: 0, totalDwell: 0, sessions: 999 }, // 윈도우 밖
 };
 
@@ -47,8 +47,14 @@ t('빈 데이터 — 0 division 안전', () => {
   assert.equal(s.avgSessionDurationSec, 0);
   assert.equal(s.bounceRate, 0);
   assert.equal(s.whale.avgDwellSec, 0);
+  assert.equal(s.whale.bounceRate, 0);
   assert.equal(s.avgScrollDepthPct, 0);
   assert.equal(s.ctaClicks, 0);
+});
+
+t('whale.bounceRate — W3 wedge metric (whale.bounces / whale.sessions)', () => {
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7);
+  assert.equal(s.whale.bounceRate, 0.25); // (5+2)/(20+8) = 7/28
 });
 
 t('스크롤 깊이 평균 + CTA 클릭 집계', () => {
