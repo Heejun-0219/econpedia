@@ -160,7 +160,15 @@ async function buildSnapshot() {
   // Code stats
   const totalFiles = parseInt(safeExec(`find src api scripts -type f \\( -name "*.js" -o -name "*.mjs" -o -name "*.astro" -o -name "*.ts" \\) | wc -l`) || '0', 10);
   const astroPages = parseInt(safeExec(`find src/pages -name "*.astro" | wc -l`) || '0', 10);
-  const whalePages = parseInt(safeExec(`find src/pages/whale -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+  const whalePages = parseInt(safeExec(`find src/pages/whale -name "*.astro" -not -name "index.astro" 2>/dev/null | wc -l`) || '0', 10);
+  // whale_alert_pages KPI = user-visible whale alerts (manifest count), not raw .astro files.
+  // /whale/index.astro lists manifest entries, so this is what users actually browse.
+  // 차이가 있으면 orphan(legacy/noindex) 또는 누락된 generator entry — DA 가 잡는다.
+  let whaleManifestCount = whalePages;
+  try {
+    const manifest = JSON.parse(await fs.readFile(path.join(ROOT, 'src/data/whale-analyses.json'), 'utf8'));
+    if (Array.isArray(manifest)) whaleManifestCount = manifest.length;
+  } catch {}
   const dailyPages = parseInt(safeExec(`find src/pages/daily -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
   const blogPages = parseInt(safeExec(`find src/pages/blog -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
 
@@ -262,7 +270,7 @@ async function buildSnapshot() {
     },
     kpis: {
       ...kpis,
-      content: { ...kpis.content, whale_alert_pages: whalePages },
+      content: { ...kpis.content, whale_alert_pages: whaleManifestCount },
       engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers, newsletter_subscribers: newsletterSubscribers },
       traffic: {
         ...kpis.traffic,
