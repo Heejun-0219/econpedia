@@ -164,11 +164,14 @@ async function buildSnapshot() {
   const dailyPages = parseInt(safeExec(`find src/pages/daily -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
   const blogPages = parseInt(safeExec(`find src/pages/blog -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
 
-  // Git
+  // Git — reference origin/main so a stale local working branch can't make the snapshot
+  // misreport "Last commit" / "Recent N commits" (was root cause of 2026-06-10 duplicate-PR #106).
+  safeExec('git fetch origin main --quiet');
+  const gitRef = safeExec('git rev-parse --verify --quiet origin/main') ? 'origin/main' : 'HEAD';
   const branch = safeExec('git rev-parse --abbrev-ref HEAD');
-  const last20Commits = safeExec('git log -20 --pretty=format:"%h %ad %s" --date=short');
-  const commitCount30d = parseInt(safeExec('git log --since=30.days --oneline | wc -l') || '0', 10);
-  const lastCommitDate = safeExec('git log -1 --pretty=format:"%ad" --date=short');
+  const last20Commits = safeExec(`git log ${gitRef} -20 --pretty=format:"%h %ad %s" --date=short`);
+  const commitCount30d = parseInt(safeExec(`git log ${gitRef} --since=30.days --oneline | wc -l`) || '0', 10);
+  const lastCommitDate = safeExec(`git log ${gitRef} -1 --pretty=format:"%ad" --date=short`);
 
   // Build size if dist exists
   const distSize = safeExec(`du -sk dist 2>/dev/null | cut -f1`) || null;
@@ -420,8 +423,10 @@ async function runDaily({ snapshotMd, latestPlan }) {
     }
   } catch {}
 
-  // Last 24h git log + recently closed PRs/issues
-  const last24hCommits = safeExec('git log --since=24.hours --pretty=format:"%h %ad %s" --date=short') || '(none in last 24h)';
+  // Last 24h git log + recently closed PRs/issues — use origin/main so daily critique sees what shipped
+  safeExec('git fetch origin main --quiet');
+  const dailyGitRef = safeExec('git rev-parse --verify --quiet origin/main') ? 'origin/main' : 'HEAD';
+  const last24hCommits = safeExec(`git log ${dailyGitRef} --since=24.hours --pretty=format:"%h %ad %s" --date=short`) || '(none in last 24h)';
   const recentlyClosedPRs = safeExec('gh pr list --state closed --limit 5 --search "closed:>=' + new Date(Date.now() - 24 * 3600 * 1000).toISOString().split('T')[0] + '" --json number,title 2>/dev/null') || '[]';
 
   const system = [personaPrompt, dailyPrompt];
