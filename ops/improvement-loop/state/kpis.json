@@ -1,6 +1,6 @@
 {
   "_description": "improvement loop가 매 사이클 시작 시 채워 넣는 KPI 스냅샷. 값을 모르면 null. snapshot.js가 가능한 만큼 자동 수집하고, 나머지는 사람이 채운다.",
-  "_lastUpdated": "2026-06-09",
+  "_lastUpdated": "2026-06-10",
   "_measurementNote": "traffic 값은 2026-05-31 프로덕션 GET /api/analytics/summary(무PII 7일 집계)에서 실측 캡처. whale per-path dwell는 이 배포부터 버킷팅 시작 → 누적 후 채워짐. 이후 snapshot이 자동 갱신.",
   "_schemaVersion": 1,
   "infra": {
@@ -21,7 +21,7 @@
     "total_pages": null,
     "ai_generated_pages": null,
     "monthly_ai_pages_published": null,
-    "whale_alert_pages": 62
+    "whale_alert_pages": 60
   },
   "traffic": {
     "daily_visitors_7d_avg": 8,
