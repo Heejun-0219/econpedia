@@ -417,6 +417,7 @@ const server = createServer(async (req, res) => {
       if (onWhale) todayStats.whale.totalDwell += td;
     } else if (body.type === 'bounce') {
       todayStats.bounces += 1;
+      if (onWhale) todayStats.whale.bounces = (todayStats.whale.bounces || 0) + 1;
     } else if (body.type === 'scroll') {
       // G3 스크롤 깊이(0-100%) 누적 → 평균 산출용
       const depth = typeof body.depth === 'number' && Number.isFinite(body.depth) ? Math.min(Math.max(body.depth, 0), 100) : null;

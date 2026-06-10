@@ -23,7 +23,7 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
   }
 
   const acc = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
-  const whaleAcc = { pageviews: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
+  const whaleAcc = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
   let daysWithData = 0;
 
   for (const [date, v] of Object.entries(map)) {
@@ -38,6 +38,7 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     acc.ctaClicks += v.ctaClicks || 0;
     if (v.whale) {
       whaleAcc.pageviews += v.whale.pageviews || 0;
+      whaleAcc.bounces += v.whale.bounces || 0;
       whaleAcc.totalDwell += v.whale.totalDwell || 0;
       whaleAcc.sessions += v.whale.sessions || 0;
       whaleAcc.scrollDepthSum += v.whale.scrollDepthSum || 0;
@@ -63,6 +64,8 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
       sessions: whaleAcc.sessions,
       dailyVisitors7dAvg: round(whaleAcc.sessions / days),
       avgDwellSec: whaleAcc.sessions > 0 ? round(whaleAcc.totalDwell / whaleAcc.sessions) : 0,
+      // W3 wedge metric — whale 진입 세션이 10초 안에 떠난 비율. 낮을수록 sticky.
+      bounceRate: whaleAcc.sessions > 0 ? round(whaleAcc.bounces / whaleAcc.sessions, 3) : 0,
       avgScrollDepthPct: whaleAcc.scrollSamples > 0 ? round(whaleAcc.scrollDepthSum / whaleAcc.scrollSamples) : 0,
       ctaClicks: whaleAcc.ctaClicks,
     },
