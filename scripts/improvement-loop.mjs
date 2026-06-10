@@ -270,6 +270,7 @@ async function buildSnapshot() {
           whale_daily_visitors: analyticsSummary.whale?.dailyVisitors7dAvg ?? kpis.traffic?.whale_daily_visitors ?? null,
           whale_avg_dwell_sec: analyticsSummary.whale?.avgDwellSec ?? null,
           whale_as_session_entry_pct: analyticsSummary.whaleAsSessionEntryPct ?? null,
+          whale_bounce_rate: analyticsSummary.whale?.bounceRate ?? null,
         } : {}),
       },
       telegram: { ...kpis.telegram, subscribers: telegramSubscribers },
