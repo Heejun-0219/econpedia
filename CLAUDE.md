@@ -21,14 +21,19 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-05-24 기준: 잔존 기술부채 및 다음 우선순위:
+> 2026-06-10 기준 (weekly cycle). Sprint Focus: Whale = The Product (W1 front door · W3 distribution · W5 compliance).
 
 - **P1 잔존 (완화됨)**: `api/server.js` in-memory poll/wallet 데이터 — PR #69로 atomic write 적용, SIGKILL 시 30초 이내 변경분 유실 위험은 잔존. Supabase 직접 저장 전환 권고 (다음 sprint 후보).
 - **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 — Opinet 출처 주석 추가 완료.
-- **다음 growth 우선순위**: whale→email 퍼널 실제 전환율 측정 (PR #78 태그 배포 후 Resend 대시보드 확인). Supabase RLS `user_settings` COUNT 권한 확인 (`wallet_authenticated_users` 계속 null인 경우 → 직접 RLS 정책 수정).
-- **다음 defensive 우선순위**: Supabase Edge Functions poll/wallet 영구 저장 전환 (P1 잔존, 별도 sprint 1개 분량).
+- **다음 growth 우선순위 (W3 distribution wedge)**: Telegram `/invite` 친구 초대 슬롯 + referral UTM (tech-radar 2026-06-10 항목 1). 1-1.5 sprint, *사용자 컨펌 후* 착수 (incentive 설계 결합).
+- **다음 defensive 우선순위 (W1/W2 reliability)**: SEC EDGAR polling 주기 단축 (16h cron → 15분 polling, tech-radar 2026-06-10 항목 2). backend-only, 사용자 결정 불필요. **즉시 채택 가능**.
+- **잔존 W5/W2 compliance**: 일부 슬러그 페이지 (e.g. `whale-sym-2026-05-30.astro`) 가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음. 다음 defensive 후보.
+- **장기 P1**: Supabase Edge Functions poll/wallet 영구 저장 전환 (별도 sprint 1개 분량).
 
 **해결 완료 항목** (참고용):
+- ~~snapshot whale_alert_pages 카운터 drift (62 vs 60 vs 61)~~ → PR #111 (manifest-based count + index 제외)
+- ~~pre-pivot orphan `whale-20260423-MXF.astro` 검색 인덱스 노출~~ → PR #111 (noindex)
+- ~~홈에 actual whale signal 카드 surface 없음~~ → PR #110 (latest 3, hero 직하)
 - ~~P0: `POLLS_FILE`/`WALLETS_FILE` 미정의~~ → PR #18
 - ~~P0: TimeAttackLounge `full_name` XSS~~ → HTML escaping 적용
 - ~~P0: `/api/track`, `/api/analytics`, `/api/poll/*`, `/api/wallet-subscribe` 레이트리밋 없음~~ → PR #30, #36
