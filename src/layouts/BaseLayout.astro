@@ -43,6 +43,7 @@ const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pr
     <meta name="description" content={description} />
     {isNoindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title="EconPedia · Whale Alert" href="/whale/rss.xml" />
     
     <!-- Open Graph -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
