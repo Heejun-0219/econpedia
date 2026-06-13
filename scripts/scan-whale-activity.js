@@ -17,9 +17,30 @@ const ROOT = path.join(__dirname, '..');
 
 const MAJOR_COMPANIES_PATH = path.join(ROOT, 'src', 'data', 'major-companies.json');
 const SIGNALS_PATH = path.join(ROOT, '.whale-signals.json');
+// SEC accession idempotency cache — 15분 polling 단축 (다음 sprint) 전제 조건.
+// 본 파일은 runtime state (gitignored). 손실 = 1회 분량 재fetch, 멱등성 자체는 dedupKey 가 별도 보장.
+const SEEN_ACCESSIONS_PATH = path.join(ROOT, '.seen-accessions.json');
+const SEEN_CACHE_MAX = 2000;
 
 const SEC_HEADERS = { 'User-Agent': 'EconPedia econpedia@dedyn.io', 'Accept': 'application/json' };
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+async function loadSeenAccessions() {
+  try {
+    const raw = await fs.readFile(SEEN_ACCESSIONS_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed?.sec)) return { sec: new Set(parsed.sec) };
+  } catch { /* missing/corrupted → fail open (empty cache) */ }
+  return { sec: new Set() };
+}
+
+async function saveSeenAccessions(state) {
+  // FIFO 캡 — 가장 최근 SEEN_CACHE_MAX 만 유지. Set iteration 은 insertion order.
+  const secArr = Array.from(state.sec).slice(-SEEN_CACHE_MAX);
+  const tmp = SEEN_ACCESSIONS_PATH + '.tmp';
+  await fs.writeFile(tmp, JSON.stringify({ sec: secArr, updatedAt: new Date().toISOString() }, null, 2), 'utf8');
+  await fs.rename(tmp, SEEN_ACCESSIONS_PATH);
+}
 
 // 환율 — 디스플레이용 근사 (정확한 환산이 필요한 경우 추후 외부 fetch로 대체 가능)
 const USD_TO_KRW = 1450;
@@ -167,10 +188,11 @@ function formatTotal(totalUsd) {
 }
 
 // ── SEC: 전체 시장 RSS 스캔 ──────────────────────────────
-async function scanSecForm4(majorCiks) {
+async function scanSecForm4(majorCiks, seenState) {
   console.log('\n🇺🇸 [SEC] 미국 전체 시장 Form 4 RSS 스캔 시작...');
   const signals = [];
-  
+  const seen = seenState.sec;
+
   // RSS 피드에서 최근 300건 가져오기 (100건씩 3페이징)
   const targetEntries = [];
   for (let start = 0; start < 300; start += 100) {
@@ -206,8 +228,19 @@ async function scanSecForm4(majorCiks) {
 
   console.log(`  📊 최근 RSS Form 4 공시: ${targetEntries.length}건 (Issuer 기준)`);
 
-  for (const item of targetEntries) {
+  // Idempotency 가드 — 이전 스캔에서 본 accession # 은 .txt 재fetch 스킵.
+  // dedupKey (ticker|거래일) 는 별도 안전망 (filing drift 흡수) — 이건 fetch 비용 최적화 전용.
+  const beforeCount = targetEntries.length;
+  const freshEntries = targetEntries.filter(item => !seen.has(item.accession));
+  const skipped = beforeCount - freshEntries.length;
+  if (skipped > 0) console.log(`  ⏭️  캐시 히트로 스킵: ${skipped}건 (${SEC_HEADERS['User-Agent']} 부담 절감)`);
+  console.log(`  🔎 신규 처리 대상: ${freshEntries.length}건`);
+
+  for (const item of freshEntries) {
     await sleep(200); // SEC rate limit 준수
+    // 처리 시도 자체를 캐시에 기록 → 일시적 에러(rate limit, 5xx) 재시도가 막힐 수 있으나
+    // RSS 윈도우 자체가 좁아 (다음 스캔에서 새 entry 로 덮임) 비용/이득 측면 ok.
+    seen.add(item.accession);
     try {
       const accNoDashes = item.accession.replace(/-/g, '');
       const cikNumber = parseInt(item.cik, 10).toString();
@@ -422,10 +455,13 @@ async function main() {
   const usCiks = majorData.us || {};
   const krCorpCodes = majorData.kr || {};
 
+  const seenState = await loadSeenAccessions();
+  if (seenState.sec.size > 0) console.log(`📦 캐시 로드: SEC accession ${seenState.sec.size}건`);
+
   const allSignals = [];
 
   // 1. SEC Form 4 전체 시장 스캔
-  const secSignals = await scanSecForm4(usCiks);
+  const secSignals = await scanSecForm4(usCiks, seenState);
   allSignals.push(...secSignals);
 
   // 2. DART 지분공시 전체 시장 스캔
@@ -445,6 +481,11 @@ async function main() {
   });
 
   await fs.writeFile(SIGNALS_PATH, JSON.stringify(unique, null, 2), 'utf8');
+  try {
+    await saveSeenAccessions(seenState);
+  } catch (e) {
+    console.warn(`⚠️ accession 캐시 저장 실패 (다음 스캔이 재fetch): ${e.message}`);
+  }
   console.log(`\n🐋 스캔 완료: ${unique.length}건의 Whale Signal 저장됨 (최상위 필터 통과분)`);
   if (unique.length > 0) {
     console.log('\n📊 Top 5 시그널:');

@@ -30,3 +30,4 @@ data/wallets.json
 .cardnews-status.json
 .blog-status.json
 .market-data.json
+.seen-accessions.json
