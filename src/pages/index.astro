@@ -5,6 +5,7 @@ import dailyArticles from '../data/daily-articles.json';
 import blogArticles from '../data/blog-articles.json';
 import weatherSummaryData from '../data/weather-summary.json';
 import ctaCardsData from '../data/cta-cards.json';
+import whaleAnalyses from '../data/whale-analyses.json';
 import fs from 'fs';
 import path from 'path';
 import '../styles/home-redesign.css';
@@ -13,6 +14,10 @@ import MarketTicker from '../components/MarketTicker.jsx';
 const latestBriefings = [...dailyArticles]
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 5);
+
+const latestWhales = [...whaleAnalyses]
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .slice(0, 3);
 
 let marketData = { weatherData: { weather: 'sunny', emoji: '☀️', label: '맑음', headline: '오늘은 평화로운 날이에요', color: '#34d399', walletImpacts: [] }, raw: { oil: { price: 68.2, changePercent: -3.1 }, kospi: { price: 2684, changePercent: 0.4 }, krw: { price: 1475, changePercent: 0.6 }, sp500: { price: 4.32, changePercent: 0 } } };
 try {
@@ -167,14 +172,11 @@ const thisWeek = Array.from({length: 7}).map((_, i) => {
 });
 
 // ─── 트래픽 메트릭 로드 (빌드 타임) ─────────────────────
-let siteStats = { 
-  total_visitors: 0, 
+let siteStats = {
+  total_visitors: 0,
   daily_visitors: 0,
   subscribers: 0,
-  portfolio_users: 0,
-  openRate: 0,
-  rating: 0,
-  course_completions: 0
+  portfolio_users: 0
 };
 try {
   // 배포된 환경의 API에서 통계 데이터를 긁어옴 (SSG 빌드 시 최신값 반영)
@@ -266,6 +268,36 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       <p class="whale-home-hero__disclaimer">투자 추천이 아닌 공개 공시 데이터 기반 정보 제공. 모든 수치는 원문에서 검증 가능.</p>
     </section>
 
+    {latestWhales.length > 0 && (
+      <section class="whale-home-latest" aria-label="최근 Whale 시그널">
+        <div class="whale-home-latest__head">
+          <h2 class="whale-home-latest__title">🐋 최근 감지된 시그널</h2>
+          <a class="whale-home-latest__more" href="/whale?utm_source=home&utm_medium=latest&utm_campaign=whale_browse">전체 보기 →</a>
+        </div>
+        <div class="whale-home-latest__grid">
+          {latestWhales.map((w) => (
+            <a
+              class={`whale-home-card ${w.isBuy ? 'whale-home-card--buy' : 'whale-home-card--sell'}`}
+              href={`/whale/${w.slug}?utm_source=home&utm_medium=latest_card&utm_campaign=whale_view`}
+            >
+              <div class="whale-home-card__top">
+                <span class="whale-home-card__market">{w.market === 'us' ? '🇺🇸 US' : '🇰🇷 KR'}</span>
+                <span class={`whale-home-card__dir ${w.isBuy ? 'buy' : 'sell'}`}>{w.isBuy ? 'BUY' : 'SELL'}</span>
+                <span class="whale-home-card__date">{w.date}</span>
+              </div>
+              <h3 class="whale-home-card__title">{w.title}</h3>
+              {w.amount && <p class="whale-home-card__amount">{w.amount.split('·')[0].trim()}</p>}
+              <p class="whale-home-card__excerpt">{w.excerpt}</p>
+              <div class="whale-home-card__foot">
+                <span>{w.companyName} ({w.ticker})</span>
+                <span class="whale-home-card__read">분석 보기 →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
     <!-- ============================================================
       ISSUE 07 — WEEKLY WEATHER
     ============================================================ -->
@@ -356,9 +388,7 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
     <div class="i2-triple">
       {ctaCardsData.map(card => {
         const processedMetrics = card.metricsHtml
-          .replace('{subscribers}', Number(siteStats.subscribers).toLocaleString())
-          .replace('{openRate}', siteStats.openRate)
-          .replace('{course_completions}', Number(siteStats.course_completions).toLocaleString());
+          .replace('{subscribers}', Number(siteStats.subscribers).toLocaleString());
           
         return (
           <div class={`i2-card ${card.isRecommended ? 'rec' : ''}`}>
@@ -494,8 +524,6 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
           <div class="d">이코노가 직접 쓴 브리핑을 매일 아침 보내드려요. <b>읽는 데 3분</b>, 이해하는 데 30초. 원할 때 한 번에 해지할 수 있어요.</div>
           <div class="i6-proof">
             <div class="p"><div class="v" id="stat-subscribers">{Number(siteStats.subscribers).toLocaleString()}</div><div class="l">구독자</div></div>
-            <div class="p"><div class="v" id="stat-openrate">{siteStats.openRate}%</div><div class="l">평균 열람률</div></div>
-            <div class="p"><div class="v" id="stat-rating">{siteStats.rating}</div><div class="l">독자 만족도</div></div>
           </div>
           <form id="subscribe-form-new" class="i6-form">
             <input type="email" id="subscribe-email-new" placeholder="이메일 주소" required />
@@ -646,20 +674,6 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
             if (subEl) subEl.textContent = Number(data.subscribers).toLocaleString();
             if (subEl2) subEl2.textContent = Number(data.subscribers).toLocaleString() + '명';
           }
-          if (data.openRate !== undefined) {
-            const orEl = document.getElementById('stat-openrate');
-            const orEl2 = document.getElementById('stat-i2-openrate');
-            if (orEl) orEl.textContent = data.openRate + '%';
-            if (orEl2) orEl2.textContent = data.openRate + '%';
-          }
-          if (data.rating !== undefined) {
-            const rEl = document.getElementById('stat-rating');
-            if (rEl) rEl.textContent = data.rating;
-          }
-          if (data.course_completions !== undefined) {
-            const cEl = document.getElementById('stat-i2-completions');
-            if (cEl) cEl.textContent = Number(data.course_completions).toLocaleString() + '명';
-          }
           if (data.portfolio_users !== undefined) {
             const pEl = document.getElementById('stat-portfolio-users');
             if (pEl) pEl.textContent = Number(data.portfolio_users).toLocaleString();
@@ -710,5 +724,35 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
     .whale-home-hero__btn--ghost:hover { background: rgba(16,185,129,.08); }
     .whale-home-hero__disclaimer { margin: 1.1rem 0 0; font-size: .78rem; opacity: .6; }
     @media (max-width: 560px) { .whale-home-hero { padding: 1.8rem 1.2rem 1.4rem; } .whale-home-hero__btn { width: 100%; } }
+
+    /* 최근 Whale 시그널 (홈 front door — W1) */
+    .whale-home-latest { margin: -.5rem 0 2.5rem; }
+    .whale-home-latest__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .whale-home-latest__title { font-size: 1.1rem; font-weight: 800; margin: 0; }
+    .whale-home-latest__more { font-size: .85rem; font-weight: 700; color: #10b981; text-decoration: none; white-space: nowrap; }
+    .whale-home-latest__more:hover { text-decoration: underline; }
+    .whale-home-latest__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .whale-home-card {
+      display: flex; flex-direction: column; gap: .5rem;
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: 14px; padding: 1.1rem 1.2rem;
+      text-decoration: none; color: inherit;
+      transition: transform .15s, box-shadow .15s, border-color .15s;
+    }
+    .whale-home-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.08); border-color: rgba(16,185,129,.4); }
+    .whale-home-card--buy { border-left: 3px solid #10b981; }
+    .whale-home-card--sell { border-left: 3px solid #ef4444; }
+    .whale-home-card__top { display: flex; align-items: center; gap: .5rem; font-size: .75rem; opacity: .8; }
+    .whale-home-card__market { font-weight: 700; }
+    .whale-home-card__dir { padding: .12rem .5rem; border-radius: 4px; font-weight: 800; font-size: .7rem; }
+    .whale-home-card__dir.buy { background: rgba(16,185,129,.15); color: #10b981; }
+    .whale-home-card__dir.sell { background: rgba(239,68,68,.15); color: #ef4444; }
+    .whale-home-card__date { margin-left: auto; opacity: .6; }
+    .whale-home-card__title { font-size: 1rem; line-height: 1.4; margin: .1rem 0 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .whale-home-card__amount { margin: 0; font-size: .85rem; font-weight: 700; opacity: .9; }
+    .whale-home-card__excerpt { margin: 0; font-size: .82rem; line-height: 1.5; opacity: .75; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .whale-home-card__foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-size: .75rem; opacity: .7; margin-top: auto; padding-top: .35rem; }
+    .whale-home-card__read { font-weight: 700; color: #10b981; }
+    @media (max-width: 860px) { .whale-home-latest__grid { grid-template-columns: 1fr; } }
   </style>
 </BaseLayout>

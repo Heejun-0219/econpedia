@@ -160,15 +160,26 @@ async function buildSnapshot() {
   // Code stats
   const totalFiles = parseInt(safeExec(`find src api scripts -type f \\( -name "*.js" -o -name "*.mjs" -o -name "*.astro" -o -name "*.ts" \\) | wc -l`) || '0', 10);
   const astroPages = parseInt(safeExec(`find src/pages -name "*.astro" | wc -l`) || '0', 10);
-  const whalePages = parseInt(safeExec(`find src/pages/whale -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+  const whalePages = parseInt(safeExec(`find src/pages/whale -name "*.astro" -not -name "index.astro" 2>/dev/null | wc -l`) || '0', 10);
+  // whale_alert_pages KPI = user-visible whale alerts (manifest count), not raw .astro files.
+  // /whale/index.astro lists manifest entries, so this is what users actually browse.
+  // 차이가 있으면 orphan(legacy/noindex) 또는 누락된 generator entry — DA 가 잡는다.
+  let whaleManifestCount = whalePages;
+  try {
+    const manifest = JSON.parse(await fs.readFile(path.join(ROOT, 'src/data/whale-analyses.json'), 'utf8'));
+    if (Array.isArray(manifest)) whaleManifestCount = manifest.length;
+  } catch {}
   const dailyPages = parseInt(safeExec(`find src/pages/daily -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
   const blogPages = parseInt(safeExec(`find src/pages/blog -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
 
-  // Git
+  // Git — reference origin/main so a stale local working branch can't make the snapshot
+  // misreport "Last commit" / "Recent N commits" (was root cause of 2026-06-10 duplicate-PR #106).
+  safeExec('git fetch origin main --quiet');
+  const gitRef = safeExec('git rev-parse --verify --quiet origin/main') ? 'origin/main' : 'HEAD';
   const branch = safeExec('git rev-parse --abbrev-ref HEAD');
-  const last20Commits = safeExec('git log -20 --pretty=format:"%h %ad %s" --date=short');
-  const commitCount30d = parseInt(safeExec('git log --since=30.days --oneline | wc -l') || '0', 10);
-  const lastCommitDate = safeExec('git log -1 --pretty=format:"%ad" --date=short');
+  const last20Commits = safeExec(`git log ${gitRef} -20 --pretty=format:"%h %ad %s" --date=short`);
+  const commitCount30d = parseInt(safeExec(`git log ${gitRef} --since=30.days --oneline | wc -l`) || '0', 10);
+  const lastCommitDate = safeExec(`git log ${gitRef} -1 --pretty=format:"%ad" --date=short`);
 
   // Build size if dist exists
   const distSize = safeExec(`du -sk dist 2>/dev/null | cut -f1`) || null;
@@ -259,7 +270,7 @@ async function buildSnapshot() {
     },
     kpis: {
       ...kpis,
-      content: { ...kpis.content, whale_alert_pages: whalePages },
+      content: { ...kpis.content, whale_alert_pages: whaleManifestCount },
       engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers, newsletter_subscribers: newsletterSubscribers },
       traffic: {
         ...kpis.traffic,
@@ -269,6 +280,8 @@ async function buildSnapshot() {
           bounce_rate: analyticsSummary.bounceRate,
           whale_daily_visitors: analyticsSummary.whale?.dailyVisitors7dAvg ?? kpis.traffic?.whale_daily_visitors ?? null,
           whale_avg_dwell_sec: analyticsSummary.whale?.avgDwellSec ?? null,
+          whale_as_session_entry_pct: analyticsSummary.whaleAsSessionEntryPct ?? null,
+          whale_bounce_rate: analyticsSummary.whale?.bounceRate ?? null,
         } : {}),
       },
       telegram: { ...kpis.telegram, subscribers: telegramSubscribers },
@@ -418,8 +431,10 @@ async function runDaily({ snapshotMd, latestPlan }) {
     }
   } catch {}
 
-  // Last 24h git log + recently closed PRs/issues
-  const last24hCommits = safeExec('git log --since=24.hours --pretty=format:"%h %ad %s" --date=short') || '(none in last 24h)';
+  // Last 24h git log + recently closed PRs/issues — use origin/main so daily critique sees what shipped
+  safeExec('git fetch origin main --quiet');
+  const dailyGitRef = safeExec('git rev-parse --verify --quiet origin/main') ? 'origin/main' : 'HEAD';
+  const last24hCommits = safeExec(`git log ${dailyGitRef} --since=24.hours --pretty=format:"%h %ad %s" --date=short`) || '(none in last 24h)';
   const recentlyClosedPRs = safeExec('gh pr list --state closed --limit 5 --search "closed:>=' + new Date(Date.now() - 24 * 3600 * 1000).toISOString().split('T')[0] + '" --json number,title 2>/dev/null') || '[]';
 
   const system = [personaPrompt, dailyPrompt];

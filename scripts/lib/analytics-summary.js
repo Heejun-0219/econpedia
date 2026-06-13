@@ -23,7 +23,7 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
   }
 
   const acc = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
-  const whaleAcc = { pageviews: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
+  const whaleAcc = { pageviews: 0, bounces: 0, totalDwell: 0, sessions: 0, scrollDepthSum: 0, scrollSamples: 0, ctaClicks: 0 };
   let daysWithData = 0;
 
   for (const [date, v] of Object.entries(map)) {
@@ -38,6 +38,7 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     acc.ctaClicks += v.ctaClicks || 0;
     if (v.whale) {
       whaleAcc.pageviews += v.whale.pageviews || 0;
+      whaleAcc.bounces += v.whale.bounces || 0;
       whaleAcc.totalDwell += v.whale.totalDwell || 0;
       whaleAcc.sessions += v.whale.sessions || 0;
       whaleAcc.scrollDepthSum += v.whale.scrollDepthSum || 0;
@@ -56,10 +57,15 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     bounceRate: acc.sessions > 0 ? round(acc.bounces / acc.sessions, 3) : 0,
     avgScrollDepthPct: acc.scrollSamples > 0 ? round(acc.scrollDepthSum / acc.scrollSamples) : 0,
     ctaClicks: acc.ctaClicks,
+    // W1 게이트 metric — 세션의 첫 pageview가 /whale/ 였던 비율. server.js는 isNewSession 인 whale pageview만 whale.sessions++ → 정의상 "세션 진입점" 비율.
+    whaleAsSessionEntryPct: acc.sessions > 0 ? round(whaleAcc.sessions / acc.sessions, 3) : 0,
     whale: {
       pageviews: whaleAcc.pageviews,
+      sessions: whaleAcc.sessions,
       dailyVisitors7dAvg: round(whaleAcc.sessions / days),
       avgDwellSec: whaleAcc.sessions > 0 ? round(whaleAcc.totalDwell / whaleAcc.sessions) : 0,
+      // W3 wedge metric — whale 진입 세션이 10초 안에 떠난 비율. 낮을수록 sticky.
+      bounceRate: whaleAcc.sessions > 0 ? round(whaleAcc.bounces / whaleAcc.sessions, 3) : 0,
       avgScrollDepthPct: whaleAcc.scrollSamples > 0 ? round(whaleAcc.scrollDepthSum / whaleAcc.scrollSamples) : 0,
       ctaClicks: whaleAcc.ctaClicks,
     },

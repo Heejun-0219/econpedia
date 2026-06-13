@@ -43,6 +43,7 @@ const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pr
     <meta name="description" content={description} />
     {isNoindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" type="application/rss+xml" title="EconPedia · Whale Alert" href="/whale/rss.xml" />
     
     <!-- Open Graph -->
     <meta property="og:type" content={article ? 'article' : 'website'} />
@@ -361,9 +362,21 @@ const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pr
       {Astro.url.pathname.startsWith('/whale/') && (
         <div class="whale-layout-cta">
           <span class="whale-layout-cta__text">📲 다음 내부자 거래 시그널, 내 지갑으로</span>
-          <a href="/wallet?utm_source=whale_bottom&utm_medium=layout&utm_campaign=wallet_signup" class="whale-layout-cta__btn">
-            무료 알림 받기 →
-          </a>
+          <div class="whale-layout-cta__actions">
+            <a href="/wallet?utm_source=whale_bottom&utm_medium=layout&utm_campaign=wallet_signup" class="whale-layout-cta__btn" data-cta="wallet_bottom">
+              무료 알림 받기 →
+            </a>
+            <a
+              href="https://t.me/econpedia_channel"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="whale-layout-cta__btn whale-layout-cta__btn--tg"
+              data-cta="telegram"
+              aria-label="Telegram 채널에서 실시간 알림 받기 (새 탭에서 열림)"
+            >
+              📡 Telegram 채널
+            </a>
+          </div>
         </div>
       )}
     </main>
@@ -838,9 +851,12 @@ const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pr
     <style>
       .whale-layout-cta { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.25rem 1.5rem; margin:2rem auto 0; max-width:800px; background:rgba(16,185,129,.06); border:1px solid rgba(16,185,129,.2); border-radius:12px; }
       .whale-layout-cta__text { font-size:.95rem; }
+      .whale-layout-cta__actions { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:flex-end; }
       .whale-layout-cta__btn { white-space:nowrap; padding:.6rem 1.25rem; background:#10b981; color:#fff; border-radius:8px; font-weight:700; font-size:.9rem; text-decoration:none; }
       .whale-layout-cta__btn:hover { background:#059669; }
-      @media (max-width:600px) { .whale-layout-cta { flex-direction:column; text-align:center; } .whale-layout-cta__btn { width:100%; text-align:center; } }
+      .whale-layout-cta__btn--tg { background:#229ED9; }
+      .whale-layout-cta__btn--tg:hover { background:#1B8AC1; }
+      @media (max-width:600px) { .whale-layout-cta { flex-direction:column; text-align:center; } .whale-layout-cta__actions { width:100%; flex-direction:column; } .whale-layout-cta__btn { width:100%; text-align:center; } }
     </style>
   </body>
 </html>
