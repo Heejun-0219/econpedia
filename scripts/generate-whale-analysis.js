@@ -494,10 +494,27 @@ async function main() {
     marketContext = md.formatted || marketContext;
   } catch { }
 
+  // 15분 polling cross-runner 멱등성 가드 (weekly cycle 4 defensive/W2):
+  // .seen-accessions.json 은 gitignored → fresh runner 마다 같은 RSS 재처리.
+  // git-tracked whale-analyses.json 을 source-of-truth 로 사용해 LLM 재호출·텔레그램 중복 push 차단.
+  let existingSlugs = new Set();
+  try {
+    const raw = await fs.readFile(ANALYSES_JSON_PATH, 'utf8');
+    const existing = JSON.parse(raw);
+    if (Array.isArray(existing)) existingSlugs = new Set(existing.map(a => a.slug));
+  } catch { /* missing/corrupted → 빈 set, 보수적으로 모두 신규 처리 */ }
+
   const topSignals = signals.slice(0, MAX_ANALYSES_PER_RUN);
   console.log(`🐋 Top ${topSignals.length} Whale Signal 분석 시작...\n`);
 
   for (const signal of topSignals) {
+    // 기본 슬러그 패턴 (saveAnalysisPage line 270 + main fallback line 539 와 일치).
+    // LLM metadata.slug 가 다를 경우 1회는 새로 생성될 수 있으나, 다음 polling 에서 manifest 에 잡혀 차단됨.
+    const candidateSlug = `whale-${String(signal.ticker).toLowerCase()}-${signal.date}`;
+    if (existingSlugs.has(candidateSlug)) {
+      console.log(`⏭️  Skip [${signal.ticker}] ${signal.date} — already in manifest (cross-runner idempotency)`);
+      continue;
+    }
     console.log(`🤖 [${signal.ticker}] ${signal.person} 분석 생성 중...`);
 
     // ISIN 확보
