@@ -21,6 +21,18 @@ const SIGNALS_PATH = path.join(ROOT, '.whale-signals.json');
 // 본 파일은 runtime state (gitignored). 손실 = 1회 분량 재fetch, 멱등성 자체는 dedupKey 가 별도 보장.
 const SEEN_ACCESSIONS_PATH = path.join(ROOT, '.seen-accessions.json');
 const SEEN_CACHE_MAX = 2000;
+// 음성 캐시 — fetch 실패(5xx/rate limit/누락 XML/파싱 실패)한 accession 의 TTL 캐시.
+// 영구 캐시(seen)는 *성공 후*에만 add → 일시 실패 accession 도 다음 cycle 에서 재시도 가능.
+// 15분 polling 시 RSS 윈도우 강하게 겹치므로 polling 주기 < TTL < 영구 손실 임계.
+const NEGATIVE_TTL_MS = 30 * 60 * 1000; // 30분
+const negativeSec = new Map(); // accession → expiresAt(ms epoch)
+function isNegCached(acc) {
+  const exp = negativeSec.get(acc);
+  if (!exp) return false;
+  if (Date.now() >= exp) { negativeSec.delete(acc); return false; }
+  return true;
+}
+function markNeg(acc) { negativeSec.set(acc, Date.now() + NEGATIVE_TTL_MS); }
 
 const SEC_HEADERS = { 'User-Agent': 'EconPedia econpedia@dedyn.io', 'Accept': 'application/json' };
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -228,33 +240,33 @@ async function scanSecForm4(majorCiks, seenState) {
 
   console.log(`  📊 최근 RSS Form 4 공시: ${targetEntries.length}건 (Issuer 기준)`);
 
-  // Idempotency 가드 — 이전 스캔에서 본 accession # 은 .txt 재fetch 스킵.
+  // Idempotency 가드 — 영구 캐시(seen) + 음성 TTL 캐시(negativeSec) 양쪽 hit 스킵.
   // dedupKey (ticker|거래일) 는 별도 안전망 (filing drift 흡수) — 이건 fetch 비용 최적화 전용.
   const beforeCount = targetEntries.length;
-  const freshEntries = targetEntries.filter(item => !seen.has(item.accession));
+  const freshEntries = targetEntries.filter(item => !seen.has(item.accession) && !isNegCached(item.accession));
   const skipped = beforeCount - freshEntries.length;
   if (skipped > 0) console.log(`  ⏭️  캐시 히트로 스킵: ${skipped}건 (${SEC_HEADERS['User-Agent']} 부담 절감)`);
   console.log(`  🔎 신규 처리 대상: ${freshEntries.length}건`);
 
   for (const item of freshEntries) {
     await sleep(200); // SEC rate limit 준수
-    // 처리 시도 자체를 캐시에 기록 → 일시적 에러(rate limit, 5xx) 재시도가 막힐 수 있으나
-    // RSS 윈도우 자체가 좁아 (다음 스캔에서 새 entry 로 덮임) 비용/이득 측면 ok.
-    seen.add(item.accession);
     try {
       const accNoDashes = item.accession.replace(/-/g, '');
       const cikNumber = parseInt(item.cik, 10).toString();
       const txtUrl = `https://www.sec.gov/Archives/edgar/data/${cikNumber}/${accNoDashes}/${item.accession}.txt`;
-      
+
       const txtRes = await fetch(txtUrl, { headers: SEC_HEADERS });
-      if (!txtRes.ok) continue;
-      
+      if (!txtRes.ok) { markNeg(item.accession); continue; }
+
       const txtContent = await txtRes.text();
-      if (!txtContent.includes('<XML>')) continue;
-      
+      if (!txtContent.includes('<XML>')) { markNeg(item.accession); continue; }
+
       const xml = txtContent.split('<XML>')[1].split('</XML>')[0];
       const parsed = parseSecForm4Xml(xml);
-      if (!parsed) continue;
+      if (!parsed) { markNeg(item.accession); continue; }
+
+      // 성공 — 영구 캐시에 add. 노이즈 필터 통과 여부와 무관하게 fetch 했으면 영구 캐시 OK.
+      seen.add(item.accession);
 
       // 노이즈 필터: $500,000 미만이고 C-Level이 아니면 스킵
       const personLower = parsed.person.toLowerCase();
@@ -302,10 +314,12 @@ async function scanSecForm4(majorCiks, seenState) {
       console.log(`  ✅ ${tickerTag} | ${parsed.person} | ${parsed.direction.toUpperCase()} | ${totals.display} ${isMajor ? '(🌟 MAJOR BONUS)' : ''}`);
       
     } catch (e) {
-      // skip
+      // 네트워크 / parser throw — 음성 캐시에 마킹해 다음 cycle 재시도 허용.
+      markNeg(item.accession);
     }
   }
 
+  if (negativeSec.size > 0) console.log(`  ⚠️  음성 캐시 (TTL ${NEGATIVE_TTL_MS / 60000}분): ${negativeSec.size}건 — 다음 polling 에서 재시도`);
   console.log(`  🐋 SEC 시그널 추출: ${signals.length}건`);
   return signals;
 }
