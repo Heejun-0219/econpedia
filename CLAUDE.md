@@ -21,18 +21,20 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-06-13 기준 (weekly cycle 3). Sprint Focus: Whale = The Product (W1 front door · W3 distribution · W5 compliance).
+> 2026-06-13 기준 (weekly cycle 3 — second pass). Sprint Focus: Whale = The Product (W1 front door · W3 distribution · W5 compliance).
 
 - **P1 잔존 (완화됨)**: `api/server.js` in-memory poll/wallet 데이터 — PR #69로 atomic write 적용, SIGKILL 시 30초 이내 변경분 유실 위험은 잔존. Supabase 직접 저장 전환 권고 (다음 sprint 후보).
 - **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 — Opinet 출처 주석 추가 완료.
-- **W3 distribution 측정 (PR #136 후속)**: 14일 후 `/api/track?source=whale_tg`+`whale_rss` 합산 클릭 ≥ 7건이면 distribution 가설 확인 → IFTTT/RSSHub aggregator 등록 후속 진행. 미달이면 Telegram /invite + referral UTM 로 pivot.
-- **다음 growth 후보 (W3 funnel 측정 정확도)**: Telegram bot deep-link `?start=whale_tg` 로 click → join conversion 측정 (tech-radar 2026-06-13 항목 1). PR #136 의 14일 데이터 평가 후 결정. *2 weeks 보류*.
-- **다음 defensive 우선순위 (W2 reliability) — prep 완료**: SEC EDGAR polling 주기 단축 (16h cron → 15분 polling, tech-radar 2026-06-13 항목 2). idempotency 캐시 (PR #137) 완료 → polling 단축 안전판 확보. 남은 작업: scan/analyze 분리 + negative-cache TTL + cron 변경. backend-only, 사용자 결정 불필요. **다음 weekly 채택 권장**.
-- **다음 growth 우선순위 (W3 distribution wedge, 미실행)**: Telegram `/invite` 친구 초대 슬롯 + referral UTM (tech-radar 2026-06-10 항목 1). 1-1.5 sprint, *사용자 컨펌 후* 착수 (incentive 설계 결합). PR #136 의 KPI 평가 결과에 따라 우선순위 조정.
-- **잔존 W5/W2 compliance**: 일부 슬러그 페이지가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음. PR #113/#115/#116/#117/#118/#119/#120/#121/#122/#124/#126/#128/#129/#130/#131/#133/#134/#135 누적 backfill — 진척 갱신 (~17/62), **45/62 잔존**. daily 사이클이 1건/일 페이스로 처리 중.
+- **W3 distribution 측정 (PR #136 + #140 후속)**: 14일 후 `/api/track?source=whale_tg`+`whale_rss`+`whale_wallet` 3 wedge 합산 클릭 ≥ 7건이면 distribution 가설 확인. `whale_wallet` 단독 ≥ 5건이면 wallet auth flow 강화 sprint 진입.
+- **다음 growth 후보 (W3 funnel 측정 정확도)**: Telegram bot deep-link `?start=whale_*` 로 click → join conversion 측정 (tech-radar 2026-06-13-late 항목 1). 2026-06-27 KPI 평가 후 결정. *2 weeks 보류*.
+- **다음 defensive 우선순위 (W2 reliability) — prep 완료 ✅**: SEC EDGAR polling 주기 단축 (16h cron → 15분 polling). PR #137 (영구 idempotency 캐시) + PR #141 (음성 캐시 TTL 30분, 일시 5xx 데이터 손실 차단) 양쪽 안전판 확보. 남은 작업: scan/analyze 분리 + cron 변경. backend-only, 사용자 결정 불필요. **다음 weekly (2026-06-15) 채택 권장** — PR #141 main 안정성 24h 관찰 후.
+- **W3 측정 신뢰성 관찰 (장기 P1)**: `/api/track` bySource 가 in-memory + 5분 flush — SIGKILL 시 최대 5분 손실. KPI 평가 결과 신뢰도가 의심되면 Supabase 직접 저장 (tech-radar 2026-06-13-late 항목 3). *2 weeks 관찰*.
+- **잔존 W5/W2 compliance**: 일부 슬러그 페이지가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음. PR #113/#115/#116/#117/#118/#119/#120/#121/#122/#124/#126/#128/#129/#130/#131/#133/#134/#135/#139 누적 backfill — 진척 갱신 (~18/63), **45/63 잔존**. daily 사이클이 1건/일 페이스로 처리 중.
 - **장기 P1**: Supabase Edge Functions poll/wallet 영구 저장 전환 (별도 sprint 1개 분량).
 
 **해결 완료 항목** (참고용):
+- ~~Whale 페이지 wallet 연동 CTA 가 success div 안에만 노출 (대다수 미노출)~~ → PR #140 (WhaleFollow alt pill 행에 emerald wallet pill, 61 페이지 retroactive, `whale_wallet` UTM 트래킹)
+- ~~SEC fetch 실패 accession 영구 캐시 박힘 (PR #137 의 정책 결함)~~ → PR #141 (음성 캐시 TTL 30분, fetch 성공 후만 영구 캐시 add, 일시 5xx 복구)
 - ~~Whale 페이지 multi-channel 구독 보조 CTA 부재~~ → PR #136 (WhaleFollow.astro 단일 수정으로 63개 페이지 retroactive, Telegram·RSS pill 칩 + `/api/track` UTM 클릭 추적)
 - ~~SEC scan polling 단축 전제 조건 (idempotency 가드)~~ → PR #137 (`.seen-accessions.json` FIFO 2000 캐시, fail-open, atomic write)
 - ~~/whale/rss.xml 외부 distribution 채널 부재~~ → PR #125 (Astro static endpoint, 50 latest items, BaseLayout `<link rel="alternate">` 전역)
