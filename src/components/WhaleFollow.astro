@@ -22,25 +22,52 @@ const { ticker, tickerName = ticker } = Astro.props;
       />
       <button type="submit" class="whale-follow__btn">알림 받기</button>
     </form>
+    <p class="whale-follow__alt">
+      이메일 대신 다른 채널이 편하면:
+      <a
+        href="https://t.me/econpedia_channel"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-track-source="whale_tg"
+        class="whale-follow__alt-link whale-follow__alt-link--tg"
+        aria-label="Telegram 채널에서 실시간 알림 받기 (새 탭에서 열림)"
+      >📡 Telegram 채널 →</a>
+      <a
+        href="/whale/rss.xml"
+        target="_blank"
+        rel="alternate noopener"
+        type="application/rss+xml"
+        data-track-source="whale_rss"
+        class="whale-follow__alt-link whale-follow__alt-link--rss"
+        aria-label="Whale Alert RSS 피드 구독 (새 탭에서 열림)"
+      >📰 RSS 구독 →</a>
+    </p>
     <p class="whale-follow__success" id="whale-follow-success" style="display:none">
       ✅ 구독 완료! 다음 시그널 발생 시 바로 알려드릴게요.
       <a
         href={`/wallet?utm_source=whale&utm_medium=follow&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}
         class="whale-follow__wallet-link"
       >지갑 연동으로 포트폴리오 전체 분석 받기 →</a>
-      <a
-        href="https://t.me/econpedia_channel"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="whale-follow__wallet-link"
-        aria-label="Telegram 채널에서 실시간 알림 받기 (새 탭에서 열림)"
-      >📡 Telegram으로 실시간 알림도 받기 →</a>
     </p>
   </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+  // 대체 채널(Telegram/RSS) 클릭 트래킹 — /api/track source 화이트리스트 (a-z0-9_-, ≤20).
+  // 실패해도 outbound navigation 막지 않음.
+  document.querySelectorAll<HTMLAnchorElement>('.whale-follow__alt-link[data-track-source]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const src = a.dataset.trackSource;
+      if (!src) return;
+      try {
+        const blob = new Blob([''], { type: 'application/x-www-form-urlencoded' });
+        navigator.sendBeacon?.(`/api/track?source=${encodeURIComponent(src)}`, blob)
+          || fetch(`/api/track?source=${encodeURIComponent(src)}`, { keepalive: true }).catch(() => {});
+      } catch { /* noop */ }
+    });
+  });
+
   const form = document.getElementById('whale-follow-form') as HTMLFormElement | null;
   const success = document.getElementById('whale-follow-success');
   if (!form || !success) return;
@@ -144,6 +171,39 @@ document.addEventListener('DOMContentLoaded', () => {
 }
 .whale-follow__btn:hover:not(:disabled) { background: #0ea5e9; }
 .whale-follow__btn:disabled { opacity: .6; cursor: not-allowed; }
+.whale-follow__alt {
+  margin: .65rem 0 0;
+  font-size: .8rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+}
+.whale-follow__alt-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s;
+}
+.whale-follow__alt-link--tg {
+  background: rgba(0, 136, 204, .12);
+  color: #0088cc;
+  border-color: rgba(0, 136, 204, .25);
+}
+.whale-follow__alt-link--tg:hover { background: rgba(0, 136, 204, .2); }
+.whale-follow__alt-link--rss {
+  background: rgba(234, 88, 12, .12);
+  color: #ea580c;
+  border-color: rgba(234, 88, 12, .25);
+}
+.whale-follow__alt-link--rss:hover { background: rgba(234, 88, 12, .2); }
 .whale-follow__success {
   font-size: .9rem;
   color: #10b981;
