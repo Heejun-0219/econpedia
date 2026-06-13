@@ -1,9 +1,30 @@
 ---
+import analyses from '../data/whale-analyses.json';
+
 export interface Props {
   ticker: string;
   tickerName?: string;
 }
 const { ticker, tickerName = ticker } = Astro.props;
+
+// Related: 같은 ticker 우선, 미달 시 같은 category 로 보완. 자기 자신은 제외.
+// currentSlug 는 Astro.url 에서 도출 (호출처 props 변경 없이 retroactive 60+ 페이지 적용).
+const currentSlug = (Astro.url.pathname || '').replace(/^\/whale\//, '').replace(/\/$/, '');
+const upTicker = String(ticker || '').toUpperCase();
+const sameTicker = analyses
+  .filter((a: any) => a.slug !== currentSlug && String(a.ticker || '').toUpperCase() === upTicker)
+  .sort((a: any, b: any) => String(b.date || '').localeCompare(String(a.date || '')));
+const currentCategory = analyses.find((a: any) => a.slug === currentSlug)?.category;
+const sameCategory = currentCategory
+  ? analyses
+      .filter((a: any) =>
+        a.slug !== currentSlug &&
+        a.category === currentCategory &&
+        String(a.ticker || '').toUpperCase() !== upTicker
+      )
+      .sort((a: any, b: any) => String(b.date || '').localeCompare(String(a.date || '')))
+  : [];
+const related = [...sameTicker, ...sameCategory].slice(0, 3);
 ---
 
 <div class="whale-follow" id="whale-follow">
@@ -58,11 +79,37 @@ const { ticker, tickerName = ticker } = Astro.props;
   </div>
 </div>
 
+{related.length > 0 && (
+  <aside class="whale-related" aria-labelledby="whale-related-title">
+    <h4 id="whale-related-title" class="whale-related__title">
+      🔁 같은 종목·섹터의 과거 Whale 시그널
+    </h4>
+    <ul class="whale-related__list">
+      {related.map((r: any) => (
+        <li class="whale-related__item">
+          <a
+            href={`/whale/${r.slug}/?utm_source=whale&utm_medium=related&utm_campaign=internal_link`}
+            data-track-source="whale_related"
+            class="whale-related__link"
+          >
+            <span class="whale-related__ticker">{r.ticker}</span>
+            <span class="whale-related__person">{r.person}</span>
+            <span class={`whale-related__dir whale-related__dir--${r.isBuy ? 'buy' : 'sell'}`}>
+              {r.isBuy ? '매수' : '매도'}
+            </span>
+            <span class="whale-related__date">{r.date}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // 대체 채널(Telegram/RSS) 클릭 트래킹 — /api/track source 화이트리스트 (a-z0-9_-, ≤20).
+  // 대체 채널(Telegram/RSS/Wallet) + Related 내부 링크 클릭 트래킹 — /api/track source 화이트리스트 (a-z0-9_-, ≤20).
   // 실패해도 outbound navigation 막지 않음.
-  document.querySelectorAll<HTMLAnchorElement>('.whale-follow__alt-link[data-track-source]').forEach((a) => {
+  document.querySelectorAll<HTMLAnchorElement>('a[data-track-source]').forEach((a) => {
     a.addEventListener('click', () => {
       const src = a.dataset.trackSource;
       if (!src) return;
@@ -236,5 +283,70 @@ document.addEventListener('DOMContentLoaded', () => {
   .whale-follow__form { flex-direction: column; }
   .whale-follow__input { min-width: unset; }
   .whale-follow__btn { width: 100%; }
+}
+
+.whale-related {
+  margin: 1rem 0 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg-primary);
+}
+.whale-related__title {
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 .65rem;
+}
+.whale-related__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+.whale-related__item { margin: 0; }
+.whale-related__link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  font-size: .85rem;
+  transition: background .15s;
+  flex-wrap: wrap;
+}
+.whale-related__link:hover { background: rgba(56, 189, 248, .08); }
+.whale-related__ticker {
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #38bdf8;
+}
+.whale-related__person {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.whale-related__dir {
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .1rem .45rem;
+  border-radius: 4px;
+}
+.whale-related__dir--buy { background: rgba(16, 185, 129, .12); color: #10b981; }
+.whale-related__dir--sell { background: rgba(239, 68, 68, .12); color: #ef4444; }
+.whale-related__date {
+  font-size: .72rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 600px) {
+  .whale-related__link { font-size: .8rem; padding: .4rem .5rem; }
 }
 </style>
