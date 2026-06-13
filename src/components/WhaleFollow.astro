@@ -41,6 +41,12 @@ const { ticker, tickerName = ticker } = Astro.props;
         class="whale-follow__alt-link whale-follow__alt-link--rss"
         aria-label="Whale Alert RSS 피드 구독 (새 탭에서 열림)"
       >📰 RSS 구독 →</a>
+      <a
+        href={`/wallet?utm_source=whale&utm_medium=follow_pill&utm_campaign=wallet_signup&ticker=${encodeURIComponent(ticker)}`}
+        data-track-source="whale_wallet"
+        class="whale-follow__alt-link whale-follow__alt-link--wallet"
+        aria-label={`${tickerName} 포함 포트폴리오 전체를 지갑에 연동해 분석 받기`}
+      >💼 지갑 연동 →</a>
     </p>
     <p class="whale-follow__success" id="whale-follow-success" style="display:none">
       ✅ 구독 완료! 다음 시그널 발생 시 바로 알려드릴게요.
@@ -204,6 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
   border-color: rgba(234, 88, 12, .25);
 }
 .whale-follow__alt-link--rss:hover { background: rgba(234, 88, 12, .2); }
+.whale-follow__alt-link--wallet {
+  background: rgba(16, 185, 129, .12);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, .25);
+}
+.whale-follow__alt-link--wallet:hover { background: rgba(16, 185, 129, .2); }
 .whale-follow__success {
   font-size: .9rem;
   color: #10b981;
