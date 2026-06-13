@@ -1,17 +1,27 @@
-name: 🐋 Daily Whale Publisher
+name: 🐋 Whale Publisher (15-min polling)
 
 # 2026-05-31 pivot: Whale Alert 단일 제품 집중. generic 생성(daily/blog/cardnews/economy)은
 # Phase별 `if: ${{ false }}`로 가역 비활성화. Whale 스캔/분석(Phase 4)만 활성.
+#
+# 2026-06-13 (weekly cycle 4 defensive/W2): cron 24h → 15min polling.
+# 안전판:
+#   - PR #137 (.seen-accessions.json FIFO 2000 idempotency 캐시) — 재방문 fetch 비용 절감.
+#   - PR #141 (negative-cache TTL 30분) — SEC 5xx/누락 일시 실패 영구 손실 방지.
+#   - analyze 스크립트는 빈 .whale-signals.json 시 즉시 종료 (scripts/generate-whale-analysis.js:487).
+#   - commit 단계 `git diff --cached --quiet` no-op skip → 무변경 run 도 비용 미미.
+#   - concurrency: cancel-in-progress=false → 동시 실행 방지 (큐잉).
+# SEC RSS 부담: 96 runs/day × 3-page paginated RSS = 288 RSS fetches/day, 캐시 hit 률 높음 (대부분 동일 accession 재출현).
+# Public repo → GitHub Actions 분(分) 무제한.
 
 on:
   schedule:
-    # Runs at 21:00 UTC (06:00 KST) every day
-    # 21:00 UTC = 06:00 KST next day → UTC date and KST date are the same
-    - cron: '0 21 * * *'
+    # 매 15분 polling (SEC Form 4 발행 → 사용자 노출 평균 지연 ≤ 30분 목표)
+    - cron: '*/15 * * * *'
   # Allows manual triggering
   workflow_dispatch:
 
-# 동시 실행 방지: 이미 실행 중이면 대기 (cancel 하지 않음)
+# 동시 실행 방지: 이미 실행 중이면 대기 (cancel 하지 않음).
+# 15분 polling 에서 한 run 이 15분 초과 시 다음 run 이 큐잉됨 → 큐 누적 모니터링 필요.
 concurrency:
   group: auto-publish
   cancel-in-progress: false
@@ -23,6 +33,10 @@ permissions:
 jobs:
   generate-and-publish:
     runs-on: ubuntu-latest
+    # 15분 cron + concurrency cancel-in-progress=false 환경에서 silent queue buildup 차단.
+    # 14분 timeout = 다음 polling 도착 전 강제 종료 → 큐 깊이 ≤ 1 보장 (SEC 리뷰 권고).
+    # TODO(next sprint): Telegram push-rate guardrail — 시간당 ≥ 5건 시 묶음 1건으로 합치기 (signal-rate burst 방지).
+    timeout-minutes: 14
 
     steps:
       - name: 📥 Checkout repository
