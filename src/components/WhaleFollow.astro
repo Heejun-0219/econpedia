@@ -25,6 +25,36 @@ const sameCategory = currentCategory
       .sort((a: any, b: any) => String(b.date || '').localeCompare(String(a.date || '')))
   : [];
 const related = [...sameTicker, ...sameCategory].slice(0, 3);
+
+// Related-by-insider: 동일 인물(역할 prefix 정규화)의 다른 거래.
+// 규칙은 scripts/build-track-record.js 의 normKey 와 동일 — 역할 앞 prefix → lowercase → 영숫자·한글만.
+// 같은 ticker 항목은 위 sameTicker 와 중복되므로 여기서는 *다른 ticker* 만 추린다.
+function normPersonKey(person: any) {
+  return String(person || '')
+    .split('/')[0]
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]/g, '')
+    .trim();
+}
+function displayPersonName(person: any) {
+  return String(person || '').split('/')[0].trim();
+}
+const current = analyses.find((a: any) => a.slug === currentSlug);
+const currentPersonKey = current ? normPersonKey(current.person) : '';
+const currentPersonName = current ? displayPersonName(current.person) : '';
+// 같은 인물(역할 prefix 정규화 기준) 의 다른 거래. ticker 동일 여부 무관 — 위 related 와 slug 중복만 제외.
+// 대부분 insider 가 단일 ticker (track-record tier1Count=0) — 데이터 누적 후 cross-ticker 활성화.
+const relatedSlugs = new Set(related.map((r: any) => r.slug));
+const sameInsider = currentPersonKey
+  ? analyses
+      .filter((a: any) =>
+        a.slug !== currentSlug &&
+        !relatedSlugs.has(a.slug) &&
+        normPersonKey(a.person) === currentPersonKey
+      )
+      .sort((a: any, b: any) => String(b.date || '').localeCompare(String(a.date || '')))
+      .slice(0, 3)
+  : [];
 ---
 
 <div class="whale-follow" id="whale-follow">
@@ -94,6 +124,32 @@ const related = [...sameTicker, ...sameCategory].slice(0, 3);
           >
             <span class="whale-related__ticker">{r.ticker}</span>
             <span class="whale-related__person">{r.person}</span>
+            <span class={`whale-related__dir whale-related__dir--${r.isBuy ? 'buy' : 'sell'}`}>
+              {r.isBuy ? '매수' : '매도'}
+            </span>
+            <span class="whale-related__date">{r.date}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}
+
+{sameInsider.length > 0 && (
+  <aside class="whale-related whale-related--insider" aria-labelledby="whale-insider-title">
+    <h4 id="whale-insider-title" class="whale-related__title">
+      👤 {currentPersonName}의 다른 거래
+    </h4>
+    <ul class="whale-related__list">
+      {sameInsider.map((r: any) => (
+        <li class="whale-related__item">
+          <a
+            href={`/whale/${r.slug}/?utm_source=whale&utm_medium=insider&utm_campaign=internal_link`}
+            data-track-source="whale_insider"
+            class="whale-related__link"
+          >
+            <span class="whale-related__ticker">{r.ticker}</span>
+            <span class="whale-related__person">{r.companyName}</span>
             <span class={`whale-related__dir whale-related__dir--${r.isBuy ? 'buy' : 'sell'}`}>
               {r.isBuy ? '매수' : '매도'}
             </span>
