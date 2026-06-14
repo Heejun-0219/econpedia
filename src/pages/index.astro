@@ -265,6 +265,26 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
         <a class="whale-home-hero__btn whale-home-hero__btn--primary" href="/whale">🐋 최신 고래 시그널 보기 →</a>
         <a class="whale-home-hero__btn whale-home-hero__btn--ghost" href="/wallet?utm_source=home&utm_medium=hero&utm_campaign=whale_signup">📲 내 종목 시그널 알림 받기</a>
       </div>
+      <p class="whale-home-hero__alt">
+        또는 1-tap 무료 구독:
+        <a
+          href="https://t.me/econpedia_channel"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track-source="whale_tg_home"
+          class="whale-home-hero__alt-link"
+          aria-label="Telegram 채널에서 실시간 알림 받기 (새 탭에서 열림)"
+        >📡 Telegram 채널 →</a>
+        <a
+          href="/whale/rss.xml"
+          target="_blank"
+          rel="alternate noopener"
+          type="application/rss+xml"
+          data-track-source="whale_rss_home"
+          class="whale-home-hero__alt-link"
+          aria-label="Whale Alert RSS 피드 (새 탭에서 열림)"
+        >📰 RSS →</a>
+      </p>
       <p class="whale-home-hero__disclaimer">투자 추천이 아닌 공개 공시 데이터 기반 정보 제공. 모든 수치는 원문에서 검증 가능.</p>
     </section>
 
@@ -695,6 +715,20 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
           }
         });
       });
+
+      // 홈 hero 의 외부 채널 pill (Telegram/RSS) UTM 트래킹 — /api/track source 화이트리스트 (a-z0-9_-, ≤20).
+      // 실패해도 outbound navigation 막지 않음.
+      document.querySelectorAll('a[data-track-source]').forEach(function(a) {
+        a.addEventListener('click', function() {
+          const src = a.dataset.trackSource;
+          if (!src) return;
+          try {
+            const blob = new Blob([''], { type: 'application/x-www-form-urlencoded' });
+            (navigator.sendBeacon && navigator.sendBeacon('/api/track?source=' + encodeURIComponent(src), blob))
+              || fetch('/api/track?source=' + encodeURIComponent(src), { keepalive: true }).catch(function () {});
+          } catch (e) { /* noop */ }
+        });
+      });
     })();
   </script>
 
@@ -723,6 +757,9 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
     .whale-home-hero__btn--ghost { background: transparent; color: var(--color-text-primary); border: 1px solid rgba(16,185,129,.4); }
     .whale-home-hero__btn--ghost:hover { background: rgba(16,185,129,.08); }
     .whale-home-hero__disclaimer { margin: 1.1rem 0 0; font-size: .78rem; opacity: .6; }
+    .whale-home-hero__alt { margin: .9rem 0 0; font-size: .82rem; opacity: .8; display: flex; gap: .5rem .65rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .whale-home-hero__alt-link { display: inline-flex; align-items: center; gap: .2rem; padding: .25rem .65rem; border-radius: 999px; font-weight: 700; text-decoration: none; border: 1px solid rgba(16,185,129,.35); color: var(--color-text-primary); background: rgba(255,255,255,.04); transition: background .15s; }
+    .whale-home-hero__alt-link:hover { background: rgba(16,185,129,.1); }
     @media (max-width: 560px) { .whale-home-hero { padding: 1.8rem 1.2rem 1.4rem; } .whale-home-hero__btn { width: 100%; } }
 
     /* 최근 Whale 시그널 (홈 front door — W1) */
