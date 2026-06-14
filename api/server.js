@@ -439,10 +439,13 @@ const server = createServer(async (req, res) => {
   }
 
   // ── GET /api/analytics/summary (무PII 7일 집계 — KPI 스냅샷용) ──────
+  // ?window=14 로 14일 윈도우 (기본 7일). UTM source 별 카운트도 함께 노출 — W3 distribution funnel 측정.
   if (req.method === 'GET' && path === '/api/analytics/summary') {
     if (isAnalyticsRateLimited(ip)) return sendJSON(res, 429, { error: 'Too Many Requests' });
     const todayStr = Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
-    const summary = computeAnalyticsSummary(stats.analytics?.daily || {}, todayStr, 7);
+    const rawWindow = parseInt(url.searchParams.get('window') || '7', 10);
+    const windowDays = Number.isFinite(rawWindow) && rawWindow >= 1 && rawWindow <= 90 ? rawWindow : 7;
+    const summary = computeAnalyticsSummary(stats.analytics?.daily || {}, todayStr, windowDays, stats.bySource || null);
     return sendJSON(res, 200, { success: true, generatedAt: new Date().toISOString(), summary });
   }
 

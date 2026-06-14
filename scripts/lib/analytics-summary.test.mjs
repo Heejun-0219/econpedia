@@ -71,6 +71,39 @@ t('isWhalePath', () => {
   assert.equal(isWhalePath(null), false);
 });
 
+t('bySource 미전달 — sourceCounts 필드 생략 (backwards compat)', () => {
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7);
+  assert.equal('sourceCounts' in s, false);
+});
+
+t('bySource 전달 — 윈도우 내 일별 카운트 합산', () => {
+  const bySource = {
+    whale_tg: { '2026-05-31': 3, '2026-05-30': 2, '2026-04-01': 100 },  // 100은 윈도우 밖
+    whale_rss: { '2026-05-31': 1 },
+    whale_insider: { '2026-05-29': 5 },
+  };
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7, bySource);
+  assert.deepEqual(s.sourceCounts, { whale_tg: 5, whale_rss: 1, whale_insider: 5 });
+});
+
+t('bySource 빈 카운트/비숫자 무시', () => {
+  const bySource = {
+    whale_tg: { '2026-05-31': 0, '2026-05-30': null, '2026-05-29': 'x' },
+    whale_rss: { '2026-05-31': 3 },
+  };
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7, bySource);
+  // whale_tg 합산 0 → 생략, whale_rss 만 노출
+  assert.deepEqual(s.sourceCounts, { whale_rss: 3 });
+});
+
+t('bySource 14일 윈도우', () => {
+  const bySource = {
+    whale_tg: { '2026-05-31': 2, '2026-05-25': 3, '2026-05-10': 100 },  // 10일은 윈도우 밖
+  };
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 14, bySource);
+  assert.deepEqual(s.sourceCounts, { whale_tg: 5 });
+});
+
 function round(n, d = 1) { const f = 10 ** d; return Math.round(n * f) / f; }
 
 console.log(`\n✅ analytics-summary: ${pass} tests passed`);
