@@ -12,7 +12,9 @@ function round(n, d = 1) {
 }
 
 // refDateStr: 'YYYY-MM-DD' 기준일(포함). days: 윈도우 길이.
-export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
+// bySource: optional { '<utm_source>': { 'YYYY-MM-DD': count } } — /api/track 에서 캡처한 UTM source 일별 카운트.
+//           W3 distribution funnel 측정용. 미전달 시 sourceCounts 필드 생략.
+export function computeAnalyticsSummary(daily, refDateStr, days = 7, bySource = null) {
   const map = daily || {};
   const ref = new Date(`${refDateStr}T00:00:00Z`);
   const wanted = new Set();
@@ -47,7 +49,23 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
     }
   }
 
-  return {
+  // W3 distribution funnel — UTM source 별 윈도우 합산. bySource 미전달 시 필드 생략.
+  let sourceCounts = null;
+  if (bySource && typeof bySource === 'object') {
+    sourceCounts = {};
+    for (const [src, byDate] of Object.entries(bySource)) {
+      if (!byDate || typeof byDate !== 'object') continue;
+      let sum = 0;
+      for (const [date, n] of Object.entries(byDate)) {
+        if (!wanted.has(date)) continue;
+        const val = Number(n);
+        if (Number.isFinite(val) && val > 0) sum += val;
+      }
+      if (sum > 0) sourceCounts[src] = sum;
+    }
+  }
+
+  const out = {
     windowDays: days,
     daysWithData,
     pageviews: acc.pageviews,
@@ -70,6 +88,8 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7) {
       ctaClicks: whaleAcc.ctaClicks,
     },
   };
+  if (sourceCounts !== null) out.sourceCounts = sourceCounts;
+  return out;
 }
 
 // dwell/pageview 이벤트를 일별 버킷에 누적 (api/server.js 핸들러가 사용). 순수 — bucket을 변형해 반환.
