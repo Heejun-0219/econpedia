@@ -6,9 +6,11 @@ export interface Props {
   article?: boolean;
   hideSubHub?: boolean;
   noindex?: boolean;
+  /** ISO 8601 (YYYY-MM-DD). 미지정 시 whale URL 패턴에서 자동 추출. Article rich-result 자격용. */
+  datePublished?: string;
 }
 
-const { title, description, ogImage = '/og-default.png', article = false, hideSubHub = false, noindex: noindexProp = false } = Astro.props;
+const { title, description, ogImage = '/og-default.png', article = false, hideSubHub = false, noindex: noindexProp = false, datePublished: datePublishedProp } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // W1 pivot(2026-05-31): Whale 단일 제품 집중. legacy generic 콘텐츠(blog/daily/economy)는
@@ -16,6 +18,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const LEGACY_NOINDEX_PREFIXES = ['/blog', '/daily', '/economy'];
 const _p = Astro.url.pathname;
 const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pre || _p.startsWith(pre + '/'));
+
+// W3 SEO wedge (cycle 6, 2026-06-18): Article rich-result 자격을 위해 datePublished/headline/image 명시.
+// Google "Article rich result" + Open Graph article:* 메타로 검색·소셜 미리보기 강화.
+// Whale 페이지 URL 패턴에서 자동 추출:
+//   /whale/whale-<TICKER>-YYYY-MM-DD/   ← KR 6자리 또는 US ticker (현행 60+ 페이지)
+//   /whale/whale-YYYYMMDD-<TICKER>/     ← legacy compact (pre-pivot orphan)
+// 호출처에서 명시적 datePublished prop 을 주면 그것이 우선.
+function deriveWhalePublishDate(pathname: string): string | null {
+  if (!pathname) return null;
+  const iso = pathname.match(/\/whale\/whale-[A-Za-z0-9가-힣]+-(\d{4}-\d{2}-\d{2})\/?$/);
+  if (iso) return iso[1];
+  const compact = pathname.match(/\/whale\/whale-(\d{4})(\d{2})(\d{2})-[A-Za-z0-9가-힣]+\/?$/);
+  if (compact) return `${compact[1]}-${compact[2]}-${compact[3]}`;
+  return null;
+}
+const publishedISO = datePublishedProp || deriveWhalePublishDate(_p);
+const ogImageAbs = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -50,38 +69,55 @@ const isNoindex = noindexProp || LEGACY_NOINDEX_PREFIXES.some((pre) => _p === pr
     <meta property="og:title" content={`${title} | EconPedia`} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageAbs} />
     <meta property="og:site_name" content="EconPedia — 경제 백과사전" />
     <meta property="og:locale" content="ko_KR" />
-    
+    {article && publishedISO && (
+      <>
+        <meta property="article:published_time" content={publishedISO} />
+        <meta property="article:author" content="EconPedia" />
+        {_p.startsWith('/whale/') && <meta property="article:section" content="Whale Alert" />}
+      </>
+    )}
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={`${title} | EconPedia`} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
-    
+    <meta name="twitter:image" content={ogImageAbs} />
+
     <!-- Schema.org -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": article ? "Article" : "WebSite",
-      "name": `${title} | EconPedia`,
-      "description": description,
-      "url": canonicalURL.toString(),
-      ...(article ? {
-        "author": { "@type": "Organization", "name": "EconPedia", "url": Astro.site?.toString() },
-        "publisher": {
-          "@type": "Organization",
-          "name": "EconPedia",
-          "logo": { "@type": "ImageObject", "url": `${Astro.site}favicon.svg` }
-        }
-      } : {
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": `${Astro.site}search?q={search_term_string}`,
-          "query-input": "required name=search_term_string"
-        }
-      })
-    })} />
+    <script type="application/ld+json" set:html={JSON.stringify(
+      article
+        ? {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": title,
+            "description": description,
+            "url": canonicalURL.toString(),
+            "image": [ogImageAbs],
+            "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalURL.toString() },
+            ...(publishedISO ? { "datePublished": publishedISO, "dateModified": publishedISO } : {}),
+            "author": { "@type": "Organization", "name": "EconPedia", "url": Astro.site?.toString() },
+            "publisher": {
+              "@type": "Organization",
+              "name": "EconPedia",
+              "logo": { "@type": "ImageObject", "url": `${Astro.site}favicon.svg` }
+            }
+          }
+        : {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": `${title} | EconPedia`,
+            "description": description,
+            "url": canonicalURL.toString(),
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": `${Astro.site}search?q={search_term_string}`,
+              "query-input": "required name=search_term_string"
+            }
+          }
+    )} />
     
     <!-- Styles -->
     <style is:global>
