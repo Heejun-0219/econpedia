@@ -21,21 +21,26 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-06-14 기준 (weekly cycle 5 종료). Sprint Focus: Whale = The Product (W1 front door · W2 reliability · W3 distribution · W5 compliance).
+> 2026-06-18 기준 (weekly cycle 6 종료). Sprint Focus: Whale = The Product (W1 front door · W2 reliability · W3 distribution · W5 compliance).
 
 - **P1 잔존 (완화됨)**: `api/server.js` in-memory poll/wallet 데이터 — PR #69로 atomic write 적용, SIGKILL 시 30초 이내 변경분 유실 위험은 잔존. Supabase 직접 저장 전환 권고 (다음 sprint 후보).
 - **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 — Opinet 출처 주석 추가 완료.
-- **W3 distribution 측정 (PR #136 + PR #145 + PR #152 후속, PR #153 enabler)**: 14일 후 `GET /api/analytics/summary?window=14` 의 `sourceCounts` 확인. (a) `whale_tg`+`whale_rss`+`whale_tg_home`+`whale_rss_home` 합산 ≥ 12건 = 외부 distribution 가설 확인, (b) `whale_related`+`whale_insider` ≥ 7건 = 내부 discovery 가설 확인, (c) `whale_wallet` ≥ 1건 = wallet conversion funnel 시작. 미달 시 카드 위치·copy pivot.
-- **W2 polling 모니터링 (PR #146 후속)**: 24-48h 동안 워크플로 timeout-minutes 14 hit 빈도 및 동일 ticker 시간당 push burst 빈도 측정. burst ≥ 1 시 push-rate guardrail (tech-radar 2026-06-13 cycle4 항목 1) 채택. cycle 5 시점: 24h 경과, 추가 5-7일 데이터 후 cycle 6-7 weekly 재평가.
+- **W3 distribution 측정 (PR #136 + PR #145 + PR #152 후속, PR #153 enabler, PR #158 augmenter)**: 14일 후 `GET /api/analytics/summary?window=14` 의 `sourceCounts` 확인. (a) `whale_tg`+`whale_rss`+`whale_tg_home`+`whale_rss_home` 합산 ≥ 12건 = 외부 distribution 가설 확인, (b) `whale_related`+`whale_insider` ≥ 7건 = 내부 discovery 가설 확인, (c) `whale_wallet` ≥ 1건 = wallet conversion funnel 시작. 미달 시 카드 위치·copy pivot.
+- **W3 SEO/social 측정 (PR #158 후속)**: 14-30일 후 Google Search Console URL Inspection 으로 3 샘플 whale 페이지가 "Article" rich-result 자격 확인. metatags.io 로 OG `article:published_time`/`article:section` 표시 검증. 30-60일: 검색 결과 날짜 표시 + 소셜 미리보기 강화 → 외부 CTR 5-15% 상승 가설 검증.
+- **GSC 가입 확인 (사용자 결정 대기, tech-radar 2026-06-18 cycle6 항목 2)**: PR #158 KPI 측정 전제. econpedia.dedyn.io 의 Google Search Console 등록 여부 + sitemap.xml 제출 확인. 미등록 시 사용자 액션 필요.
+- **W2 polling 모니터링 (PR #146 후속)**: 96h 경과 (cycle 4 → cycle 6). burst 데이터 부족 — 추가 5-7일 후 cycle 7-8 재평가.
+- **다음 defensive 우선순위 (W5 defense-in-depth, tech-radar 2026-06-18 cycle6 항목 1)**: `BaseLayout.astro` JSON-LD 의 `JSON.stringify(...).replace(/</g, '\\u003c')` 한 줄 hardening. PR #158 SEC reviewer 명시 권고. 1-line, 위험 0. cycle 7 defensive 슬롯으로 진입 권장.
 - **다음 growth 후보 (W2 evidence + W1 SEO)**: `/whale/insider/<key>` aggregation 페이지 (tech-radar 2026-06-14 cycle5 항목 2). PR #152 `whale_insider` UTM ≥ 3건 + Tier-1 정의 사용자 합의 후 채택. 약 cycle 7-8 (2026-06-25 전후).
 - **다음 defensive 우선순위 (W6 reliability)**: `sourceCounts` top-N cap (tech-radar 2026-06-14 cycle5 항목 1). UTM source 30+ 도달 시 채택, 현재 위험 0.
 - **다음 defensive 우선순위 (W6 reliability self-evolution)**: Workflow queue depth alerting (≥ 3 queued 시 OWNER Telegram, tech-radar 2026-06-13 cycle4 항목 2). PR #146 의 7-14일 timeout 빈도 데이터 후 임계 결정.
 - **다음 growth 우선순위 (W3 distribution wedge, 미실행)**: Telegram `/invite` 친구 초대 슬롯 + referral UTM (tech-radar 2026-06-10 항목 1). 1-1.5 sprint, *사용자 컨펌 후* 착수 (incentive 설계 결합). PR #152 + #153 의 KPI 평가 결과에 따라 우선순위 조정.
 - **장기 W2 evidence — Tier-1 insider track record render**: OKR O2.KR2 (`tier1_rendered = 0, target = 1`). 6개월+ followup 데이터 누적 + Tier-1 정의 사용자 합의 필요. *사용자 결정 대기*. tech-radar 2026-06-13 cycle4 항목 3 + 2026-06-14 cycle5 항목 2 (`whale_insider` 신호로 demand 검증).
-- **잔존 W5/W2 compliance**: 일부 슬러그 페이지가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음. PR #113/#115-#122/#124/#126/#128-#135/#139/#142-#144/#148-#150 누적 backfill — 진척 갱신 (~25/62), **37/62 잔존**. daily 사이클이 1건/일 페이스로 처리 중.
+- **잔존 W5/W2 compliance**: 일부 슬러그 페이지가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음. PR #113/#115-#122/#124/#126/#128-#135/#139/#142-#144/#148-#150/#156 누적 backfill — 진척 갱신 (~26/62), **36/62 잔존**. daily 사이클이 1건/일 페이스로 처리 중.
 - **장기 P1**: Supabase Edge Functions poll/wallet 영구 저장 전환 (별도 sprint 1개 분량).
 
 **해결 완료 항목** (참고용):
+- ~~Whale 페이지 Article JSON-LD 가 `datePublished`/`headline`/`image` 누락 — Google rich-result 자격 불가, OG article:* 메타 부재로 소셜 미리보기 빈약~~ → PR #158 (BaseLayout.astro 단일 수정으로 60+ 페이지 retroactive, URL 슬러그 자동 추출, 호출처 변경 0)
+- ~~`normPersonKey`/`normKey` 가 WhaleFollow.astro 와 build-track-record.js 에 중복 — cross-trade 매칭 drift 잠재~~ → PR #157 (`scripts/lib/whale-insider-key.js` 단일 소스 + 10 tests, npm test 24→34 PASS)
 - ~~/api/analytics/summary 에 UTM source 별 카운트 노출 부재 — W3 KPI 검증 불가능~~ → PR #153 (`computeAnalyticsSummary` bySource 인자 + `?window=N` 1≤N≤90 + 13 tests passed)
 - ~~WhaleFollow insider-related slot + 홈 hero 외부 채널 pill 부재 — W3 distribution surface 한정~~ → PR #152 (whale_insider/whale_tg_home/whale_rss_home UTM source 3종 추가, retroactive 60+ 페이지 + 홈)
 - ~~SEC scan cron 24h → 15min polling + cross-runner 멱등성~~ → PR #146 (cron `*/15 * * * *` + `timeout-minutes: 14` + analyze 단계 slug-gate)
