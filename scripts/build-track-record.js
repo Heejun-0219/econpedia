@@ -14,6 +14,9 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// 엔티티 정규화 — person 문자열의 이름 부분(역할 앞)만 사용.
+// scripts/lib/whale-insider-key.js 에서 단일 소스 공유 (Astro WhaleFollow 컴포넌트와 동일 결과).
+import { normPersonKey as normKey } from './lib/whale-insider-key.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,15 +28,6 @@ const OUT_PATH = path.join(ROOT, 'src', 'data', 'whale-track-record.json');
 
 const TIER1_MIN_N = 5;
 const TIER1_MIN_WINRATE = 0.65;
-
-// 엔티티 정규화 — person 문자열의 이름 부분(역할 앞)만 사용
-function normKey(person) {
-  return String(person || '')
-    .split('/')[0]
-    .toLowerCase()
-    .replace(/[^a-z0-9가-힣]/g, '')
-    .trim();
-}
 
 function displayName(person) {
   return String(person || '').split('/')[0].trim() || '(미상)';

@@ -1,5 +1,8 @@
 ---
 import analyses from '../data/whale-analyses.json';
+// W6 — Astro 와 scripts/build-track-record.js 가 동일 정규화 결과를 내야 cross-trade 매칭이 일관.
+// scripts/lib/whale-insider-key.js 가 단일 소스 (테스트 10건 통과).
+import { normPersonKey, displayPersonName } from '../../scripts/lib/whale-insider-key.js';
 
 export interface Props {
   ticker: string;
@@ -27,18 +30,8 @@ const sameCategory = currentCategory
 const related = [...sameTicker, ...sameCategory].slice(0, 3);
 
 // Related-by-insider: 동일 인물(역할 prefix 정규화)의 다른 거래.
-// 규칙은 scripts/build-track-record.js 의 normKey 와 동일 — 역할 앞 prefix → lowercase → 영숫자·한글만.
+// normPersonKey/displayPersonName 는 scripts/lib/whale-insider-key.js 에서 import.
 // 같은 ticker 항목은 위 sameTicker 와 중복되므로 여기서는 *다른 ticker* 만 추린다.
-function normPersonKey(person: any) {
-  return String(person || '')
-    .split('/')[0]
-    .toLowerCase()
-    .replace(/[^a-z0-9가-힣]/g, '')
-    .trim();
-}
-function displayPersonName(person: any) {
-  return String(person || '').split('/')[0].trim();
-}
 const current = analyses.find((a: any) => a.slug === currentSlug);
 const currentPersonKey = current ? normPersonKey(current.person) : '';
 const currentPersonName = current ? displayPersonName(current.person) : '';
