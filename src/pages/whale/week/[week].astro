@@ -1,22 +1,15 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import WhaleFollow from '../../../components/WhaleFollow.astro';
+import { isoWeekKey, isoWeekMonday } from '../../../../scripts/lib/iso-week.js';
 
 export async function getStaticPaths() {
   const mod = await import('../../../data/whale-analyses.json');
   const analyses = mod.default || mod;
   const buckets = {};
   analyses.forEach(function (a) {
-    const d = new Date(a.date + 'T00:00:00Z');
-    if (Number.isNaN(d.getTime())) return;
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(d.getUTCFullYear() + '-01-01T00:00:00Z');
-    const dt = d.getTime();
-    const yt = yearStart.getTime();
-    const dayOffset = (dt - yt) / 86400000;
-    const week = Math.ceil((dayOffset + 1) / 7);
-    const key = d.getUTCFullYear() + '-W' + String(week).padStart(2, '0');
+    const key = isoWeekKey(a.date);
+    if (!key) return;
     if (!buckets[key]) buckets[key] = [];
     buckets[key].push(a);
   });
@@ -32,16 +25,6 @@ export async function getStaticPaths() {
       },
     };
   });
-}
-
-function isoWeekMonday(year, week) {
-  const jan4 = new Date(Date.UTC(year, 0, 4));
-  const jan4Day = jan4.getUTCDay() || 7;
-  const week1Monday = new Date(jan4);
-  week1Monday.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
-  const monday = new Date(week1Monday);
-  monday.setUTCDate(week1Monday.getUTCDate() + (week - 1) * 7);
-  return monday;
 }
 
 function formatRangeKR(year, week) {
