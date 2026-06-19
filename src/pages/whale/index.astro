@@ -18,6 +18,28 @@ function formatDate(dateStr) {
   return `${month}월 ${day}일 (${weekdays[d.getDay()]})`;
 }
 
+// W3 SEO wedge (cycle 6, 2026-06-19): 주간 아카이브 페이지 (`/whale/week/<YYYY-Www>/`) 의 entry surface.
+// /src/pages/whale/week/[week].astro 와 동일 ISO 8601 week 정의 — 두 곳에서 동일 결과를 내야 매칭.
+function isoWeekKeyForIndex(dateStr) {
+  const d = new Date(`${dateStr}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return null;
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(d.getUTCFullYear() + '-01-01T00:00:00Z');
+  const dayOffset = (d.getTime() - yearStart.getTime()) / 86400000;
+  const week = Math.ceil((dayOffset + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
+}
+const weekCounts = new Map();
+for (const a of analyses) {
+  const key = isoWeekKeyForIndex(a.date);
+  if (!key) continue;
+  weekCounts.set(key, (weekCounts.get(key) || 0) + 1);
+}
+const recentWeeks = Array.from(weekCounts.entries())
+  .sort((a, b) => (a[0] < b[0] ? 1 : -1))
+  .slice(0, 6);
+
 const categories = [
   { id: 'all', title: '모두 보기' },
   { id: 'us', title: 'US' },
@@ -59,6 +81,25 @@ const categories = [
       </div>
     </div>
   </section>
+
+  {recentWeeks.length > 0 && (
+    <section class="whale-week-archive" aria-labelledby="whale-week-archive-heading">
+      <div class="container">
+        <h2 id="whale-week-archive-heading" class="whale-week-archive__heading">📅 주간 아카이브</h2>
+        <p class="whale-week-archive__sub">한 주(월~일) 단위로 정리된 Whale 시그널. 검색 엔진과 북마크용 영구 URL.</p>
+        <ul class="whale-week-archive__list">
+          {recentWeeks.map(([key, count]) => (
+            <li>
+              <a href={`/whale/week/${key}/`} class="whale-week-archive__pill">
+                <span class="whale-week-archive__key">{key}</span>
+                <span class="whale-week-archive__count">{count}건</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
 
   <section class="whale-content" style="padding: 2rem 0 5rem;">
     <div class="container">
@@ -130,6 +171,48 @@ const categories = [
   }
   .whale-compliance strong { color: #ca8a04; }
   .whale-compliance p { margin: 0.4rem 0 0; opacity: 0.82; line-height: 1.65; }
+
+  .whale-week-archive {
+    padding: 1.25rem 0 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .whale-week-archive__heading {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .whale-week-archive__sub {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    opacity: 0.7;
+  }
+  .whale-week-archive__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .whale-week-archive__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.15s;
+  }
+  .whale-week-archive__pill:hover { background: var(--color-background); }
+  .whale-week-archive__key { font-weight: 600; }
+  .whale-week-archive__count {
+    opacity: 0.65;
+    font-variant-numeric: tabular-nums;
+  }
 </style>
 
 <style>

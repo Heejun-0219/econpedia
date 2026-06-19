@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WhaleFollow from '../../../components/WhaleFollow.astro';
+
+export async function getStaticPaths() {
+  const mod = await import('../../../data/whale-analyses.json');
+  const analyses = mod.default || mod;
+  const buckets = {};
+  analyses.forEach(function (a) {
+    const d = new Date(a.date + 'T00:00:00Z');
+    if (Number.isNaN(d.getTime())) return;
+    const dayNum = d.getUTCDay() || 7;
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(d.getUTCFullYear() + '-01-01T00:00:00Z');
+    const dt = d.getTime();
+    const yt = yearStart.getTime();
+    const dayOffset = (dt - yt) / 86400000;
+    const week = Math.ceil((dayOffset + 1) / 7);
+    const key = d.getUTCFullYear() + '-W' + String(week).padStart(2, '0');
+    if (!buckets[key]) buckets[key] = [];
+    buckets[key].push(a);
+  });
+  const keys = Object.keys(buckets).sort();
+  return keys.map(function (key, idx) {
+    const items = buckets[key].slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    return {
+      params: { week: key },
+      props: {
+        items: items,
+        prevKey: idx > 0 ? keys[idx - 1] : null,
+        nextKey: idx < keys.length - 1 ? keys[idx + 1] : null,
+      },
+    };
+  });
+}
+
+function isoWeekMonday(year, week) {
+  const jan4 = new Date(Date.UTC(year, 0, 4));
+  const jan4Day = jan4.getUTCDay() || 7;
+  const week1Monday = new Date(jan4);
+  week1Monday.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
+  const monday = new Date(week1Monday);
+  monday.setUTCDate(week1Monday.getUTCDate() + (week - 1) * 7);
+  return monday;
+}
+
+function formatRangeKR(year, week) {
+  const mon = isoWeekMonday(year, week);
+  const sun = new Date(mon);
+  sun.setUTCDate(mon.getUTCDate() + 6);
+  const fmt = function (d) { return (d.getUTCMonth() + 1) + '월 ' + d.getUTCDate() + '일'; };
+  return fmt(mon) + ' ~ ' + fmt(sun);
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  return month + '월 ' + day + '일 (' + weekdays[d.getDay()] + ')';
+}
+
+const { week } = Astro.params;
+const { items, prevKey, nextKey } = Astro.props;
+
+const m = String(week || '').match(/^(\d{4})-W(\d{2})$/);
+if (!m) {
+  throw new Error('Invalid week param: ' + week);
+}
+const year = Number(m[1]);
+const weekNum = Number(m[2]);
+const rangeKR = formatRangeKR(year, weekNum);
+const usCount = items.filter(function (a) { return a.market === 'us'; }).length;
+const krCount = items.filter(function (a) { return a.market === 'kr'; }).length;
+const buyCount = items.filter(function (a) { return a.isBuy; }).length;
+const sellCount = items.length - buyCount;
+
+const weekLabel = year + '-W' + String(weekNum).padStart(2, '0');
+const pageTitle = year + '년 ' + weekNum + '주차 Whale Alert — ' + rangeKR;
+const pageDesc = weekLabel + ' (' + rangeKR + ') 미국·한국 시장 내부자·기관 매매 시그널 ' + items.length + '건. 매수 ' + buyCount + ' · 매도 ' + sellCount + ' · US ' + usCount + ' · KR ' + krCount + '.';
+const utmCampaign = 'whale_week_' + year + '_' + String(weekNum).padStart(2, '0');
+---
+
+<BaseLayout title={pageTitle} description={pageDesc}>
+  <section class="hero hero--whale" style="padding: 3rem 0 2rem; background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-background) 100%);">
+    <div class="container text-center">
+      <span class="hero__badge" style="background: rgba(56, 189, 248, 0.1); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2);">주간 아카이브</span>
+      <h1 class="hero__title" style="font-size: 2.2rem; margin: 1rem 0 0.5rem;">
+        {year}년 {weekNum}주차 Whale Alert
+      </h1>
+      <p class="hero__subtitle" style="font-size: 1rem; opacity: 0.8;">
+        {rangeKR} (월~일) 미국·한국 시장 내부자·기관 매매 시그널
+      </p>
+      <p style="margin-top: 0.75rem; font-size: 0.9rem; opacity: 0.75;">
+        총 <strong>{items.length}건</strong> · 매수 {buyCount} · 매도 {sellCount} · US {usCount} · KR {krCount}
+      </p>
+    </div>
+  </section>
+
+  <section class="whale-content" style="padding: 1.5rem 0 4rem;">
+    <div class="container">
+      <nav class="week-nav" aria-label="주간 아카이브 탐색">
+        {prevKey ? (
+          <a href={'/whale/week/' + prevKey + '/'} rel="prev" class="week-nav__link">← {prevKey} 주차</a>
+        ) : <span class="week-nav__link week-nav__link--disabled" aria-disabled="true">← 이전 주차</span>}
+        <a href="/whale/" class="week-nav__link week-nav__link--center">전체 보기</a>
+        {nextKey ? (
+          <a href={'/whale/week/' + nextKey + '/'} rel="next" class="week-nav__link">{nextKey} 주차 →</a>
+        ) : <span class="week-nav__link week-nav__link--disabled" aria-disabled="true">다음 주차 →</span>}
+      </nav>
+
+      <div class="whale-grid">
+        {items.length === 0 ? (
+          <div class="whale-empty">
+            <h3 style="margin: 0 0 0.5rem;">이 주에는 시그널이 없습니다</h3>
+            <p style="opacity: 0.7; margin: 0;">매일 07:00 KST에 전체 시장을 자동 스캔합니다.</p>
+          </div>
+        ) : items.map(function (a) {
+          const isBuy = a.isBuy;
+          const dirClass = isBuy ? 'whale-card--buy' : 'whale-card--sell';
+          const href = '/whale/' + a.slug + '/?utm_source=whale_weekly&utm_medium=archive&utm_campaign=' + utmCampaign;
+          return (
+            <a href={href} class={'whale-card ' + dirClass} data-market={a.market} data-track-source="whale_weekly">
+              <div class="whale-card__header">
+                <div class="whale-card__badge-row">
+                  <span class="whale-card__market">{a.market === 'us' ? 'US' : 'KR'}</span>
+                  <span class={'whale-card__direction ' + (isBuy ? 'buy' : 'sell')}>
+                    {isBuy ? 'BUY' : 'SELL'}
+                  </span>
+                  {a.significance && <span class="whale-card__score" title="시그널 중요도">{a.significance}</span>}
+                </div>
+                <span class="whale-card__date">{formatDate(a.date)}</span>
+              </div>
+              <h3 class="whale-card__title">{a.title}</h3>
+              {a.amount && (
+                <p class="whale-card__amount">{a.amount.split('·')[0].trim()}</p>
+              )}
+              <p class="whale-card__excerpt">{a.excerpt}</p>
+              <div class="whale-card__footer">
+                <span class="whale-card__ticker">{a.companyName} ({a.ticker})</span>
+                <span class="whale-card__read">분석 보기 →</span>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <div class="container" style="margin-top: 2rem; padding-bottom: 1rem;">
+        <WhaleFollow ticker="WHALE" tickerName={weekLabel + ' Whale'} />
+      </div>
+
+      <div class="container">
+        <div class="whale-compliance">
+          <strong>⚠️ 투자 주의 · 면책</strong>
+          <p>Whale Alert는 SEC·DART 등 <strong>공개 공시 데이터</strong>를 정리·시각화한 <strong>정보 제공 서비스</strong>입니다. 특정 종목의 매수·매도 <strong>추천이나 투자 자문이 아니며</strong>, '고래를 따라 거래'할 것을 권유하지 않습니다. 표시되는 D+30/90/180/365 수치는 <strong>과거 raw 종가 변동률(시장평균 미보정)</strong>로, <strong>과거 성과는 미래 수익을 보장하지 않습니다.</strong> 내부자 거래 동향은 다양한 사유(분산·세무·보상 등)로 발생하며 <strong>미공개중요정보(MNPI)의 이용을 시사하지 않습니다.</strong> 모든 수치는 각 페이지의 공시 원문 링크에서 직접 검증하시고, 투자 결정과 책임은 전적으로 본인에게 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .week-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 0 1.5rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .week-nav__link {
+    flex: 1 1 0;
+    text-align: center;
+    padding: 0.6rem 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .week-nav__link:hover:not(.week-nav__link--disabled) {
+    background: var(--color-background);
+  }
+  .week-nav__link--center {
+    font-weight: 600;
+  }
+  .week-nav__link--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  @media (max-width: 480px) {
+    .week-nav { gap: 0.35rem; }
+    .week-nav__link { padding: 0.5rem 0.4rem; font-size: 0.8rem; }
+  }
+</style>
