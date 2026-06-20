@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WhaleFollow from '../../../components/WhaleFollow.astro';
+
+// W2 evidence + W1 SEO — 인물별 트랙레코드 demand check.
+// /whale/insider/<key> 개별 페이지는 cycle 8+ (Tier-1 정의 사용자 합의 대기) → 본 hub 가 demand 신호 수집.
+// 데이터: data/whale-track-record.json (build-track-record.js 가 생성, normPersonKey 정규화).
+
+let track;
+try {
+  const mod = await import('../../../data/whale-track-record.json');
+  track = mod.default || mod;
+} catch {
+  track = { insiders: [], summary: { totalInsiders: 0 } };
+}
+
+let analyses;
+try {
+  const mod = await import('../../../data/whale-analyses.json');
+  analyses = mod.default || mod;
+} catch {
+  analyses = [];
+}
+
+const bySlug = {};
+for (const a of analyses) {
+  bySlug[a.slug] = a;
+}
+
+// 각 insider 의 sampleSlugs 를 join — 최신 trade 의 market/date 로 정렬.
+const insiders = (track.insiders || [])
+  .map((ins) => {
+    const slugs = (ins.sampleSlugs || []).filter((s) => bySlug[s]);
+    if (slugs.length === 0) return null;
+    const trades = slugs.map((s) => bySlug[s]);
+    trades.sort((a, b) => (a.date < b.date ? 1 : -1));
+    const latest = trades[0];
+    return {
+      key: ins.key,
+      name: ins.name || ins.key,
+      tradeCount: ins.trades || trades.length,
+      buys: ins.buys || trades.filter((t) => t.isBuy).length,
+      sells: ins.sells || trades.filter((t) => !t.isBuy).length,
+      multiTrade: (ins.trades || trades.length) >= 2,
+      latestDate: latest.date,
+      latestMarket: latest.market,
+      trades: trades,
+    };
+  })
+  .filter(Boolean);
+
+// 다중 거래 인물 먼저, 그 다음 최신순.
+const multiTrade = insiders.filter((i) => i.multiTrade).sort((a, b) => (a.latestDate < b.latestDate ? 1 : -1));
+const singleTrade = insiders.filter((i) => !i.multiTrade).sort((a, b) => (a.latestDate < b.latestDate ? 1 : -1));
+
+const totalCount = insiders.length;
+const multiCount = multiTrade.length;
+const usCount = insiders.filter((i) => i.latestMarket === 'us').length;
+const krCount = insiders.filter((i) => i.latestMarket === 'kr').length;
+
+const pageTitle = '인물별 Whale 시그널 — Insider Track Record';
+const pageDesc = `미국·한국 시장 ${totalCount}명 내부자·기관의 공시 기반 매매 시그널. 다중 거래 ${multiCount}명, US ${usCount} · KR ${krCount}. 공시 원문 + 후행 가격 기반.`;
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+}
+---
+
+<BaseLayout title={pageTitle} description={pageDesc}>
+  <section class="hero hero--insider">
+    <div class="container text-center">
+      <span class="hero__badge">인물별 트랙레코드</span>
+      <h1 class="hero__title">Whale Insider 인덱스</h1>
+      <p class="hero__subtitle">
+        SEC Form 4 · DART 공시에 등장한 <strong>{totalCount}명</strong>의 내부자·기관 거래 시그널 인덱스.<br/>
+        2회 이상 거래된 인물 <strong>{multiCount}명</strong> · US {usCount} · KR {krCount}
+      </p>
+    </div>
+  </section>
+
+  <section class="insider-content">
+    <div class="container">
+      <nav class="insider-nav" aria-label="인사이더 탐색">
+        <a href="/whale/" class="insider-nav__link insider-nav__link--back">← 전체 시그널</a>
+        <a href="#multi" class="insider-nav__link">다중 거래 ({multiCount})</a>
+        <a href="#all" class="insider-nav__link">전체 인물 ({totalCount})</a>
+      </nav>
+
+      {multiTrade.length > 0 && (
+        <section id="multi" class="insider-section">
+          <h2 class="insider-section__heading">🔁 다중 거래 인물 ({multiCount})</h2>
+          <p class="insider-section__sub">한 인물이 2회 이상 등장 — 패턴 추적 가치가 높음.</p>
+          <ul class="insider-list insider-list--multi">
+            {multiTrade.map((ins) => (
+              <li class="insider-card insider-card--multi">
+                <div class="insider-card__header">
+                  <h3 class="insider-card__name">{ins.name}</h3>
+                  <span class="insider-card__count">
+                    {ins.tradeCount}회 · 매수 {ins.buys} · 매도 {ins.sells}
+                  </span>
+                </div>
+                <ul class="insider-card__trades">
+                  {ins.trades.map((t) => (
+                    <li>
+                      <a
+                        href={'/whale/' + t.slug + '/?utm_source=whale_insider_idx&utm_medium=hub&utm_campaign=insider_index'}
+                        data-track-source="whale_insider_idx"
+                        class={'insider-card__trade-link insider-card__trade-link--' + (t.isBuy ? 'buy' : 'sell')}
+                      >
+                        <span class="insider-card__trade-market">{t.market === 'us' ? 'US' : 'KR'}</span>
+                        <span class="insider-card__trade-ticker">{t.ticker}</span>
+                        <span class="insider-card__trade-dir">{t.isBuy ? 'BUY' : 'SELL'}</span>
+                        <span class="insider-card__trade-date">{formatDate(t.date)}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section id="all" class="insider-section">
+        <h2 class="insider-section__heading">👥 전체 인물 ({totalCount})</h2>
+        <p class="insider-section__sub">공시 등장 인물 전체 — 최신 거래일 순.</p>
+        <ul class="insider-list">
+          {singleTrade.map((ins) => {
+            const t = ins.trades[0];
+            return (
+              <li class="insider-card">
+                <a
+                  href={'/whale/' + t.slug + '/?utm_source=whale_insider_idx&utm_medium=hub&utm_campaign=insider_index'}
+                  data-track-source="whale_insider_idx"
+                  class={'insider-card__single insider-card__single--' + (t.isBuy ? 'buy' : 'sell')}
+                >
+                  <div class="insider-card__single-row">
+                    <span class="insider-card__market">{t.market === 'us' ? 'US' : 'KR'}</span>
+                    <span class="insider-card__single-name">{ins.name}</span>
+                    <span class={'insider-card__single-dir insider-card__single-dir--' + (t.isBuy ? 'buy' : 'sell')}>
+                      {t.isBuy ? 'BUY' : 'SELL'}
+                    </span>
+                  </div>
+                  <div class="insider-card__single-row insider-card__single-row--meta">
+                    <span class="insider-card__single-ticker">{t.companyName} ({t.ticker})</span>
+                    <span class="insider-card__single-date">{formatDate(t.date)}</span>
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      <div style="margin-top: 2rem;">
+        <WhaleFollow ticker="INSIDER" tickerName="Whale Insider 인덱스" />
+      </div>
+
+      <div class="whale-compliance">
+        <strong>⚠️ 투자 주의 · 면책</strong>
+        <p>본 인덱스는 SEC Form 4 · DART 공시 원문에서 추출한 인물 정보를 정규화·집계한 <strong>정보 제공 서비스</strong>입니다. 특정 인물의 거래를 <strong>모방·추종할 것을 권유하지 않습니다.</strong> 내부자 거래는 분산·세무·보상 등 다양한 사유로 발생하며 <strong>미공개중요정보(MNPI)의 이용을 시사하지 않습니다.</strong> Tier-1 트랙레코드(D+90/365 승률)는 표본 충분(n≥5) 후 별도 공개되며, 현재 인덱스는 demand check 목적의 raw 시그널 인벤토리입니다.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero--insider {
+    padding: 3rem 0 2.5rem;
+    background: linear-gradient(to bottom, var(--color-surface) 0%, var(--color-background) 100%);
+  }
+  .hero--insider .hero__badge {
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+  }
+  .hero--insider .hero__title { font-size: 2.4rem; margin: 1rem 0 0.75rem; }
+  .hero--insider .hero__subtitle { font-size: 1rem; opacity: 0.8; max-width: 640px; margin: 0 auto; }
+
+  .insider-content { padding: 1.5rem 0 4rem; }
+
+  .insider-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0 0 1.5rem;
+    flex-wrap: wrap;
+  }
+  .insider-nav__link {
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md, 8px);
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .insider-nav__link:hover { background: var(--color-background); }
+  .insider-nav__link--back { opacity: 0.7; }
+
+  .insider-section { margin: 2rem 0; }
+  .insider-section__heading { margin: 0 0 0.25rem; font-size: 1.15rem; font-weight: 700; }
+  .insider-section__sub { margin: 0 0 1rem; font-size: 0.85rem; opacity: 0.7; }
+
+  .insider-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+  .insider-list--multi { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+
+  .insider-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md, 10px);
+    padding: 0.9rem 1rem;
+  }
+  .insider-card--multi { border-color: rgba(168, 85, 247, 0.35); }
+  .insider-card__header { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+  .insider-card__name { margin: 0; font-size: 1rem; font-weight: 700; }
+  .insider-card__count { font-size: 0.78rem; opacity: 0.7; }
+
+  .insider-card__trades { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .insider-card__trade-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    background: var(--color-background);
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .insider-card__trade-link:hover { background: var(--color-surface); border-color: var(--color-border); }
+  .insider-card__trade-link--buy { border-left: 3px solid #10b981; }
+  .insider-card__trade-link--sell { border-left: 3px solid #ef4444; }
+  .insider-card__trade-market { font-size: 0.7rem; font-weight: 700; opacity: 0.6; }
+  .insider-card__trade-ticker { font-weight: 600; }
+  .insider-card__trade-dir {
+    font-size: 0.7rem; font-weight: 700; padding: 1px 6px; border-radius: 3px;
+  }
+  .insider-card__trade-link--buy .insider-card__trade-dir { background: rgba(16,185,129,0.12); color: #10b981; }
+  .insider-card__trade-link--sell .insider-card__trade-dir { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .insider-card__trade-date { font-size: 0.78rem; opacity: 0.65; font-variant-numeric: tabular-nums; }
+
+  .insider-card__single {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    padding: 0.2rem 0;
+  }
+  .insider-card__single--buy { border-left: 3px solid #10b981; padding-left: 0.6rem; margin-left: -0.85rem; }
+  .insider-card__single--sell { border-left: 3px solid #ef4444; padding-left: 0.6rem; margin-left: -0.85rem; }
+  .insider-card__single-row {
+    display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+  }
+  .insider-card__single-row--meta { font-size: 0.78rem; opacity: 0.7; margin-top: 0.2rem; }
+  .insider-card__market { font-size: 0.7rem; font-weight: 700; opacity: 0.6; min-width: 24px; }
+  .insider-card__single-name { font-weight: 600; font-size: 0.92rem; flex: 1; }
+  .insider-card__single-dir {
+    font-size: 0.7rem; font-weight: 700; padding: 1px 6px; border-radius: 3px;
+  }
+  .insider-card__single-dir--buy { background: rgba(16,185,129,0.12); color: #10b981; }
+  .insider-card__single-dir--sell { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .insider-card__single-ticker { flex: 1; }
+  .insider-card__single-date { font-variant-numeric: tabular-nums; }
+
+  .whale-compliance {
+    margin: 1.5rem 0 0;
+    background: rgba(234, 179, 8, 0.07);
+    border: 1px solid rgba(234, 179, 8, 0.28);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    font-size: 0.82rem;
+  }
+  .whale-compliance strong { color: #ca8a04; }
+  .whale-compliance p { margin: 0.4rem 0 0; opacity: 0.82; line-height: 1.65; }
+
+  @media (max-width: 600px) {
+    .hero--insider { padding: 2rem 0 1.5rem; }
+    .hero--insider .hero__title { font-size: 1.8rem; }
+    .insider-list--multi { grid-template-columns: 1fr; }
+  }
+</style>
