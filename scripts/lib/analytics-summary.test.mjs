@@ -104,6 +104,40 @@ t('bySource 14일 윈도우', () => {
   assert.deepEqual(s.sourceCounts, { whale_tg: 5 });
 });
 
+t('sourceCounts top-N cap — 60종 → 50개만, count DESC', () => {
+  // 60개 source 생성, count = 60..1 으로 식별 (whale_001 = 60, whale_060 = 1)
+  const bySource = {};
+  for (let i = 1; i <= 60; i++) {
+    const src = 'whale_' + String(i).padStart(3, '0');
+    bySource[src] = { '2026-05-31': 61 - i };  // 첫번째 = 60, 마지막 = 1
+  }
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7, bySource);
+  const keys = Object.keys(s.sourceCounts);
+  assert.equal(keys.length, 50, 'cap = 50');
+  // top-1 = whale_001 (count 60), top-50 = whale_050 (count 11)
+  assert.equal(s.sourceCounts['whale_001'], 60);
+  assert.equal(s.sourceCounts['whale_050'], 11);
+  // whale_051..060 (count 1..10) 은 잘려서 미포함
+  assert.equal('whale_051' in s.sourceCounts, false);
+  assert.equal('whale_060' in s.sourceCounts, false);
+});
+
+t('sourceCounts tie-break — 동일 count 시 source 키 사전순', () => {
+  const bySource = {
+    z_source: { '2026-05-31': 5 },
+    a_source: { '2026-05-31': 5 },
+    m_source: { '2026-05-31': 5 },
+    high: { '2026-05-31': 10 },
+  };
+  const s = computeAnalyticsSummary(daily, '2026-05-31', 7, bySource);
+  // 모두 ≤ 50 이므로 전부 노출, 단 입력 순서가 아닌 결정적 순서 (count DESC, src ASC)
+  // Object 키 순서는 삽입 순서 — 검증은 첫 key 가 high (가장 큰 count) 인지로.
+  const keys = Object.keys(s.sourceCounts);
+  assert.equal(keys[0], 'high');  // count 10 → 1순위
+  // 나머지 3개 (count 5) 는 a, m, z 순으로 삽입됐어야 함
+  assert.deepEqual(keys.slice(1), ['a_source', 'm_source', 'z_source']);
+});
+
 function round(n, d = 1) { const f = 10 ** d; return Math.round(n * f) / f; }
 
 console.log(`\n✅ analytics-summary: ${pass} tests passed`);
