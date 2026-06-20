@@ -5,6 +5,13 @@
 // daily 스키마: { 'YYYY-MM-DD': { pageviews, bounces, totalDwell, sessions,
 //                                 whale?: { pageviews, totalDwell, sessions } } }
 
+// W6 — sourceCounts top-N cap. UTM source 키 화이트리스트가 ≤ 20 bytes 이고
+// 현재 9-10종 (whale_tg, whale_rss, whale_tg_home, whale_rss_home,
+// whale_related, whale_insider, whale_wallet, whale_index, whale_weekly, ...).
+// 채널 추가가 누적되면 응답이 unbounded 성장 → DoS hedge 로 count DESC top-N 만 노출.
+// 캡은 generous (50) — 정상 운영의 5x 헤드룸. 캡 초과는 정상 신호가 아닌 fingerprinting 의심.
+const SOURCE_COUNTS_TOP_N = 50;
+
 function round(n, d = 1) {
   if (typeof n !== 'number' || !Number.isFinite(n)) return 0;
   const f = 10 ** d;
@@ -50,9 +57,10 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7, bySource = 
   }
 
   // W3 distribution funnel — UTM source 별 윈도우 합산. bySource 미전달 시 필드 생략.
+  // W6 정책: count DESC 정렬 후 SOURCE_COUNTS_TOP_N 만 노출 (DoS / unbounded growth 가드).
   let sourceCounts = null;
   if (bySource && typeof bySource === 'object') {
-    sourceCounts = {};
+    const pairs = [];
     for (const [src, byDate] of Object.entries(bySource)) {
       if (!byDate || typeof byDate !== 'object') continue;
       let sum = 0;
@@ -61,8 +69,11 @@ export function computeAnalyticsSummary(daily, refDateStr, days = 7, bySource = 
         const val = Number(n);
         if (Number.isFinite(val) && val > 0) sum += val;
       }
-      if (sum > 0) sourceCounts[src] = sum;
+      if (sum > 0) pairs.push([src, sum]);
     }
+    pairs.sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+    sourceCounts = {};
+    for (const [src, sum] of pairs.slice(0, SOURCE_COUNTS_TOP_N)) sourceCounts[src] = sum;
   }
 
   const out = {
