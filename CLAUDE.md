@@ -31,7 +31,7 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 - **다음 defensive 우선순위 (W6 reliability self-evolution)**: Workflow queue depth alerting (≥ 3 queued 시 OWNER Telegram, tech-radar 2026-06-13 cycle4 항목 2). PR #146 의 7-14일 timeout 빈도 데이터 후 임계 결정.
 - **다음 growth 우선순위 (W3 distribution wedge, 미실행)**: Telegram `/invite` 친구 초대 슬롯 + referral UTM (tech-radar 2026-06-10 항목 1). 1-1.5 sprint, *사용자 컨펌 후* 착수 (incentive 설계 결합). PR #152 + #153 + #164 + #180 의 KPI 평가 결과에 따라 우선순위 조정.
 - **장기 W2 evidence — Tier-1 insider track record render**: OKR O2.KR2 (`tier1_rendered = 0, target = 1`). 6개월+ followup 데이터 누적 + Tier-1 정의 사용자 합의 필요. *사용자 결정 대기*. tech-radar 2026-06-13 cycle4 항목 3 + 2026-06-14 cycle5 항목 2 + 2026-06-20 cycle7 항목 1 (`whale_insider_idx` 신호로 demand 검증).
-- **잔존 W5/W2 compliance**: 일부 슬러그 페이지가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음. PR #113/#115-#122/#124/#126/#128-#135/#139/#142-#144/#148-#150/#161-#162/#166/#168-#170/#172-#176 누적 backfill — 진척 갱신 (~32/62), **30/62 잔존**. daily 사이클이 1건/일 페이스로 처리 중.
+- ~~**잔존 W5/W2 compliance**: 일부 슬러그 페이지가 출처 라벨만 있고 클릭 가능 EDGAR/DART URL 없음~~ → **완결 (2026-06-21, PR #207)**. `whale-*.astro` 61/61 페이지 모두 클릭 가능 DART/SEC 1차 출처 링크 보유 (`whale-20260423-MXF.astro` 는 pre-pivot orphan noindex 처리됨, PR #111). provenance 100% 달성 — W5_compliance_trust_moat 게이트 진척.
 - **장기 P1**: Supabase Edge Functions poll/wallet 영구 저장 전환 (별도 sprint 1개 분량).
 
 **해결 완료 항목** (참고용):
