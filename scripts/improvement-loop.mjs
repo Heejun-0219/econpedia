@@ -171,6 +171,8 @@ async function buildSnapshot() {
   } catch {}
   const dailyPages = parseInt(safeExec(`find src/pages/daily -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
   const blogPages = parseInt(safeExec(`find src/pages/blog -name "*.astro" 2>/dev/null | wc -l`) || '0', 10);
+  // test_count — scripts/lib/*.test.mjs 의 `t('...', ...)` 패턴 라인 합. 정확한 npm test 수에 일치.
+  const testCount = parseInt(safeExec(`grep -h "^t(" scripts/lib/*.test.mjs 2>/dev/null | wc -l`) || '0', 10);
 
   // Git — reference origin/main so a stale local working branch can't make the snapshot
   // misreport "Last commit" / "Recent N commits" (was root cause of 2026-06-10 duplicate-PR #106).
@@ -270,6 +272,7 @@ async function buildSnapshot() {
     },
     kpis: {
       ...kpis,
+      code: { ...kpis.code, test_count: testCount },
       content: { ...kpis.content, whale_alert_pages: whaleManifestCount },
       engagement: { ...kpis.engagement, wallet_authenticated_users: walletAuthUsers, newsletter_subscribers: newsletterSubscribers },
       traffic: {
