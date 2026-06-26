@@ -1,19 +1,11 @@
 import type { APIRoute } from 'astro';
 import analyses from '../../data/whale-analyses.json';
+// W5/W6 (cycle 8) — XML special-char escaping 은 scripts/lib/xml-escape.js 단일 소스
+// (14 unit tests, RSS reader 신뢰성 회귀 방지). 추가 feed endpoint 도 동일 import.
+import { xmlEscape } from '../../../scripts/lib/xml-escape.js';
 
 const SITE = 'https://econpedia.dedyn.io';
 const FEED_URL = `${SITE}/whale/rss.xml`;
-
-// XML special-char escaping — prevents injection via title/excerpt/person/amount
-// (whale-analyses.json is generated from SEC/DART + AI summarization; treat as untrusted text).
-function xmlEscape(s: string): string {
-  return String(s ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
 
 function pubDate(dateStr: string): string {
   // dateStr is YYYY-MM-DD. Treat as 00:00 KST → UTC.
