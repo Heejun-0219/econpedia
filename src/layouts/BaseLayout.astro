@@ -63,6 +63,13 @@ function deriveWhaleBreadcrumbs(pathname: string, pageTitle: string): Array<{ na
   return base;
 }
 const breadcrumbs = deriveWhaleBreadcrumbs(_p, title);
+
+// W5 trust moat (cycle 9 SEC advisory): JSON-LD emit 시 `</script>` literal 차단.
+// title 의 ultimate source 는 AI 생성(`scripts/generate-whale-analysis.js`) — prompt
+// injection 시나리오에서 `</script>` 가 출력되면 set:html 이 script 태그를 조기 종료해
+// 임의 HTML 주입 가능. `<` → `<` 치환은 JSON 디코더가 다시 `<` 로 복원하므로
+// schema.org 파서 동작 보존, HTML 파서만 script 닫는 토큰을 인식 불가.
+const jsonLD = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -115,7 +122,7 @@ const breadcrumbs = deriveWhaleBreadcrumbs(_p, title);
     <meta name="twitter:image" content={ogImageAbs} />
 
     <!-- Schema.org -->
-    <script type="application/ld+json" set:html={JSON.stringify(
+    <script type="application/ld+json" set:html={jsonLD(
       article
         ? {
             "@context": "https://schema.org",
@@ -147,7 +154,7 @@ const breadcrumbs = deriveWhaleBreadcrumbs(_p, title);
           }
     )} />
     {breadcrumbs && breadcrumbs.length > 1 && (
-      <script type="application/ld+json" set:html={JSON.stringify({
+      <script type="application/ld+json" set:html={jsonLD({
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": breadcrumbs.map((b, i) => ({
