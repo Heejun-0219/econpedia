@@ -274,7 +274,7 @@ const marketWeatherLabel = isWeekend ? '전영업일 시장' : '오늘의 시장
       </div>
     </div>
     
-    <script id="market-raw-data" type="application/json" set:html={JSON.stringify(marketData.raw || {})}></script>
+    <script id="market-raw-data" type="application/json" set:html={JSON.stringify(marketData.raw || {}).replace(/</g, '\\u003c')}></script>
     <script>
       import { supabase } from '../lib/supabase.js';
 
