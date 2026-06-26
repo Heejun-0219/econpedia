@@ -82,4 +82,31 @@ t('실데이터 패턴: 회사명 + 인용 + 직책 — 정확히 escape', () =>
   );
 });
 
+// W5 control-char guard (daily 2026-06-26) — XML 1.0 §2.2 Char production 비허용
+// 제어문자가 feed 에 섞이면 RSS reader 가 fatal error → 인접 signal 까지 dropped.
+t('XML 1.0 비허용 제어문자 0x00 (NULL) silent strip', () => {
+  assert.equal(xmlEscape('a\x00b'), 'ab');
+});
+
+t('XML 1.0 비허용 제어문자 0x07 (BEL) silent strip', () => {
+  assert.equal(xmlEscape('alert\x07'), 'alert');
+});
+
+t('XML 1.0 비허용 제어문자 0x1B (ESC) silent strip — ANSI escape sequence', () => {
+  assert.equal(xmlEscape('\x1B[31mRED\x1B[0m'), '[31mRED[0m');
+});
+
+// 허용 제어문자 — \t(0x09), \n(0x0A), \r(0x0D) 는 XML 1.0 에서 합법.
+// description 줄바꿈 보존, table 의 tab 보존.
+t('허용 제어문자 \\t \\n \\r 는 보존', () => {
+  assert.equal(xmlEscape('line1\nline2\tcol\rEND'), 'line1\nline2\tcol\rEND');
+});
+
+t('실제 시나리오: AI 토큰화 결손으로 0x01 가 description 중간에 삽입 — silent recover', () => {
+  assert.equal(
+    xmlEscape('메타 2인자\x01의 매도'),
+    '메타 2인자의 매도'
+  );
+});
+
 console.log(`\n✅ xml-escape: ${pass} tests passed`);
