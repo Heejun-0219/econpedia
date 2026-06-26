@@ -79,16 +79,17 @@ const categories = [
         <h2 id="whale-week-archive-heading" class="whale-week-archive__heading">📅 주간 아카이브</h2>
         <p class="whale-week-archive__sub">한 주(월~일) 단위로 정리된 Whale 시그널. 검색 엔진과 북마크용 영구 URL.</p>
         <ul class="whale-week-archive__list">
+          {/* W3 discovery funnel — entry click 측정 (WhaleFollow tracker 가 a[data-track-source] 자동 binding). hub 사용 (whale_weekly / whale_insider_idx) 과 비교해 hub UX vs discovery 문제 구분. */}
           {recentWeeks.map(([key, count]) => (
             <li>
-              <a href={`/whale/week/${key}/`} class="whale-week-archive__pill">
+              <a href={`/whale/week/${key}/`} class="whale-week-archive__pill" data-track-source="whale_week_entry">
                 <span class="whale-week-archive__key">{key}</span>
                 <span class="whale-week-archive__count">{count}건</span>
               </a>
             </li>
           ))}
           <li>
-            <a href="/whale/insider/" class="whale-week-archive__pill whale-week-archive__pill--insider">
+            <a href="/whale/insider/" class="whale-week-archive__pill whale-week-archive__pill--insider" data-track-source="whale_insider_entry">
               <span class="whale-week-archive__key">👥 인물별</span>
               <span class="whale-week-archive__count">인덱스</span>
             </a>
