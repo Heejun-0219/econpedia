@@ -8,6 +8,13 @@ export interface Props {
 }
 
 const { chartData, transactionDate, isBuy, ticker, currency = 'USD' } = Astro.props;
+
+// W5 trust moat (daily cycle 9 — PR #218 carry-over): 두 `<script type="application/json">`
+// 자리에 `</script>` literal 차단. chartData 의 ultimate source 는 Yahoo Finance 시계열
+// (`scripts/generate-whale-analysis.js:588`) 이고 meta 는 enum, 현재 입력에 `<` 부재 →
+// byte-identical. shape 변화·향후 prompt-injection 회귀 시 script 조기 종료 영구 차단.
+// 패턴은 BaseLayout.astro:72 와 동일 (lib 추출은 weekly cycle 9 후보).
+const jsonScript = (s: string) => s.replace(/</g, '\\u003c');
 ---
 
 {chartData !== 'null' && (
@@ -21,8 +28,8 @@ const { chartData, transactionDate, isBuy, ticker, currency = 'USD' } = Astro.pr
     </p>
 
     <!-- Pass data to client script securely -->
-    <script type="application/json" id="whale-chart-data" set:html={chartData}></script>
-    <script type="application/json" id="whale-chart-meta" set:html={JSON.stringify({ txDate: transactionDate, isBuy: isBuy, currency })}></script>
+    <script type="application/json" id="whale-chart-data" set:html={jsonScript(chartData)}></script>
+    <script type="application/json" id="whale-chart-meta" set:html={jsonScript(JSON.stringify({ txDate: transactionDate, isBuy: isBuy, currency }))}></script>
     
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script is:inline>
