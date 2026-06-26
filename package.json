@@ -19,7 +19,7 @@
     "whale:followups": "node scripts/build-followups.js --missing",
     "whale:track-record": "node scripts/build-track-record.js",
     "kpi:delta": "node scripts/snapshot-delta.js",
-    "test": "node scripts/lib/source-url.test.mjs && node scripts/lib/analytics-summary.test.mjs && node scripts/lib/whale-dedup.test.mjs && node scripts/lib/whale-insider-key.test.mjs && node scripts/lib/iso-week.test.mjs"
+    "test": "node scripts/lib/source-url.test.mjs && node scripts/lib/analytics-summary.test.mjs && node scripts/lib/whale-dedup.test.mjs && node scripts/lib/whale-insider-key.test.mjs && node scripts/lib/iso-week.test.mjs && node scripts/lib/xml-escape.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.88.0",

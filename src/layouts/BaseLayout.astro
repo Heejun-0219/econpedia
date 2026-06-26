@@ -35,6 +35,34 @@ function deriveWhalePublishDate(pathname: string): string | null {
 }
 const publishedISO = datePublishedProp || deriveWhalePublishDate(_p);
 const ogImageAbs = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro.site).toString();
+
+// W1 SEO wedge (cycle 8, 2026-06-26): Google "Breadcrumbs" rich result 자격을 위해
+// /whale/* URL 패턴에서 BreadcrumbList 를 자동 생성. SERP 에 raw URL 대신
+// "EconPedia > Whale Alert > <deal title>" 가 surface 되어 CTR 상승 기대.
+// 호출처 props 변경 없이 retroactive 60+ whale 페이지 + week archive + insider hub 적용.
+// 측정: 14일 후 Google Search Console "Breadcrumbs" rich result count + /whale/* CTR.
+function deriveWhaleBreadcrumbs(pathname: string, pageTitle: string): Array<{ name: string; url: string }> | null {
+  if (!pathname || !pathname.startsWith('/whale')) return null;
+  const siteAbs = (Astro.site?.toString() || '').replace(/\/$/, '');
+  const here = `${siteAbs}${pathname.endsWith('/') ? pathname : pathname + '/'}`;
+  const base = [
+    { name: 'EconPedia', url: `${siteAbs}/` },
+    { name: 'Whale Alert', url: `${siteAbs}/whale/` },
+  ];
+  if (pathname === '/whale' || pathname === '/whale/') return base;
+  if (pathname.startsWith('/whale/week/')) {
+    const wk = pathname.replace(/^\/whale\/week\//, '').replace(/\/$/, '');
+    if (wk) return [...base, { name: wk, url: here }];
+  }
+  if (pathname === '/whale/insider/' || pathname === '/whale/insider') {
+    return [...base, { name: '인물별', url: `${siteAbs}/whale/insider/` }];
+  }
+  if (pathname.match(/^\/whale\/whale-/)) {
+    return [...base, { name: pageTitle, url: here }];
+  }
+  return base;
+}
+const breadcrumbs = deriveWhaleBreadcrumbs(_p, title);
 ---
 
 <!doctype html>
@@ -118,7 +146,19 @@ const ogImageAbs = ogImage.startsWith('http') ? ogImage : new URL(ogImage, Astro
             }
           }
     )} />
-    
+    {breadcrumbs && breadcrumbs.length > 1 && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((b, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "name": b.name,
+          "item": b.url,
+        })),
+      })} />
+    )}
+
     <!-- Styles -->
     <style is:global>
       @import '../styles/global.css';
