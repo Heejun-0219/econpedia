@@ -21,11 +21,12 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 
 ## 알려진 P0/P1 결함 (수정 우선순위)
 
-> 2026-06-20 기준 (weekly cycle 7 종료). Sprint Focus: Whale = The Product (W1 front door · W2 reliability · W3 distribution · W5 compliance · W6 reliability self-evolution).
+> 2026-06-26 기준 (weekly cycle 8 종료). Sprint Focus: Whale = The Product (W1 front door · W2 reliability · W3 distribution · W5 compliance · W6 reliability self-evolution). 2주차 진입 — cycle 9-10 에 14일 누적 KPI 첫 평가.
 
 - **P1 잔존 (완화됨)**: `api/server.js` in-memory poll/wallet 데이터 — PR #69로 atomic write 적용, SIGKILL 시 30초 이내 변경분 유실 위험은 잔존. Supabase 직접 저장 전환 권고 (다음 sprint 후보).
 - **관찰**: `src/pages/wallet.astro` gasoline 타격감 계산에 `* 0.5` 추산 계수 — Opinet 출처 주석 추가 완료.
-- **W3 distribution 측정 (PR #136 + PR #145 + PR #152 + PR #164 + PR #180 후속, PR #153 + PR #179 enabler)**: 14일 후 `GET /api/analytics/summary?window=14` 의 `sourceCounts` 확인. (a) `whale_tg`+`whale_rss`+`whale_tg_home`+`whale_rss_home` 합산 ≥ 12건 = 외부 distribution 가설 확인, (b) `whale_related`+`whale_insider` ≥ 7건 = 내부 discovery 가설 확인, (c) `whale_wallet` ≥ 1건 = wallet conversion funnel 시작, (d) `whale_weekly` (PR #164) ≥ 1건 = 주간 아카이브 indexed, (e) `whale_insider_idx` (PR #180) ≥ 1건 = 인물 hub indexed (≥ 3건 = 개별 페이지 채택 신호). 미달 시 카드 위치·copy pivot.
+- **W3 distribution 측정 (PR #136 + PR #145 + PR #152 + PR #164 + PR #180 + PR #215 후속, PR #153 + PR #179 enabler)**: 14일 후 `GET /api/analytics/summary?window=14` 의 `sourceCounts` 확인. (a) `whale_tg`+`whale_rss`+`whale_tg_home`+`whale_rss_home` 합산 ≥ 12건 = 외부 distribution 가설 확인, (b) `whale_related`+`whale_insider` ≥ 7건 = 내부 discovery 가설 확인, (c) `whale_wallet` ≥ 1건 = wallet conversion funnel 시작, (d) `whale_weekly` (PR #164) + `whale_week_entry` (PR #215) ≥ 2건 = 주간 아카이브 indexed + pill click, (e) `whale_insider_idx` (PR #180) + `whale_insider_entry` (PR #215) ≥ 2건 = 인물 hub indexed + pill click (≥ 3건 = 개별 페이지 채택 신호). 미달 시 카드 위치·copy pivot.
+- **W1 SERP CTR 측정 (PR #216 BreadcrumbList JSON-LD 후속)**: 14일 후 Google Search Console 의 (a) "Breadcrumbs" rich result count ≥ 1 = 자격 확인, (b) /whale/* 14d organic CTR ≥ 직전 14d (regression 없음). 미달 시 itemListElement label/order pivot.
 - **W2 polling 모니터링 (PR #146 후속)**: 24-48h 동안 워크플로 timeout-minutes 14 hit 빈도 및 동일 ticker 시간당 push burst 빈도 측정. burst ≥ 1 시 push-rate guardrail (tech-radar 2026-06-13 cycle4 항목 1) 채택. cycle 7 시점: ~6일 경과, 추가 데이터 후 cycle 8-9 weekly 재평가.
 - **다음 growth 후보 (W2 evidence + W1 SEO)**: `/whale/insider/<key>` 개별 인물 페이지 (cycle 5 radar #2 의 정식 본). PR #180 의 `whale_insider_idx` UTM ≥ 3건 + Tier-1 정의 사용자 합의 후 채택. 약 cycle 9-10 (2026-07-05 전후).
 - **다음 defensive 우선순위 (W6 reliability self-evolution)**: Workflow queue depth alerting (≥ 3 queued 시 OWNER Telegram, tech-radar 2026-06-13 cycle4 항목 2). PR #146 의 7-14일 timeout 빈도 데이터 후 임계 결정.
@@ -34,6 +35,9 @@ EconPedia는 1인 운영 한·미 시장 분석 사이트. Astro static build + 
 - **장기 P1**: Supabase Edge Functions poll/wallet 영구 저장 전환 (별도 sprint 1개 분량).
 
 **해결 완료 항목** (참고용):
+- ~~Whale 페이지 SERP 가 raw URL 노출 — Google "Breadcrumbs" rich result 자격 부재~~ → PR #216 (cycle 8 growth/W1, `BaseLayout.astro` 단일 파일 BreadcrumbList JSON-LD 자동 emit, 60+ retroactive). 14일 후 GSC breadcrumb rich result count + /whale/* CTR 평가.
+- ~~/whale/rss.xml `xmlEscape` 단일소스 부재 — RSS reader 파서 회귀 위험~~ → PR #216 (cycle 8 defensive/W5+W6, `scripts/lib/xml-escape.js` 추출 + 14 unit tests, byte-identical 동작 보존). lib+test 패턴 6번째 자리.
+- ~~`/whale/index` 주간·인물 pill click 측정 부재 — funnel 가시성 부족~~ → PR #215 (cycle 8 daily growth/W3, `whale_week_entry` + `whale_insider_entry` UTM source 2종 추가).
 - ~~잔존 W5/W2 compliance — 일부 슬러그 페이지 출처 plain-text~~ → PR #113–#207 누적 backfill, **61/61 provenance 100%** (PR #207 최종, 2026-06-21). `whale-20260423-MXF.astro` pre-pivot orphan 은 PR #111 로 noindex 처리.
 - ~~`/whale/insider/` 인물 인덱스 hub 부재 — Tier-1 demand check 불가능~~ → PR #180 (`/whale/insider/` Astro static, 58 insider × 60 UTM 링크, `whale_insider_idx` 신규)
 - ~~`sourceCounts` unbounded growth 위험~~ → PR #179 (top-N=50 cap, count DESC + 사전순 tie-break, 15 tests passed)
