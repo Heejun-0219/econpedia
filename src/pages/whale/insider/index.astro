@@ -83,7 +83,11 @@ function formatDate(dateStr) {
   <section class="insider-content">
     <div class="container">
       <nav class="insider-nav" aria-label="인사이더 탐색">
-        <a href="/whale/" class="insider-nav__link insider-nav__link--back">← 전체 시그널</a>
+        <a
+          href="/whale/?utm_source=whale_insider_back&utm_medium=hub_back&utm_campaign=insider_index"
+          class="insider-nav__link insider-nav__link--back"
+          data-track-source="whale_insider_back"
+        >← 전체 시그널</a>
         <a href="#multi" class="insider-nav__link">다중 거래 ({multiCount})</a>
         <a href="#all" class="insider-nav__link">전체 인물 ({totalCount})</a>
       </nav>
