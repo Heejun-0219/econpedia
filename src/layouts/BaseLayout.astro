@@ -352,7 +352,7 @@ const jsonLD = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
             </a>
           </li>
           <li>
-            <a href="/wallet" class="nav__link nav__link--icon">
+            <a href="/wallet" class="nav__link nav__link--icon" data-nav-track-source="wallet_nav_top">
               <svg class="nav__link-icon" viewBox="0 0 24 24" fill="none" width="16" height="16" aria-hidden="true">
                 <rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.75" fill="none"/>
                 <path d="M2 11h20" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
@@ -504,7 +504,7 @@ const jsonLD = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
         </svg>
         <span>데일리</span>
       </a>
-      <a href="/wallet" class={`mobile-nav__item ${Astro.url.pathname.startsWith('/wallet') ? 'mobile-nav__item--active' : ''}`}>
+      <a href="/wallet" class={`mobile-nav__item ${Astro.url.pathname.startsWith('/wallet') ? 'mobile-nav__item--active' : ''}`} data-nav-track-source="wallet_nav_bot">
         <svg class="mobile-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
           <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
