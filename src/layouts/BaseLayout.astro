@@ -293,6 +293,20 @@ const jsonLD = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
             if (navigator.sendBeacon) navigator.sendBeacon('/api/analytics', payload);
             else fetch('/api/analytics', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
           }, { capture: true });
+
+          // ── W3: 전역 nav UTM (data-nav-track-source, /api/track 화이트리스트) ──
+          // WhaleFollow/home 의 a[data-track-source] 와 attribute 분리 → double-fire 없음.
+          document.addEventListener('click', (e) => {
+            const a = e.target && e.target.closest && e.target.closest('a[data-nav-track-source]');
+            if (!a) return;
+            const src = a.getAttribute('data-nav-track-source');
+            if (!src) return;
+            try {
+              const blob = new Blob([''], { type: 'application/x-www-form-urlencoded' });
+              navigator.sendBeacon && navigator.sendBeacon('/api/track?source=' + encodeURIComponent(src), blob)
+                || fetch('/api/track?source=' + encodeURIComponent(src), { keepalive: true }).catch(() => {});
+            } catch (_) { /* noop */ }
+          }, { capture: true });
         } catch(e) {
           console.error('Analytics tracking error:', e);
         }
@@ -350,7 +364,7 @@ const jsonLD = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
             </a>
           </li>
           <li>
-            <a href="/whale" class="nav__link nav__link--icon">
+            <a href="/whale" class="nav__link nav__link--icon" data-nav-track-source="whale_nav_top">
               <svg class="nav__link-icon" viewBox="0 0 24 24" fill="none" width="16" height="16" aria-hidden="true">
                 <rect x="2" y="7" width="20" height="15" rx="2" stroke="currentColor" stroke-width="1.75" fill="none"/>
                 <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
@@ -498,7 +512,7 @@ const jsonLD = (obj: unknown) => JSON.stringify(obj).replace(/</g, '\\u003c');
         </svg>
         <span>내 지갑</span>
       </a>
-      <a href="/whale" class={`mobile-nav__item ${Astro.url.pathname.startsWith('/whale') ? 'mobile-nav__item--active' : ''}`}>
+      <a href="/whale" class={`mobile-nav__item ${Astro.url.pathname.startsWith('/whale') ? 'mobile-nav__item--active' : ''}`} data-nav-track-source="whale_nav_bot">
         <svg class="mobile-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
           <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
