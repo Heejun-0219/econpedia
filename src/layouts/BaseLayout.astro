@@ -52,7 +52,14 @@ function deriveWhaleBreadcrumbs(pathname: string, pageTitle: string): Array<{ na
   if (pathname === '/whale' || pathname === '/whale/') return base;
   if (pathname.startsWith('/whale/week/')) {
     const wk = pathname.replace(/^\/whale\/week\//, '').replace(/\/$/, '');
-    if (wk) return [...base, { name: wk, url: here }];
+    if (wk) {
+      // W1 SERP CTR (cycle 9 daily) — PR #216 BreadcrumbList 후속. Korean SERP 사용자에게
+      // `2026-W23` raw key 대신 `2026년 23주차` readable label 노출. URL/canonical 불변,
+      // BreadcrumbList JSON-LD `name` 만 변경 → 14일 후 GSC /whale/week/* CTR 동등 검증.
+      const m = wk.match(/^(\d{4})-W(\d{2})$/);
+      const label = m ? `${m[1]}년 ${Number(m[2])}주차` : wk;
+      return [...base, { name: label, url: here }];
+    }
   }
   if (pathname === '/whale/insider/' || pathname === '/whale/insider') {
     return [...base, { name: '인물별', url: `${siteAbs}/whale/insider/` }];
