@@ -84,11 +84,11 @@ const utmCampaign = 'whale_week_' + year + '_' + String(weekNum).padStart(2, '0'
     <div class="container">
       <nav class="week-nav" aria-label="주간 아카이브 탐색">
         {prevKey ? (
-          <a href={'/whale/week/' + prevKey + '/'} rel="prev" class="week-nav__link">← {prevKey} 주차</a>
+          <a href={'/whale/week/' + prevKey + '/'} rel="prev" class="week-nav__link" data-track-source="whale_week_prev">← {prevKey} 주차</a>
         ) : <span class="week-nav__link week-nav__link--disabled" aria-disabled="true">← 이전 주차</span>}
-        <a href="/whale/" class="week-nav__link week-nav__link--center">전체 보기</a>
+        <a href="/whale/" class="week-nav__link week-nav__link--center" data-track-source="whale_week_back">전체 보기</a>
         {nextKey ? (
-          <a href={'/whale/week/' + nextKey + '/'} rel="next" class="week-nav__link">{nextKey} 주차 →</a>
+          <a href={'/whale/week/' + nextKey + '/'} rel="next" class="week-nav__link" data-track-source="whale_week_next">{nextKey} 주차 →</a>
         ) : <span class="week-nav__link week-nav__link--disabled" aria-disabled="true">다음 주차 →</span>}
       </nav>
 
