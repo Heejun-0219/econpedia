@@ -292,13 +292,14 @@ const topImpacts = rawItems.sort((a, b) => Math.abs(b.data.changePercent || 0) -
       <section class="whale-home-latest" aria-label="최근 Whale 시그널">
         <div class="whale-home-latest__head">
           <h2 class="whale-home-latest__title">🐋 최근 감지된 시그널</h2>
-          <a class="whale-home-latest__more" href="/whale?utm_source=home&utm_medium=latest&utm_campaign=whale_browse">전체 보기 →</a>
+          <a class="whale-home-latest__more" href="/whale?utm_source=home&utm_medium=latest&utm_campaign=whale_browse" data-track-source="whale_home_more">전체 보기 →</a>
         </div>
         <div class="whale-home-latest__grid">
           {latestWhales.map((w) => (
             <a
               class={`whale-home-card ${w.isBuy ? 'whale-home-card--buy' : 'whale-home-card--sell'}`}
               href={`/whale/${w.slug}?utm_source=home&utm_medium=latest_card&utm_campaign=whale_view`}
+              data-track-source="whale_home_latest"
             >
               <div class="whale-home-card__top">
                 <span class="whale-home-card__market">{w.market === 'us' ? '🇺🇸 US' : '🇰🇷 KR'}</span>
