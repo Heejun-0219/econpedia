@@ -35,14 +35,19 @@ export const GET: APIRoute = () => {
 
   const itemsXml = items
     .map((a) => {
-      const link = `${SITE}/whale/${a.slug}`;
+      const canonical = `${SITE}/whale/${a.slug}`;
+      // W3 distribution (cycle 9 daily) — RSS reader item 클릭은 BaseLayout 트래커가
+      // page-load 시 `utm_source` 만 읽어 카운트하므로(canonical URL·SEO 영향 없음),
+      // feed item `<link>` 에 `whale_rss_feed` UTM 부착해 RSS 구독자 실 clickthrough 를
+      // `whale_rss` 핀 클릭(PR #136) 과 구분 측정. `<guid>` 는 canonical 유지 — reader dedup 보장.
+      const link = `${canonical}?utm_source=whale_rss_feed&utm_medium=rss&utm_campaign=whale_view`;
       const market = a.market === 'us' ? 'US' : 'KR';
       const dir = a.isBuy ? '매수' : '매도';
       const desc = `[${market} · ${dir}] ${a.companyName} (${a.ticker}) — ${a.person}, ${a.amount}. ${a.excerpt}`;
       return `    <item>
       <title>${xmlEscape(a.title)}</title>
       <link>${xmlEscape(link)}</link>
-      <guid isPermaLink="true">${xmlEscape(link)}</guid>
+      <guid isPermaLink="true">${xmlEscape(canonical)}</guid>
       <pubDate>${pubDate(a.date)}</pubDate>
       <category>${xmlEscape(market)}</category>
       <description>${xmlEscape(desc)}</description>
