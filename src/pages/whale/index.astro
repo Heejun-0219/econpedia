@@ -120,7 +120,7 @@ const categories = [
           const isBuy = a.isBuy;
           const dirClass = isBuy ? 'whale-card--buy' : 'whale-card--sell';
           return (
-            <a href={`/whale/${a.slug}`} class={`whale-card ${dirClass}`} data-market={a.market}>
+            <a href={`/whale/${a.slug}`} class={`whale-card ${dirClass}`} data-market={a.market} data-track-source="whale_index_card">
               <div class="whale-card__header">
                 <div class="whale-card__badge-row">
                   <span class="whale-card__market">{a.market === 'us' ? 'US' : 'KR'}</span>
