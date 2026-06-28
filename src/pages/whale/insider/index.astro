@@ -89,7 +89,7 @@ function formatDate(dateStr) {
           data-track-source="whale_insider_back"
         >← 전체 시그널</a>
         <a href="#multi" class="insider-nav__link">다중 거래 ({multiCount})</a>
-        <a href="#all" class="insider-nav__link">전체 인물 ({totalCount})</a>
+        <a href="#single" class="insider-nav__link">단일 거래 ({singleTrade.length})</a>
       </nav>
 
       {multiTrade.length > 0 && (
@@ -127,9 +127,9 @@ function formatDate(dateStr) {
         </section>
       )}
 
-      <section id="all" class="insider-section">
-        <h2 class="insider-section__heading">👥 전체 인물 ({totalCount})</h2>
-        <p class="insider-section__sub">공시 등장 인물 전체 — 최신 거래일 순.</p>
+      <section id="single" class="insider-section">
+        <h2 class="insider-section__heading">👤 단일 거래 인물 ({singleTrade.length})</h2>
+        <p class="insider-section__sub">공시 1회 등장 인물 — 최신 거래일 순. (다중 거래자는 위 섹션 참조)</p>
         <ul class="insider-list">
           {singleTrade.map((ins) => {
             const t = ins.trades[0];
