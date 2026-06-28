@@ -125,6 +125,23 @@ function pruneOldDaily() {
       if (key < cutoffStr) delete stats.daily[key];
     }
   }
+  // W6 — /api/analytics/summary 의 windowDays cap (90) 과 일치하는 retention.
+  // 90일 초과 엔트리는 어떤 응답에도 노출되지 않으므로 storage hygiene 차원에서 정리.
+  if (stats.analytics?.daily) {
+    for (const key of Object.keys(stats.analytics.daily)) {
+      if (key < cutoffStr) delete stats.analytics.daily[key];
+    }
+  }
+  if (stats.bySource) {
+    for (const src of Object.keys(stats.bySource)) {
+      const byDate = stats.bySource[src];
+      if (!byDate) continue;
+      for (const key of Object.keys(byDate)) {
+        if (key < cutoffStr) delete byDate[key];
+      }
+      if (Object.keys(byDate).length === 0) delete stats.bySource[src];
+    }
+  }
 }
 
 async function atomicWriteJSON(filePath, data) {
