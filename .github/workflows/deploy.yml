@@ -1,8 +1,11 @@
 name: 🚀 Deploy EconPedia
 
 on:
-  push:
-    branches: [main]
+  # push 자동 트리거 비활성화 — 운영 정지 요청 (2026-07-13).
+  # main 에 코드가 들어와도 자동 배포되지 않음. 배포가 필요하면 workflow_dispatch 로 수동.
+  # 복원: 아래 push 블록 주석 해제.
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 env:

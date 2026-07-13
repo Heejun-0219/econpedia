@@ -1,10 +1,14 @@
 name: CI / Build Check
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # push/pull_request 자동 트리거 비활성화 — 운영 정지 요청 (2026-07-13).
+  # 회귀 detection 이 필요할 때는 workflow_dispatch 로 수동 실행.
+  # 복원: 아래 push/pull_request 블록 주석 해제.
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
