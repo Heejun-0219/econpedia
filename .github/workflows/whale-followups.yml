@@ -5,8 +5,11 @@ name: 🐋 Whale Follow-up Backfill
 # auto-publish(21:00 UTC) 직후 실행해 그날 새로 발행된 whale 페이지도 포함시킨다.
 
 on:
-  schedule:
-    - cron: '40 21 * * *' # 매일 21:40 UTC (= 06:40 KST). auto-publish 이후.
+  # cron 비활성화 — 운영 정지 요청 (2026-07-13).
+  # 후행 가격 백필이 매일 06:40 KST 에 돌던 것을 멈춤. workflow_dispatch 유지.
+  # 복원: 아래 schedule 블록 주석 해제.
+  # schedule:
+  #   - cron: '40 21 * * *' # 매일 21:40 UTC (= 06:40 KST). auto-publish 이후.
   workflow_dispatch:
 
 permissions:
