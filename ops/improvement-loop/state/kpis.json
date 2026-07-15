@@ -12,7 +12,7 @@
   "code": {
     "total_files": null,
     "total_loc": null,
-    "test_count": 0,
+    "test_count": 50,
     "dependencies": null,
     "outdated_dependencies": null,
     "build_size_kb": null
